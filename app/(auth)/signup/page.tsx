@@ -31,7 +31,7 @@ export default function SignupPage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard');
+    router.push('/journey');
     router.refresh();
   }
 
@@ -40,7 +40,7 @@ export default function SignupPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create account</CardTitle>
-          <CardDescription>Sign up for TrialBridge.</CardDescription>
+          <CardDescription>Sign up for OncoKind.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

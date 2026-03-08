@@ -22,6 +22,9 @@ export function DashboardNav() {
           <Link href="/" className="font-semibold text-slate-900">
             OncoKind
           </Link>
+          <Link href="/journey" className="text-sm text-slate-600 hover:text-slate-900">
+            Journey
+          </Link>
           <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
             Dashboard
           </Link>

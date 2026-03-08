@@ -2,39 +2,33 @@ import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { stripePrices, hasProPrices, hasEnterprisePrices } from '@/lib/stripe-prices';
 
 export const metadata = {
   title: 'Pricing | OncoKind',
   description: 'Free, Pro, and Enterprise plans — simple pricing for families and professional advocates.',
 };
 
-const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID;
-const STRIPE_PRICE_ID_ENTERPRISE = process.env.STRIPE_PRICE_ID_ENTERPRISE;
-
 const FREE_FEATURES = [
-  'Pathology report processing',
-  'Clear biomarker summary',
-  'Clinical trial matches (limited)',
-  'Basic Doctor Prep questions',
+  'Diagnosis explanation',
+  'Basic care map',
   '1 report per month',
 ];
 
-const PRO_FEATURES = [
+const CAREGIVER_PRO_FEATURES = [
   'Everything in Free',
-  'Unlimited report processing',
-  'Full trial match results',
-  'Downloadable Doctor Prep PDF',
-  '50-mile radius trial search',
-  'Priority processing',
+  'AI Care Navigator',
+  'Clinical trial matching',
+  'Care timeline',
+  'Unlimited reports',
+  'Doctor Prep Sheet',
 ];
 
-const ENTERPRISE_FEATURES = [
-  'Everything in Pro',
+const PROFESSIONAL_FEATURES = [
+  'Everything in Caregiver Pro',
   'Multi-patient dashboard',
-  'Batch report processing',
-  'Branded PDF headers',
-  'Usage analytics',
-  'Concierge workflow support',
+  'Batch document analysis',
+  'Clinic integrations',
   'Dedicated support',
 ];
 
@@ -66,7 +60,7 @@ export default async function PricingPage() {
             <ul className="mt-8 space-y-3">
               {FREE_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-3 text-sm text-slate-600">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   {f}
                 </li>
               ))}
@@ -76,31 +70,43 @@ export default async function PricingPage() {
             </Button>
           </div>
 
-          {/* Pro */}
-          <div className="relative rounded-2xl border-2 border-brand-500 bg-white p-8 shadow-lg">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-500 px-3 py-0.5 text-xs font-medium text-white">
+          {/* Caregiver Pro */}
+          <div className="relative rounded-2xl border-2 border-primary bg-white p-8 shadow-lg">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-0.5 text-xs font-medium text-white">
               Most Popular
             </span>
-            <h2 className="text-xl font-semibold text-slate-900">Pro</h2>
-            <p className="mt-2 text-slate-600">Full access</p>
-            <p className="mt-6 text-3xl font-bold text-slate-900">From $29</p>
+            <h2 className="text-xl font-semibold text-slate-900">Caregiver Pro</h2>
+            <p className="mt-2 text-slate-600">For families</p>
+            <p className="mt-6 text-3xl font-bold text-slate-900">$19</p>
             <p className="text-sm text-slate-500">/month</p>
             <ul className="mt-8 space-y-3">
-              {PRO_FEATURES.map((f) => (
+              {CAREGIVER_PRO_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-3 text-sm text-slate-600">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   {f}
                 </li>
               ))}
             </ul>
             {user ? (
-              STRIPE_PRICE_ID ? (
-                <form action="/api/checkout" method="POST" className="mt-8">
-                  <input type="hidden" name="priceId" value={STRIPE_PRICE_ID} />
+              hasProPrices ? (
+                <div className="mt-8 space-y-3">
+                  {stripePrices.proMonthly && (
+                    <form action="/api/checkout" method="POST">
+                      <input type="hidden" name="priceId" value={stripePrices.proMonthly} />
                   <Button type="submit" className="w-full">
-                    Upgrade to Pro
+                    Caregiver Pro Monthly
                   </Button>
-                </form>
+                    </form>
+                  )}
+                  {stripePrices.proYearly && (
+                    <form action="/api/checkout" method="POST">
+                      <input type="hidden" name="priceId" value={stripePrices.proYearly} />
+                  <Button type="submit" variant="outline" className="w-full">
+                    Caregiver Pro Yearly
+                  </Button>
+                    </form>
+                  )}
+                </div>
               ) : (
                 <Button asChild className="mt-8 w-full">
                   <Link href="/dashboard/billing">Manage in Dashboard</Link>
@@ -113,27 +119,39 @@ export default async function PricingPage() {
             )}
           </div>
 
-          {/* Enterprise */}
+          {/* Professional */}
           <div id="enterprise" className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm scroll-mt-24">
-            <h2 className="text-xl font-semibold text-slate-900">Enterprise</h2>
-            <p className="mt-2 text-slate-600">For advocates</p>
-            <p className="mt-6 text-3xl font-bold text-slate-900">Custom</p>
-            <p className="text-sm text-slate-500">contact us</p>
+            <h2 className="text-xl font-semibold text-slate-900">Professional</h2>
+            <p className="mt-2 text-slate-600">For advocates & clinics</p>
+            <p className="mt-6 text-3xl font-bold text-slate-900">$999</p>
+            <p className="text-sm text-slate-500">/month</p>
             <ul className="mt-8 space-y-3">
-              {ENTERPRISE_FEATURES.map((f) => (
+              {PROFESSIONAL_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-3 text-sm text-slate-600">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   {f}
                 </li>
               ))}
             </ul>
-            {user && STRIPE_PRICE_ID_ENTERPRISE ? (
-              <form action="/api/checkout" method="POST" className="mt-8">
-                <input type="hidden" name="priceId" value={STRIPE_PRICE_ID_ENTERPRISE} />
-                <Button type="submit" variant="outline" className="w-full">
-                  Start Enterprise
-                </Button>
-              </form>
+            {user && hasEnterprisePrices ? (
+              <div className="mt-8 space-y-3">
+                {stripePrices.enterpriseUnlimited && (
+                  <form action="/api/checkout" method="POST">
+                    <input type="hidden" name="priceId" value={stripePrices.enterpriseUnlimited} />
+                    <Button type="submit" variant="outline" className="w-full">
+                      Professional — Unlimited
+                    </Button>
+                  </form>
+                )}
+                {stripePrices.enterprisePerSeat && (
+                  <form action="/api/checkout" method="POST">
+                    <input type="hidden" name="priceId" value={stripePrices.enterprisePerSeat} />
+                    <Button type="submit" variant="outline" className="w-full">
+                      Professional — Per seat
+                    </Button>
+                  </form>
+                )}
+              </div>
             ) : (
               <Button asChild variant="outline" className="mt-8 w-full">
                 <a href="mailto:hello@oncokind.com?subject=Enterprise%20Inquiry">Contact Us</a>
@@ -153,8 +171,8 @@ export default async function PricingPage() {
                 <tr className="border-b border-slate-200 bg-slate-50">
                   <th className="px-6 py-4 font-semibold text-slate-900">Feature</th>
                   <th className="px-6 py-4 font-semibold text-slate-900 text-center">Free</th>
-                  <th className="px-6 py-4 font-semibold text-slate-900 text-center">Pro</th>
-                  <th className="px-6 py-4 font-semibold text-slate-900 text-center">Enterprise</th>
+                  <th className="px-6 py-4 font-semibold text-slate-900 text-center">Caregiver Pro</th>
+                  <th className="px-6 py-4 font-semibold text-slate-900 text-center">Professional</th>
                 </tr>
               </thead>
               <tbody>
@@ -163,14 +181,13 @@ export default async function PricingPage() {
                   ['Trial matches', 'Limited', 'Full (50mi)', 'Full + custom'],
                   ['Doctor Prep PDF', '—', '✓', '✓ Branded'],
                   ['Multi-patient', '—', '—', '✓'],
-                  ['Usage analytics', '—', '—', '✓'],
                   ['Support', 'Community', 'Email', 'Dedicated'],
-                ].map(([feature, free, pro, ent]) => (
+                ].map(([feature, free, pro, prof]) => (
                   <tr key={feature} className="border-b border-slate-100">
                     <td className="px-6 py-4 font-medium text-slate-900">{feature}</td>
                     <td className="px-6 py-4 text-center text-slate-600">{free}</td>
                     <td className="px-6 py-4 text-center text-slate-600">{pro}</td>
-                    <td className="px-6 py-4 text-center text-slate-600">{ent}</td>
+                    <td className="px-6 py-4 text-center text-slate-600">{prof}</td>
                   </tr>
                 ))}
               </tbody>

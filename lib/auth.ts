@@ -6,9 +6,11 @@ export async function getProfile() {
   if (!user) return { user: null, profile: null, isPro: false };
   const { data: profile } = await supabase
     .from('profiles')
-    .select('subscription_status, stripe_customer_id')
+    .select('subscription_status, subscription_tier, stripe_customer_id')
     .eq('id', user.id)
     .single();
-  const isPro = profile?.subscription_status === 'pro';
+  const isPro =
+    profile?.subscription_status === 'pro' ||
+    profile?.subscription_tier === 'enterprise';
   return { user, profile, isPro };
 }

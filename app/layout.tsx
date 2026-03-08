@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter, Source_Sans_3 } from 'next/font/google';
 import './globals.css';
 import { TrustFooter } from '@/components/layout/TrustFooter';
 import { PwaRegister } from '@/components/PwaRegister';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans' });
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#3b82f6',
+  themeColor: '#0284c7',
   width: 'device-width',
   initialScale: 1,
 };
@@ -31,13 +35,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${sourceSans.variable}`}>
       <head>
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      <body className="min-h-screen flex flex-col bg-[#f9fafb] text-accent">
         <PwaRegister />
         {children}
         <TrustFooter />

@@ -2,8 +2,18 @@ import type Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripeClient } from '@/lib/stripe';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { stripePrices } from '@/lib/stripe-prices';
 
 export const runtime = 'nodejs';
+
+const enterprisePriceIds = [
+  stripePrices.enterpriseUnlimited,
+  stripePrices.enterprisePerSeat,
+].filter(Boolean);
+
+function isEnterprisePrice(priceId: string | undefined): boolean {
+  return !!priceId && enterprisePriceIds.includes(priceId);
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -29,10 +39,13 @@ export async function POST(request: NextRequest) {
       const customerId = typeof session.customer === 'string' ? session.customer : session.customer?.id;
       const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id;
       let userId = session.metadata?.supabase_user_id as string | undefined;
-      if (!userId && subscriptionId) {
+      let priceId: string | undefined;
+      if (subscriptionId) {
         const sub = await getStripeClient().subscriptions.retrieve(subscriptionId);
-        userId = sub.metadata?.supabase_user_id as string | undefined;
+        userId = userId ?? (sub.metadata?.supabase_user_id as string | undefined);
+        priceId = typeof sub.items.data[0]?.price === 'string' ? sub.items.data[0]?.price : sub.items.data[0]?.price?.id;
       }
+      const tier = isEnterprisePrice(priceId) ? 'enterprise' : 'pro';
       if (userId && (customerId || subscriptionId)) {
         await supabase
           .from('profiles')
@@ -40,6 +53,7 @@ export async function POST(request: NextRequest) {
             stripe_customer_id: customerId ?? undefined,
             stripe_subscription_id: subscriptionId ?? undefined,
             subscription_status: 'pro',
+            subscription_tier: tier,
             updated_at: new Date().toISOString(),
           })
           .eq('id', userId);
@@ -53,6 +67,7 @@ export async function POST(request: NextRequest) {
           .from('profiles')
           .update({
             subscription_status: 'cancelled',
+            subscription_tier: 'free',
             stripe_subscription_id: null,
             updated_at: new Date().toISOString(),
           })

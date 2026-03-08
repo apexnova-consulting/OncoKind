@@ -4,16 +4,21 @@
 
 @layer base {
   :root {
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 15 23 42;    /* slate-900 */
+    --background: 249 250 251; /* soft white #f9fafb */
+    --foreground: 15 23 42;    /* accent navy #0f172a */
+    --primary: 2 132 199;      /* sky blue #0284c7 */
+    --success: 16 185 129;     /* soft green #10b981 */
     --card: 255 255 255;
     --card-foreground: 15 23 42;
-    --muted: 241 245 249;      /* slate-100 */
-    --muted-foreground: 100 116 139; /* slate-400 */
-    --border: 226 232 240;     /* slate-200 */
-    --ring: 148 163 184;       /* slate-400 */
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --border: 226 232 240;
+    --ring: 2 132 199;
   }
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-[#f9fafb] text-accent antialiased font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
   }
 }

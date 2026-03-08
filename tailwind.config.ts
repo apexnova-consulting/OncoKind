@@ -9,14 +9,31 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-source-sans)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+      },
       colors: {
+        primary: {
+          DEFAULT: '#0284c7',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0284c7',
+          600: '#0369a1',
+          700: '#075985',
+        },
+        accent: '#0f172a',
+        success: '#10b981',
         brand: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0284c7',
         },
         stone: {
           50: '#fafaf9',

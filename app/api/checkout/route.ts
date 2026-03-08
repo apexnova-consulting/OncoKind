@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { createCheckoutSession } from '@/lib/stripe';
+import { stripePrices } from '@/lib/stripe-prices';
 
-const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID;
+const defaultPriceId = stripePrices.proMonthly;
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
@@ -10,12 +11,12 @@ export async function POST(request: NextRequest) {
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  if (!STRIPE_PRICE_ID) {
-    return NextResponse.json({ error: 'Checkout not configured' }, { status: 503 });
-  }
 
   const formData = await request.formData().catch(() => new FormData());
-  const priceId = (formData.get('priceId') as string) || STRIPE_PRICE_ID;
+  const priceId = (formData.get('priceId') as string) || defaultPriceId;
+  if (!priceId) {
+    return NextResponse.json({ error: 'Checkout not configured' }, { status: 503 });
+  }
   const base = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
 
   const { data: profile } = await supabase

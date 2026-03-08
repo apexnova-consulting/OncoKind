@@ -20,7 +20,7 @@ export async function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
-          className="text-xl font-semibold tracking-tight text-slate-900 transition-colors hover:text-brand-500"
+          className="text-xl font-semibold tracking-tight text-slate-900 transition-colors hover:text-primary"
         >
           OncoKind
         </Link>

@@ -11,7 +11,7 @@ export default async function ReportsPage() {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
       <h1 className="text-2xl font-bold text-slate-900">Reports</h1>
       {!reports?.length ? (
         <Card>

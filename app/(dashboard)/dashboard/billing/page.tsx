@@ -4,8 +4,7 @@ import { getStripeClient } from '@/lib/stripe';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-
-const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID;
+import { stripePrices, hasProPrices } from '@/lib/stripe-prices';
 
 export default async function BillingPage() {
   const { user, profile, isPro } = await getProfile();
@@ -23,13 +22,14 @@ export default async function BillingPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-lg">
+    <div className="mx-auto max-w-6xl px-4 py-6">
+    <div className="max-w-lg space-y-6">
       <h1 className="text-2xl font-bold text-slate-900">Billing</h1>
       <Card>
         <CardHeader>
           <CardTitle>Pro</CardTitle>
           <CardDescription>
-            Unlock the Doctor Prep Sheet and support OncoKind.
+            Unlock the Doctor Prep Sheet and support OncoKind. Choose monthly or yearly.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -42,15 +42,25 @@ export default async function BillingPage() {
                 </Button>
               )}
             </>
-          ) : STRIPE_PRICE_ID ? (
-            <form action="/api/checkout" method="POST">
-              <input type="hidden" name="priceId" value={STRIPE_PRICE_ID} />
-              <Button type="submit">Upgrade to Pro</Button>
-            </form>
+          ) : hasProPrices ? (
+            <div className="space-y-3">
+              {stripePrices.proMonthly && (
+                <form action="/api/checkout" method="POST">
+                  <input type="hidden" name="priceId" value={stripePrices.proMonthly} />
+                  <Button type="submit" className="w-full">Pro Monthly</Button>
+                </form>
+              )}
+              {stripePrices.proYearly && (
+                <form action="/api/checkout" method="POST">
+                  <input type="hidden" name="priceId" value={stripePrices.proYearly} />
+                  <Button type="submit" variant="outline" className="w-full">Pro Yearly</Button>
+                </form>
+              )}
+            </div>
           ) : (
             <>
               <p className="text-sm text-slate-600">
-                Set STRIPE_PRICE_ID in your environment to enable checkout.
+                Set Stripe price IDs in your environment to enable checkout.
               </p>
               <Button asChild variant="secondary">
                 <Link href="/dashboard">Back to Dashboard</Link>
@@ -59,6 +69,7 @@ export default async function BillingPage() {
           )}
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 }

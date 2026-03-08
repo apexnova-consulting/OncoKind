@@ -23,23 +23,22 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50/80 px-4 py-20 sm:py-28 animate-in fade-in duration-700">
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            Clarity for Families Navigating Cancer.
+          <h1 className="font-heading text-4xl font-bold tracking-tight text-accent sm:text-5xl">
+            Navigate Cancer Care With Clarity
           </h1>
           <p className="mt-6 text-lg text-slate-600">
-            Upload a pathology report. Receive clear explanations and relevant
-            clinical trial options — designed to help you prepare for your next
-            oncology appointment.
+            Upload a medical report. Get clear explanations, a care journey map, and
+            AI guidance — designed to help you prepare for your next oncology appointment.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             {user ? (
               <Button asChild size="lg" className="rounded-xl px-8">
-                <Link href="/dashboard">Go to Dashboard</Link>
+                <Link href="/journey">Go to Journey</Link>
               </Button>
             ) : (
               <>
                 <Button asChild size="lg" className="rounded-xl px-8">
-                  <Link href="/signup">Upload Report Securely</Link>
+                  <Link href="/signup">Upload Medical Report</Link>
                 </Button>
                 <Button
                   asChild
@@ -47,26 +46,26 @@ export default async function HomePage() {
                   size="lg"
                   className="rounded-xl border-slate-300 px-8"
                 >
-                  <Link href="/signup?tier=pro">For Professional Advocates</Link>
+                  <Link href="/signup">Explore Caregiver Tools</Link>
                 </Button>
               </>
             )}
           </div>
           <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500">
             <span className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-brand-500" />
+              <Shield className="h-4 w-4 text-primary" />
               HIPAA-conscious design
             </span>
             <span className="flex items-center gap-2">
-              <FileText className="h-4 w-4 text-brand-500" />
+              <FileText className="h-4 w-4 text-primary" />
               Zero raw report retention
             </span>
             <span className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-brand-500" />
+              <Sparkles className="h-4 w-4 text-primary" />
               Secure AI processing
             </span>
             <span className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-brand-500" />
+              <Shield className="h-4 w-4 text-primary" />
               Stripe-secured checkout
             </span>
           </div>
@@ -84,7 +83,7 @@ export default async function HomePage() {
           </p>
           <div className="mt-16 grid gap-10 sm:grid-cols-3">
             <div className="rounded-2xl bg-slate-50/80 p-6 text-center transition-shadow hover:shadow-md">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-500">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <FileUp className="h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold text-slate-900">1. Upload securely</h3>
@@ -94,7 +93,7 @@ export default async function HomePage() {
               </p>
             </div>
             <div className="rounded-2xl bg-slate-50/80 p-6 text-center transition-shadow hover:shadow-md">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-500">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Sparkles className="h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold text-slate-900">
@@ -106,7 +105,7 @@ export default async function HomePage() {
               </p>
             </div>
             <div className="rounded-2xl bg-slate-50/80 p-6 text-center transition-shadow hover:shadow-md">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-500">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <FileText className="h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold text-slate-900">
@@ -157,7 +156,7 @@ export default async function HomePage() {
                 key={item.title}
                 className="flex gap-4 rounded-2xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-500">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <item.icon className="h-5 w-5" />
                 </div>
                 <div>
@@ -190,7 +189,7 @@ export default async function HomePage() {
                 key={feature}
                 className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700"
               >
-                <Check className="h-4 w-4 text-brand-500" />
+                <Check className="h-4 w-4 text-primary" />
                 {feature}
               </div>
             ))}
@@ -234,7 +233,7 @@ export default async function HomePage() {
             ))}
           </div>
           <p className="mt-8 text-center">
-            <Link href="/pricing" className="text-brand-500 font-medium hover:underline">
+            <Link href="/pricing" className="text-primary font-medium hover:underline">
               View Full Pricing →
             </Link>
           </p>
@@ -253,7 +252,7 @@ export default async function HomePage() {
           </p>
           {!user && (
             <Button asChild size="lg" className="mt-8 rounded-xl px-8">
-              <Link href="/signup">Upload Report Securely</Link>
+              <Link href="/signup">Upload Medical Report</Link>
             </Button>
           )}
         </div>
