@@ -214,8 +214,8 @@ export default async function HomePage() {
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {[
               { name: 'Free', desc: 'Try OncoKind', price: '$0', cta: 'Get Started' },
-              { name: 'Pro', desc: 'Full access', price: 'From $29/mo', cta: 'Upgrade' },
-              { name: 'Enterprise', desc: 'For advocates', price: 'Custom', cta: 'Contact' },
+              { name: 'Caregiver Pro', desc: 'For families', price: '$19/mo', cta: 'Upgrade' },
+              { name: 'Professional', desc: 'For advocates', price: '$999/mo', cta: 'Contact' },
             ].map((tier) => (
               <div
                 key={tier.name}

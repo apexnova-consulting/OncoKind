@@ -26,7 +26,7 @@ export default function LoginPage() {
       setError(err.message);
       return;
     }
-    router.push('/dashboard');
+    router.push('/journey');
     router.refresh();
   }
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
-          <CardDescription>Sign in to your TrialBridge account.</CardDescription>
+          <CardDescription>Sign in to your OncoKind account.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
