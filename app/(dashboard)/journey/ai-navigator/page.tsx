@@ -31,6 +31,9 @@ export default async function AINavigatorPage() {
   const treatmentOptions: string[] = report
     ? ['Chemotherapy', 'Radiation Therapy', 'Immunotherapy']
     : [];
+  const recommendedActions: string[] = report
+    ? ['Meet with oncologist', 'Discuss immunotherapy', 'Review clinical trials']
+    : [];
 
   return (
     <div className="flex h-[calc(100vh-120px)] flex-col">
@@ -47,7 +50,7 @@ export default async function AINavigatorPage() {
         <AICareNavigator
           contextualInfo={
             (diagnosis || biomarkers.length > 0)
-              ? { diagnosis, biomarkers, treatmentOptions }
+              ? { diagnosis, biomarkers, treatmentOptions, recommendedActions }
               : null
           }
         />

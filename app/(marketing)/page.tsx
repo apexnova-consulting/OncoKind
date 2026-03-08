@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
+import { DashboardPreview } from '@/components/marketing/DashboardPreview';
 import { FileUp, ArrowRight } from 'lucide-react';
 
 export default async function HomePage() {
@@ -12,55 +13,61 @@ export default async function HomePage() {
 
   return (
     <main className="bg-[#f9fafb]">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#f9fafb] px-4 py-20 sm:py-28 animate-in fade-in duration-700">
-        <div className="mx-auto max-w-3xl text-center">
-          <h1 className="font-heading text-4xl font-bold tracking-tight text-accent sm:text-5xl">
-            Navigate Cancer Care With Clarity
-          </h1>
-          <p className="mt-6 text-lg text-slate-600 sm:text-xl">
-            Understand diagnoses, explore treatment options, and find the best steps for your loved one.
-          </p>
-          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            {user ? (
-              <Button asChild size="lg" className="h-14 rounded-xl px-10 text-base">
-                <Link href="/journey">Go to Journey</Link>
-              </Button>
-            ) : (
-              <>
-                <Button asChild size="lg" className="h-14 rounded-xl px-10 text-base shadow-md">
-                  <Link href="/signup" className="flex items-center gap-2">
-                    <FileUp className="h-5 w-5" />
-                    Upload Your Medical Report
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-14 rounded-xl border-slate-300 px-10 text-base"
-                >
-                  <Link href="/signup">Explore Caregiver Tools</Link>
-                </Button>
-              </>
-            )}
-          </div>
-          {/* 3-step guide */}
-          <div className="mt-16 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-slate-600">
-            <span className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">1</span>
-              Upload Your Report
-            </span>
-            <ArrowRight className="h-4 w-4 shrink-0 text-slate-300" />
-            <span className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">2</span>
-              Get Clear Results
-            </span>
-            <ArrowRight className="h-4 w-4 shrink-0 text-slate-300" />
-            <span className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">3</span>
-              Follow Your Care Plan
-            </span>
+      {/* Product-first hero: left = copy + CTA, right = dashboard preview */}
+      <section className="relative overflow-hidden bg-[#f9fafb] px-4 py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <h1 className="font-heading text-3xl font-bold tracking-tight text-accent sm:text-4xl lg:text-5xl">
+                Navigate Cancer Care With Clarity
+              </h1>
+              <p className="mt-5 text-base text-slate-600 sm:text-lg lg:text-xl" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>
+                Understand diagnoses, explore treatment options, and find the best steps for your loved one.
+              </p>
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                {user ? (
+                  <Button asChild size="lg" className="h-12 rounded-xl px-8 text-base">
+                    <Link href="/journey">Go to Journey</Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button asChild size="lg" className="h-12 rounded-xl px-8 text-base shadow-md">
+                      <Link href="/signup" className="flex items-center gap-2">
+                        <FileUp className="h-5 w-5" />
+                        Upload Your Medical Report
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="lg"
+                      className="h-12 rounded-xl border-slate-300 px-8 text-base"
+                    >
+                      <Link href="/signup">Explore Caregiver Tools</Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+              <div className="mt-12 flex flex-wrap items-center gap-3 sm:gap-4 text-sm font-medium text-slate-600">
+                <span className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">1</span>
+                  Upload Your Report
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-slate-300" />
+                <span className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">2</span>
+                  Get Clear Results
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-slate-300" />
+                <span className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary text-xs">3</span>
+                  Follow Your Care Plan
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-center lg:justify-end">
+              <DashboardPreview />
+            </div>
           </div>
         </div>
       </section>

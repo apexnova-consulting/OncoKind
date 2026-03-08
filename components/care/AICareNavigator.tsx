@@ -14,6 +14,7 @@ interface ContextualInfo {
   diagnosis?: string;
   biomarkers?: string[];
   treatmentOptions?: string[];
+  recommendedActions?: string[];
 }
 
 interface AICareNavigatorProps {
@@ -112,7 +113,7 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
                         : 'bg-slate-100 text-slate-800'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{msg.content}</p>
+                    <p className="text-base leading-relaxed">{msg.content}</p>
                   </div>
                 </motion.div>
               ))}
@@ -121,7 +122,7 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
                 <div className="flex items-center gap-2 rounded-2xl bg-slate-100 px-4 py-3">
                   <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                  <span className="text-sm text-slate-600">Thinking…</span>
+                  <span className="text-base text-slate-600">Thinking…</span>
                 </div>
               </motion.div>
             )}
@@ -164,27 +165,31 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
           </Button>
         </form>
       </div>
-      {/* Right: Contextual info panel */}
+      {/* Right: Patient Summary (Navina-style contextual panel) */}
       <div className="hidden w-80 shrink-0 lg:block">
-        <div className="sticky top-24 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="font-heading text-lg font-semibold text-accent">Overview</h3>
-          <div className="mt-4 space-y-6">
+        <div className="sticky top-24 rounded-xl border border-slate-200 bg-white shadow-sm">
+          <div className="border-b border-slate-100 bg-slate-50/50 px-4 py-3">
+            <h3 className="font-heading text-sm font-semibold uppercase tracking-wide text-accent">
+              Patient Summary
+            </h3>
+          </div>
+          <div className="p-5 space-y-6">
             {contextualInfo?.diagnosis && (
               <div>
                 <p className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                  <FileText className="h-4 w-4 text-success" /> Diagnosis
+                  <FileText className="h-4 w-4 text-success" aria-hidden /> Diagnosis
                 </p>
-                <p className="mt-2 text-sm text-slate-700">{contextualInfo.diagnosis}</p>
+                <p className="mt-2 text-base text-slate-700">{contextualInfo.diagnosis}</p>
               </div>
             )}
             {contextualInfo?.biomarkers && contextualInfo.biomarkers.length > 0 && (
               <div>
                 <p className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                  <FlaskConical className="h-4 w-4 text-success" /> Key Biomarkers
+                  <FlaskConical className="h-4 w-4 text-success" aria-hidden /> Biomarkers
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {contextualInfo.biomarkers.map((b) => (
-                    <span key={b} className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
+                    <span key={b} className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
                       {b}
                     </span>
                   ))}
@@ -194,16 +199,26 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
             {contextualInfo?.treatmentOptions && contextualInfo.treatmentOptions.length > 0 && (
               <div>
                 <p className="text-xs font-semibold text-slate-500">Treatment Options</p>
-                <ol className="mt-2 list-inside list-decimal space-y-1 text-sm text-slate-700">
+                <ol className="mt-2 list-inside list-decimal space-y-1 text-base text-slate-700">
                   {contextualInfo.treatmentOptions.map((opt, i) => (
                     <li key={i}>{opt}</li>
                   ))}
                 </ol>
               </div>
             )}
+            {contextualInfo?.recommendedActions && contextualInfo.recommendedActions.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-slate-500">Recommended actions</p>
+                <ul className="mt-2 list-inside list-disc space-y-0.5 text-base text-slate-700">
+                  {contextualInfo.recommendedActions.map((action, i) => (
+                    <li key={i}>{action}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {!contextualInfo?.diagnosis && !contextualInfo?.biomarkers?.length && (
-              <p className="text-sm text-slate-500">
-                Upload a report to see your diagnosis summary and biomarkers here.
+              <p className="text-base text-slate-500">
+                Upload a report to see your diagnosis summary, biomarkers, and recommended actions here.
               </p>
             )}
           </div>

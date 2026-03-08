@@ -78,9 +78,9 @@ export function ProgressStrip({ currentStage, completedStages = [] }: ProgressSt
                 <div
                   className={`group relative flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     status === 'completed'
-                      ? 'bg-primary/10 text-primary'
+                      ? 'bg-success/10 text-success'
                       : status === 'current'
-                        ? 'bg-amber-100 text-amber-700'
+                        ? 'bg-primary/10 text-primary'
                         : 'bg-slate-50 text-slate-400'
                   }`}
                   role="button"
@@ -88,9 +88,9 @@ export function ProgressStrip({ currentStage, completedStages = [] }: ProgressSt
                   aria-label={`${STAGE_LABELS[stage]}: ${status} stage. Hover or tap for details.`}
                 >
                   {status === 'completed' ? (
-                    <Check className="h-4 w-4 shrink-0 text-primary" />
+                    <Check className="h-4 w-4 shrink-0 text-success" />
                   ) : status === 'current' ? (
-                    <Clock className="h-4 w-4 shrink-0 text-amber-600" />
+                    <Clock className="h-4 w-4 shrink-0 text-primary" />
                   ) : (
                     <Square className="h-3.5 w-3.5 shrink-0" />
                   )}

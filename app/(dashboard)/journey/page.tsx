@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { JourneyUploadCard } from '@/components/care/JourneyUploadCard';
 import { JourneyTimeline } from '@/components/care/JourneyTimeline';
+import { CancerProfileSummaryCard } from '@/components/care/CancerProfileSummaryCard';
 import { getPatientReport } from '@/lib/patient-reports';
 import { ClipboardList, Activity, BarChart3, FileText } from 'lucide-react';
 
@@ -104,14 +105,44 @@ export default async function JourneyPage() {
           </div>
         )}
         {report && (
-          <div className="mt-8">
-            <JourneyTimeline stages={stages} />
+          <>
+            <div className="mt-8 max-w-2xl">
+              <CancerProfileSummaryCard
+                type={
+                  report.biomarkers?.cancer_type_inferred
+                    ? `${report.biomarkers.cancer_type_inferred.charAt(0).toUpperCase() + report.biomarkers.cancer_type_inferred.slice(1)} Cancer`
+                    : 'Cancer'
+                }
+                stage={report.biomarkers?.tnm_stage ? `Stage ${report.biomarkers.tnm_stage}` : undefined}
+                biomarkers={
+                  report.biomarkers?.names?.map((name, i) => {
+                    const status = report.biomarkers?.statuses?.[i];
+                    return status ? `${name}: ${status}` : name;
+                  }) ?? []
+                }
+                recommendedNextSteps={[
+                  'Meet with oncologist',
+                  'Discuss treatment options',
+                  'Review clinical trials',
+                ]}
+                showCta={false}
+              />
+            </div>
+            <div className="mt-8">
+              <h2 className="font-heading text-lg font-semibold text-accent">Care roadmap</h2>
+              <p className="mt-1 text-sm text-slate-600">
+                Expand each stage for details and next steps.
+              </p>
+              <div className="mt-4">
+                <JourneyTimeline stages={stages} />
+              </div>
+            </div>
             <div className="pt-6 text-center">
               <Button asChild variant="outline">
                 <Link href="/journey/documents">Upload Another Report</Link>
               </Button>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>
