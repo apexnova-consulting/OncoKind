@@ -1,9 +1,96 @@
 import Link from 'next/link';
-import { FileUp, Map } from 'lucide-react';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { JourneyUploadCard } from '@/components/care/JourneyUploadCard';
+import { JourneyTimeline } from '@/components/care/JourneyTimeline';
+import { getPatientReport } from '@/lib/patient-reports';
+import { ClipboardList, Activity, BarChart3, FileText } from 'lucide-react';
 
-export default function JourneyPage() {
+export default async function JourneyPage() {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: reports } = await supabase
+    .from('patient_reports')
+    .select('id, created_at')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  const latestReportId = reports?.[0]?.id;
+  const report = latestReportId ? await getPatientReport(latestReportId, user.id) : null;
+
+  const biomarkers =
+    report?.biomarkers?.names?.map(
+      (name, i) => `${name}: ${report.biomarkers?.statuses?.[i] ?? '—'}`
+    ) ?? [];
+  const stages = report
+    ? [
+        {
+          id: 'diagnosis' as const,
+          label: 'Diagnosis',
+          icon: FileText,
+          status: 'completed' as const,
+          summary: report.biomarkers?.cancer_type_inferred
+            ? `${report.biomarkers.cancer_type_inferred} — ${report.biomarkers.tnm_stage ?? ''}`
+            : 'Stage identified',
+          biomarkers: report.biomarkers?.names ?? [],
+        },
+        {
+          id: 'treatment-planning' as const,
+          label: 'Treatment Planning',
+          icon: ClipboardList,
+          status: 'current' as const,
+          nextSteps: [
+            'Schedule PET Scan',
+            'Meet with Oncologist',
+            'Review Clinical Trials',
+          ],
+        },
+        {
+          id: 'active-treatment' as const,
+          label: 'Active Treatment',
+          icon: Activity,
+          status: 'upcoming' as const,
+          summary: 'Upcoming treatments',
+        },
+        {
+          id: 'monitoring' as const,
+          label: 'Monitoring',
+          icon: BarChart3,
+          status: 'upcoming' as const,
+        },
+      ]
+    : [
+        {
+          id: 'diagnosis' as const,
+          label: 'Diagnosis',
+          icon: FileText,
+          status: 'upcoming' as const,
+        },
+        {
+          id: 'treatment-planning' as const,
+          label: 'Treatment Planning',
+          icon: ClipboardList,
+          status: 'upcoming' as const,
+        },
+        {
+          id: 'active-treatment' as const,
+          label: 'Active Treatment',
+          icon: Activity,
+          status: 'upcoming' as const,
+        },
+        {
+          id: 'monitoring' as const,
+          label: 'Monitoring',
+          icon: BarChart3,
+          status: 'upcoming' as const,
+        },
+      ];
+
   return (
     <div className="p-6">
       <div className="mx-auto max-w-3xl">
@@ -11,38 +98,25 @@ export default function JourneyPage() {
           Your Cancer Care Journey
         </h1>
         <p className="mt-2 text-slate-600">
-          Upload a medical report to get started. We&apos;ll help you understand
-          your diagnosis and navigate next steps.
+          {report
+            ? 'See where you are in your care journey. Expand cards for details and next steps.'
+            : 'Upload a medical report to get started. We\'ll help you understand your diagnosis and navigate next steps.'}
         </p>
-        <div className="mt-8">
-          <JourneyUploadCard />
-        </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
-            <Map className="h-8 w-8 text-primary" />
-            <h2 className="mt-4 font-heading font-semibold text-accent">
-              Journey Map
-            </h2>
-            <p className="mt-2 text-sm text-slate-600">
-              See where you are: Diagnosis → Treatment Planning → Active Treatment → Monitoring
-            </p>
-            <Button asChild variant="outline" className="mt-4">
-              <Link href="/journey">View Map</Link>
-            </Button>
+        {!report && (
+          <div className="mt-8">
+            <JourneyUploadCard />
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
-            <FileUp className="h-8 w-8 text-primary" />
-            <h2 className="mt-4 font-heading font-semibold text-accent">
-              Upload Report
-            </h2>
-            <p className="mt-2 text-sm text-slate-600">
-              Pathology reports, imaging notes — we extract key information and explain it clearly.
-            </p>
-            <Button asChild className="mt-4">
-              <Link href="/journey">Upload Document</Link>
-            </Button>
+        )}
+        {report && (
+          <div className="mt-8 space-y-4">
+            <JourneyTimeline stages={stages} />
+            <div className="pt-6 text-center">
+              <Button asChild variant="outline">
+                <Link href="/journey/documents">Upload Another Report</Link>
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
