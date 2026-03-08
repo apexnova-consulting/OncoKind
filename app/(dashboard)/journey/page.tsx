@@ -23,10 +23,6 @@ export default async function JourneyPage() {
   const latestReportId = reports?.[0]?.id;
   const report = latestReportId ? await getPatientReport(latestReportId, user.id) : null;
 
-  const biomarkers =
-    report?.biomarkers?.names?.map(
-      (name, i) => `${name}: ${report.biomarkers?.statuses?.[i] ?? '—'}`
-    ) ?? [];
   const stages = report
     ? [
         {
@@ -93,7 +89,7 @@ export default async function JourneyPage() {
 
   return (
     <div className="p-6">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-6xl">
         <h1 className="font-heading text-2xl font-semibold text-accent">
           Your Cancer Care Journey
         </h1>
@@ -108,7 +104,7 @@ export default async function JourneyPage() {
           </div>
         )}
         {report && (
-          <div className="mt-8 space-y-4">
+          <div className="mt-8">
             <JourneyTimeline stages={stages} />
             <div className="pt-6 text-center">
               <Button asChild variant="outline">

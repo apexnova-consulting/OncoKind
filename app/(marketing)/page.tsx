@@ -1,13 +1,8 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
-import {
-  FileUp,
-  ArrowRight,
-  Shield,
-  Stethoscope,
-  User,
-} from 'lucide-react';
+import { FileUp, ArrowRight } from 'lucide-react';
 
 export default async function HomePage() {
   const supabase = await createServerSupabaseClient();
@@ -16,9 +11,9 @@ export default async function HomePage() {
   } = await supabase.auth.getUser();
 
   return (
-    <main>
+    <main className="bg-[#f9fafb]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50/80 px-4 py-20 sm:py-28 animate-in fade-in duration-700">
+      <section className="relative overflow-hidden bg-[#f9fafb] px-4 py-20 sm:py-28 animate-in fade-in duration-700">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-heading text-4xl font-bold tracking-tight text-accent sm:text-5xl">
             Navigate Cancer Care With Clarity
@@ -70,10 +65,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Trust cues */}
+      {/* Trust cues — doctor imagery */}
       <section className="border-t border-slate-200/60 bg-white px-4 py-16 sm:py-24">
         <div className="mx-auto max-w-4xl">
-          <h2 className="text-center text-2xl font-semibold text-accent sm:text-3xl">
+          <h2 id="how-it-works" className="text-center font-heading text-2xl font-semibold text-accent sm:text-3xl">
             Trusted Guidance for Families
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-center text-slate-600">
@@ -81,17 +76,32 @@ export default async function HomePage() {
           </p>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {[
-              { icon: Shield, title: 'Secure & Private', desc: 'Your data is protected. We never store raw reports.' },
-              { icon: Stethoscope, title: 'Clinical Boundaries', desc: 'We support preparation — your doctor guides treatment.' },
-              { icon: User, title: 'Empathy First', desc: 'Calm, clear language. No alarming statistics.' },
+              {
+                src: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop',
+                alt: 'Doctor with patient',
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop',
+                alt: 'Healthcare professional',
+              },
+              {
+                src: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400&h=300&fit=crop',
+                alt: 'Medical care team',
+              },
             ].map((item) => (
               <div
-                key={item.title}
-                className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                key={item.src}
+                className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md"
               >
-                <item.icon className="h-8 w-8 text-primary" />
-                <h3 className="mt-4 font-semibold text-accent">{item.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
+                <div className="relative aspect-[4/3] bg-slate-100">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                  />
+                </div>
               </div>
             ))}
           </div>

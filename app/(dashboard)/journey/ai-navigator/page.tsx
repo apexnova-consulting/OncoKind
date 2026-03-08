@@ -1,3 +1,4 @@
+import { Mail } from 'lucide-react';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getPatientReport } from '@/lib/patient-reports';
 import { AICareNavigator } from '@/components/care/AICareNavigator';
@@ -27,21 +28,26 @@ export default async function AINavigatorPage() {
       : `${ct.charAt(0).toUpperCase() + ct.slice(1)} Cancer`
     : undefined;
   const biomarkers = report?.biomarkers?.names ?? [];
-  const treatmentOptions: string[] = []; // Populated from trials or cancer type when available
+  const treatmentOptions: string[] = report
+    ? ['Chemotherapy', 'Radiation Therapy', 'Immunotherapy']
+    : [];
 
   return (
-    <div className="flex h-[calc(100vh-120px)] flex-col p-6">
-      <h1 className="font-heading text-2xl font-semibold text-accent">
-        AI Care Navigator
-      </h1>
-      <p className="mt-2 text-slate-600">
-        Ask questions about your care journey. We&apos;ll help you prepare for appointments and understand next steps.
-      </p>
-      <div className="mt-6 flex-1 min-h-0">
+    <div className="flex h-[calc(100vh-120px)] flex-col">
+      <div className="flex items-center gap-2 bg-primary px-6 py-3 text-white">
+        <Mail className="h-5 w-5 shrink-0" aria-hidden />
+        <h1 className="font-heading text-lg font-semibold">
+          Care Navigator
+        </h1>
+      </div>
+      <div className="flex-1 min-h-0 overflow-auto p-6">
+        <p className="mb-4 text-slate-600">
+          Ask questions about your care journey. We&apos;ll help you prepare for appointments and understand next steps.
+        </p>
         <AICareNavigator
           contextualInfo={
             (diagnosis || biomarkers.length > 0)
-              ? { diagnosis, biomarkers, treatmentOptions: treatmentOptions.length > 0 ? treatmentOptions : undefined }
+              ? { diagnosis, biomarkers, treatmentOptions }
               : null
           }
         />

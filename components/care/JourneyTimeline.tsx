@@ -23,18 +23,11 @@ interface JourneyTimelineProps {
   stages: StageData[];
 }
 
-const STAGE_ICONS = {
-  diagnosis: FileText,
-  'treatment-planning': ClipboardList,
-  'active-treatment': Activity,
-  monitoring: BarChart3,
-};
-
 export function JourneyTimeline({ stages }: JourneyTimelineProps) {
   const [expanded, setExpanded] = useState<CareStageId | null>('treatment-planning');
 
   return (
-    <div className="space-y-0">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {stages.map((stage, idx) => {
         const Icon = stage.icon;
         const isExpanded = expanded === stage.id;
@@ -51,16 +44,10 @@ export function JourneyTimeline({ stages }: JourneyTimelineProps) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="relative"
+            className="flex flex-col"
           >
-            {idx < stages.length - 1 && (
-              <div
-                className="absolute left-6 top-14 bottom-0 w-px bg-slate-200"
-                aria-hidden
-              />
-            )}
             <div
-              className={`rounded-xl border p-6 shadow-sm transition-shadow hover:shadow-md ${statusColors}`}
+              className={`flex min-h-[180px] flex-1 flex-col rounded-xl border p-6 shadow-sm transition-shadow hover:shadow-md ${statusColors}`}
             >
               <button
                 type="button"
@@ -83,12 +70,17 @@ export function JourneyTimeline({ stages }: JourneyTimelineProps) {
                       <Icon className="h-5 w-5" />
                     )}
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-heading font-semibold text-accent">
                       {stage.label}
                     </h3>
                     {stage.summary && (
                       <p className="mt-0.5 text-sm text-slate-600">{stage.summary}</p>
+                    )}
+                    {stage.id === 'diagnosis' && stage.summary && (
+                      <Button asChild size="sm" className="mt-3">
+                        <Link href="/journey/ai-navigator">Learn More</Link>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -135,8 +127,8 @@ export function JourneyTimeline({ stages }: JourneyTimelineProps) {
                               <li key={i}>{step}</li>
                             ))}
                           </ul>
-                          <Button asChild variant="outline" size="sm" className="mt-3">
-                            <Link href="/journey/documents">View Plan</Link>
+                          <Button asChild size="sm" className="mt-3">
+                            <Link href="/journey/ai-navigator">View Plan</Link>
                           </Button>
                         </div>
                       )}
@@ -152,7 +144,7 @@ export function JourneyTimeline({ stages }: JourneyTimelineProps) {
                           </ul>
                         </div>
                       )}
-                      {stage.status !== 'upcoming' && (
+                      {stage.status !== 'upcoming' && stage.id !== 'diagnosis' && (
                         <div className="flex gap-2">
                           <Button asChild size="sm">
                             <Link href="/journey/trials">View Clinical Trials</Link>

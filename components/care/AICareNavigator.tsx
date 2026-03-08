@@ -155,7 +155,7 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Search questions…"
+            placeholder="Search quick questions…"
             className="flex-1 rounded-lg border border-slate-200 px-4 py-2.5 text-sm placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             disabled={loading}
           />

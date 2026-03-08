@@ -66,6 +66,9 @@ export function ProgressStrip({ currentStage, completedStages = [] }: ProgressSt
   return (
     <div className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90">
       <div className="mx-auto max-w-4xl px-4 py-3">
+        <h2 className="mb-3 text-center font-heading text-sm font-semibold text-accent">
+          Your Cancer Care Journey
+        </h2>
         <div className="flex items-center justify-between gap-2">
           {stages.map((stage, idx) => {
             const status = getStageInfo(stage);
@@ -75,9 +78,9 @@ export function ProgressStrip({ currentStage, completedStages = [] }: ProgressSt
                 <div
                   className={`group relative flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     status === 'completed'
-                      ? 'bg-success/10 text-success'
+                      ? 'bg-primary/10 text-primary'
                       : status === 'current'
-                        ? 'bg-primary/10 text-primary'
+                        ? 'bg-amber-100 text-amber-700'
                         : 'bg-slate-50 text-slate-400'
                   }`}
                   role="button"
@@ -85,9 +88,9 @@ export function ProgressStrip({ currentStage, completedStages = [] }: ProgressSt
                   aria-label={`${STAGE_LABELS[stage]}: ${status} stage. Hover or tap for details.`}
                 >
                   {status === 'completed' ? (
-                    <Check className="h-4 w-4 shrink-0" />
+                    <Check className="h-4 w-4 shrink-0 text-primary" />
                   ) : status === 'current' ? (
-                    <Clock className="h-4 w-4 shrink-0" />
+                    <Clock className="h-4 w-4 shrink-0 text-amber-600" />
                   ) : (
                     <Square className="h-3.5 w-3.5 shrink-0" />
                   )}

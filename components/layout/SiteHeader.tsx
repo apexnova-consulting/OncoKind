@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
+import { Cloud } from 'lucide-react';
 
 export async function SiteHeader() {
   const supabase = await createServerSupabaseClient();
@@ -9,10 +10,8 @@ export async function SiteHeader() {
   } = await supabase.auth.getUser();
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/pricing', label: 'Pricing' },
-    { href: '/security', label: 'Security' },
+    { href: '/#how-it-works', label: 'How It Works' },
+    { href: '/signup', label: 'Caregiver Tools' },
   ];
 
   return (
@@ -20,8 +19,9 @@ export async function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
-          className="text-xl font-semibold tracking-tight text-slate-900 transition-colors hover:text-primary"
+          className="flex items-center gap-2 text-xl font-semibold tracking-tight text-slate-900 transition-colors hover:text-primary"
         >
+          <Cloud className="h-7 w-7 text-primary" aria-hidden />
           OncoKind
         </Link>
         <nav className="flex items-center gap-6">
@@ -35,21 +35,19 @@ export async function SiteHeader() {
             </Link>
           ))}
           {user ? (
-            <>
-              <Button asChild size="sm">
-                <Link href="/dashboard">Dashboard</Link>
-              </Button>
-            </>
+            <Button asChild size="sm">
+              <Link href="/journey">Go to Journey</Link>
+            </Button>
           ) : (
             <>
               <Link
                 href="/login"
                 className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
               >
-                Login
+                Log In
               </Link>
               <Button asChild size="sm">
-                <Link href="/signup">Get Started</Link>
+                <Link href="/signup">Sign In</Link>
               </Button>
             </>
           )}
