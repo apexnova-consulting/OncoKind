@@ -51,7 +51,7 @@ Add all variables in **Vercel → Project → Settings → Environment Variables
   3. `20250302000000_oncokind_v1_production.sql`
 - [ ] **Verify tables**: `profiles`, `medical_reports`, `patient_reports`, `enterprise_patient_assignments`
 - [ ] **Verify RLS** is enabled on all tables (Table Editor → each table → RLS)
-- [ ] **Auth → URL Configuration**:
+- [ ] **Auth → URL Configuration** (required for sign-up and login to work):
   - **Site URL**: `https://oncokind.com`
   - **Redirect URLs**: Add:
     - `https://oncokind.com/callback`
@@ -60,6 +60,7 @@ Add all variables in **Vercel → Project → Settings → Environment Variables
     - `https://www.oncokind.com/**`
     - (Keep `http://localhost:3000/callback` for local dev)
 - [ ] **Auth → Providers**: Enable Email (and any others you need)
+- [ ] **If sign-up shows "Failed to fetch"**: Ensure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are set in Vercel (Settings → Environment Variables), then redeploy. Supabase keys are inlined at build time.
 - [ ] **Storage**: Confirm `reports` bucket exists; policies allow user-scoped paths only
 
 ---

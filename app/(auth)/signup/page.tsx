@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,24 +14,47 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const { error: err } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: fullName } },
-    });
-    setLoading(false);
-    if (err) {
-      setError(err.message);
-      return;
+
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          full_name: fullName || undefined,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(data.error || 'Sign-up failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      router.push('/journey');
+      router.refresh();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      const isNetworkError =
+        message === 'Failed to fetch' ||
+        message.toLowerCase().includes('network') ||
+        (err instanceof TypeError && message.includes('fetch'));
+      setError(
+        isNetworkError
+          ? 'Unable to reach the server. Check your connection and try again.'
+          : message
+      );
+    } finally {
+      setLoading(false);
     }
-    router.push('/journey');
-    router.refresh();
   }
 
   return (

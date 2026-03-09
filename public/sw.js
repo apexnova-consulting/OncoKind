@@ -1,5 +1,5 @@
-/* TrialBridge PWA Service Worker - minimal installable + offline shell */
-const CACHE_NAME = 'trialbridge-v1';
+/* OncoKind PWA Service Worker - minimal installable + offline shell */
+const CACHE_NAME = 'oncokind-v2';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
