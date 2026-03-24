@@ -25,14 +25,55 @@ export function PwaRegister() {
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
-    window.addEventListener('load', () => {
+
+    let reloaded = false;
+    let hadActiveController = !!navigator.serviceWorker.controller;
+    const onControllerChange = () => {
+      if (!hadActiveController) {
+        hadActiveController = true;
+        return;
+      }
+      if (reloaded) return;
+      reloaded = true;
+      window.location.reload();
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+
+    const register = () => {
       navigator.serviceWorker
         .register('/sw.js', { scope: '/' })
         .then((reg) => {
-          if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          if (reg.waiting && navigator.serviceWorker.controller) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+          reg.addEventListener('updatefound', () => {
+            const w = reg.installing;
+            if (!w) return;
+            w.addEventListener('statechange', () => {
+              if (w.state === 'installed' && navigator.serviceWorker.controller) {
+                reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
+              }
+            });
+          });
+          void reg.update();
         })
         .catch(() => {});
-    });
+    };
+
+    if (document.readyState === 'complete') {
+      register();
+    } else {
+      window.addEventListener('load', register, { once: true });
+    }
+
+    const interval = window.setInterval(() => {
+      navigator.serviceWorker.getRegistration().then((reg) => void reg?.update());
+    }, 60 * 60 * 1000);
+
+    return () => {
+      navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+      window.clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
