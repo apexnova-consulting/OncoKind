@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { DashboardPreview } from '@/components/marketing/DashboardPreview';
+import { SampleReportDemo } from '@/components/marketing/SampleReportDemo';
 import { FileUp, ArrowRight } from 'lucide-react';
 
 export default async function HomePage() {
@@ -21,6 +22,11 @@ export default async function HomePage() {
               <h1 className="font-heading text-3xl font-bold tracking-tight text-accent sm:text-4xl lg:text-5xl">
                 Navigate Cancer Care With Clarity
               </h1>
+              <p className="mt-3 text-sm font-medium text-primary">
+                <Link href="/about#founder-section" className="underline-offset-4 hover:underline">
+                  Built by a caregiver, for caregivers.
+                </Link>
+              </p>
               <p className="mt-5 text-base text-slate-600 sm:text-lg lg:text-xl" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>
                 Understand diagnoses, explore treatment options, and find the best steps for your loved one.
               </p>
@@ -69,6 +75,7 @@ export default async function HomePage() {
               <DashboardPreview />
             </div>
           </div>
+          <SampleReportDemo />
         </div>
       </section>
 
@@ -182,6 +189,40 @@ export default async function HomePage() {
               View Full Pricing →
             </Link>
           </p>
+        </div>
+      </section>
+
+      {/* Feature highlights */}
+      <section className="border-t border-slate-200/60 bg-white px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-center font-heading text-2xl font-semibold text-accent sm:text-3xl">
+            Built to help you prepare with confidence
+          </h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {[
+              {
+                icon: '🗓',
+                title: 'Doctor Prep Sheet',
+                desc: 'Walk into every appointment prepared.',
+              },
+              {
+                icon: '🔬',
+                title: 'Clinical Trial Matching',
+                desc: 'Find trials you may qualify for, in plain language.',
+              },
+              {
+                icon: '🛡',
+                title: 'Empathy Filter',
+                desc: 'Every word is chosen to support, not scare.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm">
+                <p className="text-2xl" aria-hidden>{item.icon}</p>
+                <h3 className="mt-3 font-heading text-lg font-semibold text-accent">{item.title}</h3>
+                <p className="mt-2 text-slate-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

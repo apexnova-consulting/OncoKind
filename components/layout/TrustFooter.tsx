@@ -11,6 +11,12 @@ export function TrustFooter() {
           <Link href="/about" className="text-slate-600 hover:text-slate-900">
             About
           </Link>
+          <Link href="/about#founder-section" className="text-slate-600 hover:text-slate-900">
+            Founder
+          </Link>
+          <Link href="/empathy-filter" className="text-slate-600 hover:text-slate-900">
+            Empathy Filter
+          </Link>
           <Link href="/mission" className="text-slate-600 hover:text-slate-900">
             Mission
           </Link>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronDown, ChevronRight, FileText, ClipboardList, Activity, BarChart3 } from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export type CareStageId = 'diagnosis' | 'treatment-planning' | 'active-treatment' | 'monitoring';
