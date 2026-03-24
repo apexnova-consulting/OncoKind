@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 type Props = {
@@ -69,6 +69,16 @@ export function DoctorPrepSheet({
   const [durationMinutes, setDurationMinutes] = useState(45);
   const [notes, setNotes] = useState('');
   const [reminderMsg, setReminderMsg] = useState<string | null>(null);
+  const [extraTrialQuestions, setExtraTrialQuestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('oncokind_prep_extra_questions') ?? '[]');
+      setExtraTrialQuestions(Array.isArray(stored) ? stored.filter((x) => typeof x === 'string') : []);
+    } catch {
+      setExtraTrialQuestions([]);
+    }
+  }, []);
 
   if (!isPro) {
     return (
@@ -93,7 +103,7 @@ export function DoctorPrepSheet({
       'What should we monitor before the next appointment?',
       'What decisions do we need to make in the next two weeks?',
     ];
-    return [...fromReport, ...defaults].slice(0, 5);
+    return [...fromReport, ...extraTrialQuestions, ...defaults].slice(0, 8);
   })();
 
   const topBiomarkers = (() => {
@@ -298,6 +308,17 @@ export function DoctorPrepSheet({
           placeholder="Add your own concerns and priorities for the visit..."
         />
       </label>
+
+      {extraTrialQuestions.length > 0 && (
+        <div className="mt-3 rounded-md border border-sky-200 bg-sky-50/50 p-3">
+          <p className="text-sm font-medium text-primary">Questions added from Clinical Trials</p>
+          <ul className="mt-1 list-inside list-disc text-sm text-slate-700">
+            {extraTrialQuestions.map((q, i) => (
+              <li key={i}>{q}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="mt-4 flex flex-wrap gap-2">
         <Button onClick={openPrintablePrepSheet}>Open Prep Sheet (Save as PDF)</Button>
