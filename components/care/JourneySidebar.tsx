@@ -8,6 +8,7 @@ import {
   FileText,
   Calendar,
   FlaskConical,
+  FolderPlus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +18,7 @@ const navItems = [
   { href: '/journey/documents', label: 'Documents', icon: FileText },
   { href: '/journey/timeline', label: 'Care Timeline', icon: Calendar },
   { href: '/journey/trials', label: 'Clinical Trials', icon: FlaskConical },
+  { href: '/journey/second-opinion', label: 'Second Opinion', icon: FolderPlus },
 ];
 
 export function JourneySidebar() {
