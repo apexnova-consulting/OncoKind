@@ -1,6 +1,7 @@
 import { PathologyTranslationCard } from '@/components/dashboard/PathologyTranslationCard';
 import { TrialMatchesCard } from '@/components/dashboard/TrialMatchesCard';
 import { AppointmentQuestionGenerator } from '@/components/dashboard/AppointmentQuestionGenerator';
+import { CaregiverWellbeingCheckin } from '@/components/dashboard/CaregiverWellbeingCheckin';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +11,7 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-6xl px-4 py-6">
       <div className="space-y-8">
         <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+        <CaregiverWellbeingCheckin />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <PathologyTranslationCard />
           <TrialMatchesCard />

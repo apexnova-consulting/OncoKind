@@ -1,5 +1,5 @@
 /* OncoKind PWA Service Worker - minimal installable + offline shell */
-const CACHE_NAME = 'oncokind-v2';
+const CACHE_NAME = 'oncokind-v3';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -25,7 +25,15 @@ self.addEventListener('fetch', (event) => {
       return fetch(request).then((res) => {
         if (!res || res.status !== 200 || res.type !== 'basic') return res;
         const clone = res.clone();
-        if (url.pathname.startsWith('/_next/static/') || url.pathname === '/' || url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/login') || url.pathname.startsWith('/signup')) {
+        if (
+          url.pathname.startsWith('/_next/static/') ||
+          url.pathname === '/' ||
+          url.pathname.startsWith('/dashboard') ||
+          url.pathname.startsWith('/journey') ||
+          url.pathname.startsWith('/reports') ||
+          url.pathname.startsWith('/login') ||
+          url.pathname.startsWith('/signup')
+        ) {
           caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
         }
         return res;

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Cloud } from 'lucide-react';
 import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
+import { LanguageSelector } from '@/components/layout/LanguageSelector';
 
 export function DashboardNav() {
   const router = useRouter();
@@ -37,9 +38,12 @@ export function DashboardNav() {
             Billing
           </Link>
         </div>
-        <Button variant="ghost" size="sm" onClick={signOut}>
-          Sign out
-        </Button>
+        <div className="flex items-center gap-3">
+          <LanguageSelector />
+          <Button variant="ghost" size="sm" onClick={signOut}>
+            Sign out
+          </Button>
+        </div>
       </nav>
     </header>
   );

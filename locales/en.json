@@ -1,0 +1,22 @@
+{
+  "nav.howItWorks": "How It Works",
+  "nav.caregiverTools": "Caregiver Tools",
+  "nav.login": "Log In",
+  "nav.signup": "Sign In",
+  "nav.goToJourney": "Go to Journey",
+  "footer.about": "About",
+  "footer.founder": "Founder",
+  "footer.empathyFilter": "Empathy Filter",
+  "footer.mission": "Mission",
+  "footer.pricing": "Pricing",
+  "footer.security": "Security",
+  "footer.terms": "Terms",
+  "footer.privacy": "Privacy",
+  "pwa.installTitle": "Install OncoKind",
+  "pwa.installBody": "Add OncoKind to your home screen for faster access.",
+  "pwa.installAction": "Install",
+  "wellbeing.prompt": "How are you holding up this week?",
+  "wellbeing.ok": "Managing okay",
+  "wellbeing.hard": "It's been hard",
+  "wellbeing.support": "I need some support"
+}

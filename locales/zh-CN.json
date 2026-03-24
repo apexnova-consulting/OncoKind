@@ -1,0 +1,22 @@
+{
+  "nav.howItWorks": "工作原理",
+  "nav.caregiverTools": "照护者工具",
+  "nav.login": "登录",
+  "nav.signup": "注册",
+  "nav.goToJourney": "进入护理旅程",
+  "footer.about": "关于",
+  "footer.founder": "创始人",
+  "footer.empathyFilter": "同理心过滤器",
+  "footer.mission": "使命",
+  "footer.pricing": "价格",
+  "footer.security": "安全",
+  "footer.terms": "条款",
+  "footer.privacy": "隐私",
+  "pwa.installTitle": "安装 OncoKind",
+  "pwa.installBody": "将 OncoKind 添加到主屏幕以便更快访问。",
+  "pwa.installAction": "安装",
+  "wellbeing.prompt": "这周你还好吗？",
+  "wellbeing.ok": "我还可以",
+  "wellbeing.hard": "这周很难",
+  "wellbeing.support": "我需要支持"
+}

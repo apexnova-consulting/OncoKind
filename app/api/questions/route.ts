@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { normalizeLanguage } from '@/lib/i18n';
 
 const NAVIGATOR_PROMPT = `You are a calm, empathetic AI Care Navigator for families navigating cancer care. Your role is to help caregivers:
 - Understand diagnosis and next steps
@@ -11,6 +12,16 @@ Rules: No survival statistics. No fear-based language. Emphasize preparation and
 
 export async function POST(request: NextRequest) {
   try {
+    const language = normalizeLanguage(request.cookies.get('oncokind_lang')?.value);
+    const languageInstruction =
+      language === 'es'
+        ? 'Respond in Spanish.'
+        : language === 'zh-CN'
+          ? 'Respond in Simplified Chinese.'
+          : language === 'tl'
+            ? 'Respond in Tagalog.'
+            : 'Respond in English.';
+
     const body = await request.json().catch(() => ({}));
     const question = (body.question as string)?.trim();
     const topic = (body.topic as string)?.trim();
@@ -23,7 +34,7 @@ export async function POST(request: NextRequest) {
           model: 'claude-3-5-sonnet-20241022',
           max_tokens: 512,
           messages: [
-            { role: 'user', content: `${NAVIGATOR_PROMPT}\n\nCaregiver question: ${question}` },
+            { role: 'user', content: `${NAVIGATOR_PROMPT}\n${languageInstruction}\n\nCaregiver question: ${question}` },
           ],
         });
         const textBlock = message.content.find((b) => b.type === 'text');
@@ -46,7 +57,7 @@ export async function POST(request: NextRequest) {
           messages: [
             {
               role: 'user',
-              content: `Generate exactly 3 short questions a caregiver could ask an oncologist about: "${resolvedTopic}". Return only a JSON array of 3 strings, no other text.`,
+              content: `${languageInstruction} Generate exactly 3 short questions a caregiver could ask an oncologist about: "${resolvedTopic}". Return only a JSON array of 3 strings, no other text.`,
             },
           ],
         });

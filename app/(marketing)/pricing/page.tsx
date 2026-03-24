@@ -26,10 +26,11 @@ const CAREGIVER_PRO_FEATURES = [
 
 const PROFESSIONAL_FEATURES = [
   'Everything in Caregiver Pro',
-  'Multi-patient dashboard',
-  'Batch document analysis',
-  'Clinic integrations',
-  'Dedicated support',
+  'Branded portal (white-label subdomain)',
+  'HIPAA BAA acknowledgment flow',
+  'Batch report queue + status tracking',
+  'Exportable patient roster + prep completion flags',
+  'Dedicated support channel (email/Slack placeholder)',
 ];
 
 export default async function PricingPage() {
@@ -122,7 +123,7 @@ export default async function PricingPage() {
           {/* Professional */}
           <div id="enterprise" className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm scroll-mt-24">
             <h2 className="text-xl font-semibold text-slate-900">Professional</h2>
-            <p className="mt-2 text-slate-600">For advocates & clinics</p>
+            <p className="mt-2 text-slate-600">For Care Teams & Concierge Health Services</p>
             <p className="mt-6 text-3xl font-bold text-slate-900">$999</p>
             <p className="text-sm text-slate-500">/month</p>
             <ul className="mt-8 space-y-3">
@@ -181,6 +182,9 @@ export default async function PricingPage() {
                   ['Trial matches', 'Limited', 'Full (50mi)', 'Full + custom'],
                   ['Doctor Prep PDF', '—', '✓', '✓ Branded'],
                   ['Multi-patient', '—', '—', '✓'],
+                  ['Branded portal', '—', '—', '✓'],
+                  ['HIPAA BAA onboarding', '—', '—', '✓'],
+                  ['Roster export + prep flags', '—', '—', '✓'],
                   ['Support', 'Community', 'Email', 'Dedicated'],
                 ].map(([feature, free, pro, prof]) => (
                   <tr key={feature} className="border-b border-slate-100">

@@ -2,16 +2,19 @@ import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { Cloud } from 'lucide-react';
+import { LanguageSelector } from '@/components/layout/LanguageSelector';
+import { getDictionaryFromCookies } from '@/lib/i18n-server';
 
 export async function SiteHeader() {
   const supabase = await createServerSupabaseClient();
+  const t = await getDictionaryFromCookies();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const navLinks = [
-    { href: '/#how-it-works', label: 'How It Works' },
-    { href: '/signup', label: 'Caregiver Tools' },
+    { href: '/#how-it-works', label: t['nav.howItWorks'] },
+    { href: '/signup', label: t['nav.caregiverTools'] },
   ];
 
   return (
@@ -25,6 +28,7 @@ export async function SiteHeader() {
           OncoKind
         </Link>
         <nav className="flex items-center gap-6">
+          <LanguageSelector />
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -36,7 +40,7 @@ export async function SiteHeader() {
           ))}
           {user ? (
             <Button asChild size="sm">
-              <Link href="/journey">Go to Journey</Link>
+              <Link href="/journey">{t['nav.goToJourney']}</Link>
             </Button>
           ) : (
             <>
@@ -44,10 +48,10 @@ export async function SiteHeader() {
                 href="/login"
                 className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
               >
-                Log In
+                {t['nav.login']}
               </Link>
               <Button asChild size="sm">
-                <Link href="/signup">Sign In</Link>
+                <Link href="/signup">{t['nav.signup']}</Link>
               </Button>
             </>
           )}

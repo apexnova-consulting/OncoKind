@@ -1,0 +1,22 @@
+{
+  "nav.howItWorks": "Cómo funciona",
+  "nav.caregiverTools": "Herramientas para cuidadores",
+  "nav.login": "Iniciar sesión",
+  "nav.signup": "Registrarse",
+  "nav.goToJourney": "Ir al recorrido",
+  "footer.about": "Acerca de",
+  "footer.founder": "Fundador",
+  "footer.empathyFilter": "Filtro de empatía",
+  "footer.mission": "Misión",
+  "footer.pricing": "Precios",
+  "footer.security": "Seguridad",
+  "footer.terms": "Términos",
+  "footer.privacy": "Privacidad",
+  "pwa.installTitle": "Instalar OncoKind",
+  "pwa.installBody": "Agrega OncoKind a tu pantalla de inicio para un acceso más rápido.",
+  "pwa.installAction": "Instalar",
+  "wellbeing.prompt": "¿Cómo te has sentido esta semana?",
+  "wellbeing.ok": "Estoy manejándolo bien",
+  "wellbeing.hard": "Ha sido difícil",
+  "wellbeing.support": "Necesito apoyo"
+}

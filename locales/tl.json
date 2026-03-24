@@ -1,0 +1,22 @@
+{
+  "nav.howItWorks": "Paano ito gumagana",
+  "nav.caregiverTools": "Mga tool para sa caregiver",
+  "nav.login": "Mag-log in",
+  "nav.signup": "Mag-sign up",
+  "nav.goToJourney": "Pumunta sa journey",
+  "footer.about": "Tungkol",
+  "footer.founder": "Tagapagtatag",
+  "footer.empathyFilter": "Empathy Filter",
+  "footer.mission": "Misyon",
+  "footer.pricing": "Presyo",
+  "footer.security": "Seguridad",
+  "footer.terms": "Mga Tuntunin",
+  "footer.privacy": "Privacy",
+  "pwa.installTitle": "I-install ang OncoKind",
+  "pwa.installBody": "Idagdag ang OncoKind sa iyong home screen para mas mabilis na access.",
+  "pwa.installAction": "I-install",
+  "wellbeing.prompt": "Kumusta ka ngayong linggo?",
+  "wellbeing.ok": "Kaya ko pa",
+  "wellbeing.hard": "Mahirap ang linggong ito",
+  "wellbeing.support": "Kailangan ko ng suporta"
+}
