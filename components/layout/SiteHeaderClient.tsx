@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { LanguageSelector } from '@/components/layout/LanguageSelector';
 import { Menu, X } from 'lucide-react';
@@ -21,7 +22,12 @@ export type SiteHeaderClientProps = {
 export function SiteHeaderClient({ navLinks, signedIn, labels }: SiteHeaderClientProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -40,7 +46,9 @@ export function SiteHeaderClient({ navLinks, signedIn, labels }: SiteHeaderClien
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 border-b transition-[border-color,background-color] duration-300',
+        'sticky top-0 border-b transition-[border-color,background-color] duration-300',
+        /* When mobile menu is open, sit above the portaled overlay so the bar + close control stay tappable */
+        open ? 'z-[110]' : 'z-50',
         scrolled
           ? 'border-[var(--color-border-subtle)] bg-[rgba(250,248,245,0.95)] backdrop-blur-[12px]'
           : 'border-transparent bg-[rgba(250,248,245,0.92)] backdrop-blur-[12px]'
@@ -99,59 +107,69 @@ export function SiteHeaderClient({ navLinks, signedIn, labels }: SiteHeaderClien
         </div>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-nav"
-            className="fixed inset-0 top-16 z-40 flex flex-col bg-[var(--color-bg-page)] px-6 pb-10 pt-8 lg:hidden"
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <nav className="flex flex-col gap-1" aria-label="Mobile">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={reduceMotion ? false : { opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: reduceMotion ? 0 : 0.05 + i * 0.06, duration: 0.35 }}
-                >
-                  <Link
-                    href={link.href}
-                    className="block rounded-xl px-4 py-4 text-lg font-medium text-[var(--color-primary-800)] hover:bg-[var(--color-surface-200)]"
-                    onClick={() => setOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
-              <div className="mt-6 flex flex-col gap-3 border-t border-[var(--color-border-subtle)] pt-6">
-                {signedIn ? (
-                  <Button asChild className="w-full">
-                    <Link href="/journey" onClick={() => setOpen(false)}>
-                      {labels.journey}
-                    </Link>
-                  </Button>
-                ) : (
-                  <>
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href="/login" onClick={() => setOpen(false)}>
-                        {labels.login}
+      {/* Portal avoids Safari stacking bugs: fixed descendants inside backdrop-blur header paint under page / bottom nav */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                key="mobile-nav"
+                id="mobile-nav"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Mobile navigation"
+                className="fixed inset-0 top-16 z-[100] flex flex-col overflow-y-auto bg-[var(--color-bg-page)] px-6 pb-10 pt-8 lg:hidden"
+                style={{ WebkitOverflowScrolling: 'touch' }}
+                initial={reduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <nav className="relative z-[1] flex flex-col gap-1" aria-label="Mobile">
+                  {navLinks.map((link, i) => (
+                    <motion.div
+                      key={link.href}
+                      initial={reduceMotion ? false : { opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: reduceMotion ? 0 : 0.05 + i * 0.06, duration: 0.35 }}
+                    >
+                      <Link
+                        href={link.href}
+                        className="block rounded-xl px-4 py-4 text-lg font-medium text-[var(--color-primary-800)] hover:bg-[var(--color-surface-200)] active:bg-[var(--color-surface-200)]"
+                        onClick={() => setOpen(false)}
+                      >
+                        {link.label}
                       </Link>
-                    </Button>
-                    <Button asChild className="w-full">
-                      <Link href="/signup" onClick={() => setOpen(false)}>
-                        {labels.signup}
-                      </Link>
-                    </Button>
-                  </>
-                )}
-              </div>
-            </nav>
-          </motion.div>
+                    </motion.div>
+                  ))}
+                  <div className="mt-6 flex flex-col gap-3 border-t border-[var(--color-border-subtle)] pt-6">
+                    {signedIn ? (
+                      <Button asChild className="w-full">
+                        <Link href="/journey" onClick={() => setOpen(false)}>
+                          {labels.journey}
+                        </Link>
+                      </Button>
+                    ) : (
+                      <>
+                        <Button asChild variant="outline" className="w-full">
+                          <Link href="/login" onClick={() => setOpen(false)}>
+                            {labels.login}
+                          </Link>
+                        </Button>
+                        <Button asChild className="w-full">
+                          <Link href="/signup" onClick={() => setOpen(false)}>
+                            {labels.signup}
+                          </Link>
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </nav>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </header>
   );
 }
