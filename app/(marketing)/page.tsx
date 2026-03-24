@@ -167,7 +167,7 @@ export default async function HomePage() {
             {[
               { name: 'Free', desc: 'Try OncoKind', price: '$0', cta: 'Get Started' },
               { name: 'Caregiver Pro', desc: 'For families', price: '$19/mo', cta: 'Upgrade' },
-              { name: 'Professional', desc: 'For advocates', price: '$999/mo', cta: 'Contact' },
+              { name: 'Professional', desc: 'For Care Teams & Concierge Health Services', price: '$999/mo', cta: 'Contact' },
             ].map((tier) => (
               <div
                 key={tier.name}
