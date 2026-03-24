@@ -67,6 +67,7 @@ export default async function ReportDetailPage({
       </Card>
       <DoctorPrepSheet
         isPro={isPro}
+        reportTitle={report.file_name ?? undefined}
         reportSummary={summary}
         reportQuestions={suggestedQuestions}
         reportFindings={keyFindings}
