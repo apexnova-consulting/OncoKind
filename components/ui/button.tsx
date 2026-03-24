@@ -4,21 +4,24 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold transition-[transform,box-shadow,background-color,color,border-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-white hover:bg-primary/90',
-        secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200',
-        outline: 'border border-slate-200 bg-white hover:bg-slate-50',
-        ghost: 'hover:bg-slate-100',
-        link: 'text-primary underline-offset-4 hover:underline',
+        default:
+          'rounded-full bg-[var(--color-accent-400)] px-7 py-3.5 text-[var(--color-primary-900)] shadow-sm hover:bg-[var(--color-accent-500)] motion-safe:hover:-translate-y-px motion-safe:hover:shadow-md',
+        secondary:
+          'rounded-full bg-[var(--color-surface-200)] text-[var(--color-primary-800)] hover:bg-[var(--color-surface-300)]',
+        outline:
+          'rounded-full border-[1.5px] border-[var(--color-primary-700)] bg-transparent text-[var(--color-primary-800)] hover:bg-[var(--color-primary-900)] hover:text-[var(--color-text-inverse)]',
+        ghost: 'rounded-full hover:bg-[var(--color-surface-200)]',
+        link: 'h-auto min-h-[44px] rounded-none px-1 py-2 font-medium text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10',
+        default: 'min-h-11 rounded-full px-5 py-2.5',
+        sm: 'min-h-11 rounded-full px-5 py-2.5 text-sm',
+        lg: 'min-h-12 rounded-full px-8 py-3 text-base',
+        icon: 'h-11 w-11 min-h-11 min-w-11 rounded-full p-0',
       },
     },
     defaultVariants: {

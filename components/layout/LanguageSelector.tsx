@@ -32,13 +32,13 @@ export function LanguageSelector() {
   }
 
   return (
-    <label className="inline-flex items-center gap-1.5 text-sm text-slate-600">
-      <Globe className="h-4 w-4" aria-hidden />
+    <label className="inline-flex items-center gap-1.5 text-sm text-[var(--color-text-secondary)]">
+      <Globe className="h-4 w-4 shrink-0 text-[var(--color-primary-600)]" aria-hidden />
       <span className="sr-only">Language</span>
       <select
         value={lang}
         onChange={(e) => changeLanguage(e.target.value as SupportedLanguage)}
-        className="rounded-md border border-slate-200 bg-white px-2 py-1 text-sm"
+        className="max-w-[9rem] cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-surface-100)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary-800)] transition-colors hover:border-[var(--color-primary-600)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2"
         aria-label="Select language"
       >
         {options.map((o) => (

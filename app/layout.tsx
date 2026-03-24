@@ -1,13 +1,28 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Source_Sans_3 } from 'next/font/google';
+import { DM_Sans, Lora } from 'next/font/google';
 import './globals.css';
 import { TrustFooter } from '@/components/layout/TrustFooter';
 import { PwaRegister } from '@/components/PwaRegister';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { getLanguageFromCookies } from '@/lib/i18n-server';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans' });
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  preload: true,
+  weight: ['600', '700'],
+  style: ['normal', 'italic'],
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+  preload: true,
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -26,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0284c7',
+  themeColor: '#0d1b2a',
   width: 'device-width',
   initialScale: 1,
 };
@@ -38,13 +53,14 @@ export default async function RootLayout({
 }>) {
   const lang = await getLanguageFromCookies();
   return (
-    <html lang={lang} className={`${inter.variable} ${sourceSans.variable}`}>
+    <html lang={lang} className={`${lora.variable} ${dmSans.variable}`}>
       <head>
+        <link rel="icon" href="/icons/icon-192.png" type="image/png" sizes="192x192" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#f9fafb] pb-16 text-accent md:pb-0">
+      <body className="flex min-h-screen flex-col bg-[var(--color-bg-page)] pb-16 text-accent md:pb-0">
         <PwaRegister />
         {children}
         <TrustFooter />

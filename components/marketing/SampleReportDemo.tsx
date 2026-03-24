@@ -43,23 +43,28 @@ export function SampleReportDemo() {
   }
 
   return (
-    <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <section
+      id="sample-demo"
+      className="mt-12 scroll-mt-24 rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-6 shadow-[var(--shadow-md)] motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-[var(--shadow-lg)] motion-safe:transition-all motion-safe:duration-300"
+    >
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="font-heading text-xl font-semibold text-accent">Try a Sample Report</h3>
-          <p className="mt-1 text-slate-600">
+          <h2 className="font-display text-xl font-semibold text-[var(--color-primary-900)]">
+            Try a Sample Report
+          </h2>
+          <p className="mt-1 text-[var(--color-text-secondary)]">
             Explore a fictional case to see how OncoKind translates complex reports into clear next steps.
           </p>
         </div>
-        <Button type="button" size="lg" onClick={() => setOpen((v) => !v)} className="h-11">
+        <Button type="button" size="lg" onClick={() => setOpen((v) => !v)}>
           <Sparkles className="mr-2 h-4 w-4" />
           {open ? 'Hide sample demo' : 'Try a Sample Report'}
         </Button>
       </div>
 
       {open && (
-        <div className="mt-6 space-y-4 rounded-xl border border-sky-200 bg-sky-50/40 p-4">
-          <p className="text-sm font-medium text-primary">
+        <div className="mt-6 space-y-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-100)] p-5">
+          <p className="text-sm font-semibold text-[var(--color-primary-700)]">
             Sample Report - For Demonstration Purposes Only
           </p>
           <CancerProfileSummaryCard
@@ -86,9 +91,11 @@ export function SampleReportDemo() {
           </div>
 
           {showPrepPreview && (
-            <div className="rounded-lg border border-slate-200 bg-white p-4">
-              <h4 className="font-heading text-base font-semibold text-accent">Prep Sheet Preview</h4>
-              <pre className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
+            <div className="rounded-[var(--radius-lg)] border border-[var(--color-border-subtle)] bg-white p-4 shadow-[var(--shadow-sm)]">
+              <h3 className="font-display text-base font-semibold text-[var(--color-primary-900)]">
+                Prep Sheet Preview
+              </h3>
+              <pre className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-[var(--color-text-secondary)]">
                 {samplePrepSheet}
               </pre>
               <div className="mt-3">

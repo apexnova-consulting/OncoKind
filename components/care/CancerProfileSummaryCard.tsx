@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { FlaskConical, ListChecks } from 'lucide-react';
+import { FlaskConical } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export interface CancerProfileSummaryCardProps {
   /** e.g. "Non-Small Cell Lung Cancer" */
@@ -29,38 +30,61 @@ export function CancerProfileSummaryCard({
 }: CancerProfileSummaryCardProps) {
   return (
     <div
-      className={`rounded-xl border border-slate-200 bg-white shadow-sm ${
+      className={cn(
+        'rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white shadow-[var(--shadow-md)]',
         compact ? 'p-4' : 'p-6'
-      }`}
+      )}
     >
-      <h3 className="font-heading text-sm font-semibold uppercase tracking-wide text-slate-500">
+      <p className="inline-flex rounded-full bg-[rgba(95,132,116,0.14)] px-3 py-1 text-[var(--text-xs)] font-semibold uppercase tracking-[var(--tracking-widest)] text-[var(--color-sage-600)]">
         Cancer Profile
-      </h3>
-      <div className={compact ? 'mt-3 space-y-3' : 'mt-5 space-y-5'}>
-        <div>
-          <p className="text-xs font-medium text-slate-500">Type</p>
-          <p className={`font-medium text-accent ${compact ? 'text-sm' : 'text-base'}`}>
-            {type}
-          </p>
-        </div>
-        {stage && (
+      </p>
+      <div className={compact ? 'mt-4 space-y-4' : 'mt-6 space-y-5'}>
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <p className="text-xs font-medium text-slate-500">Stage</p>
-            <p className={`font-medium text-accent ${compact ? 'text-sm' : 'text-base'}`}>
-              {stage}
+            <p className="text-[var(--text-xs)] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+              Type
+            </p>
+            <p
+              className={cn(
+                'mt-1 font-display font-semibold text-[var(--color-primary-900)]',
+                compact ? 'text-base' : 'text-lg'
+              )}
+            >
+              {type}
             </p>
           </div>
-        )}
+          {stage && (
+            <div>
+              <p className="text-[var(--text-xs)] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+                Stage
+              </p>
+              <p
+                className={cn(
+                  'mt-1 font-display font-semibold text-[var(--color-primary-900)]',
+                  compact ? 'text-base' : 'text-lg'
+                )}
+              >
+                {stage}
+              </p>
+            </div>
+          )}
+        </div>
         {biomarkers.length > 0 && (
           <div>
-            <p className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-              <FlaskConical className="h-3.5 w-3.5" /> Key Biomarkers
+            <p className="flex items-center gap-1.5 text-[var(--text-xs)] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+              <FlaskConical className="h-3.5 w-3.5 text-[var(--color-sage-500)]" aria-hidden />
+              Key Biomarkers
             </p>
-            <div className="mt-1.5 flex flex-wrap gap-2">
-              {biomarkers.map((b) => (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {biomarkers.map((b, i) => (
                 <span
                   key={b}
-                  className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+                  className={cn(
+                    'rounded-full px-3 py-1 text-[var(--text-xs)] font-semibold',
+                    i % 2 === 0
+                      ? 'bg-[rgba(95,132,116,0.16)] text-[var(--color-sage-600)]'
+                      : 'bg-[rgba(58,97,134,0.12)] text-[var(--color-primary-700)]'
+                  )}
                 >
                   {b}
                 </span>
@@ -70,19 +94,30 @@ export function CancerProfileSummaryCard({
         )}
         {recommendedNextSteps.length > 0 && (
           <div>
-            <p className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-              <ListChecks className="h-3.5 w-3.5" /> Recommended Next Steps
+            <p className="text-[var(--text-xs)] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+              Recommended Next Steps
             </p>
-            <ul className="mt-1.5 list-inside list-disc space-y-0.5 text-sm text-slate-700">
+            <ul className="mt-3 space-y-2.5">
               {recommendedNextSteps.map((step, i) => (
-                <li key={i}>{step}</li>
+                <li key={i} className="flex gap-3 text-sm leading-snug text-[var(--color-text-secondary)]">
+                  <span
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-400)] text-xs font-bold text-[var(--color-primary-900)]"
+                    aria-hidden
+                  >
+                    {i + 1}
+                  </span>
+                  <span className="pt-0.5">{step}</span>
+                </li>
               ))}
             </ul>
           </div>
         )}
       </div>
+      <p className="mt-4 border-t border-[var(--color-border-subtle)] pt-3 text-center text-[var(--text-xs)] text-[var(--color-text-muted)]">
+        Generated by OncoKind
+      </p>
       {showCta && !compact && (
-        <Button asChild size="sm" className="mt-5">
+        <Button asChild size="sm" className="mt-4 w-full sm:w-auto">
           <Link href="/journey">View full journey</Link>
         </Button>
       )}
