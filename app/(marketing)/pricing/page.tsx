@@ -196,19 +196,9 @@ export default async function PricingPage() {
                 )}
               </div>
             ) : (
-              <div className="mt-8 space-y-3">
-                <Button asChild variant="outline" className="w-full border-[var(--color-primary-800)]">
-                  <a href="mailto:hello@oncokind.com?subject=Enterprise%20Inquiry">Contact Us</a>
-                </Button>
-                <p className="text-center text-sm text-[var(--color-text-muted)]">
-                  <a
-                    className="font-medium text-[var(--color-primary-800)] underline underline-offset-2"
-                    href="mailto:hello@oncokind.com?subject=Enterprise%20sales%20inquiry"
-                  >
-                    Enterprise email contact
-                  </a>
-                </p>
-              </div>
+              <Button asChild variant="outline" className="mt-8 w-full border-[var(--color-primary-800)]">
+                <a href="mailto:hello@oncokind.com?subject=Enterprise%20Inquiry">Contact Us</a>
+              </Button>
             )}
           </div>
         </div>

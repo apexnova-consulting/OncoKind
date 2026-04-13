@@ -1,7 +1,7 @@
 'use client';
 
 import { Globe } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { normalizeLanguage, type SupportedLanguage } from '@/lib/i18n';
 
 const DISPLAY: Record<SupportedLanguage, string> = {
@@ -11,7 +11,7 @@ const DISPLAY: Record<SupportedLanguage, string> = {
   tl: 'Tagalog',
 };
 
-const optionOrder: SupportedLanguage[] = ['es', 'zh-CN', 'tl', 'en'];
+const optionOrder: SupportedLanguage[] = ['en', 'es', 'zh-CN', 'tl'];
 
 export function LanguageSelector() {
   const [lang, setLang] = useState<SupportedLanguage>('en');
@@ -30,15 +30,25 @@ export function LanguageSelector() {
 
   useEffect(() => {
     if (!open) return;
-    function onPointerDown(e: PointerEvent) {
+    function handleOutside(e: MouseEvent | TouchEvent) {
       const root = rootRef.current;
       if (root && !root.contains(e.target as Node)) {
         setOpen(false);
       }
     }
-    document.addEventListener('pointerdown', onPointerDown);
-    return () => document.removeEventListener('pointerdown', onPointerDown);
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
   }, [open]);
+
+  const toggle = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen((v) => !v);
+  }, []);
 
   function changeLanguage(next: SupportedLanguage) {
     setLang(next);
@@ -56,15 +66,16 @@ export function LanguageSelector() {
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label="Select language"
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggle}
+        onTouchEnd={toggle}
       >
         <Globe className="h-4 w-4 shrink-0 text-[var(--color-primary-600)]" aria-hidden />
-        <span>{DISPLAY[lang]}</span>
+        <span>English</span>
       </button>
       {open && (
         <ul
           role="listbox"
-          className="absolute right-0 top-[calc(100%+6px)] z-[200] min-w-[10rem] rounded-lg border border-[var(--color-border)] bg-white py-1 shadow-lg"
+          className="absolute right-0 top-[calc(100%+6px)] z-[200] min-w-[10rem] max-w-[90vw] rounded-lg border border-[var(--color-border)] bg-white py-1 shadow-lg"
         >
           {optionOrder.map((id) => (
             <li key={id} role="presentation">
@@ -74,6 +85,10 @@ export function LanguageSelector() {
                 aria-selected={id === lang}
                 className="block w-full px-4 py-2 text-left text-sm text-[var(--color-primary-900)] hover:bg-[var(--color-surface-100)]"
                 onClick={() => changeLanguage(id)}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  changeLanguage(id);
+                }}
               >
                 {DISPLAY[id]}
               </button>

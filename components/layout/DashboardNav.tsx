@@ -20,27 +20,24 @@ export function DashboardNav() {
   return (
     <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
           <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900">
             <Cloud className="h-6 w-6 text-primary" aria-hidden />
             OncoKind
           </Link>
-          <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/dashboard" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Home
           </Link>
-          <Link href="/journey" className="text-sm text-slate-600 hover:text-slate-900">
-            Journey
-          </Link>
-          <Link href="/journey/timeline" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/journey/timeline" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Timeline
           </Link>
-          <Link href="/reports" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/reports" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Reports
           </Link>
-          <Link href="/journey/second-opinion" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/journey/second-opinion" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Prep Sheet
           </Link>
-          <Link href="/dashboard/billing" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/dashboard/billing" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Billing
           </Link>
         </div>

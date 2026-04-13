@@ -11,7 +11,7 @@ export function Reveal({
   className,
   delay = 0,
   y = 28,
-  once = true,
+  once: _once = true,
 }: {
   children: ReactNode;
   className?: string;
@@ -27,8 +27,7 @@ export function Reveal({
     <motion.div
       className={cn(className)}
       initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, margin: '-48px' }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, delay, ease: easeOutExpo }}
     >
       {children}
@@ -58,8 +57,7 @@ export function RevealStagger({
         <motion.div
           key={i}
           initial={{ opacity: 0, y }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: i * stagger, ease: easeOutExpo }}
         >
           {child}
