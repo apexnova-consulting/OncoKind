@@ -16,6 +16,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
+import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
 import Anthropic from '@anthropic-ai/sdk';
 
 const MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -44,6 +45,7 @@ Rules: Be concise. If unclear, use null. Never include patient identifiers.`;
 
 export async function scrubAndProcessPathology(formData: FormData): Promise<PathologyResult> {
   let rawText: string | null = null;
+  let releaseTemporaryArtifact: (() => void) | null = null;
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -75,6 +77,8 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     if (!rawText?.trim()) {
       return { success: false, error: 'Could not extract text from PDF' };
     }
+
+    releaseTemporaryArtifact = trackTemporaryArtifact('pathology-pdf');
 
     rawText = rawText.slice(0, MAX_EXTRACTED_CHARS);
     const scrubbedText = scrubPHI(rawText);
@@ -163,5 +167,6 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     return { success: false, error: 'Processing failed. Please try again.' };
   } finally {
     rawText = null;
+    releaseTemporaryArtifact?.();
   }
 }

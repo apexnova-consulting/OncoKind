@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
+import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
 import type { PatientReportData } from '@/lib/patient-reports';
 
 const MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024;
@@ -195,44 +196,50 @@ export async function decodeInsuranceDenial(file: File): Promise<{
   denialSummaryEncrypted: string;
 }> {
   const rawText = await extractTextFromPdfFile(file);
-  const scrubbedText = scrubPHI(rawText);
-
-  if (!verifyNoPHIRemaining(scrubbedText)) {
-    throw new Error('Unable to fully de-identify the insurance document');
-  }
-
-  const parsedSignals = extractInsuranceSignals(scrubbedText);
-  let plainEnglishBullets = buildFallbackPayload(parsedSignals, null).plainEnglishBullets;
-  let modelId = 'fallback-rules';
+  const releaseTemporaryArtifact = trackTemporaryArtifact('insurance-pdf');
 
   try {
-    const generated = await generateWithAnthropic({
-      scrubbedText,
-      parsedSignals,
-      report: null,
-    });
-    if (generated.plainEnglishBullets.length > 0) {
-      plainEnglishBullets = generated.plainEnglishBullets.slice(0, 3);
-      modelId = DEFAULT_MODEL_ID;
+    const scrubbedText = scrubPHI(rawText);
+
+    if (!verifyNoPHIRemaining(scrubbedText)) {
+      throw new Error('Unable to fully de-identify the insurance document');
     }
-  } catch {
-    modelId = 'fallback-rules';
+
+    const parsedSignals = extractInsuranceSignals(scrubbedText);
+    let plainEnglishBullets = buildFallbackPayload(parsedSignals, null).plainEnglishBullets;
+    let modelId = 'fallback-rules';
+
+    try {
+      const generated = await generateWithAnthropic({
+        scrubbedText,
+        parsedSignals,
+        report: null,
+      });
+      if (generated.plainEnglishBullets.length > 0) {
+        plainEnglishBullets = generated.plainEnglishBullets.slice(0, 3);
+        modelId = DEFAULT_MODEL_ID;
+      }
+    } catch {
+      modelId = 'fallback-rules';
+    }
+
+    const payload: DecodedInsurancePayload = {
+      denialReasonCode: parsedSignals.denialReasonCode,
+      insuranceName: parsedSignals.insuranceName,
+      memberServicesPhone: parsedSignals.memberServicesPhone,
+      appealDeadlineText: parsedSignals.appealDeadlineText,
+      plainEnglishBullets,
+    };
+
+    return {
+      payload,
+      scrubbedText,
+      modelId,
+      denialSummaryEncrypted: toSupabaseBytea(encryptJson(payload)),
+    };
+  } finally {
+    releaseTemporaryArtifact();
   }
-
-  const payload: DecodedInsurancePayload = {
-    denialReasonCode: parsedSignals.denialReasonCode,
-    insuranceName: parsedSignals.insuranceName,
-    memberServicesPhone: parsedSignals.memberServicesPhone,
-    appealDeadlineText: parsedSignals.appealDeadlineText,
-    plainEnglishBullets,
-  };
-
-  return {
-    payload,
-    scrubbedText,
-    modelId,
-    denialSummaryEncrypted: toSupabaseBytea(encryptJson(payload)),
-  };
 }
 
 export async function draftAppealFromDecodedCase({

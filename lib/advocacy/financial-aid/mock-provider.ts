@@ -1,6 +1,6 @@
 import type { FinancialAidFundRecord, FinancialAidProvider } from '@/lib/advocacy/financial-aid/types';
 
-const MOCK_FUNDS: FinancialAidFundRecord[] = [
+export const MOCK_FUNDS: FinancialAidFundRecord[] = [
   {
     sourceSlug: 'paf',
     externalKey: 'paf-lung-copay-relief',
