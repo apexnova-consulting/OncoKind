@@ -40,6 +40,9 @@ export function DashboardNav() {
           <Link href="/dashboard/billing" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Billing
           </Link>
+          <Link href="/dashboard/security" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
+            Security
+          </Link>
         </div>
         <div className="flex items-center gap-3">
           <LanguageSelector />

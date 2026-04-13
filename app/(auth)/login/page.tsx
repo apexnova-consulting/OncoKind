@@ -40,7 +40,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/journey');
+      router.push('/mfa');
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to reach the server. Please try again.');
