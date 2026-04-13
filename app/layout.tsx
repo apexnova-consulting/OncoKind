@@ -31,6 +31,20 @@ export const metadata: Metadata = {
   },
   description:
     'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
+  openGraph: {
+    type: 'website',
+    title: 'OncoKind — Clarity for Families Navigating Cancer',
+    description:
+      'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
+    siteName: 'OncoKind',
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://oncokind.com',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'OncoKind — Clarity for Families Navigating Cancer',
+    description:
+      'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

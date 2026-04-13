@@ -1,8 +1,12 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getPatientReport } from '@/lib/patient-reports';
 import { TrialsMatcher } from '@/components/care/TrialsMatcher';
+import { getProfile } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function TrialsPage() {
+  const { isPro } = await getProfile();
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
@@ -25,11 +29,22 @@ export default async function TrialsPage() {
   return (
     <div className="p-6">
       <h1 className="font-heading text-2xl font-semibold text-accent">
-        Clinical Trials
+        Clinical Trial Matching
       </h1>
       <p className="mt-2 text-slate-600">
         Matched trials based on your diagnosis and biomarkers from ClinicalTrials.gov.
       </p>
+      {!isPro && (
+        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm text-slate-700">
+            You are on the Free tier. Upgrade to Caregiver Pro for expanded local trial visibility and
+            richer trial details.
+          </p>
+          <Button asChild className="mt-3">
+            <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+          </Button>
+        </div>
+      )}
       <div className="mt-6">
         <TrialsMatcher
           defaultCancerType={defaultCancerType}

@@ -1,18 +1,27 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ReportsUploadPanel } from '@/components/reports/ReportsUploadPanel';
 
 export default async function ReportsPage() {
   const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
   const { data: reports } = await supabase
     .from('medical_reports')
-    .select('id, file_name, created_at')
+    .select('id, file_name, created_at, user_id')
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false });
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
       <h1 className="text-2xl font-bold text-slate-900">Reports</h1>
+      <ReportsUploadPanel />
       {!reports?.length ? (
         <Card>
           <CardContent className="py-8 text-center text-slate-600">

@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getPatientReport } from '@/lib/patient-reports';
 import { Button } from '@/components/ui/button';
 import { SecondOpinionPacket } from '@/components/care/SecondOpinionPacket';
+import { getProfile } from '@/lib/auth';
 
 type TimelineItem = {
   title: string;
@@ -12,6 +13,7 @@ type TimelineItem = {
 };
 
 export default async function SecondOpinionPage() {
+  const { isPro } = await getProfile();
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
@@ -67,7 +69,7 @@ export default async function SecondOpinionPage() {
       <div className="mx-auto max-w-5xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="font-heading text-2xl font-semibold text-accent">Prepare for Second Opinion</h1>
+            <h1 className="font-heading text-2xl font-semibold text-accent">Second Opinion Mode</h1>
             <p className="mt-2 text-slate-600">
               Build a structured packet from your existing care data and bring it to your next appointment.
             </p>
@@ -76,6 +78,17 @@ export default async function SecondOpinionPage() {
             <Link href="/journey/timeline">Open Care Timeline</Link>
           </Button>
         </div>
+
+        {!isPro && (
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-sm text-slate-700">
+              Second Opinion packet export is a Pro feature. Upgrade to unlock complete packet generation.
+            </p>
+            <Button asChild className="mt-3">
+              <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+            </Button>
+          </div>
+        )}
 
         <SecondOpinionPacket
           reportSummary={summary}

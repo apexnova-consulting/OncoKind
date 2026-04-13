@@ -61,7 +61,7 @@ export default function SignupPage() {
     <main className="flex min-h-[80vh] items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Create account</CardTitle>
+          <CardTitle>Create Account</CardTitle>
           <CardDescription>Sign up for OncoKind.</CardDescription>
         </CardHeader>
         <CardContent>

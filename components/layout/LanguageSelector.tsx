@@ -6,8 +6,8 @@ import { normalizeLanguage, type SupportedLanguage } from '@/lib/i18n';
 
 const options: Array<{ id: SupportedLanguage; label: string }> = [
   { id: 'en', label: 'English' },
-  { id: 'es', label: 'Español' },
-  { id: 'zh-CN', label: '简体中文' },
+  { id: 'es', label: 'Spanish (Espanol)' },
+  { id: 'zh-CN', label: 'Mandarin (中文)' },
   { id: 'tl', label: 'Tagalog' },
 ];
 
@@ -38,7 +38,7 @@ export function LanguageSelector() {
       <select
         value={lang}
         onChange={(e) => changeLanguage(e.target.value as SupportedLanguage)}
-        className="max-w-[9rem] cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-surface-100)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary-800)] transition-colors hover:border-[var(--color-primary-600)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2"
+        className="max-w-[13rem] cursor-pointer rounded-full border border-[var(--color-border)] bg-[var(--color-surface-100)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary-800)] transition-colors hover:border-[var(--color-primary-600)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2"
         aria-label="Select language"
       >
         {options.map((o) => (

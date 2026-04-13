@@ -17,8 +17,8 @@ const navItems = [
   { href: '/journey/ai-navigator', label: 'AI Navigator', icon: MessageCircle },
   { href: '/journey/documents', label: 'Documents', icon: FileText },
   { href: '/journey/timeline', label: 'Care Timeline', icon: Calendar },
-  { href: '/journey/trials', label: 'Clinical Trials', icon: FlaskConical },
-  { href: '/journey/second-opinion', label: 'Second Opinion', icon: FolderPlus },
+  { href: '/journey/trials', label: 'Clinical Trial Matching', icon: FlaskConical },
+  { href: '/journey/second-opinion', label: 'Second Opinion Mode', icon: FolderPlus },
 ];
 
 export function JourneySidebar() {
