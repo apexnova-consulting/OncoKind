@@ -13,6 +13,7 @@ const enterprisePriceIds = [
 
 const advocatePriceIds = [
   stripePrices.advocateMonthly,
+  stripePrices.advocateYearly,
 ].filter(Boolean);
 
 function isEnterprisePrice(priceId: string | undefined): boolean {

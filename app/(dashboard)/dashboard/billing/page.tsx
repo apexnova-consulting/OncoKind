@@ -4,7 +4,7 @@ import { getStripeClient } from '@/lib/stripe';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { stripePrices, hasProPrices, hasAdvocatePrice } from '@/lib/stripe-prices';
+import { stripePrices, hasProPrices, hasAdvocatePrices } from '@/lib/stripe-prices';
 
 export default async function BillingPage() {
   const { user, profile, isPro, hasAdvocateAccess } = await getProfile();
@@ -46,13 +46,15 @@ export default async function BillingPage() {
             <div className="space-y-3">
               {stripePrices.proMonthly && (
                 <form action="/api/checkout" method="POST">
-                  <input type="hidden" name="priceId" value={stripePrices.proMonthly} />
+                  <input type="hidden" name="plan" value="pro" />
+                  <input type="hidden" name="billingInterval" value="monthly" />
                   <Button type="submit" className="w-full">Pro Monthly</Button>
                 </form>
               )}
               {stripePrices.proYearly && (
                 <form action="/api/checkout" method="POST">
-                  <input type="hidden" name="priceId" value={stripePrices.proYearly} />
+                  <input type="hidden" name="plan" value="pro" />
+                  <input type="hidden" name="billingInterval" value="yearly" />
                   <Button type="submit" variant="outline" className="w-full">Pro Yearly</Button>
                 </form>
               )}
@@ -87,15 +89,27 @@ export default async function BillingPage() {
                 </Button>
               )}
             </>
-          ) : hasAdvocatePrice ? (
-            <form action="/api/checkout" method="POST">
-              <input type="hidden" name="priceId" value={stripePrices.advocateMonthly} />
-              <Button type="submit" className="w-full">Advocate Monthly ($49)</Button>
-            </form>
+          ) : hasAdvocatePrices ? (
+            <div className="space-y-3">
+              {stripePrices.advocateMonthly && (
+                <form action="/api/checkout" method="POST">
+                  <input type="hidden" name="plan" value="advocate" />
+                  <input type="hidden" name="billingInterval" value="monthly" />
+                  <Button type="submit" className="w-full">Advocate Monthly</Button>
+                </form>
+              )}
+              {stripePrices.advocateYearly && (
+                <form action="/api/checkout" method="POST">
+                  <input type="hidden" name="plan" value="advocate" />
+                  <input type="hidden" name="billingInterval" value="yearly" />
+                  <Button type="submit" variant="outline" className="w-full">Advocate Yearly</Button>
+                </form>
+              )}
+            </div>
           ) : (
             <>
               <p className="text-sm text-slate-600">
-                Set `STRIPE_PRICE_ID_ADVOCATE_MONTHLY` to enable Advocate checkout.
+                Set `STRIPE_PRICE_ID_ADVOCATE_MONTHLY` and optionally `STRIPE_PRICE_ID_ADVOCATE_YEARLY` to enable Advocate checkout.
               </p>
               <Button asChild variant="secondary">
                 <Link href="/pricing?plan=advocate">View pricing</Link>

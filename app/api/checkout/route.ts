@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { createCheckoutSession } from '@/lib/stripe';
-import { stripePrices } from '@/lib/stripe-prices';
+import {
+  isBillingInterval,
+  isCheckoutPlanKey,
+  isKnownStripePriceId,
+  resolveCheckoutPriceId,
+  stripePrices,
+} from '@/lib/stripe-prices';
 
 const defaultPriceId = stripePrices.proMonthly;
 
@@ -13,7 +19,26 @@ export async function POST(request: NextRequest) {
   }
 
   const formData = await request.formData().catch(() => new FormData());
-  const priceId = (formData.get('priceId') as string) || defaultPriceId;
+  const requestedPlan = formData.get('plan');
+  const requestedBillingInterval = formData.get('billingInterval');
+  const requestedPriceId = formData.get('priceId');
+
+  let priceId = defaultPriceId;
+
+  if (
+    typeof requestedPlan === 'string' &&
+    typeof requestedBillingInterval === 'string' &&
+    isCheckoutPlanKey(requestedPlan) &&
+    isBillingInterval(requestedBillingInterval)
+  ) {
+    priceId = resolveCheckoutPriceId(requestedPlan, requestedBillingInterval);
+    if (!priceId) {
+      return NextResponse.json({ error: 'Selected billing option is not configured' }, { status: 503 });
+    }
+  } else if (typeof requestedPriceId === 'string' && isKnownStripePriceId(requestedPriceId)) {
+    priceId = requestedPriceId;
+  }
+
   if (!priceId) {
     return NextResponse.json({ error: 'Checkout not configured' }, { status: 503 });
   }

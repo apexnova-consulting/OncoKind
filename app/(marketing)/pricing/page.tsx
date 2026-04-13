@@ -1,46 +1,14 @@
-import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
-import { Button } from '@/components/ui/button';
+import { getStripeClient } from '@/lib/stripe';
 import { Check, Minus } from 'lucide-react';
-import { stripePrices, hasProPrices, hasEnterprisePrices } from '@/lib/stripe-prices';
+import { hasEnterprisePrices, stripePrices } from '@/lib/stripe-prices';
 import { cn } from '@/lib/utils';
+import { PricingPlans } from '@/components/marketing/PricingPlans';
 
 export const metadata = {
   title: 'Pricing | OncoKind',
   description: 'Free, Caregiver Pro, Advocate, and Enterprise plans — simple pricing for families and professional advocates.',
 };
-
-const FREE_FEATURES = [
-  'Diagnosis explanation',
-  'Basic care map',
-  '1 report per month',
-];
-
-const CAREGIVER_PRO_FEATURES = [
-  'Everything in Free',
-  'AI Care Navigator',
-  'Clinical trial matching',
-  'Care timeline',
-  'Unlimited reports',
-  'Doctor Prep Sheet',
-];
-
-const PROFESSIONAL_FEATURES = [
-  'Everything in Caregiver Pro',
-  'Branded portal (white-label subdomain)',
-  'HIPAA BAA acknowledgment flow',
-  'Batch report queue + status tracking',
-  'Exportable patient roster + prep completion flags',
-  'Dedicated support channel (email/Slack placeholder)',
-];
-
-const ADVOCATE_FEATURES = [
-  'Everything in Caregiver Pro',
-  'Insurance denial decoder',
-  'Letter of Medical Necessity drafts',
-  'Appeal checklist + PDF export',
-  'Advocacy case history',
-];
 
 const comparisonRows: [string, string, string, string][] = [
   ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
@@ -69,11 +37,64 @@ function ComparisonCell({ value }: { value: string }) {
   return <>{value}</>;
 }
 
+type PriceDisplay = {
+  amount: string;
+  cadenceLabel: string;
+  configured: boolean;
+};
+
+async function getPriceDisplay(priceId: string, fallbackAmount: string, fallbackCadenceLabel: string): Promise<PriceDisplay> {
+  if (!priceId) {
+    return {
+      amount: fallbackAmount,
+      cadenceLabel: fallbackCadenceLabel,
+      configured: false,
+    };
+  }
+
+  try {
+    const price = await getStripeClient().prices.retrieve(priceId);
+    const amount =
+      typeof price.unit_amount === 'number'
+        ? new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: price.currency.toUpperCase(),
+            maximumFractionDigits: 0,
+          }).format(price.unit_amount / 100)
+        : fallbackAmount;
+    const cadenceLabel =
+      price.recurring?.interval === 'year'
+        ? '/year'
+        : price.recurring?.interval === 'month'
+          ? '/month'
+          : fallbackCadenceLabel;
+
+    return {
+      amount,
+      cadenceLabel,
+      configured: true,
+    };
+  } catch {
+    return {
+      amount: fallbackAmount,
+      cadenceLabel: fallbackCadenceLabel,
+      configured: true,
+    };
+  }
+}
+
 export default async function PricingPage() {
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const [proMonthly, proYearly, advocateMonthly, advocateYearly] = await Promise.all([
+    getPriceDisplay(stripePrices.proMonthly, '$19', '/month'),
+    getPriceDisplay(stripePrices.proYearly, '$190', '/year'),
+    getPriceDisplay(stripePrices.advocateMonthly, '$49', '/month'),
+    getPriceDisplay(stripePrices.advocateYearly, '$490', '/year'),
+  ]);
 
   return (
     <main className="bg-[var(--color-bg-page)] px-4 py-16 sm:py-24">
@@ -90,176 +111,19 @@ export default async function PricingPage() {
             Stripe-secured · Cancel anytime · No contracts
           </p>
         </div>
-
-        <div className="mt-16 grid items-stretch gap-8 lg:grid-cols-3 lg:gap-6">
-          {/* Free */}
-          <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-8 shadow-[var(--shadow-md)]">
-            <h2 className="font-display text-xl font-semibold text-[var(--color-primary-900)]">Free</h2>
-            <p className="mt-2 text-[var(--color-text-secondary)]">Try OncoKind</p>
-            <p className="mt-6 font-display text-4xl font-semibold text-[var(--color-primary-900)]">$0</p>
-            <p className="text-sm text-[var(--color-text-muted)]">forever</p>
-            <ul className="mt-8 flex-1 space-y-3">
-              {FREE_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-sage-500)]" aria-hidden />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Button asChild variant="outline" className="mt-8 w-full">
-              <Link href="/signup">Get Started</Link>
-            </Button>
-          </div>
-
-          {/* Caregiver Pro */}
-          <div className="relative flex h-full flex-col rounded-[var(--radius-xl)] border-t-[3px] border-t-[var(--color-accent-400)] bg-[var(--color-primary-900)] p-8 text-[var(--color-text-inverse)] shadow-[0_0_60px_rgba(232,168,56,0.15)] lg:-mt-4 lg:mb-4 lg:scale-[1.04]">
-            <span className="absolute -right-1 top-4 rotate-3 rounded-full bg-[var(--color-accent-400)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--color-primary-900)]">
-              Most Popular
-            </span>
-            <h2 className="font-display text-xl font-semibold">Caregiver Pro</h2>
-            <p className="mt-2 text-sm text-[var(--color-surface-300)]">For families</p>
-            <p className="mt-6 font-display text-4xl font-semibold sm:text-5xl">$19</p>
-            <p className="text-sm text-[var(--color-surface-400)]">/month</p>
-            <ul className="mt-8 flex-1 space-y-3">
-              {CAREGIVER_PRO_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-3 text-sm text-[var(--color-surface-200)]">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-400)]" aria-hidden />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            {user ? (
-              hasProPrices ? (
-                <div className="mt-8 space-y-3">
-                  {stripePrices.proMonthly && (
-                    <form action="/api/checkout" method="POST">
-                      <input type="hidden" name="priceId" value={stripePrices.proMonthly} />
-                      <Button type="submit" className="w-full">
-                        Caregiver Pro Monthly
-                      </Button>
-                    </form>
-                  )}
-                  {stripePrices.proYearly && (
-                    <form action="/api/checkout" method="POST">
-                      <input type="hidden" name="priceId" value={stripePrices.proYearly} />
-                      <Button type="submit" variant="outline" className="w-full border-[var(--color-text-inverse)] text-[var(--color-text-inverse)] hover:bg-[var(--color-text-inverse)] hover:text-[var(--color-primary-900)]">
-                        Caregiver Pro Yearly
-                      </Button>
-                    </form>
-                  )}
-                </div>
-              ) : (
-                <Button asChild className="mt-8 w-full">
-                  <Link href="/dashboard/billing">Manage in Dashboard</Link>
-                </Button>
-              )
-            ) : (
-              <Button asChild className="mt-8 w-full">
-                <Link href="/signup">Get Started → Upgrade</Link>
-              </Button>
-            )}
-          </div>
-
-          {/* Professional */}
-          <div
-            id="enterprise"
-            className="hover-lift-card flex h-full scroll-mt-24 flex-col rounded-[var(--radius-xl)] border-[1.5px] border-[var(--color-primary-800)] bg-white p-8 shadow-[var(--shadow-md)]"
-          >
-            <span className="inline-flex w-fit rounded-full bg-[var(--color-primary-900)] px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-text-inverse)]">
-              For Care Teams
-            </span>
-            <h2 className="mt-4 font-display text-xl font-semibold text-[var(--color-primary-900)]">
-              Professional
-            </h2>
-            <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-              For Care Teams & Concierge Health Services
-            </p>
-            <p className="mt-6 font-display text-4xl font-semibold text-[var(--color-primary-900)]">$999</p>
-            <p className="text-sm text-[var(--color-text-muted)]">/month</p>
-            <ul className="mt-8 flex-1 space-y-3">
-              {PROFESSIONAL_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-sage-500)]" aria-hidden />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            {user && hasEnterprisePrices ? (
-              <div className="mt-8 space-y-3">
-                {stripePrices.enterpriseUnlimited && (
-                  <form action="/api/checkout" method="POST">
-                    <input type="hidden" name="priceId" value={stripePrices.enterpriseUnlimited} />
-                    <Button type="submit" variant="outline" className="w-full">
-                      Professional — Unlimited
-                    </Button>
-                  </form>
-                )}
-                {stripePrices.enterprisePerSeat && (
-                  <form action="/api/checkout" method="POST">
-                    <input type="hidden" name="priceId" value={stripePrices.enterprisePerSeat} />
-                    <Button type="submit" variant="outline" className="w-full">
-                      Professional — Per seat
-                    </Button>
-                  </form>
-                )}
-              </div>
-            ) : (
-              <Button asChild variant="outline" className="mt-8 w-full border-[var(--color-primary-800)]">
-                <a href="mailto:hello@oncokind.com?subject=Enterprise%20Inquiry">Contact Us</a>
-              </Button>
-            )}
-          </div>
-        </div>
-
-        <section
-          id="advocate"
-          className="mt-10 rounded-[var(--radius-xl)] border border-[var(--color-accent-400)]/30 bg-[rgba(232,168,56,0.08)] p-8 shadow-[var(--shadow-sm)]"
-        >
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-600)]">
-                Advocate Plan
-              </p>
-              <h2 className="mt-3 font-display text-3xl font-semibold text-[var(--color-primary-900)]">
-                Insurance support for higher-stakes appeals
-              </h2>
-              <p className="mt-3 text-[var(--color-text-secondary)]">
-                Built for families and professional advocates who need denial decoding, medical necessity letter drafts,
-                and a step-by-step appeals engine.
-              </p>
-              <ul className="mt-6 grid gap-3 md:grid-cols-2">
-                {ADVOCATE_FEATURES.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-600)]" aria-hidden />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-[var(--radius-lg)] bg-white p-6 text-center shadow-[var(--shadow-md)]">
-              <p className="font-display text-4xl font-semibold text-[var(--color-primary-900)]">$49</p>
-              <p className="mt-1 text-sm text-[var(--color-text-muted)]">/month</p>
-              {user ? (
-                stripePrices.advocateMonthly ? (
-                  <form action="/api/checkout" method="POST" className="mt-5">
-                    <input type="hidden" name="priceId" value={stripePrices.advocateMonthly} />
-                    <Button type="submit" className="w-full">
-                      Start Advocate Plan
-                    </Button>
-                  </form>
-                ) : (
-                  <Button asChild className="mt-5 w-full">
-                    <Link href="/dashboard/billing">Set up in Billing</Link>
-                  </Button>
-                )
-              ) : (
-                <Button asChild className="mt-5 w-full">
-                  <Link href="/signup">Create account to upgrade</Link>
-                </Button>
-              )}
-            </div>
-          </div>
-        </section>
+        <PricingPlans
+          isSignedIn={!!user}
+          proPricing={{
+            monthly: { ...proMonthly, configured: !!stripePrices.proMonthly },
+            yearly: { ...proYearly, configured: !!stripePrices.proYearly },
+          }}
+          advocatePricing={{
+            monthly: { ...advocateMonthly, configured: !!stripePrices.advocateMonthly },
+            yearly: { ...advocateYearly, configured: !!stripePrices.advocateYearly },
+          }}
+          enterpriseUnlimitedPriceId={hasEnterprisePrices ? stripePrices.enterpriseUnlimited : undefined}
+          enterprisePerSeatPriceId={hasEnterprisePrices ? stripePrices.enterprisePerSeat : undefined}
+        />
 
         <section className="mt-24" id="comparison">
           <h2 className="text-center font-display text-2xl font-semibold text-[var(--color-primary-900)]">
