@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 export const metadata = {
   title: 'Pricing | OncoKind',
-  description: 'Free, Pro, and Enterprise plans — simple pricing for families and professional advocates.',
+  description: 'Free, Caregiver Pro, Advocate, and Enterprise plans — simple pricing for families and professional advocates.',
 };
 
 const FREE_FEATURES = [
@@ -32,6 +32,14 @@ const PROFESSIONAL_FEATURES = [
   'Batch report queue + status tracking',
   'Exportable patient roster + prep completion flags',
   'Dedicated support channel (email/Slack placeholder)',
+];
+
+const ADVOCATE_FEATURES = [
+  'Everything in Caregiver Pro',
+  'Insurance denial decoder',
+  'Letter of Medical Necessity drafts',
+  'Appeal checklist + PDF export',
+  'Advocacy case history',
 ];
 
 const comparisonRows: [string, string, string, string][] = [
@@ -202,6 +210,56 @@ export default async function PricingPage() {
             )}
           </div>
         </div>
+
+        <section
+          id="advocate"
+          className="mt-10 rounded-[var(--radius-xl)] border border-[var(--color-accent-400)]/30 bg-[rgba(232,168,56,0.08)] p-8 shadow-[var(--shadow-sm)]"
+        >
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-600)]">
+                Advocate Plan
+              </p>
+              <h2 className="mt-3 font-display text-3xl font-semibold text-[var(--color-primary-900)]">
+                Insurance support for higher-stakes appeals
+              </h2>
+              <p className="mt-3 text-[var(--color-text-secondary)]">
+                Built for families and professional advocates who need denial decoding, medical necessity letter drafts,
+                and a step-by-step appeals engine.
+              </p>
+              <ul className="mt-6 grid gap-3 md:grid-cols-2">
+                {ADVOCATE_FEATURES.map((feature) => (
+                  <li key={feature} className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-600)]" aria-hidden />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-[var(--radius-lg)] bg-white p-6 text-center shadow-[var(--shadow-md)]">
+              <p className="font-display text-4xl font-semibold text-[var(--color-primary-900)]">$49</p>
+              <p className="mt-1 text-sm text-[var(--color-text-muted)]">/month</p>
+              {user ? (
+                stripePrices.advocateMonthly ? (
+                  <form action="/api/checkout" method="POST" className="mt-5">
+                    <input type="hidden" name="priceId" value={stripePrices.advocateMonthly} />
+                    <Button type="submit" className="w-full">
+                      Start Advocate Plan
+                    </Button>
+                  </form>
+                ) : (
+                  <Button asChild className="mt-5 w-full">
+                    <Link href="/dashboard/billing">Set up in Billing</Link>
+                  </Button>
+                )
+              ) : (
+                <Button asChild className="mt-5 w-full">
+                  <Link href="/signup">Create account to upgrade</Link>
+                </Button>
+              )}
+            </div>
+          </div>
+        </section>
 
         <section className="mt-24" id="comparison">
           <h2 className="text-center font-display text-2xl font-semibold text-[var(--color-primary-900)]">

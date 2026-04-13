@@ -9,6 +9,8 @@ export const stripePrices = {
     process.env.STRIPE_PRICE_ID_PRO_MONTHLY ?? process.env.STRIPE_PRICE_ID ?? '',
   /** Pro yearly */
   proYearly: process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? '',
+  /** Advocate monthly */
+  advocateMonthly: process.env.STRIPE_PRICE_ID_ADVOCATE_MONTHLY ?? '',
   /** Enterprise: unlimited users */
   enterpriseUnlimited: process.env.STRIPE_PRICE_ID_ENTERPRISE_UNLIMITED ?? '',
   /** Enterprise: per seat */
@@ -21,3 +23,5 @@ export const hasProPrices = !!(
 export const hasEnterprisePrices = !!(
   stripePrices.enterpriseUnlimited || stripePrices.enterprisePerSeat
 );
+
+export const hasAdvocatePrice = !!stripePrices.advocateMonthly;

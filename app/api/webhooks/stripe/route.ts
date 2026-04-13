@@ -11,8 +11,16 @@ const enterprisePriceIds = [
   stripePrices.enterprisePerSeat,
 ].filter(Boolean);
 
+const advocatePriceIds = [
+  stripePrices.advocateMonthly,
+].filter(Boolean);
+
 function isEnterprisePrice(priceId: string | undefined): boolean {
   return !!priceId && enterprisePriceIds.includes(priceId);
+}
+
+function isAdvocatePrice(priceId: string | undefined): boolean {
+  return !!priceId && advocatePriceIds.includes(priceId);
 }
 
 export async function POST(request: NextRequest) {
@@ -45,7 +53,11 @@ export async function POST(request: NextRequest) {
         userId = userId ?? (sub.metadata?.supabase_user_id as string | undefined);
         priceId = typeof sub.items.data[0]?.price === 'string' ? sub.items.data[0]?.price : sub.items.data[0]?.price?.id;
       }
-      const tier = isEnterprisePrice(priceId) ? 'enterprise' : 'pro';
+      const tier = isEnterprisePrice(priceId)
+        ? 'enterprise'
+        : isAdvocatePrice(priceId)
+          ? 'advocate'
+          : 'pro';
       if (userId && (customerId || subscriptionId)) {
         await supabase
           .from('profiles')

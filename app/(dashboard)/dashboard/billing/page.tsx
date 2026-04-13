@@ -4,10 +4,10 @@ import { getStripeClient } from '@/lib/stripe';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { stripePrices, hasProPrices } from '@/lib/stripe-prices';
+import { stripePrices, hasProPrices, hasAdvocatePrice } from '@/lib/stripe-prices';
 
 export default async function BillingPage() {
-  const { user, profile, isPro } = await getProfile();
+  const { user, profile, isPro, hasAdvocateAccess } = await getProfile();
   if (!user) redirect('/login');
 
   let portalUrl = '';
@@ -64,6 +64,41 @@ export default async function BillingPage() {
               </p>
               <Button asChild variant="secondary">
                 <Link href="/dashboard">Back to Dashboard</Link>
+              </Button>
+            </>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Advocate Plan</CardTitle>
+          <CardDescription>
+            Unlock the Insurance Navigator, denial decoder history, and appeal / LMN generation workflows.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {hasAdvocateAccess ? (
+            <>
+              <p className="text-sm text-slate-600">You have Advocate-level access.</p>
+              {portalUrl && (
+                <Button asChild>
+                  <a href={portalUrl}>Manage subscription</a>
+                </Button>
+              )}
+            </>
+          ) : hasAdvocatePrice ? (
+            <form action="/api/checkout" method="POST">
+              <input type="hidden" name="priceId" value={stripePrices.advocateMonthly} />
+              <Button type="submit" className="w-full">Advocate Monthly ($49)</Button>
+            </form>
+          ) : (
+            <>
+              <p className="text-sm text-slate-600">
+                Set `STRIPE_PRICE_ID_ADVOCATE_MONTHLY` to enable Advocate checkout.
+              </p>
+              <Button asChild variant="secondary">
+                <Link href="/pricing?plan=advocate">View pricing</Link>
               </Button>
             </>
           )}
