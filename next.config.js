@@ -36,6 +36,7 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    serverComponentsExternalPackages: ['playwright-core', '@sparticuz/chromium'],
   },
 };
 

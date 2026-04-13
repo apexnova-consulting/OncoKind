@@ -2,6 +2,7 @@ import { PathologyTranslationCard } from '@/components/dashboard/PathologyTransl
 import { TrialMatchesCard } from '@/components/dashboard/TrialMatchesCard';
 import { AppointmentQuestionGenerator } from '@/components/dashboard/AppointmentQuestionGenerator';
 import { CaregiverWellbeingCheckin } from '@/components/dashboard/CaregiverWellbeingCheckin';
+import { LiveFundingFeedCard } from '@/components/dashboard/LiveFundingFeedCard';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,6 +36,7 @@ export default async function DashboardPage() {
           <TrialMatchesCard />
           <AppointmentQuestionGenerator />
         </div>
+        <LiveFundingFeedCard />
         <Card>
           <CardHeader>
             <CardTitle>Prepare for Second Opinion</CardTitle>

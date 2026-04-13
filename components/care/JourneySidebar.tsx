@@ -9,6 +9,8 @@ import {
   Calendar,
   FlaskConical,
   FolderPlus,
+  HandCoins,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +21,8 @@ const navItems = [
   { href: '/journey/timeline', label: 'Care Timeline', icon: Calendar },
   { href: '/journey/trials', label: 'Clinical Trial Matching', icon: FlaskConical },
   { href: '/journey/second-opinion', label: 'Second Opinion Mode', icon: FolderPlus },
+  { href: '/journey/financial-help', label: 'Financial Help', icon: HandCoins },
+  { href: '/journey/insurance-support', label: 'Insurance Support', icon: ShieldCheck },
 ];
 
 export function JourneySidebar() {
