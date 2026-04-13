@@ -70,8 +70,10 @@ export default async function SecondOpinionPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="font-heading text-2xl font-semibold text-accent">Second Opinion Mode</h1>
-            <p className="mt-2 text-slate-600">
-              Build a structured packet from your existing care data and bring it to your next appointment.
+            <p className="mt-2 text-sm font-semibold text-slate-800">Doctor Prep Sheet</p>
+            <p className="mt-1 text-slate-600">
+              Prepare for your appointment: build a structured second opinion packet from your care data, with questions
+              to ask your doctor.
             </p>
           </div>
           <Button asChild variant="outline">

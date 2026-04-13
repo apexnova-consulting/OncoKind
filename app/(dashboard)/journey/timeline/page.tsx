@@ -1,7 +1,11 @@
+import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { CareTimeline } from '@/components/care/CareTimeline';
+import { getProfile } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
 
 export default async function TimelinePage() {
+  const { isPro } = await getProfile();
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
@@ -22,6 +26,17 @@ export default async function TimelinePage() {
       <p className="mt-2 text-slate-600">
         A living record of your care journey. Add milestones and export for second opinions.
       </p>
+      {!isPro && (
+        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm text-slate-700">
+            The full Care Timeline experience is included with Caregiver Pro. Upgrade to unlock advanced milestone tools
+            and exports.
+          </p>
+          <Button asChild className="mt-3">
+            <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+          </Button>
+        </div>
+      )}
       <div className="mt-6">
         <CareTimeline initialEntries={entries ?? []} />
       </div>

@@ -29,7 +29,13 @@ export default function LoginPage() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setError(data.error || 'Sign-in failed. Please try again.');
+        const raw = typeof data.error === 'string' ? data.error : '';
+        const lower = raw.toLowerCase();
+        const friendly =
+          lower.includes('invalid') || lower.includes('credential') || lower.includes('password')
+            ? 'Invalid email or password. Please try again.'
+            : raw || 'Sign-in failed. Please try again.';
+        setError(friendly);
         setLoading(false);
         return;
       }
@@ -55,20 +61,34 @@ export default function LoginPage() {
             {error && (
               <p className="text-sm text-red-600 bg-red-50 p-2 rounded-md">{error}</p>
             )}
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="space-y-2">
+              <label htmlFor="login-email" className="text-sm font-medium text-slate-700">
+                Email
+              </label>
+              <Input
+                id="login-email"
+                type="email"
+                placeholder="Email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="login-password" className="text-sm font-medium text-slate-700">
+                Password
+              </label>
+              <Input
+                id="login-password"
+                type="password"
+                placeholder="Password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Signing in…' : 'Sign in'}
             </Button>

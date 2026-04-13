@@ -102,6 +102,10 @@ export function TrialsMatcher({
 
   return (
     <div className="space-y-5">
+      <p className="text-sm text-slate-600">
+        Clinical trial matching uses public study records. Trial sponsors often list studies with an NCT identifier; run
+        a search below to see matches for your profile.
+      </p>
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="font-heading text-lg font-semibold text-accent">Trial matching filters</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">

@@ -25,6 +25,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com'),
   title: {
     default: 'OncoKind — Clarity for Families Navigating Cancer',
     template: '%s | OncoKind',
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     description:
       'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
     siteName: 'OncoKind',
-    url: process.env.NEXT_PUBLIC_APP_URL || 'https://oncokind.com',
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com',
   },
   twitter: {
     card: 'summary_large_image',

@@ -69,27 +69,48 @@ export default function SignupPage() {
             {error && (
               <p className="text-sm text-red-600 bg-red-50 p-2 rounded-md">{error}</p>
             )}
-            <Input
-              type="text"
-              placeholder="Full name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
+            <div className="space-y-2">
+              <label htmlFor="signup-full-name" className="text-sm font-medium text-slate-700">
+                Full name
+              </label>
+              <Input
+                id="signup-full-name"
+                type="text"
+                placeholder="Full name"
+                autoComplete="name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="signup-email" className="text-sm font-medium text-slate-700">
+                Email
+              </label>
+              <Input
+                id="signup-email"
+                type="email"
+                placeholder="Email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="signup-password" className="text-sm font-medium text-slate-700">
+                Password
+              </label>
+              <Input
+                id="signup-password"
+                type="password"
+                placeholder="Password"
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+              />
+            </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Creating account…' : 'Sign up'}
             </Button>

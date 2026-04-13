@@ -67,6 +67,9 @@ export function SampleReportDemo() {
           <p className="text-sm font-semibold text-[var(--color-primary-700)]">
             Sample Report - For Demonstration Purposes Only
           </p>
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            Sample Cancer Profile (NSCLC): Non-Small Cell Lung Cancer — Stage IIIA
+          </p>
           <CancerProfileSummaryCard
             type="Non-Small Cell Lung Cancer"
             stage="Stage IIIA"

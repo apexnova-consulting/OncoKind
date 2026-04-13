@@ -20,19 +20,25 @@ export function DashboardNav() {
   return (
     <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900">
             <Cloud className="h-6 w-6 text-primary" aria-hidden />
             OncoKind
           </Link>
+          <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
+            Home
+          </Link>
           <Link href="/journey" className="text-sm text-slate-600 hover:text-slate-900">
             Journey
           </Link>
-          <Link href="/dashboard" className="text-sm text-slate-600 hover:text-slate-900">
-            Dashboard
+          <Link href="/journey/timeline" className="text-sm text-slate-600 hover:text-slate-900">
+            Timeline
           </Link>
           <Link href="/reports" className="text-sm text-slate-600 hover:text-slate-900">
             Reports
+          </Link>
+          <Link href="/journey/second-opinion" className="text-sm text-slate-600 hover:text-slate-900">
+            Prep Sheet
           </Link>
           <Link href="/dashboard/billing" className="text-sm text-slate-600 hover:text-slate-900">
             Billing
