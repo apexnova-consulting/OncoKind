@@ -12,12 +12,14 @@ import {
   FlaskConical,
   GitBranch,
   Globe,
+  HandCoins,
   ListOrdered,
   Lock,
   MessageCircle,
   Minus,
   Heart,
   Shield,
+  ShieldCheck,
   Sparkles,
   Upload,
 } from 'lucide-react';
@@ -89,6 +91,18 @@ const features = [
     Icon: FileCheck,
   },
   {
+    href: '/journey/financial-help',
+    title: 'Financial Help',
+    desc: 'Track live co-pay and foundation support options matched to the diagnosis.',
+    Icon: HandCoins,
+  },
+  {
+    href: '/journey/insurance-support',
+    title: 'Insurance Support',
+    desc: 'Decode denials and generate structured appeal packets with Advocate access.',
+    Icon: ShieldCheck,
+  },
+  {
     href: '/',
     title: 'Multi-Language',
     desc: 'Available in English, Spanish, 中文, and Tagalog.',
@@ -117,13 +131,20 @@ const trustTiles = [
     title: 'Real-Time Clinical Trial Matching',
     desc: 'Explore trials in plain language, near you.',
   },
+  {
+    Icon: ShieldCheck,
+    title: 'Appeals + Funding Support',
+    desc: 'Insurance denial decoding and live financial help for tougher care decisions.',
+  },
 ];
 
-const comparisonRows: [string, string, string, string][] = [
-  ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
-  ['Trial matches', 'Limited', 'Full (50mi)', 'Full + custom'],
-  ['Doctor Prep PDF', '—', '✓', '✓ Branded'],
-  ['Multi-patient', '—', '—', '✓'],
+const comparisonRows: [string, string, string, string, string][] = [
+  ['Report processing', '1/month', 'Unlimited', 'Unlimited', 'Unlimited + batch'],
+  ['Trial matches', 'Limited', 'Full (50mi)', 'Full (50mi)', 'Full + custom'],
+  ['Doctor Prep PDF', '—', '✓', '✓', '✓ Branded'],
+  ['Financial help feed', '—', '—', '✓', '✓'],
+  ['Insurance appeal drafting', '—', '—', '✓', '—'],
+  ['Multi-patient', '—', '—', '—', '✓'],
 ];
 
 export function MarketingHome({ signedIn }: { signedIn: boolean }) {
@@ -384,12 +405,15 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               Start free. Upgrade when you need more.
             </p>
           </Reveal>
-          <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-3 lg:gap-6">
+          <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-4 lg:gap-6">
             {/* Free */}
             <Reveal className="h-full">
               <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-8 text-center shadow-[var(--shadow-md)]">
+                <span className="mx-auto inline-flex rounded-full bg-[var(--color-surface-200)] px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-primary-700)]">
+                  For First Steps
+                </span>
                 <h3 className="font-display text-xl font-semibold text-[var(--color-primary-900)]">Free</h3>
-                <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Try OncoKind</p>
+                <p className="mt-2 text-sm font-medium text-[var(--color-primary-700)]">Try OncoKind</p>
                 <p className="mt-6 font-display text-4xl font-semibold text-[var(--color-primary-900)]">
                   $0
                 </p>
@@ -414,8 +438,13 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 <span className="absolute -right-1 top-4 rotate-3 rounded-full bg-[var(--color-accent-400)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--color-primary-900)]">
                   Most Popular
                 </span>
+                <span className="mx-auto inline-flex rounded-full bg-white/10 px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-400)]">
+                  For Caregivers
+                </span>
                 <h3 className="font-display text-xl font-semibold">Caregiver Pro</h3>
-                <p className="mt-2 text-sm text-[var(--color-surface-300)]">For families</p>
+                <p className="mt-2 text-sm font-medium text-[var(--color-surface-200)]">
+                  Guidance, reports, and care planning for families.
+                </p>
                 <p className="mt-6 font-display text-4xl font-semibold sm:text-5xl">$19</p>
                 <p className="text-sm text-[var(--color-surface-400)]">/month</p>
                 <ul className="mt-8 flex-1 space-y-3 text-left text-sm text-[var(--color-surface-200)]">
@@ -438,8 +467,38 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 </Button>
               </div>
             </Reveal>
+            {/* Advocate */}
+            <Reveal delay={0.1} className="h-full">
+              <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-accent-400)]/40 bg-[rgba(232,168,56,0.08)] p-8 text-center shadow-[var(--shadow-md)]">
+                <span className="mx-auto inline-flex rounded-full bg-[var(--color-accent-400)]/20 px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-700)]">
+                  For Advocacy & Appeals
+                </span>
+                <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-primary-900)]">Advocate</h3>
+                <p className="mt-2 text-sm font-medium text-[var(--color-text-secondary)]">
+                  Insurance support, appeal drafting, and financial help guidance.
+                </p>
+                <p className="mt-6 font-display text-4xl font-semibold text-[var(--color-primary-900)]">$49</p>
+                <p className="text-sm text-[var(--color-text-muted)]">/month</p>
+                <ul className="mt-8 flex-1 space-y-3 text-left text-sm text-[var(--color-text-secondary)]">
+                  {[
+                    'Insurance denial decoder',
+                    'Letter of Medical Necessity drafts',
+                    'Appeal checklist + PDF export',
+                    'Live financial help guidance',
+                  ].map((f) => (
+                    <li key={f} className="flex gap-2">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-600)]" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild className="mt-8 w-full">
+                  <Link href="/pricing?plan=advocate">View Advocate Plan</Link>
+                </Button>
+              </div>
+            </Reveal>
             {/* Professional */}
-            <Reveal delay={0.12} className="h-full">
+            <Reveal delay={0.14} className="h-full">
               <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border-[1.5px] border-[var(--color-primary-800)] bg-white p-8 text-center shadow-[var(--shadow-md)]">
                 <span className="mx-auto inline-flex rounded-full bg-[var(--color-primary-900)] px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-text-inverse)]">
                   For Care Teams
@@ -470,13 +529,13 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           </div>
 
           <Reveal className="mt-16 overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white shadow-[var(--shadow-sm)]">
-            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[720px] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-100)]">
                   <th className="px-4 py-4 font-sans font-semibold text-[var(--color-primary-900)] sm:px-6">
                     Feature
                   </th>
-                  {(['Free', 'Caregiver Pro', 'Professional'] as const).map((h) => (
+                  {(['Free', 'Caregiver Pro', 'Advocate', 'Professional'] as const).map((h) => (
                     <th
                       key={h}
                       className="px-4 py-4 text-center font-sans font-semibold text-[var(--color-primary-900)] sm:px-6"
@@ -489,7 +548,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map(([feature, free, pro, prof], row) => (
+                {comparisonRows.map(([feature, free, pro, advocate, prof], row) => (
                   <tr
                     key={feature}
                     className={cn(
@@ -500,7 +559,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                     <td className="px-4 py-4 font-medium text-[var(--color-primary-900)] sm:px-6">
                       {feature}
                     </td>
-                    {[free, pro, prof].map((cell, ci) => (
+                    {[free, pro, advocate, prof].map((cell, ci) => (
                       <td
                         key={`${feature}-${ci}`}
                         className="px-4 py-4 text-center text-[var(--color-text-secondary)] sm:px-6"
@@ -531,7 +590,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               className="text-sm font-semibold text-[var(--color-primary-700)] underline-offset-4 hover:underline"
               aria-label="View full pricing details"
             >
-              View Full Pricing →
+              View Full Pricing, including Advocate →
             </Link>
           </p>
         </div>
