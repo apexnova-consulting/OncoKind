@@ -1,4 +1,11 @@
+
 {
+  "functions": {
+    "app/api/advocacy/funding/sync/route.ts": {
+      "memory": 3008,
+      "maxDuration": 300
+    }
+  },
   "crons": [
     {
       "path": "/api/advocacy/funding/sync",

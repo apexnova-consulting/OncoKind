@@ -211,18 +211,28 @@ async function scrapeCancerCareFunds() {
 export const liveFinancialAidProvider: FinancialAidProvider = {
   name: 'playwright-oncology-funding-scraper',
   async fetchFunds() {
-    const results = await Promise.allSettled([
-      scrapePafFunds(),
-      scrapeHealthwellFunds(),
-      scrapeCancerCareFunds(),
-    ]);
+    const scrapers = [scrapePafFunds, scrapeHealthwellFunds, scrapeCancerCareFunds];
+    const results: FinancialAidFundRecord[][] = [];
+    const errors: Error[] = [];
 
-    const funds = results.flatMap((result) =>
-      result.status === 'fulfilled' ? result.value : []
-    );
+    for (const scrape of scrapers) {
+      try {
+        results.push(await scrape());
+      } catch (error) {
+        errors.push(error instanceof Error ? error : new Error('Unknown scraper error'));
+      }
+    }
+
+    const funds = results.flatMap((result) => result);
 
     if (funds.length === 0) {
-      throw new Error('No financial aid funds could be scraped from any provider');
+      throw new Error(
+        errors.length > 0
+          ? `No financial aid funds could be scraped from any provider: ${errors
+              .map((error) => error.message)
+              .join(' | ')}`
+          : 'No financial aid funds could be scraped from any provider'
+      );
     }
 
     return dedupeFunds(funds);
