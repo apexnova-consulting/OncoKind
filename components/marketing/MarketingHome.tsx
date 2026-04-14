@@ -138,13 +138,13 @@ const trustTiles = [
   },
 ];
 
-const comparisonRows: [string, string, string, string, string][] = [
-  ['Report processing', '1/month', 'Unlimited', 'Unlimited', 'Unlimited + batch'],
-  ['Trial matches', 'Limited', 'Full (50mi)', 'Full (50mi)', 'Full + custom'],
-  ['Doctor Prep PDF', '—', '✓', '✓', '✓ Branded'],
-  ['Financial help feed', '—', '—', '✓', '✓'],
-  ['Insurance appeal drafting', '—', '—', '✓', '—'],
-  ['Multi-patient', '—', '—', '—', '✓'],
+const comparisonRows: [string, string, string, string][] = [
+  ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
+  ['Trial matches', 'Limited', 'Full (50mi)', 'Full + custom'],
+  ['NCCN-aligned advocate sheets', '—', '✓', '✓ Branded'],
+  ['Financial help feed', '—', '✓', '✓'],
+  ['Insurance denial defense', '—', '✓', '—'],
+  ['Multi-patient', '—', '—', '✓'],
 ];
 
 export function MarketingHome({ signedIn }: { signedIn: boolean }) {
@@ -405,7 +405,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               Start free. Upgrade when you need more.
             </p>
           </Reveal>
-          <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-4 lg:gap-6">
+          <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-3 lg:gap-6">
             {/* Free */}
             <Reveal className="h-full">
               <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-8 text-center shadow-[var(--shadow-md)]">
@@ -430,7 +430,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 </Button>
               </div>
             </Reveal>
-            {/* Caregiver Pro */}
+            {/* Advocate */}
             <Reveal delay={0.08} className="h-full lg:-mt-4 lg:mb-4">
               <div
                 className="relative flex h-full flex-col rounded-[var(--radius-xl)] border-t-[3px] border-t-[var(--color-accent-400)] bg-[var(--color-primary-900)] p-8 text-center text-[var(--color-text-inverse)] shadow-[0_0_60px_rgba(232,168,56,0.15)] motion-safe:transition-transform motion-safe:duration-300 lg:scale-[1.04]"
@@ -441,53 +441,23 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 <span className="mx-auto inline-flex rounded-full bg-white/10 px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-400)]">
                   For Caregivers
                 </span>
-                <h3 className="font-display text-xl font-semibold">Caregiver Pro</h3>
+                <h3 className="font-display text-xl font-semibold">Advocate Plan</h3>
                 <p className="mt-2 text-sm font-medium text-[var(--color-surface-200)]">
-                  Guidance, reports, and care planning for families.
+                  Insurance defense, financial navigation, and advanced oncology prep.
                 </p>
-                <p className="mt-6 font-display text-4xl font-semibold sm:text-5xl">$19</p>
+                <p className="mt-6 font-display text-4xl font-semibold sm:text-5xl">$49</p>
                 <p className="text-sm text-[var(--color-surface-400)]">/month</p>
                 <ul className="mt-8 flex-1 space-y-3 text-left text-sm text-[var(--color-surface-200)]">
                   {[
-                    'Everything in Free',
-                    'AI Care Navigator',
+                    'Insurance Denial Defense',
+                    'Live Financial Aid Tracker',
+                    'NCCN-Aligned Advocate Sheets',
                     'Clinical trial matching',
                     'Care timeline',
                     'Unlimited reports',
-                    'Doctor Prep Sheet',
                   ].map((f) => (
                     <li key={f} className="flex gap-2">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-400)]" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild className="mt-8 w-full">
-                  <Link href="/pricing">Upgrade</Link>
-                </Button>
-              </div>
-            </Reveal>
-            {/* Advocate */}
-            <Reveal delay={0.1} className="h-full">
-              <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-accent-400)]/40 bg-[rgba(232,168,56,0.08)] p-8 text-center shadow-[var(--shadow-md)]">
-                <span className="mx-auto inline-flex rounded-full bg-[var(--color-accent-400)]/20 px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-700)]">
-                  For Advocacy & Appeals
-                </span>
-                <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-primary-900)]">Advocate</h3>
-                <p className="mt-2 text-sm font-medium text-[var(--color-text-secondary)]">
-                  Insurance support, appeal drafting, and financial help guidance.
-                </p>
-                <p className="mt-6 font-display text-4xl font-semibold text-[var(--color-primary-900)]">$49</p>
-                <p className="text-sm text-[var(--color-text-muted)]">/month</p>
-                <ul className="mt-8 flex-1 space-y-3 text-left text-sm text-[var(--color-text-secondary)]">
-                  {[
-                    'Insurance denial decoder',
-                    'Letter of Medical Necessity drafts',
-                    'Appeal checklist + PDF export',
-                    'Live financial help guidance',
-                  ].map((f) => (
-                    <li key={f} className="flex gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-600)]" />
                       {f}
                     </li>
                   ))}
@@ -498,9 +468,9 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               </div>
             </Reveal>
             {/* Professional */}
-            <Reveal delay={0.14} className="h-full">
+            <Reveal delay={0.12} className="h-full">
               <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border-[1.5px] border-[var(--color-primary-800)] bg-white p-8 text-center shadow-[var(--shadow-md)]">
-                <span className="mx-auto inline-flex rounded-full bg-[var(--color-primary-900)] px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-text-inverse)]">
+                <span className="mx-auto inline-flex rounded-full border border-[var(--color-primary-300)] bg-[var(--color-surface-200)] px-3 py-1 text-[var(--text-xs)] font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-primary-800)]">
                   For Care Teams
                 </span>
                 <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-primary-900)]">
@@ -529,13 +499,13 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           </div>
 
           <Reveal className="mt-16 overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white shadow-[var(--shadow-sm)]">
-            <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-100)]">
                   <th className="px-4 py-4 font-sans font-semibold text-[var(--color-primary-900)] sm:px-6">
                     Feature
                   </th>
-                  {(['Free', 'Caregiver Pro', 'Advocate', 'Professional'] as const).map((h) => (
+                  {(['Free', 'Advocate Plan', 'Professional'] as const).map((h) => (
                     <th
                       key={h}
                       className="px-4 py-4 text-center font-sans font-semibold text-[var(--color-primary-900)] sm:px-6"
@@ -548,7 +518,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map(([feature, free, pro, advocate, prof], row) => (
+                {comparisonRows.map(([feature, free, advocate, prof], row) => (
                   <tr
                     key={feature}
                     className={cn(
@@ -559,7 +529,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                     <td className="px-4 py-4 font-medium text-[var(--color-primary-900)] sm:px-6">
                       {feature}
                     </td>
-                    {[free, pro, advocate, prof].map((cell, ci) => (
+                    {[free, advocate, prof].map((cell, ci) => (
                       <td
                         key={`${feature}-${ci}`}
                         className="px-4 py-4 text-center text-[var(--color-text-secondary)] sm:px-6"

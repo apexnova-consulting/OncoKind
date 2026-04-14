@@ -1,11 +1,14 @@
-import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ShieldCheck } from 'lucide-react';
 import { getProfile } from '@/lib/auth';
 import { InsuranceSupportWorkbench } from '@/components/insurance/InsuranceSupportWorkbench';
-import { Button } from '@/components/ui/button';
 
 export default async function InsuranceSupportPage() {
-  const { hasAdvocateAccess } = await getProfile();
+  const { user, hasAdvocateAccess } = await getProfile();
+  if (!user) return null;
+  if (!hasAdvocateAccess) {
+    redirect('/pricing?plan=advocate');
+  }
 
   return (
     <div className="p-6">
@@ -19,17 +22,6 @@ export default async function InsuranceSupportPage() {
             Decode denial letters, draft a Letter of Medical Necessity, and follow a structured appeal checklist using
             your oncology report context.
           </p>
-          {!hasAdvocateAccess && (
-            <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
-              <p className="text-sm text-amber-900">
-                Appeal letter generation is included in the Advocate Plan. You can still decode denial letters before
-                upgrading.
-              </p>
-              <Button asChild className="mt-3">
-                <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan ($49/mo)</Link>
-              </Button>
-            </div>
-          )}
         </div>
 
         <InsuranceSupportWorkbench hasAdvocateAccess={hasAdvocateAccess} />

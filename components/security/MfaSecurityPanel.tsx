@@ -222,10 +222,10 @@ export function MfaSecurityPanel({
     : 'Protect your account with a time-based one-time password from an authenticator app.';
 
   return (
-    <Card className="mx-auto w-full max-w-2xl">
-      <CardHeader>
-        <CardTitle>{challengeTitle}</CardTitle>
-        <CardDescription>{challengeDescription}</CardDescription>
+    <Card className="mx-auto w-full max-w-2xl rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white/95 shadow-[var(--shadow-lg)]">
+      <CardHeader className="space-y-2 border-b border-[var(--color-border-subtle)] bg-[var(--color-surface-100)]/70">
+        <CardTitle className="font-display text-2xl text-[var(--color-primary-900)]">{challengeTitle}</CardTitle>
+        <CardDescription className="text-[var(--color-text-secondary)]">{challengeDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {error && <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>}
@@ -249,50 +249,57 @@ export function MfaSecurityPanel({
         ) : null}
 
         {!challengeOnly && qrSvg ? (
-          <div className="space-y-4 rounded-lg border border-slate-200 p-4">
-            <Image
-              src={`data:image/svg+xml;utf8,${encodeURIComponent(qrSvg)}`}
-              alt="Authenticator QR code"
-              width={224}
-              height={224}
-              unoptimized
-              className="h-56 w-56 rounded-md border border-slate-200 bg-white p-2"
-            />
-            {secret ? (
-              <p className="text-sm text-slate-600">
-                Manual key: <span className="font-mono text-slate-900">{secret}</span>
-              </p>
-            ) : null}
-            <div className="space-y-2">
-              <label htmlFor="mfa-enrollment-code" className="text-sm font-medium text-slate-700">
-                Verification code
-              </label>
-              <Input
-                id="mfa-enrollment-code"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                placeholder="123456"
-                value={code}
-                onChange={(event) => setCode(event.target.value)}
+          <div className="rounded-lg border border-slate-200 p-4">
+            <div className="grid gap-4 md:grid-cols-[224px,1fr] md:items-start">
+              <Image
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(qrSvg)}`}
+                alt="Authenticator QR code"
+                width={224}
+                height={224}
+                unoptimized
+                className="mx-auto h-56 w-56 rounded-md border border-slate-200 bg-white p-2"
               />
-            </div>
-            <div className="flex gap-3">
-              <Button onClick={verifyEnrollment} disabled={working || code.trim().length < 6}>
-                {working ? 'Verifying…' : 'Enable MFA'}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setEnrollmentFactorId(null);
-                  setQrSvg(null);
-                  setSecret(null);
-                  setCode('');
-                  setMessage(null);
-                }}
-                disabled={working}
-              >
-                Cancel
-              </Button>
+              <div className="space-y-4">
+                <p className="text-sm text-slate-600">
+                  Scan this QR code with Google Authenticator, 1Password, or another TOTP app.
+                </p>
+                {secret ? (
+                  <p className="text-sm text-slate-600">
+                    Manual key: <span className="font-mono text-slate-900">{secret}</span>
+                  </p>
+                ) : null}
+                <div className="space-y-2">
+                  <label htmlFor="mfa-enrollment-code" className="text-sm font-medium text-slate-700">
+                    Verification code
+                  </label>
+                  <Input
+                    id="mfa-enrollment-code"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    placeholder="123456"
+                    value={code}
+                    onChange={(event) => setCode(event.target.value)}
+                  />
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Button onClick={verifyEnrollment} disabled={working || code.trim().length < 6}>
+                    {working ? 'Verifying…' : 'Enable MFA'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setEnrollmentFactorId(null);
+                      setQrSvg(null);
+                      setSecret(null);
+                      setCode('');
+                      setMessage(null);
+                    }}
+                    disabled={working}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         ) : null}

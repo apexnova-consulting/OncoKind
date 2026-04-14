@@ -178,10 +178,10 @@ export function TrialsMatcher({
           {data.tier === 'free' && data.total > 3 && (
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-sm text-slate-700">
-                You are viewing 3 matches on the Free tier. Upgrade to Caregiver Pro to see more local matches.
+                You are viewing 3 matches on the Free tier. Upgrade to Advocate Plan to see more local matches.
               </p>
               <Button asChild className="mt-3">
-                <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+                <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
               </Button>
             </div>
           )}

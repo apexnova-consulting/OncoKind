@@ -29,11 +29,11 @@ export default async function TimelinePage() {
       {!isPro && (
         <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <p className="text-sm text-slate-700">
-            The full Care Timeline experience is included with Caregiver Pro. Upgrade to unlock advanced milestone tools
+            The full Care Timeline experience is included with Advocate Plan. Upgrade to unlock advanced milestone tools
             and exports.
           </p>
           <Button asChild className="mt-3">
-            <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+            <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
           </Button>
         </div>
       )}

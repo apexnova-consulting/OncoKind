@@ -87,7 +87,7 @@ export default async function SecondOpinionPage() {
               Second Opinion packet export is a Pro feature. Upgrade to unlock complete packet generation.
             </p>
             <Button asChild className="mt-3">
-              <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+              <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
             </Button>
           </div>
         )}

@@ -7,7 +7,7 @@ import { PricingPlans } from '@/components/marketing/PricingPlans';
 
 export const metadata = {
   title: 'Pricing | OncoKind',
-  description: 'Free, Caregiver Pro, Advocate, and Enterprise plans — simple pricing for families and professional advocates.',
+  description: 'Free, Advocate, and Professional plans — simple pricing for caregivers, advocates, and care teams.',
 };
 
 const comparisonRows: [string, string, string, string][] = [
@@ -89,9 +89,7 @@ export default async function PricingPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [proMonthly, proYearly, advocateMonthly, advocateYearly] = await Promise.all([
-    getPriceDisplay(stripePrices.proMonthly, '$19', '/month'),
-    getPriceDisplay(stripePrices.proYearly, '$190', '/year'),
+  const [advocateMonthly, advocateYearly] = await Promise.all([
     getPriceDisplay(stripePrices.advocateMonthly, '$49', '/month'),
     getPriceDisplay(stripePrices.advocateYearly, '$490', '/year'),
   ]);
@@ -113,16 +111,13 @@ export default async function PricingPage() {
         </div>
         <PricingPlans
           isSignedIn={!!user}
-          proPricing={{
-            monthly: { ...proMonthly, configured: !!stripePrices.proMonthly },
-            yearly: { ...proYearly, configured: !!stripePrices.proYearly },
-          }}
           advocatePricing={{
             monthly: { ...advocateMonthly, configured: !!stripePrices.advocateMonthly },
             yearly: { ...advocateYearly, configured: !!stripePrices.advocateYearly },
           }}
           enterpriseUnlimitedPriceId={hasEnterprisePrices ? stripePrices.enterpriseUnlimited : undefined}
           enterprisePerSeatPriceId={hasEnterprisePrices ? stripePrices.enterprisePerSeat : undefined}
+          highlightAdvocate
         />
 
         <section className="mt-24" id="comparison">
@@ -136,7 +131,7 @@ export default async function PricingPage() {
                   <th className="px-6 py-4 font-sans font-semibold text-[var(--color-primary-900)]">
                     Feature
                   </th>
-                  {(['Free', 'Caregiver Pro', 'Professional'] as const).map((h) => (
+                  {(['Free', 'Advocate Plan', 'Professional'] as const).map((h) => (
                     <th
                       key={h}
                       className="px-6 py-4 text-center font-sans font-semibold text-[var(--color-primary-900)]"

@@ -48,6 +48,13 @@ type PlaywrightCoreModule = {
   };
 };
 
+const DEFAULT_SCRAPER_USER_AGENT =
+  'Mozilla/5.0 (compatible; OncoKindFundingBot/1.0; +https://www.oncokind.com)';
+
+function getScraperUserAgent() {
+  return process.env.FINANCIAL_AID_SCRAPER_USER_AGENT ?? DEFAULT_SCRAPER_USER_AGENT;
+}
+
 function decodeEntities(value: string) {
   return value
     .replace(/&amp;/g, '&')
@@ -83,9 +90,7 @@ function extractLinksFromHtml(html: string, baseUrl: string) {
 async function buildFetchSnapshot(url: string): Promise<PageSnapshot> {
   const response = await fetch(url, {
     headers: {
-      'user-agent':
-        process.env.FINANCIAL_AID_SCRAPER_USER_AGENT ??
-        'Mozilla/5.0 (compatible; OncoKindFundingBot/1.0; +https://www.oncokind.com)',
+      'user-agent': getScraperUserAgent(),
     },
     next: { revalidate: 0 },
   });
@@ -131,9 +136,7 @@ async function withPlaywrightPage<T>(fn: (page: PlaywrightPage) => Promise<T>) {
       headless: true,
     });
     context = await browser.newContext({
-      userAgent:
-        process.env.FINANCIAL_AID_SCRAPER_USER_AGENT ??
-        'Mozilla/5.0 (compatible; OncoKindFundingBot/1.0; +https://www.oncokind.com)',
+      userAgent: getScraperUserAgent(),
     });
     const page = await context.newPage();
     return await fn(page);

@@ -37,11 +37,11 @@ export default async function TrialsPage() {
       {!isPro && (
         <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <p className="text-sm text-slate-700">
-            You are on the Free tier. Clinical trial matching is limited here — upgrade to Caregiver Pro for expanded
+            You are on the Free tier. Clinical trial matching is limited here — upgrade to Advocate Plan for expanded
             local trial visibility and richer trial details.
           </p>
           <Button asChild className="mt-3">
-            <Link href="/dashboard/billing">Upgrade to Caregiver Pro</Link>
+            <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
           </Button>
         </div>
       )}

@@ -13,6 +13,11 @@ export default async function JourneyLayout({
     ? (await supabase.from('patient_reports').select('*', { count: 'exact', head: true }).eq('user_id', user.id))
     : { count: 0 };
   const hasReport = (count ?? 0) > 0;
+  const { data: profile } = user
+    ? await supabase.from('profiles').select('subscription_tier').eq('id', user.id).maybeSingle()
+    : { data: null };
+  const hasAdvocateAccess =
+    profile?.subscription_tier === 'advocate' || profile?.subscription_tier === 'enterprise';
 
   const currentStage = hasReport ? 'treatment-planning' : 'diagnosis';
   const completedStages: ('diagnosis' | 'treatment-planning' | 'active-treatment' | 'monitoring')[] = hasReport ? ['diagnosis'] : [];
@@ -21,7 +26,7 @@ export default async function JourneyLayout({
     <div className="flex min-h-screen flex-col">
       <ProgressStrip currentStage={currentStage} completedStages={completedStages} />
       <div className="flex flex-1">
-        <JourneySidebar />
+        <JourneySidebar hasAdvocateAccess={hasAdvocateAccess} />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { BadgeDollarSign, Clock3 } from 'lucide-react';
+import { getProfile } from '@/lib/auth';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 
@@ -30,6 +32,12 @@ function formatTimestamp(value?: string | null) {
 }
 
 export default async function FinancialHelpPage() {
+  const { user: profileUser, hasAdvocateAccess } = await getProfile();
+  if (!profileUser) return null;
+  if (!hasAdvocateAccess) {
+    redirect('/pricing?plan=advocate');
+  }
+
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
@@ -147,9 +155,9 @@ export default async function FinancialHelpPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900">What happens next</h2>
           <ul className="mt-4 space-y-2 text-sm text-slate-600">
-            <li>Funds are refreshed every 6 hours via the sync service.</li>
+            <li>Funds are refreshed daily via the sync service.</li>
             <li>When a matched fund changes to Open, the match is marked for notification.</li>
-            <li>Insurance support and appeal drafting will appear alongside this module in the next phase.</li>
+            <li>Insurance support and appeal drafting sit alongside this module for Advocate users.</li>
           </ul>
           <Button asChild variant="outline" className="mt-4">
             <Link href="/journey/insurance-support">Open Insurance Support</Link>
