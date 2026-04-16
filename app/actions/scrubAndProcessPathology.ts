@@ -13,7 +13,7 @@
  * 8. Logs NEVER contain PHI
  */
 
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
@@ -207,7 +207,27 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       };
     }
 
-    const { data: inserted, error } = await supabase
+    const serviceRole = createServiceRoleSupabaseClient();
+    const { error: profileError } = await serviceRole.from('profiles').upsert(
+      {
+        id: user.id,
+        email: user.email ?? null,
+        full_name:
+          (typeof user.user_metadata?.full_name === 'string' && user.user_metadata.full_name) ||
+          (typeof user.user_metadata?.name === 'string' && user.user_metadata.name) ||
+          '',
+      },
+      { onConflict: 'id' }
+    );
+
+    if (profileError) {
+      console.error('[pathology-upload][ensure-profile]', {
+        message: profileError.message,
+      });
+      return { success: false, error: 'Failed to prepare your account for report storage' };
+    }
+
+    const { data: inserted, error } = await serviceRole
       .from('patient_reports')
       .insert({
         user_id: user.id,
