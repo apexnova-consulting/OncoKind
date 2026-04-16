@@ -1,28 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
+import {
+  ANTHROPIC_MODELS,
+  asAnthropicRequest,
+  createAnthropicClient,
+  getAnthropicErrorMessage,
+} from '@/lib/anthropic';
 import { encryptJson } from '@/lib/encryption';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message;
-  return 'Unknown diagnostics error';
-}
-
 async function probeAnthropic() {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    throw new Error('ANTHROPIC_API_KEY is not configured');
-  }
-
-  const anthropic = new Anthropic({ apiKey });
-  const response = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
+  const anthropic = createAnthropicClient();
+  const request = asAnthropicRequest({
+    model: ANTHROPIC_MODELS.light,
     max_tokens: 8,
     messages: [{ role: 'user', content: 'Reply with OK' }],
   });
+  const response = await anthropic.messages.create(request);
 
   const textBlock = response.content.find((block) => block.type === 'text');
   return textBlock && 'text' in textBlock ? textBlock.text : '';
@@ -46,7 +42,7 @@ export async function GET(request: NextRequest) {
     encryptJson({ ok: true, checkedAt: new Date().toISOString() });
     encryptionOk = true;
   } catch (error) {
-    encryptionError = getErrorMessage(error);
+    encryptionError = getAnthropicErrorMessage(error);
   }
 
   let anthropicProbe:
@@ -81,7 +77,7 @@ export async function GET(request: NextRequest) {
       anthropicProbe = {
         attempted: true,
         ok: false,
-        error: getErrorMessage(error),
+        error: getAnthropicErrorMessage(error),
         responsePreview: null,
       };
     }

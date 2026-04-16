@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
 import { normalizeLanguage } from '@/lib/i18n';
+import {
+  ANTHROPIC_MODELS,
+  asAnthropicRequest,
+  buildCachedSystemBlocks,
+  createAnthropicClient,
+  getAnthropicMaintenanceMessage,
+} from '@/lib/anthropic';
 
 export const runtime = 'nodejs';
 export const maxDuration = 120;
@@ -12,6 +18,13 @@ const NAVIGATOR_PROMPT = `You are a calm, empathetic AI Care Navigator for famil
 - Feel supported, not overwhelmed
 
 Rules: No survival statistics. No fear-based language. Emphasize preparation and questions. Encourage oncologist discussion. Be concise (2-4 sentences typically).`;
+
+const NAVIGATOR_KNOWLEDGE_BASE = `OncoKind UI guidance:
+- Keep responses short and supportive for caregivers.
+- Use plain language before oncology jargon.
+- Prefer practical next steps, question lists, and appointment prep.
+- Do not provide diagnoses, treatment prescriptions, or survival estimates.
+- If model capacity is unavailable, the UI should degrade gracefully.`;
 
 function buildContextBlock(context: unknown) {
   if (!context || typeof context !== 'object') return '';
@@ -33,17 +46,17 @@ function buildContextBlock(context: unknown) {
 }
 
 async function createAnthropicMessage(prompt: string, maxTokens: number) {
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) {
-    throw new Error('ANTHROPIC_API_KEY is not configured');
-  }
-
-  const anthropic = new Anthropic({ apiKey: key });
-  return anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
+  const anthropic = createAnthropicClient();
+  const request = asAnthropicRequest({
+    model: ANTHROPIC_MODELS.light,
     max_tokens: maxTokens,
+    system: buildCachedSystemBlocks([
+      { text: NAVIGATOR_PROMPT },
+      { text: NAVIGATOR_KNOWLEDGE_BASE, ttl: '1h' },
+    ]),
     messages: [{ role: 'user', content: prompt }],
   });
+  return anthropic.messages.create(request);
 }
 
 async function createAnthropicMessageWithTimeout(prompt: string, maxTokens: number) {
@@ -84,8 +97,7 @@ export async function POST(request: NextRequest) {
       } catch (error) {
         console.error('[ai-navigator-chat]', error);
         return NextResponse.json({
-          answer:
-            'I’m having trouble reaching the care navigator model right now. Please try again in a moment.',
+          answer: getAnthropicMaintenanceMessage(error),
         });
       }
     }

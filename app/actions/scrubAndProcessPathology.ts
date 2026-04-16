@@ -17,7 +17,15 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
-import Anthropic from '@anthropic-ai/sdk';
+import {
+  ANTHROPIC_MODELS,
+  asAnthropicRequest,
+  buildCachedSystemBlocks,
+  createAnthropicClient,
+  getAnthropicErrorMessage,
+  getAnthropicMaintenanceMessage,
+  isAnthropicRateLimit,
+} from '@/lib/anthropic';
 
 const MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 const MAX_EXTRACTED_CHARS = 100_000;
@@ -43,34 +51,29 @@ const EXTRACTION_PROMPT = `You are a clinical assistant. Extract oncology-releva
 
 Rules: Be concise. If unclear, use null. Never include patient identifiers.`;
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message;
-  return 'Unknown processing error';
-}
-
-function isAnthropicRateLimit(error: unknown) {
-  if (!error || typeof error !== 'object') return false;
-  const maybeError = error as { status?: number; message?: string };
-  return maybeError.status === 429 || maybeError.message?.toLowerCase().includes('rate limit') === true;
-}
+const PATHOLOGY_KNOWLEDGE_BASE = `OncoKind pathology extraction template:
+- Extract biomarkers only when explicitly present.
+- Preserve reported mutation names exactly, such as KRAS G12C or EGFR exon 19 deletion.
+- Use null when stage, histology, or cancer type is not stated.
+- Return only the requested JSON structure without commentary.`;
 
 async function createAnthropicExtraction(scrubbedText: string) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    throw new Error('ANTHROPIC_API_KEY is not configured');
-  }
-
-  const anthropic = new Anthropic({ apiKey });
-  return anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
+  const anthropic = createAnthropicClient();
+  const request = asAnthropicRequest({
+    model: ANTHROPIC_MODELS.heavy,
     max_tokens: 2048,
+    system: buildCachedSystemBlocks([
+      { text: EXTRACTION_PROMPT },
+      { text: PATHOLOGY_KNOWLEDGE_BASE, ttl: '1h' },
+    ]),
     messages: [
       {
         role: 'user',
-        content: `${EXTRACTION_PROMPT}\n\n---\n\n${scrubbedText}`,
+        content: `De-identified pathology text:\n\n${scrubbedText}`,
       },
     ],
   });
+  return anthropic.messages.create(request);
 }
 
 export async function scrubAndProcessPathology(formData: FormData): Promise<PathologyResult> {
@@ -106,7 +109,7 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       data = await pdfParse(buffer);
     } catch (error) {
       console.error('[pathology-upload][pdf-parse]', {
-        message: getErrorMessage(error),
+        message: getAnthropicErrorMessage(error),
         fileSize: file.size,
       });
       return {
@@ -140,15 +143,15 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       message = await createAnthropicExtraction(scrubbedText);
     } catch (error) {
       console.error('[pathology-upload][anthropic]', {
-        message: getErrorMessage(error),
+        message: getAnthropicErrorMessage(error),
       });
       return {
         success: false,
         error: isAnthropicRateLimit(error)
-          ? 'Our pathology extraction service is temporarily rate limited. Please try again in a few minutes.'
-          : getErrorMessage(error).includes('ANTHROPIC_API_KEY')
+          ? getAnthropicMaintenanceMessage(error)
+          : getAnthropicErrorMessage(error).includes('ANTHROPIC_API_KEY')
             ? 'Anthropic is not configured in this deployment.'
-            : 'The pathology AI service is temporarily unavailable.',
+            : getAnthropicMaintenanceMessage(error),
       };
     }
 
@@ -194,11 +197,11 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       trialsBuf = encryptJson({ matched_trials: [] });
     } catch (error) {
       console.error('[pathology-upload][encryption]', {
-        message: getErrorMessage(error),
+        message: getAnthropicErrorMessage(error),
       });
       return {
         success: false,
-        error: getErrorMessage(error).includes('ENCRYPTION_KEY')
+        error: getAnthropicErrorMessage(error).includes('ENCRYPTION_KEY')
           ? 'Encryption is not configured correctly in this deployment.'
           : 'Unable to secure the pathology report for storage.',
       };
@@ -229,7 +232,7 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     };
   } catch (error) {
     console.error('[pathology-upload][unexpected]', {
-      message: getErrorMessage(error),
+      message: getAnthropicErrorMessage(error),
     });
     return { success: false, error: 'Processing failed. Please try again.' };
   } finally {

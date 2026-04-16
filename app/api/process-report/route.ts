@@ -1,41 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { scrubPII } from '@/lib/medical-utils';
-import Anthropic from '@anthropic-ai/sdk';
+import {
+  ANTHROPIC_MODELS,
+  asAnthropicRequest,
+  buildCachedSystemBlocks,
+  createAnthropicClient,
+  getAnthropicErrorMessage,
+  getAnthropicMaintenanceMessage,
+  isAnthropicRateLimit,
+} from '@/lib/anthropic';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
 
 const CLARITY_PROMPT = `Act as a compassionate oncology navigator. Summarize this pathology report for a 11:30 PM kitchen-table caregiver. Focus on clarity, not jargon. Return a JSON object with: "summary" (plain-language 2–4 sentences), "keyFindings" (array of short strings), "suggestedQuestions" (array of 3 questions to ask the oncologist).`;
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message;
-  return 'Unknown processing error';
-}
-
-function isAnthropicRateLimit(error: unknown) {
-  if (!error || typeof error !== 'object') return false;
-  const maybeError = error as { status?: number; message?: string };
-  return maybeError.status === 429 || maybeError.message?.toLowerCase().includes('rate limit') === true;
-}
+const PATHOLOGY_SUMMARY_KNOWLEDGE_BASE = `OncoKind caregiver summary template:
+- Lead with plain language and emotional clarity.
+- Highlight pathology findings without overwhelming detail.
+- Offer exactly three practical follow-up questions for the oncology visit.
+- Avoid raw jargon unless briefly explained.`;
 
 async function createAnthropicSummary(scrubbedText: string) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    throw new Error('ANTHROPIC_API_KEY is not configured');
-  }
-
-  const anthropic = new Anthropic({ apiKey });
-  return anthropic.messages.create({
-    model: 'claude-3-5-sonnet-20241022',
+  const anthropic = createAnthropicClient();
+  const request = asAnthropicRequest({
+    model: ANTHROPIC_MODELS.heavy,
     max_tokens: 1024,
+    system: buildCachedSystemBlocks([
+      { text: CLARITY_PROMPT },
+      { text: PATHOLOGY_SUMMARY_KNOWLEDGE_BASE, ttl: '1h' },
+    ]),
     messages: [
       {
         role: 'user',
-        content: `${CLARITY_PROMPT}\n\n---\n\n${scrubbedText.slice(0, 50000)}`,
+        content: `De-identified pathology report text:\n\n${scrubbedText.slice(0, 50000)}`,
       },
     ],
   });
+  return anthropic.messages.create(request);
 }
 
 export async function POST(request: NextRequest) {
@@ -73,7 +76,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('[process-report][pdf-parse]', {
         filePath,
-        message: getErrorMessage(error),
+        message: getAnthropicErrorMessage(error),
       });
       return NextResponse.json(
         { error: 'We could not read text from that PDF. Please try a text-based pathology report.' },
@@ -95,13 +98,13 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('[process-report][anthropic]', {
         filePath,
-        message: getErrorMessage(error),
+        message: getAnthropicErrorMessage(error),
       });
       return NextResponse.json(
         {
           error: isAnthropicRateLimit(error)
-            ? 'Our pathology summary service is temporarily rate limited. Please try again in a few minutes.'
-            : 'The report was uploaded, but the AI summary service is temporarily unavailable.',
+            ? getAnthropicMaintenanceMessage(error)
+            : getAnthropicMaintenanceMessage(error),
         },
         { status: isAnthropicRateLimit(error) ? 429 : 503 }
       );
@@ -129,7 +132,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(json);
   } catch (err) {
     console.error('process-report error:', {
-      message: getErrorMessage(err),
+      message: getAnthropicErrorMessage(err),
     });
     return NextResponse.json(
       { error: 'Processing failed. Please try again or use a different PDF.' },

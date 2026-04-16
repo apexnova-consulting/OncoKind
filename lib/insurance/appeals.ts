@@ -1,4 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
+import {
+  ANTHROPIC_MODELS,
+  asAnthropicRequest,
+  buildCachedSystemBlocks,
+  createAnthropicClient,
+} from '@/lib/anthropic';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
@@ -6,7 +11,17 @@ import type { PatientReportData } from '@/lib/patient-reports';
 
 const MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024;
 const MAX_EXTRACTED_CHARS = 100_000;
-const DEFAULT_MODEL_ID = 'claude-3-5-sonnet-20241022';
+const DEFAULT_MODEL_ID = ANTHROPIC_MODELS.heavy;
+const APPEALS_SYSTEM_PROMPT = `You are a health-tech insurance appeals assistant. Return only valid JSON that matches the requested schema exactly.`;
+const APPEALS_KNOWLEDGE_BASE = `OncoKind insurance appeal knowledge base:
+- Use plain English for denial explanations.
+- Tie appeals to documented cancer type, stage, histology, biomarkers, and medical necessity.
+- Mention guideline alignment, physician support, and avoiding treatment delay.
+- Keep next steps practical for a caregiver or oncology office team.`;
+const APPEALS_TEMPLATE_GUIDANCE = `Appeal drafting template:
+- Plain English bullets: exactly 3.
+- Letter of medical necessity: concise, formal, and physician-ready.
+- Checklist: concrete steps with insurer contact, oncologist follow-up, deadline, and document retention.`;
 
 export type InsuranceAppealPayload = {
   denialReasonCode: string;
@@ -128,8 +143,8 @@ async function generateWithAnthropic({
   parsedSignals: ParsedInsuranceSignals;
   report: PatientReportData | null;
 }): Promise<{ plainEnglishBullets: string[]; letterOfMedicalNecessity: string; nextStepChecklist: string[] }> {
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const prompt = `You are a health-tech insurance appeals assistant. Return ONLY valid JSON with this exact structure:
+  const anthropic = createAnthropicClient();
+  const prompt = `Return ONLY valid JSON with this exact structure:
 
 {
   "plainEnglishBullets": ["...", "...", "..."],
@@ -153,11 +168,17 @@ Requirements:
 EOB text:
 ${scrubbedText}`;
 
-  const message = await anthropic.messages.create({
+  const request = asAnthropicRequest({
     model: DEFAULT_MODEL_ID,
     max_tokens: 2500,
+    system: buildCachedSystemBlocks([
+      { text: APPEALS_SYSTEM_PROMPT },
+      { text: APPEALS_KNOWLEDGE_BASE },
+      { text: APPEALS_TEMPLATE_GUIDANCE, ttl: '1h' },
+    ]),
     messages: [{ role: 'user', content: prompt }],
   });
+  const message = await anthropic.messages.create(request);
 
   const textBlock = message.content.find((b) => b.type === 'text');
   const responseText = textBlock && 'text' in textBlock ? textBlock.text : '';
