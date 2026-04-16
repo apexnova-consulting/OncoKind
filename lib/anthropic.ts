@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 
 export const ANTHROPIC_MODELS = {
   heavy: 'claude-3-5-sonnet-latest',
-  light: 'claude-3-haiku-20240307',
+  light: 'claude-haiku-4-5',
 } as const;
 
 type CacheTtl = '5m' | '1h';
