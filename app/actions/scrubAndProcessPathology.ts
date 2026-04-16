@@ -43,6 +43,36 @@ const EXTRACTION_PROMPT = `You are a clinical assistant. Extract oncology-releva
 
 Rules: Be concise. If unclear, use null. Never include patient identifiers.`;
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return 'Unknown processing error';
+}
+
+function isAnthropicRateLimit(error: unknown) {
+  if (!error || typeof error !== 'object') return false;
+  const maybeError = error as { status?: number; message?: string };
+  return maybeError.status === 429 || maybeError.message?.toLowerCase().includes('rate limit') === true;
+}
+
+async function createAnthropicExtraction(scrubbedText: string) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ANTHROPIC_API_KEY is not configured');
+  }
+
+  const anthropic = new Anthropic({ apiKey });
+  return anthropic.messages.create({
+    model: 'claude-3-5-sonnet-20241022',
+    max_tokens: 2048,
+    messages: [
+      {
+        role: 'user',
+        content: `${EXTRACTION_PROMPT}\n\n---\n\n${scrubbedText}`,
+      },
+    ],
+  });
+}
+
 export async function scrubAndProcessPathology(formData: FormData): Promise<PathologyResult> {
   let rawText: string | null = null;
   let releaseTemporaryArtifact: (() => void) | null = null;
@@ -70,8 +100,20 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const pdfParse = (await import('pdf-parse')).default;
-    const data = await pdfParse(buffer);
+    let data;
+    try {
+      const pdfParse = (await import('pdf-parse')).default;
+      data = await pdfParse(buffer);
+    } catch (error) {
+      console.error('[pathology-upload][pdf-parse]', {
+        message: getErrorMessage(error),
+        fileSize: file.size,
+      });
+      return {
+        success: false,
+        error: 'We could not read text from that PDF. Please try a text-based pathology report.',
+      };
+    }
 
     rawText = typeof data?.text === 'string' ? data.text : '';
     if (!rawText?.trim()) {
@@ -93,17 +135,22 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     rawText = null;
     (globalThis as { _tmp?: string })._tmp = undefined;
 
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 2048,
-      messages: [
-        {
-          role: 'user',
-          content: `${EXTRACTION_PROMPT}\n\n---\n\n${scrubbedText}`,
-        },
-      ],
-    });
+    let message;
+    try {
+      message = await createAnthropicExtraction(scrubbedText);
+    } catch (error) {
+      console.error('[pathology-upload][anthropic]', {
+        message: getErrorMessage(error),
+      });
+      return {
+        success: false,
+        error: isAnthropicRateLimit(error)
+          ? 'Our pathology extraction service is temporarily rate limited. Please try again in a few minutes.'
+          : getErrorMessage(error).includes('ANTHROPIC_API_KEY')
+            ? 'Anthropic is not configured in this deployment.'
+            : 'The pathology AI service is temporarily unavailable.',
+      };
+    }
 
     const textBlock = message.content.find((b) => b.type === 'text');
     const text = textBlock && 'text' in textBlock ? textBlock.text : '';
@@ -140,8 +187,22 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       Math.max(0, Number(parsed.confidence_score) ?? 0)
     );
 
-    const biomarkersBuf = encryptJson(biomarkersPayload);
-    const trialsBuf = encryptJson({ matched_trials: [] });
+    let biomarkersBuf: Buffer;
+    let trialsBuf: Buffer;
+    try {
+      biomarkersBuf = encryptJson(biomarkersPayload);
+      trialsBuf = encryptJson({ matched_trials: [] });
+    } catch (error) {
+      console.error('[pathology-upload][encryption]', {
+        message: getErrorMessage(error),
+      });
+      return {
+        success: false,
+        error: getErrorMessage(error).includes('ENCRYPTION_KEY')
+          ? 'Encryption is not configured correctly in this deployment.'
+          : 'Unable to secure the pathology report for storage.',
+      };
+    }
 
     const { data: inserted, error } = await supabase
       .from('patient_reports')
@@ -155,6 +216,9 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       .single();
 
     if (error) {
+      console.error('[pathology-upload][save-report]', {
+        message: error.message,
+      });
       return { success: false, error: 'Failed to save report' };
     }
 
@@ -163,7 +227,10 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       reportId: inserted?.id ?? '',
       confidenceScore,
     };
-  } catch {
+  } catch (error) {
+    console.error('[pathology-upload][unexpected]', {
+      message: getErrorMessage(error),
+    });
     return { success: false, error: 'Processing failed. Please try again.' };
   } finally {
     rawText = null;
