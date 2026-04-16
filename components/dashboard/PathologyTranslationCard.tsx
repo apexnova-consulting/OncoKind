@@ -36,7 +36,7 @@ export function PathologyTranslationCard() {
         return;
       }
       setStatus('processing');
-      const res = await fetch('/api/process-report', {
+      const res = await fetch('/api/reports/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ filePath: path }),

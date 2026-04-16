@@ -34,6 +34,19 @@ type ParsedInsuranceSignals = {
   appealDeadlineText: string;
 };
 
+function formatBiomarkerProfile(report: PatientReportData | null) {
+  if (!report?.biomarkers) return 'no biomarker profile available';
+
+  const names = report.biomarkers.names ?? [];
+  const statuses = report.biomarkers.statuses ?? [];
+  const paired = names.map((name, index) => {
+    const status = statuses[index]?.trim();
+    return status ? `${name} ${status}` : name;
+  });
+
+  return paired.filter(Boolean).join(', ') || 'no biomarker profile available';
+}
+
 function normalizeWhitespace(value: string) {
   return value.replace(/\s+/g, ' ').trim();
 }
@@ -97,7 +110,7 @@ function extractInsuranceSignals(text: string): ParsedInsuranceSignals {
 function buildMockNccnContext(report: PatientReportData | null) {
   const cancerType = report?.biomarkers?.cancer_type_inferred?.toLowerCase() ?? '';
   const stage = report?.biomarkers?.tnm_stage ?? 'advanced-stage disease';
-  const biomarkers = (report?.biomarkers?.names ?? []).join(', ') || 'documented tumor biomarkers';
+  const biomarkers = formatBiomarkerProfile(report);
 
   if (cancerType.includes('lung')) {
     return `Mock NCCN 2026 context: for lung cancer with stage ${stage}, treatment planning should consider biomarker-driven therapy, systemic treatment sequencing, and documented pathology findings including ${biomarkers}.`;
@@ -133,7 +146,9 @@ Requirements:
 - Use this member services phone: ${parsedSignals.memberServicesPhone}
 - Use this appeal deadline text: ${parsedSignals.appealDeadlineText}
 - Use this mock NCCN 2026 guidance: ${buildMockNccnContext(report)}
-- Use these pathology facts when relevant: cancer type=${report?.biomarkers?.cancer_type_inferred ?? 'unknown'}, stage=${report?.biomarkers?.tnm_stage ?? 'unknown'}, histology=${report?.biomarkers?.histology ?? 'unknown'}, biomarkers=${(report?.biomarkers?.names ?? []).join(', ') || 'none listed'}
+- Use these pathology facts when relevant: cancer type=${report?.biomarkers?.cancer_type_inferred ?? 'unknown'}, stage=${report?.biomarkers?.tnm_stage ?? 'unknown'}, histology=${report?.biomarkers?.histology ?? 'unknown'}, biomarkers=${formatBiomarkerProfile(report)}
+- In both the plainEnglishBullets and letterOfMedicalNecessity, explicitly mention the patient's biomarker-driven oncology context when biomarker data exists.
+- Do not write generic appeals. Tie medical necessity to the specific cancer type, stage, histology, and biomarker profile.
 
 EOB text:
 ${scrubbedText}`;
@@ -166,7 +181,7 @@ function buildFallbackPayload(
 ): InsuranceAppealPayload {
   const cancerType = report?.biomarkers?.cancer_type_inferred ?? 'the documented cancer diagnosis';
   const stage = report?.biomarkers?.tnm_stage ?? 'the current disease stage';
-  const biomarkers = (report?.biomarkers?.names ?? []).join(', ') || 'documented biomarkers';
+  const biomarkers = formatBiomarkerProfile(report);
 
   return {
     denialReasonCode: parsedSignals.denialReasonCode,
@@ -189,7 +204,7 @@ function buildFallbackPayload(
   };
 }
 
-export async function decodeInsuranceDenial(file: File): Promise<{
+export async function decodeInsuranceDenial(file: File, report: PatientReportData | null = null): Promise<{
   payload: DecodedInsurancePayload;
   scrubbedText: string;
   modelId: string;
@@ -206,14 +221,14 @@ export async function decodeInsuranceDenial(file: File): Promise<{
     }
 
     const parsedSignals = extractInsuranceSignals(scrubbedText);
-    let plainEnglishBullets = buildFallbackPayload(parsedSignals, null).plainEnglishBullets;
+    let plainEnglishBullets = buildFallbackPayload(parsedSignals, report).plainEnglishBullets;
     let modelId = 'fallback-rules';
 
     try {
       const generated = await generateWithAnthropic({
         scrubbedText,
         parsedSignals,
-        report: null,
+        report,
       });
       if (generated.plainEnglishBullets.length > 0) {
         plainEnglishBullets = generated.plainEnglishBullets.slice(0, 3);

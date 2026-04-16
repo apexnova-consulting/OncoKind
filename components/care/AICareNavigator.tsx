@@ -48,7 +48,7 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
       const res = await fetch('/api/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: trimmed }),
+        body: JSON.stringify({ question: trimmed, contextualInfo }),
       });
       const data = await res.json();
       const reply = data.answer ?? 'I’m sorry, I couldn’t process that. Please try again.';
@@ -77,7 +77,7 @@ export function AICareNavigator({ contextualInfo }: AICareNavigatorProps) {
       const res = await fetch('/api/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: query }),
+        body: JSON.stringify({ question: query, contextualInfo }),
       });
       const data = await res.json();
       const reply = data.answer ?? 'I couldn\'t process that. Please try again.';

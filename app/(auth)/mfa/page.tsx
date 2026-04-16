@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { readAalFromAccessToken } from '@/lib/auth-security';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { MfaSecurityPanel } from '@/components/security/MfaSecurityPanel';
 
@@ -10,6 +11,21 @@ export default async function MfaPage() {
 
   if (!user) {
     redirect('/login');
+  }
+
+  const [
+    {
+      data: { session },
+    },
+    { data: profile },
+  ] = await Promise.all([
+    supabase.auth.getSession(),
+    supabase.from('profiles').select('mfa_enabled').eq('id', user.id).maybeSingle(),
+  ]);
+
+  const aal = readAalFromAccessToken(session?.access_token);
+  if (!profile?.mfa_enabled || aal === 'aal2') {
+    redirect('/journey');
   }
 
   return (

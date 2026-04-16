@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { decodeInsuranceDenial } from '@/lib/insurance/appeals';
+import { getPatientReport } from '@/lib/patient-reports';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -22,7 +23,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing PDF file' }, { status: 400 });
     }
 
-    const decoded = await decodeInsuranceDenial(file);
+    const { data: reports } = await supabase
+      .from('patient_reports')
+      .select('id')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    const latestReportId = reports?.[0]?.id;
+    const report = latestReportId ? await getPatientReport(latestReportId, user.id) : null;
+
+    const decoded = await decodeInsuranceDenial(file, report);
 
     const { data: inserted, error: insertError } = await supabase
       .from('insurance_navigation_cases')
@@ -54,6 +64,7 @@ export async function POST(request: NextRequest) {
       details: {
         denialReasonCode: decoded.payload.denialReasonCode,
         insuranceName: decoded.payload.insuranceName,
+        reportId: latestReportId ?? null,
       },
     });
 
