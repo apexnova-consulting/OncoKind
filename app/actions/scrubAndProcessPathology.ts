@@ -242,7 +242,12 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       console.error('[pathology-upload][save-report]', {
         message: error.message,
       });
-      return { success: false, error: 'Failed to save report' };
+      return {
+        success: false,
+        error: error.message
+          ? `Failed to save report: ${error.message}`
+          : 'Failed to save report',
+      };
     }
 
     return {
