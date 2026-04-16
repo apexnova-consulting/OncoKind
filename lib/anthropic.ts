@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 
 export const ANTHROPIC_MODELS = {
-  heavy: 'claude-3-5-sonnet-latest',
+  heavy: 'claude-sonnet-4-6',
   light: 'claude-haiku-4-5',
 } as const;
 
