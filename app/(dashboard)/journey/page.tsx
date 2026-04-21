@@ -5,7 +5,6 @@ import { JourneyUploadCard } from '@/components/care/JourneyUploadCard';
 import { JourneyTimeline } from '@/components/care/JourneyTimeline';
 import { CancerProfileSummaryCard } from '@/components/care/CancerProfileSummaryCard';
 import { getPatientReport } from '@/lib/patient-reports';
-import { ClipboardList, Activity, BarChart3, FileText } from 'lucide-react';
 
 export default async function JourneyPage() {
   const supabase = await createServerSupabaseClient();
@@ -29,17 +28,17 @@ export default async function JourneyPage() {
         {
           id: 'diagnosis' as const,
           label: 'Diagnosis',
-          icon: FileText,
           status: 'completed' as const,
           summary: report.biomarkers?.cancer_type_inferred
-            ? `${report.biomarkers.cancer_type_inferred} — ${report.biomarkers.tnm_stage ?? ''}`
+            ? [report.biomarkers.cancer_type_inferred, report.biomarkers.tnm_stage]
+                .filter(Boolean)
+                .join(' — ')
             : 'Stage identified',
           biomarkers: report.biomarkers?.names ?? [],
         },
         {
           id: 'treatment-planning' as const,
           label: 'Treatment Planning',
-          icon: ClipboardList,
           status: 'current' as const,
           nextSteps: [
             'Schedule PET Scan',
@@ -50,14 +49,12 @@ export default async function JourneyPage() {
         {
           id: 'active-treatment' as const,
           label: 'Active Treatment',
-          icon: Activity,
           status: 'upcoming' as const,
           summary: 'Upcoming treatments',
         },
         {
           id: 'monitoring' as const,
           label: 'Monitoring',
-          icon: BarChart3,
           status: 'upcoming' as const,
         },
       ]
@@ -65,25 +62,21 @@ export default async function JourneyPage() {
         {
           id: 'diagnosis' as const,
           label: 'Diagnosis',
-          icon: FileText,
           status: 'upcoming' as const,
         },
         {
           id: 'treatment-planning' as const,
           label: 'Treatment Planning',
-          icon: ClipboardList,
           status: 'upcoming' as const,
         },
         {
           id: 'active-treatment' as const,
           label: 'Active Treatment',
-          icon: Activity,
           status: 'upcoming' as const,
         },
         {
           id: 'monitoring' as const,
           label: 'Monitoring',
-          icon: BarChart3,
           status: 'upcoming' as const,
         },
       ];

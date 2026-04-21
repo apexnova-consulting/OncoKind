@@ -3,7 +3,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronDown, ChevronRight, FileText } from 'lucide-react';
+import {
+  Check,
+  ChevronDown,
+  ChevronRight,
+  FileText,
+  ClipboardList,
+  Activity,
+  BarChart3,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export type CareStageId = 'diagnosis' | 'treatment-planning' | 'active-treatment' | 'monitoring';
@@ -11,7 +19,6 @@ export type CareStageId = 'diagnosis' | 'treatment-planning' | 'active-treatment
 interface StageData {
   id: CareStageId;
   label: string;
-  icon: typeof FileText;
   status: 'completed' | 'current' | 'upcoming';
   summary?: string;
   biomarkers?: string[];
@@ -25,11 +32,17 @@ interface JourneyTimelineProps {
 
 export function JourneyTimeline({ stages }: JourneyTimelineProps) {
   const [expanded, setExpanded] = useState<CareStageId | null>('treatment-planning');
+  const iconMap = {
+    diagnosis: FileText,
+    'treatment-planning': ClipboardList,
+    'active-treatment': Activity,
+    monitoring: BarChart3,
+  } as const;
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {stages.map((stage, idx) => {
-        const Icon = stage.icon;
+        const Icon = iconMap[stage.id];
         const isExpanded = expanded === stage.id;
         const statusColors =
           stage.status === 'completed'
