@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { readAalFromAccessToken } from '@/lib/auth-security';
 
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -28,7 +29,32 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-  await supabase.auth.getUser();
+  const pathname = request.nextUrl.pathname;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const requiresDashboardMfa = pathname.startsWith('/dashboard') || pathname.startsWith('/journey');
+  if (user && requiresDashboardMfa) {
+    const [
+      {
+        data: { session },
+      },
+      { data: profile },
+    ] = await Promise.all([
+      supabase.auth.getSession(),
+      supabase.from('profiles').select('mfa_enabled').eq('id', user.id).maybeSingle(),
+    ]);
+
+    const aal = readAalFromAccessToken(session?.access_token);
+    if (profile?.mfa_enabled && aal !== 'aal2') {
+      const url = request.nextUrl.clone();
+      url.pathname = '/mfa';
+      url.search = '';
+      return NextResponse.redirect(url);
+    }
+  }
+
   return response;
 }
 

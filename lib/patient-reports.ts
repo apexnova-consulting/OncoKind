@@ -9,11 +9,29 @@ export interface BiomarkersData {
   cancer_type_inferred?: string | null;
 }
 
+export interface AnalysisResultsData {
+  summary?: string;
+  keyFindings?: string[];
+  suggestedQuestions?: string[];
+  comparisonHighlight?: string | null;
+}
+
 export interface PatientReportData {
   id: string;
   biomarkers: BiomarkersData;
-  matchedTrials: { matched_trials: unknown[] };
+  matchedTrials: { matched_trials: unknown[]; analysis_results?: AnalysisResultsData };
   confidenceScore: number;
+}
+
+function normalizeStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => (typeof item === 'string' ? item : typeof item === 'number' ? String(item) : ''))
+    .filter(Boolean);
+}
+
+function normalizeNullableString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() ? value : null;
 }
 
 export async function getPatientReport(
@@ -31,12 +49,40 @@ export async function getPatientReport(
   if (error || !data) return null;
 
   try {
-    const biomarkers = data.biomarkers_json_encrypted
+    const rawBiomarkers = data.biomarkers_json_encrypted
       ? decryptJson<BiomarkersData>(data.biomarkers_json_encrypted as string)
       : { names: [], statuses: [] };
-    const matchedTrials = data.matched_trials_json_encrypted
-      ? decryptJson<{ matched_trials: unknown[] }>(data.matched_trials_json_encrypted as string)
+    const biomarkers: BiomarkersData = {
+      names: normalizeStringArray(rawBiomarkers.names),
+      statuses: normalizeStringArray(rawBiomarkers.statuses),
+      tnm_stage: normalizeNullableString(rawBiomarkers.tnm_stage),
+      histology: normalizeNullableString(rawBiomarkers.histology),
+      cancer_type_inferred: normalizeNullableString(rawBiomarkers.cancer_type_inferred),
+    };
+
+    const rawMatchedTrials = data.matched_trials_json_encrypted
+      ? decryptJson<{ matched_trials?: unknown[]; analysis_results?: AnalysisResultsData }>(
+          data.matched_trials_json_encrypted as string
+        )
       : { matched_trials: [] };
+    const matchedTrials = {
+      matched_trials: Array.isArray(rawMatchedTrials.matched_trials)
+        ? rawMatchedTrials.matched_trials
+        : [],
+      analysis_results: rawMatchedTrials.analysis_results
+        ? {
+            summary: normalizeNullableString(rawMatchedTrials.analysis_results.summary) ?? undefined,
+            keyFindings: normalizeStringArray(rawMatchedTrials.analysis_results.keyFindings),
+            suggestedQuestions: normalizeStringArray(
+              rawMatchedTrials.analysis_results.suggestedQuestions
+            ),
+            comparisonHighlight: normalizeNullableString(
+              rawMatchedTrials.analysis_results.comparisonHighlight
+            ),
+          }
+        : undefined,
+    };
+
     return {
       id: data.id,
       biomarkers,

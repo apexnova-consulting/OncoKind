@@ -1,10 +1,11 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getProfile } from '@/lib/auth';
 import { DoctorPrepSheet } from '@/components/reports/DoctorPrepSheet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getPatientReport } from '@/lib/patient-reports';
 
 export default async function ReportDetailPage({
   params,
@@ -13,19 +14,39 @@ export default async function ReportDetailPage({
 }) {
   const { id } = await params;
   const supabase = await createServerSupabaseClient();
-  const { data: report } = await supabase
-    .from('medical_reports')
-    .select('id, file_name, raw_extracted_text, metadata, created_at')
-    .eq('id', id)
-    .single();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
 
+  const report = await getPatientReport(id, user.id);
   if (!report) notFound();
 
   const { isPro } = await getProfile();
-  const meta = (report.metadata as { summary?: string; keyFindings?: string[]; suggestedQuestions?: string[] }) ?? {};
-  const summary = meta.summary ?? report.raw_extracted_text?.slice(0, 500) ?? '';
-  const keyFindings = meta.keyFindings ?? [];
-  const suggestedQuestions = meta.suggestedQuestions ?? [];
+  const summary =
+    report.matchedTrials.analysis_results?.summary ??
+    [
+      report.biomarkers.cancer_type_inferred ? `**Cancer type:** ${report.biomarkers.cancer_type_inferred}` : null,
+      report.biomarkers.tnm_stage ? `**Stage:** ${report.biomarkers.tnm_stage}` : null,
+      report.biomarkers.histology ? `**Histology:** ${report.biomarkers.histology}` : null,
+    ]
+      .filter(Boolean)
+      .join('\n');
+  const keyFindings =
+    report.matchedTrials.analysis_results?.keyFindings ??
+    (report.biomarkers.names ?? []).map((name, index) => {
+      const status = report.biomarkers.statuses?.[index];
+      return status ? `**${name}:** ${status}` : `**${name}**`;
+    });
+  const suggestedQuestions =
+    report.matchedTrials.analysis_results?.suggestedQuestions ?? [
+      'What should we compare against my previous scan or pathology report?',
+      'Do these findings suggest progression or any new metastatic sites?',
+      'How do these biomarkers affect the next treatment decision?',
+    ];
+  const reportTitle = report.biomarkers.cancer_type_inferred
+    ? `${report.biomarkers.cancer_type_inferred} report`
+    : 'Cancer report';
 
   return (
     <div className="space-y-6">
@@ -35,7 +56,7 @@ export default async function ReportDetailPage({
         </Button>
       </div>
       <h1 className="text-2xl font-bold text-slate-900">
-        {report.file_name ?? 'Report'}
+        {reportTitle}
       </h1>
       <Card>
         <CardHeader>
@@ -67,7 +88,7 @@ export default async function ReportDetailPage({
       </Card>
       <DoctorPrepSheet
         isPro={isPro}
-        reportTitle={report.file_name ?? undefined}
+        reportTitle={reportTitle}
         reportSummary={summary}
         reportQuestions={suggestedQuestions}
         reportFindings={keyFindings}

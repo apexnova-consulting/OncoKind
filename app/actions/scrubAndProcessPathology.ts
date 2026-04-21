@@ -13,10 +13,12 @@
  * 8. Logs NEVER contain PHI
  */
 
+import { revalidatePath } from 'next/cache';
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
+import { getPatientReport } from '@/lib/patient-reports';
 import {
   ANTHROPIC_MODELS,
   asAnthropicRequest,
@@ -46,7 +48,13 @@ const EXTRACTION_PROMPT = `You are a clinical assistant. Extract oncology-releva
   "tnm_stage": "T2N1M0" or null if not found,
   "histology": "adenocarcinoma" or null,
   "cancer_type_inferred": "lung" or null,
-  "confidence_score": 0.0 to 1.0
+  "confidence_score": 0.0 to 1.0,
+  "analysis_results": {
+    "summary": "**Headline**\\n- Bullet",
+    "keyFindings": ["**Finding:** detail", "**Finding:** detail"],
+    "suggestedQuestions": ["question 1", "question 2", "question 3"],
+    "comparisonHighlight": "New lung nodules identified since the prior scan." or null
+  }
 }
 
 Rules: Be concise. If unclear, use null. Never include patient identifiers.`;
@@ -55,9 +63,34 @@ const PATHOLOGY_KNOWLEDGE_BASE = `OncoKind pathology extraction template:
 - Extract biomarkers only when explicitly present.
 - Preserve reported mutation names exactly, such as KRAS G12C or EGFR exon 19 deletion.
 - Use null when stage, histology, or cancer type is not stated.
-- Return only the requested JSON structure without commentary.`;
+- Return only the requested JSON structure without commentary.
+- Use Markdown bold and bullet formatting inside analysis_results.summary and analysis_results.keyFindings.
+- When previous findings are provided, compare the new report against the prior report and explicitly highlight progression or new metastases.`;
 
-async function createAnthropicExtraction(scrubbedText: string) {
+function buildPreviousReportContext(previousReport: Awaited<ReturnType<typeof getPatientReport>>) {
+  if (!previousReport) {
+    return 'No previous report available for comparison.';
+  }
+
+  const biomarkers = (previousReport.biomarkers.names ?? []).map((name, index) => {
+    const status = previousReport.biomarkers.statuses?.[index];
+    return status ? `${name}: ${status}` : name;
+  });
+
+  return [
+    `Previous cancer type: ${previousReport.biomarkers.cancer_type_inferred ?? 'unknown'}`,
+    `Previous stage: ${previousReport.biomarkers.tnm_stage ?? 'unknown'}`,
+    `Previous histology: ${previousReport.biomarkers.histology ?? 'unknown'}`,
+    `Previous biomarkers: ${biomarkers.join(', ') || 'none recorded'}`,
+    `Previous summary: ${previousReport.matchedTrials.analysis_results?.summary ?? 'none recorded'}`,
+    `Previous comparison highlight: ${previousReport.matchedTrials.analysis_results?.comparisonHighlight ?? 'none recorded'}`,
+  ].join('\n');
+}
+
+async function createAnthropicExtraction(
+  scrubbedText: string,
+  previousReport: Awaited<ReturnType<typeof getPatientReport>>
+) {
   const anthropic = createAnthropicClient();
   const request = asAnthropicRequest({
     model: ANTHROPIC_MODELS.heavy,
@@ -69,7 +102,7 @@ async function createAnthropicExtraction(scrubbedText: string) {
     messages: [
       {
         role: 'user',
-        content: `De-identified pathology text:\n\n${scrubbedText}`,
+        content: `Previous report context:\n${buildPreviousReportContext(previousReport)}\n\nDe-identified pathology text:\n\n${scrubbedText}`,
       },
     ],
   });
@@ -88,6 +121,15 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     if (!user) {
       return { success: false, error: 'Unauthorized' };
     }
+
+    const { data: previousReports } = await supabase
+      .from('patient_reports')
+      .select('id, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    const previousReportId = previousReports?.[0]?.id;
+    const previousReport = previousReportId ? await getPatientReport(previousReportId, user.id) : null;
 
     const file = formData.get('pdf') as File | null;
     if (!file || !(file instanceof File)) {
@@ -140,7 +182,7 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
 
     let message;
     try {
-      message = await createAnthropicExtraction(scrubbedText);
+      message = await createAnthropicExtraction(scrubbedText, previousReport);
     } catch (error) {
       console.error('[pathology-upload][anthropic]', {
         message: getAnthropicErrorMessage(error),
@@ -165,6 +207,12 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       histology?: string | null;
       cancer_type_inferred?: string | null;
       confidence_score?: number;
+      analysis_results?: {
+        summary?: string;
+        keyFindings?: string[];
+        suggestedQuestions?: string[];
+        comparisonHighlight?: string | null;
+      };
     } = {};
 
     try {
@@ -184,6 +232,12 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       histology: parsed.histology ?? null,
       cancer_type_inferred: parsed.cancer_type_inferred ?? null,
     };
+    const analysisResults = {
+      summary: parsed.analysis_results?.summary ?? '',
+      keyFindings: parsed.analysis_results?.keyFindings ?? [],
+      suggestedQuestions: parsed.analysis_results?.suggestedQuestions ?? [],
+      comparisonHighlight: parsed.analysis_results?.comparisonHighlight ?? null,
+    };
 
     const confidenceScore = Math.min(
       1,
@@ -194,7 +248,7 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     let trialsBuf: Buffer;
     try {
       biomarkersBuf = encryptJson(biomarkersPayload);
-      trialsBuf = encryptJson({ matched_trials: [] });
+      trialsBuf = encryptJson({ matched_trials: [], analysis_results: analysisResults });
     } catch (error) {
       console.error('[pathology-upload][encryption]', {
         message: getAnthropicErrorMessage(error),
@@ -248,6 +302,14 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
           ? `Failed to save report: ${error.message}`
           : 'Failed to save report',
       };
+    }
+
+    revalidatePath('/journey');
+    revalidatePath('/journey/documents');
+    revalidatePath('/reports');
+    if (inserted?.id) {
+      revalidatePath(`/journey/diagnosis/${inserted.id}`);
+      revalidatePath(`/reports/${inserted.id}`);
     }
 
     return {
