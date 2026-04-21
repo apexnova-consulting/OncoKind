@@ -166,6 +166,14 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  let supabaseHost: string | null = null;
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    supabaseHost = url ? new URL(url).host : null;
+  } catch {
+    supabaseHost = null;
+  }
+
   return NextResponse.json({
     deployment: {
       nodeEnv: process.env.NODE_ENV ?? null,
@@ -177,6 +185,7 @@ export async function GET(request: NextRequest) {
       encryptionConfigured: Boolean(process.env.ENCRYPTION_KEY),
       supabaseUrlConfigured: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
       supabaseAnonConfigured: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+      supabaseHost,
     },
     encryptionProbe: {
       ok: encryptionOk,
