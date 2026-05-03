@@ -78,10 +78,31 @@ CREATE TABLE IF NOT EXISTS public.prep_sheet_appointments (
   notes TEXT,
   follow_up_banner_dismissed_at TIMESTAMPTZ,
   check_in_email_sent_at TIMESTAMPTZ,
-  check_in_due_at TIMESTAMPTZ GENERATED ALWAYS AS (appointment_at + interval '24 hours') STORED,
+  check_in_due_at TIMESTAMPTZ NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE OR REPLACE FUNCTION public.set_prep_sheet_appointment_due_at()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.check_in_due_at = NEW.appointment_at + interval '24 hours';
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS set_prep_sheet_appointment_due_at ON public.prep_sheet_appointments;
+
+CREATE TRIGGER set_prep_sheet_appointment_due_at
+  BEFORE INSERT OR UPDATE OF appointment_at ON public.prep_sheet_appointments
+  FOR EACH ROW
+  EXECUTE FUNCTION public.set_prep_sheet_appointment_due_at();
+
+UPDATE public.prep_sheet_appointments
+SET check_in_due_at = appointment_at + interval '24 hours'
+WHERE check_in_due_at IS NULL;
 
 CREATE INDEX IF NOT EXISTS idx_prep_sheet_appointments_user_id
   ON public.prep_sheet_appointments(user_id);
