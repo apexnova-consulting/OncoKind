@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
+import { getPendingCheckInPrompt } from '@/lib/check-ins';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ReportsUploadPanel } from '@/components/reports/ReportsUploadPanel';
+import { formatReadableDate } from '@/lib/time';
 import { getPatientReport } from '@/lib/patient-reports';
 
 export default async function ReportsPage() {
@@ -26,11 +28,30 @@ export default async function ReportsPage() {
       details: await getPatientReport(report.id, user.id),
     }))
   );
+  const pendingCheckIn = await getPendingCheckInPrompt(user.id);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
       <h1 className="text-2xl font-bold text-slate-900">Reports</h1>
+      {pendingCheckIn ? (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-amber-900">
+              How did your {formatReadableDate(pendingCheckIn.appointment_at)} appointment go?
+            </p>
+            <Button asChild size="sm">
+              <Link href={`/journey/check-in/${pendingCheckIn.id}`}>Take 60-second check-in →</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
       <ReportsUploadPanel />
+      <p className="text-sm text-slate-500">
+        Need a moment?{' '}
+        <Link href="/quiet-room" className="font-semibold text-primary hover:underline">
+          → The Quiet Room
+        </Link>
+      </p>
       {!reportCards.length ? (
         <Card>
           <CardContent className="py-8 text-center text-slate-600">

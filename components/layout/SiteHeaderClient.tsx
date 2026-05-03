@@ -10,6 +10,10 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export type SiteHeaderClientProps = {
+  brand: {
+    displayName: string;
+    logoUrl: string | null;
+  };
   navLinks: { href: string; label: string }[];
   signedIn: boolean;
   labels: {
@@ -19,7 +23,7 @@ export type SiteHeaderClientProps = {
   };
 };
 
-export function SiteHeaderClient({ navLinks, signedIn, labels }: SiteHeaderClientProps) {
+export function SiteHeaderClient({ brand, navLinks, signedIn, labels }: SiteHeaderClientProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -57,12 +61,19 @@ export function SiteHeaderClient({ navLinks, signedIn, labels }: SiteHeaderClien
       <div className="mx-auto flex h-16 max-w-[var(--max-width-full)] items-center justify-between gap-4 px-4 lg:h-[4.25rem]">
         <Link
           href="/"
-          className="group flex shrink-0 items-baseline gap-0 font-display text-[1.375rem] font-semibold italic tracking-tight text-[var(--color-primary-900)]"
+          className="group flex shrink-0 items-center gap-3 font-display text-[1.375rem] font-semibold italic tracking-tight text-[var(--color-primary-900)]"
         >
-          <span className="text-[var(--color-accent-500)] transition-colors group-hover:text-[var(--color-accent-400)]">
-            O
-          </span>
-          <span>ncoKind</span>
+          {brand.logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={brand.logoUrl} alt={brand.displayName} className="h-9 w-auto max-w-[8.5rem] object-contain" />
+          ) : (
+            <>
+              <span className="text-[var(--color-accent-500)] transition-colors group-hover:text-[var(--color-accent-400)]">
+                {brand.displayName.charAt(0)}
+              </span>
+              <span>{brand.displayName.slice(1)}</span>
+            </>
+          )}
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Main">

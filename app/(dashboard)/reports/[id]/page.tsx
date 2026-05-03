@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getProfile } from '@/lib/auth';
+import { getBrandTheme } from '@/lib/branding';
 import { DoctorPrepSheet } from '@/components/reports/DoctorPrepSheet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +23,7 @@ export default async function ReportDetailPage({
   const report = await getPatientReport(id, user.id);
   if (!report) notFound();
 
-  const { isPro } = await getProfile();
+  const [{ isPro }, brandTheme] = await Promise.all([getProfile(), getBrandTheme()]);
   const summary =
     report.matchedTrials.analysis_results?.summary ??
     [
@@ -88,10 +89,14 @@ export default async function ReportDetailPage({
       </Card>
       <DoctorPrepSheet
         isPro={isPro}
+        reportId={id}
         reportTitle={reportTitle}
         reportSummary={summary}
         reportQuestions={suggestedQuestions}
         reportFindings={keyFindings}
+        brandDisplayName={brandTheme.displayName}
+        brandLogoUrl={brandTheme.logoUrl}
+        brandFooterDisclaimer={brandTheme.footerDisclaimer}
       />
     </div>
   );

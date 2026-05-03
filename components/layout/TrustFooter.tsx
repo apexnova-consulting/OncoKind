@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getBrandTheme } from '@/lib/branding';
 import { getDictionaryFromCookies } from '@/lib/i18n-server';
 
 const productLinks = [
@@ -6,10 +7,13 @@ const productLinks = [
   { href: '/#features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/#sample-demo', label: 'Try Demo' },
+  { href: '/community', label: 'Community' },
+  { href: '/resources', label: 'Resources' },
 ];
 
 export async function TrustFooter() {
   const t = await getDictionaryFromCookies();
+  const brandTheme = await getBrandTheme();
   const year = new Date().getFullYear();
 
   return (
@@ -17,7 +21,16 @@ export async function TrustFooter() {
       <div className="mx-auto max-w-[var(--max-width-full)] px-4 py-14">
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between">
           <div className="max-w-sm">
-            <p className="font-display text-2xl font-semibold italic text-white">OncoKind</p>
+            {brandTheme.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={brandTheme.logoUrl}
+                alt={brandTheme.displayName}
+                className="h-12 w-auto max-w-[11rem] object-contain"
+              />
+            ) : (
+              <p className="font-display text-2xl font-semibold italic text-white">{brandTheme.displayName}</p>
+            )}
             <p className="mt-2 text-sm leading-relaxed text-[var(--color-surface-300)]">
               Clarity for families navigating cancer.
             </p>
@@ -129,10 +142,10 @@ export async function TrustFooter() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-[var(--color-primary-700)] pt-8 text-sm text-[var(--color-surface-300)] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <p>© {year} OncoKind. All rights reserved.</p>
+          <p>© {year} {brandTheme.displayName}. All rights reserved.</p>
           <p className="max-w-xl text-[var(--color-surface-400)]">
-            OncoKind provides informational guidance and is not a substitute for professional medical
-            advice.
+            {brandTheme.footerDisclaimer ??
+              'OncoKind provides informational guidance and is not a substitute for professional medical advice.'}
           </p>
           <nav className="flex flex-wrap gap-6" aria-label="Legal links">
             <Link href="/privacy" className="hover:text-[var(--color-accent-400)]">

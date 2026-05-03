@@ -13,11 +13,18 @@ export const metadata = {
 const comparisonRows: [string, string, string, string][] = [
   ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
   ['Trial matches', 'Limited', 'Full (50mi)', 'Full + custom'],
-  ['Doctor Prep PDF', '—', '✓', '✓ Branded'],
-  ['Multi-patient', '—', '—', '✓'],
+  ['Insurance Denial Defense', '—', '✓', '✓'],
+  ['Live Financial Aid Tracker', '—', '✓', '✓'],
+  ['NCCN-Aligned Advocate Sheets', '—', '✓', '✓'],
+  ['Care Timeline', 'Basic', '✓', '✓'],
+  ['Doctor Prep Sheet (PDF)', '—', '✓', '✓ Branded'],
+  ['Appointment Check-In', '—', '✓', '✓'],
+  ['Community Access', 'Read only', '✓', '✓'],
+  ['Multi-patient dashboard', '—', '—', '✓'],
+  ['Batch document analysis', '—', '—', '✓'],
   ['Branded portal', '—', '—', '✓'],
-  ['HIPAA BAA onboarding', '—', '—', '✓'],
-  ['Roster export + prep flags', '—', '—', '✓'],
+  ['HIPAA BAA flow', '—', '—', '✓'],
+  ['Clinic integrations', '—', '—', '✓'],
   ['Support', 'Community', 'Email', 'Dedicated'],
 ];
 

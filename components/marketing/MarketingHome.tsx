@@ -79,6 +79,12 @@ const features = [
     Icon: Heart,
   },
   {
+    href: '/community',
+    title: 'Community Access',
+    desc: 'Read moderated caregiver conversations and share support with Advocate access.',
+    Icon: MessageCircle,
+  },
+  {
     href: '/journey/timeline',
     title: 'Care Timeline',
     desc: "A living record of your loved one's cancer journey.",
@@ -141,10 +147,12 @@ const trustTiles = [
 const comparisonRows: [string, string, string, string][] = [
   ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
   ['Trial matches', 'Limited', 'Full (50mi)', 'Full + custom'],
-  ['NCCN-aligned advocate sheets', '—', '✓', '✓ Branded'],
-  ['Financial help feed', '—', '✓', '✓'],
-  ['Insurance denial defense', '—', '✓', '—'],
-  ['Multi-patient', '—', '—', '✓'],
+  ['Insurance Denial Defense', '—', '✓', '✓'],
+  ['Live Financial Aid Tracker', '—', '✓', '✓'],
+  ['NCCN-aligned advocate sheets', '—', '✓', '✓'],
+  ['Appointment Check-In', '—', '✓', '✓'],
+  ['Community Access', 'Read only', '✓', '✓'],
+  ['Multi-patient dashboard', '—', '—', '✓'],
 ];
 
 export function MarketingHome({ signedIn }: { signedIn: boolean }) {
@@ -452,9 +460,12 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                     'Insurance Denial Defense',
                     'Live Financial Aid Tracker',
                     'NCCN-Aligned Advocate Sheets',
-                    'Clinical trial matching',
+                    'Clinical trial matching (50mi)',
                     'Care timeline',
                     'Unlimited reports',
+                    'Doctor Prep Sheet (PDF)',
+                    'Appointment Check-In',
+                    'Community Access',
                   ].map((f) => (
                     <li key={f} className="flex gap-2">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-400)]" />
@@ -484,7 +495,15 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 </p>
                 <p className="text-sm text-[var(--color-text-muted)]">/month</p>
                 <ul className="mt-8 flex-1 space-y-3 text-left text-sm text-[var(--color-text-secondary)]">
-                  {['Branded portal', 'Batch queue', 'HIPAA BAA flow', 'Dedicated support'].map((f) => (
+                  {[
+                    'Everything in Advocate Plan',
+                    'Multi-patient dashboard',
+                    'Batch document analysis',
+                    'Branded portal',
+                    'HIPAA BAA flow',
+                    'Clinic integrations',
+                    'Dedicated support',
+                  ].map((f) => (
                     <li key={f} className="flex gap-2">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-sage-500)]" />
                       {f}

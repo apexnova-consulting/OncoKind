@@ -35,20 +35,25 @@ const FREE_FEATURES = [
 
 const ADVOCATE_FEATURES = [
   'Everything in Free',
-  'Insurance Denial Defense: AI-powered decode of denial letters and automated appeal generation.',
-  'Live Financial Aid Tracker: Real-time matching with active grants and foundation funding.',
-  'NCCN-Aligned Advocate Sheets: Advanced doctor prep sheets based on latest oncology standards.',
-  'Clinical trial matching and care timeline support.',
-  'Unlimited reports and document workflows.',
+  'Insurance Denial Defense',
+  'Live Financial Aid Tracker',
+  'NCCN-Aligned Advocate Sheets',
+  'Clinical Trial Matching (full, 50mi radius)',
+  'Care Timeline',
+  'Unlimited Reports',
+  'Doctor Prep Sheet (PDF)',
+  'Appointment Check-In',
+  'Community Access',
 ];
 
 const PROFESSIONAL_FEATURES = [
   'Everything in Advocate Plan',
-  'Branded portal (white-label subdomain)',
-  'HIPAA BAA acknowledgment flow',
-  'Batch report queue + status tracking',
-  'Exportable patient roster + prep completion flags',
-  'Dedicated support channel (email/Slack placeholder)',
+  'Multi-patient dashboard',
+  'Batch document analysis',
+  'Branded portal (white-label ready)',
+  'HIPAA BAA flow',
+  'Clinic integrations',
+  'Dedicated support',
 ];
 
 function CheckoutForm({

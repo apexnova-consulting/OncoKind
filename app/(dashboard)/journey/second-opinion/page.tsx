@@ -84,7 +84,7 @@ export default async function SecondOpinionPage() {
         {!isPro && (
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
             <p className="text-sm text-slate-700">
-              Second Opinion packet export is a Pro feature. Upgrade to unlock complete packet generation.
+              Second Opinion packet export is part of the Advocate Plan. Upgrade to unlock complete packet generation.
             </p>
             <Button asChild className="mt-3">
               <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>

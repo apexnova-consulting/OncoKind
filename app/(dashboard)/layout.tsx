@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation';
 import { readAalFromAccessToken } from '@/lib/auth-security';
+import { getAdminContext } from '@/lib/admin';
+import { getBrandTheme } from '@/lib/branding';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { DashboardNav } from '@/components/layout/DashboardNav';
 
@@ -31,9 +33,17 @@ export default async function DashboardLayout({
     redirect('/mfa');
   }
 
+  const [brandTheme, adminContext] = await Promise.all([getBrandTheme(), getAdminContext()]);
+
   return (
     <>
-      <DashboardNav />
+      <DashboardNav
+        brand={{
+          displayName: brandTheme.displayName,
+          logoUrl: brandTheme.logoUrl,
+        }}
+        isAdmin={adminContext.isAdmin}
+      />
       {children}
     </>
   );

@@ -1,9 +1,11 @@
+import type { CSSProperties } from 'react';
 import type { Metadata, Viewport } from 'next';
 import { DM_Sans, Lora } from 'next/font/google';
 import './globals.css';
 import { TrustFooter } from '@/components/layout/TrustFooter';
 import { PwaRegister } from '@/components/PwaRegister';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
+import { getBrandTheme } from '@/lib/branding';
 import { getLanguageFromCookies } from '@/lib/i18n-server';
 
 const lora = Lora({
@@ -67,6 +69,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const lang = await getLanguageFromCookies();
+  const brandTheme = await getBrandTheme();
   return (
     <html lang={lang} className={`${lora.variable} ${dmSans.variable}`}>
       <head>
@@ -75,7 +78,10 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="flex min-h-screen flex-col bg-[var(--color-bg-page)] pb-16 text-accent md:pb-0">
+      <body
+        className="flex min-h-screen flex-col bg-[var(--color-bg-page)] pb-16 text-accent md:pb-0"
+        style={brandTheme.cssVariables as CSSProperties}
+      >
         <PwaRegister />
         {children}
         <TrustFooter />

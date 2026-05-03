@@ -34,7 +34,11 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const requiresDashboardMfa = pathname.startsWith('/dashboard') || pathname.startsWith('/journey');
+  const requiresDashboardMfa =
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/journey') ||
+    pathname.startsWith('/quiet-room') ||
+    pathname.startsWith('/admin');
   if (user && requiresDashboardMfa) {
     const [
       {
