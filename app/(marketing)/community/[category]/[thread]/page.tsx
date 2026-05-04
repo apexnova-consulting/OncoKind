@@ -131,7 +131,7 @@ export default async function CommunityThreadPage({ params }: PageProps) {
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Button asChild>
-                <Link href="/login">Sign In</Link>
+                <Link href="/login">Log In</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/pricing?plan=advocate">See Advocate Plan</Link>

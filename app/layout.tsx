@@ -4,7 +4,6 @@ import { DM_Sans, Lora } from 'next/font/google';
 import './globals.css';
 import { TrustFooter } from '@/components/layout/TrustFooter';
 import { PwaRegister } from '@/components/PwaRegister';
-import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { getBrandTheme } from '@/lib/branding';
 import { getLanguageFromCookies } from '@/lib/i18n-server';
 
@@ -79,13 +78,12 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body
-        className="flex min-h-screen flex-col bg-[var(--color-bg-page)] pb-16 text-accent md:pb-0"
+        className="flex min-h-screen flex-col bg-[var(--color-bg-page)] text-accent"
         style={brandTheme.cssVariables as CSSProperties}
       >
         <PwaRegister />
         {children}
         <TrustFooter />
-        <MobileBottomNav />
       </body>
     </html>
   );

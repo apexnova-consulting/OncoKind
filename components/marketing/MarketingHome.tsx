@@ -6,7 +6,6 @@ import {
   ArrowRight,
   Calendar,
   Check,
-  ChevronDown,
   FileCheck,
   FileUp,
   FlaskConical,
@@ -223,21 +222,6 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             </div>
           </div>
           <SampleReportDemo />
-          <motion.div
-            className="mt-14 flex flex-col items-center gap-2 text-[var(--color-text-muted)]"
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
-          >
-            <span className="text-xs tracking-[var(--tracking-wide)]">Scroll to see how it works</span>
-            <motion.span
-              aria-hidden
-              animate={reduce ? undefined : { y: [0, 6, 0] }}
-              transition={reduce ? undefined : { repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            >
-              <ChevronDown className="h-5 w-5" />
-            </motion.span>
-          </motion.div>
         </div>
       </section>
 

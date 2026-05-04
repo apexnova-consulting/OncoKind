@@ -60,7 +60,7 @@ export default async function CommunityCategoryPage({ params }: PageProps) {
                     : '/login'
                 }
               >
-                {user ? hasAdvocateAccess ? 'Start a Thread' : 'Upgrade to Post' : 'Sign In to Post'}
+                {user ? hasAdvocateAccess ? 'Start a Thread' : 'Upgrade to Post' : 'Log In to Post'}
               </Link>
             </Button>
           </div>

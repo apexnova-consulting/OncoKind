@@ -95,6 +95,7 @@ export default async function PricingPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const showYearlyBilling = false;
 
   const [advocateMonthly, advocateYearly] = await Promise.all([
     getPriceDisplay(stripePrices.advocateMonthly, '$49', '/month'),
@@ -125,6 +126,7 @@ export default async function PricingPage() {
           enterpriseUnlimitedPriceId={hasEnterprisePrices ? stripePrices.enterpriseUnlimited : undefined}
           enterprisePerSeatPriceId={hasEnterprisePrices ? stripePrices.enterprisePerSeat : undefined}
           highlightAdvocate
+          showBillingToggle={showYearlyBilling}
         />
 
         <section className="mt-24" id="comparison">

@@ -52,7 +52,7 @@ export default async function CommunityLandingPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild>
               <Link href={user ? '/community/new-post' : '/signup'}>
-                {user ? hasAdvocateAccess ? 'Start a New Thread' : 'Upgrade to Post' : 'Sign In to Join'}
+                {user ? hasAdvocateAccess ? 'Start a New Thread' : 'Upgrade to Post' : 'Get Started Free'}
               </Link>
             </Button>
             <Button asChild variant="outline">

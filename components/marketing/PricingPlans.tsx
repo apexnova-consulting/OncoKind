@@ -25,6 +25,7 @@ type Props = {
   enterpriseUnlimitedPriceId?: string;
   enterprisePerSeatPriceId?: string;
   highlightAdvocate?: boolean;
+  showBillingToggle?: boolean;
 };
 
 const FREE_FEATURES = [
@@ -86,48 +87,52 @@ export function PricingPlans({
   enterpriseUnlimitedPriceId,
   enterprisePerSeatPriceId,
   highlightAdvocate = false,
+  showBillingToggle = false,
 }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly');
+  const activeBillingInterval = showBillingToggle ? billingInterval : 'monthly';
 
-  const advocateActivePrice = advocatePricing[billingInterval];
+  const advocateActivePrice = advocatePricing[activeBillingInterval];
 
   const yearlySavingsLabel = useMemo(() => {
     if (!advocatePricing.monthly.configured || !advocatePricing.yearly.configured) return null;
-    return 'Save with annual billing';
+    return 'Save 20%';
   }, [advocatePricing.monthly.configured, advocatePricing.yearly.configured]);
 
   return (
     <>
-      <div className="mt-8 flex justify-center">
-        <div className="inline-flex items-center rounded-full border border-[var(--color-border-subtle)] bg-white p-1 shadow-[var(--shadow-sm)]">
-          <button
-            type="button"
-            onClick={() => setBillingInterval('monthly')}
-            className={cn(
-              'rounded-full px-5 py-2 text-sm font-semibold transition-colors',
-              billingInterval === 'monthly'
-                ? 'bg-[var(--color-primary-900)] text-[var(--color-text-inverse)]'
-                : 'text-[var(--color-text-secondary)]'
-            )}
-          >
-            Monthly
-          </button>
-          <button
-            type="button"
-            onClick={() => setBillingInterval('yearly')}
-            className={cn(
-              'rounded-full px-5 py-2 text-sm font-semibold transition-colors',
-              billingInterval === 'yearly'
-                ? 'bg-[var(--color-primary-900)] text-[var(--color-text-inverse)]'
-                : 'text-[var(--color-text-secondary)]'
-            )}
-          >
-            Yearly
-          </button>
+      {showBillingToggle ? (
+        <div className="mt-8 flex justify-center">
+          <div className="inline-flex items-center rounded-full border border-[var(--color-border-subtle)] bg-white p-1 shadow-[var(--shadow-sm)]">
+            <button
+              type="button"
+              onClick={() => setBillingInterval('monthly')}
+              className={cn(
+                'rounded-full px-5 py-2 text-sm font-semibold transition-colors',
+                billingInterval === 'monthly'
+                  ? 'bg-[var(--color-primary-900)] text-[var(--color-text-inverse)]'
+                  : 'text-[var(--color-text-secondary)]'
+              )}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              onClick={() => setBillingInterval('yearly')}
+              className={cn(
+                'rounded-full px-5 py-2 text-sm font-semibold transition-colors',
+                billingInterval === 'yearly'
+                  ? 'bg-[var(--color-primary-900)] text-[var(--color-text-inverse)]'
+                  : 'text-[var(--color-text-secondary)]'
+              )}
+            >
+              Yearly
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
 
-      {billingInterval === 'yearly' && yearlySavingsLabel ? (
+      {showBillingToggle && activeBillingInterval === 'yearly' && yearlySavingsLabel ? (
         <p className="mt-3 text-center text-sm font-medium text-[var(--color-accent-600)]">
           {yearlySavingsLabel}
         </p>
@@ -165,6 +170,11 @@ export function PricingPlans({
           <span className="absolute -right-1 top-4 rotate-3 rounded-full bg-[var(--color-accent-400)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--color-primary-900)]">
             Most Popular
           </span>
+          {showBillingToggle && activeBillingInterval === 'yearly' && yearlySavingsLabel ? (
+            <span className="absolute left-6 top-4 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--color-accent-400)]">
+              {yearlySavingsLabel}
+            </span>
+          ) : null}
           <span className="inline-flex w-fit rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-400)]">
             For Caregivers
           </span>
@@ -187,8 +197,8 @@ export function PricingPlans({
               <div className="mt-8 space-y-3">
                 <CheckoutForm
                   plan="advocate"
-                  billingInterval={billingInterval}
-                  cta={`Start Advocate ${billingInterval === 'monthly' ? 'Monthly' : 'Yearly'}`}
+                  billingInterval={activeBillingInterval}
+                  cta={`Start Advocate ${activeBillingInterval === 'monthly' ? 'Monthly' : 'Yearly'}`}
                 />
               </div>
             ) : (

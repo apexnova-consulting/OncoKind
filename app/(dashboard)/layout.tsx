@@ -4,6 +4,7 @@ import { getAdminContext } from '@/lib/admin';
 import { getBrandTheme } from '@/lib/branding';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { DashboardNav } from '@/components/layout/DashboardNav';
+import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 
 export default async function DashboardLayout({
   children,
@@ -44,7 +45,8 @@ export default async function DashboardLayout({
         }}
         isAdmin={adminContext.isAdmin}
       />
-      {children}
+      <div className="pb-16 md:pb-0">{children}</div>
+      <MobileBottomNav />
     </>
   );
 }
