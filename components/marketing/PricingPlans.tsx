@@ -156,7 +156,7 @@ export function PricingPlans({
             ))}
           </ul>
           <Button asChild variant="outline" className="mt-8 w-full">
-            <Link href="/signup">Get Started</Link>
+            <Link href="/signup">Get Started Free</Link>
           </Button>
         </div>
 
@@ -208,7 +208,7 @@ export function PricingPlans({
             )
           ) : (
             <Button asChild className="mt-8 w-full">
-              <Link href="/signup">Get Started → Upgrade</Link>
+              <Link href="/signup">Get Started Free</Link>
             </Button>
           )}
         </div>
