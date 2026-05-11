@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getStripeClient } from '@/lib/stripe';
 import { Check, Minus } from 'lucide-react';
 import { hasEnterprisePrices, stripePrices } from '@/lib/stripe-prices';
-import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_SECURITY_REVIEW_TEXT, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
+import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 

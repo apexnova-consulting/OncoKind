@@ -10,7 +10,6 @@ import {
   FileUp,
   FlaskConical,
   GitBranch,
-  Globe,
   HandCoins,
   ListOrdered,
   Lock,

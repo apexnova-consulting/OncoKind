@@ -87,7 +87,10 @@ export default async function ReportDetailPage({
               </ul>
             </div>
           )}
-          <OutputSources items={getCancerProfileSources(report.biomarkers.cancer_type_inferred)} className="mt-4" />
+          <OutputSources
+            items={getCancerProfileSources(report.biomarkers.cancer_type_inferred ?? undefined)}
+            className="mt-4"
+          />
           <MedicalDisclaimer className="mt-3" />
         </CardContent>
       </Card>

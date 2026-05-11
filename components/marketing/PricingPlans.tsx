@@ -85,8 +85,8 @@ function CheckoutForm({
 export function PricingPlans({
   isSignedIn,
   advocatePricing,
-  enterpriseUnlimitedPriceId,
-  enterprisePerSeatPriceId,
+  enterpriseUnlimitedPriceId: _enterpriseUnlimitedPriceId,
+  enterprisePerSeatPriceId: _enterprisePerSeatPriceId,
   highlightAdvocate = false,
   showBillingToggle = false,
 }: Props) {
