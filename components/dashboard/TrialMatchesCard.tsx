@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
+import { getClinicalTrialSources } from '@/lib/disclosures';
 
 type Trial = { id?: string; title?: string; status?: string; url?: string };
 
@@ -70,6 +72,8 @@ export function TrialMatchesCard() {
             ))}
           </ul>
         )}
+        <OutputSources items={getClinicalTrialSources()} className="mt-4" />
+        <MedicalDisclaimer className="mt-3" />
       </CardContent>
     </Card>
   );

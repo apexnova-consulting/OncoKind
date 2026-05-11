@@ -3,6 +3,8 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
+import { getClinicalTrialSources } from '@/lib/disclosures';
 
 type Tier = 'free' | 'pro' | 'professional';
 
@@ -38,6 +40,7 @@ export function TrialsMatcher({
   defaultStage = '',
   defaultBiomarkers = [],
 }: Props) {
+  const sourceItems = getClinicalTrialSources();
   const [cancerType, setCancerType] = useState(defaultCancerType);
   const [stage, setStage] = useState(defaultStage);
   const [biomarkers, setBiomarkers] = useState(defaultBiomarkers.join(', '));
@@ -193,6 +196,8 @@ export function TrialsMatcher({
               <Link href="/reports">Open Doctor Prep Sheet</Link>
             </Button>
           </div>
+          <OutputSources items={sourceItems} />
+          <MedicalDisclaimer />
         </div>
       )}
     </div>

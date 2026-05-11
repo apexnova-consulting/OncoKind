@@ -6,6 +6,7 @@ import {
   Ban,
   FileCheck,
 } from 'lucide-react';
+import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
 
 export const metadata = {
   title: 'Security | OncoKind',
@@ -101,7 +102,7 @@ export default function SecurityPage() {
             { icon: Database, title: 'RLS isolation', desc: 'You only access your own data.' },
             { icon: Cpu, title: 'Secure AI', desc: 'De-identified input only; no PHI to third parties.' },
             { icon: Ban, title: 'No data sold', desc: 'Never sold, shared, or used for advertising.' },
-            { icon: Shield, title: 'HIPAA-conscious', desc: 'Built with healthcare privacy in mind.' },
+            { icon: Shield, title: 'Privacy-first', desc: PATH_B_PRIVACY_LANGUAGE },
           ].map((item) => (
             <div
               key={item.title}

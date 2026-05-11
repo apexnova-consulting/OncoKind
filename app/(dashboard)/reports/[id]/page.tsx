@@ -4,8 +4,10 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getProfile } from '@/lib/auth';
 import { getBrandTheme } from '@/lib/branding';
 import { DoctorPrepSheet } from '@/components/reports/DoctorPrepSheet';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCancerProfileSources } from '@/lib/disclosures';
 import { getPatientReport } from '@/lib/patient-reports';
 
 export default async function ReportDetailPage({
@@ -85,6 +87,8 @@ export default async function ReportDetailPage({
               </ul>
             </div>
           )}
+          <OutputSources items={getCancerProfileSources(report.biomarkers.cancer_type_inferred)} className="mt-4" />
+          <MedicalDisclaimer className="mt-3" />
         </CardContent>
       </Card>
       <DoctorPrepSheet

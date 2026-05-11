@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getStripeClient } from '@/lib/stripe';
 import { Check, Minus } from 'lucide-react';
 import { hasEnterprisePrices, stripePrices } from '@/lib/stripe-prices';
+import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_SECURITY_REVIEW_TEXT, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 
@@ -23,7 +24,7 @@ const comparisonRows: [string, string, string, string][] = [
   ['Multi-patient dashboard', '—', '—', '✓'],
   ['Batch document analysis', '—', '—', '✓'],
   ['Branded portal', '—', '—', '✓'],
-  ['HIPAA BAA flow', '—', '—', '✓'],
+  ['Enterprise security review available upon request', '—', '—', '✓'],
   ['Clinic integrations', '—', '—', '✓'],
   ['Support', 'Community', 'Email', 'Dedicated'],
 ];
@@ -179,8 +180,7 @@ export default async function PricingPage() {
         </section>
 
         <p className="mt-12 text-center text-sm text-[var(--color-text-muted)]">
-          All plans include HIPAA-conscious design, zero raw PHI retention, and Stripe-secured payments.
-          Prices may vary by region (Stripe Tax).
+          {PATH_B_PRIVACY_LANGUAGE} {PROFESSIONAL_HIPAA_NOTE} Prices may vary by region (Stripe Tax).
         </p>
       </div>
     </main>

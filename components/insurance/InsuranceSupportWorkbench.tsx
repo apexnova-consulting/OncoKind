@@ -4,8 +4,10 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { FileText, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { getInsuranceAppealSources, MEDICAL_DISCLAIMER_TEXT } from '@/lib/disclosures';
 
 type DecodedResponse = {
   caseId: string;
@@ -23,6 +25,7 @@ type AppealResponse = DecodedResponse & {
 };
 
 function printableHtml(result: AppealResponse) {
+  const sources = getInsuranceAppealSources().map((item) => `<li>${item}</li>`).join('');
   return `<!doctype html>
 <html>
 <head>
@@ -34,7 +37,10 @@ function printableHtml(result: AppealResponse) {
     .muted { color: #64748b; }
     .box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 12px; background: #fff; }
     ul { padding-left: 20px; }
+    @page { margin: 32px 32px 80px 32px; }
     pre { white-space: pre-wrap; font-family: Arial, sans-serif; }
+    .sources { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; background: #f8fafc; }
+    .footer { position: fixed; left: 32px; right: 32px; bottom: 20px; font-size: 12px; color: #475569; border-top: 1px solid #e2e8f0; padding-top: 10px; }
   </style>
 </head>
 <body>
@@ -44,6 +50,11 @@ function printableHtml(result: AppealResponse) {
   <h2>Next-Step Checklist</h2>
   <ul>${result.nextStepChecklist.map((item) => `<li>${item}</li>`).join('')}</ul>
   <p style="margin-top: 24px;">${result.physicianSignatureLine}</p>
+  <div class="sources">
+    <h2 style="margin-top:0;">Sources</h2>
+    <ul>${sources}</ul>
+  </div>
+  <div class="footer">${MEDICAL_DISCLAIMER_TEXT}</div>
 </body>
 </html>`;
 }
@@ -248,6 +259,8 @@ export function InsuranceSupportWorkbench({
                 Export / Print PDF
               </Button>
             </div>
+            <OutputSources items={getInsuranceAppealSources()} />
+            <MedicalDisclaimer />
           </CardContent>
         </Card>
       )}

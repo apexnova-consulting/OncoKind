@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getBrandTheme } from '@/lib/branding';
+import { GLOBAL_SITE_DISCLAIMER_TEXT } from '@/lib/disclosures';
 import { getDictionaryFromCookies } from '@/lib/i18n-server';
 
 const productLinks = [
@@ -8,13 +9,16 @@ const productLinks = [
   { href: '/pricing', label: 'Pricing' },
   { href: '/#sample-demo', label: 'Try Demo' },
   { href: '/community', label: 'Community' },
-  { href: '/resources', label: 'Resources' },
+  { href: '/learn', label: 'Resources' },
 ];
 
 export async function TrustFooter() {
   const t = await getDictionaryFromCookies();
   const brandTheme = await getBrandTheme();
   const year = new Date().getFullYear();
+
+  const globalDisclaimer =
+    brandTheme.displayName === 'OncoKind' ? GLOBAL_SITE_DISCLAIMER_TEXT : brandTheme.footerDisclaimer ?? GLOBAL_SITE_DISCLAIMER_TEXT;
 
   return (
     <footer className="mt-auto border-t-2 border-[var(--color-accent-400)] bg-[var(--color-primary-900)] text-[var(--color-text-inverse)]">
@@ -35,7 +39,7 @@ export async function TrustFooter() {
               Clarity for families navigating cancer.
             </p>
           </div>
-          <div className="grid flex-1 grid-cols-2 gap-10 sm:grid-cols-4 lg:max-w-3xl">
+          <div className="grid flex-1 grid-cols-2 gap-10 sm:grid-cols-3 lg:max-w-4xl lg:grid-cols-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-400)]">
                 Product
@@ -76,11 +80,21 @@ export async function TrustFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/security"
+                    href="/trust"
                     className="text-[var(--color-surface-200)] transition-colors hover:text-[var(--color-accent-400)]"
                   >
-                    {t['footer.security']}
+                    Trust &amp; Privacy
                   </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://status.oncokind.com"
+                    className="text-[var(--color-surface-200)] transition-colors hover:text-[var(--color-accent-400)]"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    System Status
+                  </a>
                 </li>
               </ul>
             </div>
@@ -106,11 +120,33 @@ export async function TrustFooter() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="mailto:hello@oncokind.com"
+                  <Link href="/support" className="text-[var(--color-surface-200)] transition-colors hover:text-[var(--color-accent-400)]">
+                    Support
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-400)]">
+                For Professionals
+              </p>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li>
+                  <Link
+                    href="/professional"
                     className="text-[var(--color-surface-200)] transition-colors hover:text-[var(--color-accent-400)]"
                   >
-                    Contact
+                    Professional Overview
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://calendly.com/oncokind-support"
+                    className="text-[var(--color-surface-200)] transition-colors hover:text-[var(--color-accent-400)]"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Book a Demo
                   </a>
                 </li>
               </ul>
@@ -130,10 +166,10 @@ export async function TrustFooter() {
                 </li>
                 <li>
                   <Link
-                    href="/privacy"
+                    href="/trust"
                     className="text-[var(--color-surface-200)] transition-colors hover:text-[var(--color-accent-400)]"
                   >
-                    {t['footer.privacy']}
+                    Trust &amp; Privacy
                   </Link>
                 </li>
               </ul>
@@ -144,12 +180,11 @@ export async function TrustFooter() {
         <div className="mt-14 flex flex-col gap-4 border-t border-[var(--color-primary-700)] pt-8 text-sm text-[var(--color-surface-300)] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <p>© {year} {brandTheme.displayName}. All rights reserved.</p>
           <p className="max-w-xl text-[var(--color-surface-400)]">
-            {brandTheme.footerDisclaimer ??
-              'OncoKind provides informational guidance and is not a substitute for professional medical advice.'}
+            {globalDisclaimer}
           </p>
           <nav className="flex flex-wrap gap-6" aria-label="Legal links">
-            <Link href="/privacy" className="hover:text-[var(--color-accent-400)]">
-              {t['footer.privacy']}
+            <Link href="/trust" className="hover:text-[var(--color-accent-400)]">
+              Trust &amp; Privacy
             </Link>
             <Link href="/terms" className="hover:text-[var(--color-accent-400)]">
               {t['footer.terms']}

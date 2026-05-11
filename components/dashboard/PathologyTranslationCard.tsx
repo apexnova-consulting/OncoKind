@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { Input } from '@/components/ui/input';
+import { getCancerProfileSources } from '@/lib/disclosures';
 import { createClient } from '@/lib/supabase-client';
 
 export function PathologyTranslationCard() {
@@ -100,6 +102,8 @@ export function PathologyTranslationCard() {
                 </ul>
               </div>
             ) : null}
+            <OutputSources items={getCancerProfileSources('Relevant pathology report')} className="mt-4" />
+            <MedicalDisclaimer className="mt-3" />
           </div>
         )}
       </CardContent>

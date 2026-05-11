@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
+import { getCancerProfileSources } from '@/lib/disclosures';
 
 const preparednessOptions = [
   { value: 1, label: '😟 Not prepared' },
@@ -105,6 +107,8 @@ export function AppointmentCheckInForm({ appointmentId }: { appointmentId: strin
             Here&apos;s what we found about what your doctor mentioned:
           </p>
           <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">{explanation}</p>
+          <OutputSources items={getCancerProfileSources('Relevant oncology topic')} className="mt-4" />
+          <MedicalDisclaimer className="mt-3" />
         </div>
       ) : null}
 

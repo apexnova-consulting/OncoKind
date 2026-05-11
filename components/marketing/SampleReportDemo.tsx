@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, CheckSquare, FileText, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
+import { getCancerProfileSources, getClinicalTrialSources } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 
 const tabs = [
@@ -218,7 +220,7 @@ export function SampleReportDemo() {
             <Link href="/signup">Upload Your Report — It&apos;s Free</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/signup">Learn How It Works</Link>
+            <Link href="/features/doctor-prep-sheet">Learn How It Works</Link>
           </Button>
         </div>
       </div>
@@ -227,6 +229,7 @@ export function SampleReportDemo() {
 }
 
 function CancerProfilePanel() {
+  const sources = getCancerProfileSources('Non-Small Cell Lung Cancer');
   return (
     <div className="space-y-5">
       <div className="rounded-[var(--radius-lg)] border border-[rgba(85,136,123,0.18)] bg-[rgba(99,164,145,0.08)] p-5 sm:p-6">
@@ -279,17 +282,19 @@ function CancerProfilePanel() {
           <ProfileRow label="Next Milestone" value="First oncology appointment" />
         </dl>
       </div>
+      <OutputSources items={sources} />
+      <MedicalDisclaimer />
     </div>
   );
 }
 
 function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) {
+  const sources = getCancerProfileSources('Non-Small Cell Lung Cancer');
   return (
     <div className="space-y-4">
       <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-sm)] sm:p-6">
         <p className="text-sm font-semibold text-[var(--color-primary-900)]">
-          Doctor Prep Sheet — Oncology Appointment · Prepared by OncoKind · For educational use
-          only
+          Doctor Prep Sheet — Oncology Appointment · Prepared by OncoKind
         </p>
 
         {doctorQuestion ? (
@@ -370,6 +375,8 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
           Sign up to download your personalized report
         </span>
       </span>
+      <OutputSources items={sources} />
+      <MedicalDisclaimer />
     </div>
   );
 }
@@ -383,6 +390,7 @@ function TrialMatchesPanel({
   onLearnMore: (trialId: string) => void;
   onAskDoctor: (question: string) => void;
 }) {
+  const sources = getClinicalTrialSources();
   return (
     <div className="space-y-4">
       <div className="inline-flex items-center rounded-full bg-[rgba(99,164,145,0.12)] px-3 py-1 text-xs font-semibold tracking-[var(--tracking-wide)] text-[var(--color-sage-700)]">
@@ -439,10 +447,14 @@ function TrialMatchesPanel({
         })}
       </div>
 
-      <p className="text-xs leading-relaxed text-[var(--color-text-muted)]">
-        These are sample results for demonstration only. Real trial matching is available after
-        uploading your report.
-      </p>
+      <OutputSources items={sources} />
+      <div className="space-y-2">
+        <p className="text-xs leading-relaxed text-[var(--color-text-muted)]">
+          These are sample results for demonstration only. Real trial matching is available after
+          uploading your report.
+        </p>
+        <MedicalDisclaimer />
+      </div>
     </div>
   );
 }

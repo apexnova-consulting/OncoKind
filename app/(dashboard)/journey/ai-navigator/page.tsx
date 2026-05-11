@@ -2,6 +2,8 @@ import { Mail } from 'lucide-react';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getPatientReport } from '@/lib/patient-reports';
 import { AICareNavigator } from '@/components/care/AICareNavigator';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
+import { getCancerProfileSources } from '@/lib/disclosures';
 
 export default async function AINavigatorPage() {
   const supabase = await createServerSupabaseClient();
@@ -54,13 +56,11 @@ export default async function AINavigatorPage() {
               : null
           }
         />
+        <div className="mt-4">
+          <OutputSources items={getCancerProfileSources(diagnosis)} />
+          <MedicalDisclaimer className="mt-3" />
+        </div>
       </div>
-      <p
-        className="sticky bottom-0 mt-4 shrink-0 border-t border-slate-200 pt-4 text-center text-xs text-slate-500"
-        role="status"
-      >
-        OncoKind provides guidance only; not a substitute for medical advice.
-      </p>
     </div>
   );
 }

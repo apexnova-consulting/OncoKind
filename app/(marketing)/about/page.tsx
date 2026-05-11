@@ -1,4 +1,5 @@
 import { Heart, Shield, Eye, Scale } from 'lucide-react';
+import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
 
 export const metadata = {
   title: 'About | OncoKind',
@@ -89,7 +90,7 @@ export default function AboutPage() {
                 {
                   icon: Shield,
                   title: 'Security by Design',
-                  desc: 'Zero raw PHI retention. Encrypted storage. HIPAA-conscious architecture.',
+                  desc: PATH_B_PRIVACY_LANGUAGE,
                 },
                 {
                   icon: Eye,
@@ -124,48 +125,36 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[var(--max-width-wide)]">
           <h2 className="font-display text-3xl font-semibold">Meet the Founder</h2>
           <p className="mt-2 text-sm text-[var(--color-surface-400)]">Mike Nielson, Founder, OncoKind</p>
-          <div className="mt-12 grid gap-12 md:grid-cols-[200px_1fr] md:gap-16">
-            <div className="flex flex-col items-center md:items-start">
-              <div
-                className="flex h-[180px] w-[180px] shrink-0 items-center justify-center rounded-full border-4 border-[var(--color-surface-300)] bg-[var(--color-sage-500)] font-display text-3xl font-semibold text-white shadow-[var(--shadow-lg)]"
-                aria-hidden
-              >
-                MN
-              </div>
+          <div className="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-[var(--color-primary-900)] shadow-[var(--shadow-lg)]">
+              <video
+                className="h-full w-full object-cover"
+                src="https://res.cloudinary.com/dlfgwspxw/video/upload/q_auto/f_auto/v1778522170/OncoKind_Marketing_2_lhufi5.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                controls
+              />
             </div>
             <div className="min-w-0">
-              <blockquote className="border-l-4 border-[var(--color-accent-400)] pl-6 font-display text-2xl font-medium italic leading-snug text-[var(--color-accent-400)] sm:text-[var(--text-3xl)]">
-                &ldquo;When the woman who cared for you your entire life receives a terrifying prognosis, you
-                understand very quickly what is missing.&rdquo;
-              </blockquote>
               <div className="mt-8 space-y-4 leading-[var(--leading-relaxed)] text-[var(--color-surface-200)]">
-                <p>My name is Mike, and I built OncoKind because cancer has been part of my life for as long as I can remember.</p>
+                <p>Cancer has been part of my life for as long as I can remember.</p>
+                <p>I lost my grandmother at 9. My grandfather at 15. My dad had a kidney removed at 16. At 28, I lost my cousin one month after his diagnosis.</p>
+                <p>And today, my mom is fighting Stage 4 metastatic cancer.</p>
                 <p>
-                  I lost my grandmother to cancer when I was 9. My grandfather passed when I was 15. At 16, my
-                  dad had a kidney removed due to kidney cancer. At 28, I lost my cousin — who was more like a
-                  brother — just one month after his diagnosis. And now, my mom is battling a rare Stage 4
-                  metastatic cancer with a prognosis that has changed everything.
-                </p>
-                <p>Each of these experiences prepared me in ways I didn&apos;t ask for but couldn&apos;t ignore.</p>
-                <p>
-                  My career started in software after graduate school, where I worked as a Sales Engineer and
-                  Project Manager before moving into sales as an Account Executive. More recently, I&apos;ve
-                  worked as a consultant — where I learned that the most powerful thing you can offer someone
-                  isn&apos;t a product, it&apos;s a partnership.
+                  When she was diagnosed, I became her caregiver. I sat in appointments I didn&apos;t
+                  understand, went home and searched terms I couldn&apos;t pronounce, and felt completely
+                  alone in trying to help her.
                 </p>
                 <p>
-                  When my mom was diagnosed, I became her primary caregiver. And in that role, all the other
-                  challenges I&apos;d faced became small. When the woman who cared for you your entire life
-                  receives a terrifying prognosis, you understand very quickly what is missing — not just in
-                  the medical system, but in the tools built to support it. Pathology reports written for
-                  specialists. Information delivered without context. Families left to navigate alone.
+                  This disease has taken so much from my family. It won&apos;t take clarity from yours.
                 </p>
                 <p>
-                  I built OncoKind to change that. Not to replace doctors — but to make sure no family ever
-                  sits in a waiting room without understanding what they&apos;re facing and what questions to
-                  ask.
+                  I built OncoKind so no family has to navigate this without understanding what
+                  they&apos;re facing.
                 </p>
-                <p>This is personal. Every feature, every word, and every design decision is made with that in mind.</p>
+                <p className="font-medium text-[var(--color-accent-400)]">— Mike Nielson, Founder</p>
               </div>
               <div className="mt-12 border-t border-[var(--color-primary-700)] pt-8 text-xs leading-relaxed text-[var(--color-surface-400)]">
                 <p className="font-medium uppercase tracking-[var(--tracking-widest)] text-[var(--color-surface-300)]">
@@ -180,6 +169,31 @@ export default function AboutPage() {
                 </ul>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-[var(--max-width-wide)] rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-white p-8 shadow-[var(--shadow-sm)]">
+          <p className="text-sm font-semibold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-600)]">
+            Partner Spotlights
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-[var(--color-primary-900)]">
+            Future nonprofit and community partners
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--color-text-secondary)]">
+            As OncoKind builds relationships with advocacy organizations, caregiver communities, and
+            trusted nonprofit partners, approved logos and resource links will appear here.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {['Caregiver resource partners', 'Patient advocacy organizations', 'Navigation partners', 'Community collaborations'].map((label) => (
+              <div
+                key={label}
+                className="rounded-[var(--radius-lg)] border border-dashed border-[var(--color-border)] bg-[var(--color-surface-100)] px-5 py-8 text-center text-sm font-medium text-[var(--color-text-secondary)]"
+              >
+                {label}
+              </div>
+            ))}
           </div>
         </div>
       </section>

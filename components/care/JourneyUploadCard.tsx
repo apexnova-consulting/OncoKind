@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FileUp, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -70,6 +71,12 @@ export function JourneyUploadCard() {
               'Upload & Analyze'
             )}
           </Button>
+          <Link
+            href="/trust"
+            className="text-sm font-medium text-[var(--color-primary-700)] underline-offset-4 hover:underline"
+          >
+            How your report is handled →
+          </Link>
         </div>
         <AnimatePresence>
           {error && (

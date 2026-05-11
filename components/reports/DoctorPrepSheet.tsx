@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
+import { getCancerProfileSources, MEDICAL_DISCLAIMER_TEXT } from '@/lib/disclosures';
 
 type Props = {
   isPro: boolean;
@@ -72,6 +74,7 @@ export function DoctorPrepSheet({
   brandLogoUrl = null,
   brandFooterDisclaimer = null,
 }: Props) {
+  const sources = getCancerProfileSources(reportTitle);
   const [appointmentDate, setAppointmentDate] = useState('');
   const [appointmentTime, setAppointmentTime] = useState('');
   const [durationMinutes, setDurationMinutes] = useState(45);
@@ -121,6 +124,7 @@ export function DoctorPrepSheet({
   })();
 
   function printablePrepSheetHtml() {
+    const sourcesHtml = sources.map((item) => `<li>${item}</li>`).join('');
     const qHtml = suggestedQuestions.map((q) => `<li>${q}</li>`).join('');
     const bHtml = (topBiomarkers.length > 0 ? topBiomarkers : ['- No biomarkers were extracted from this report.'])
       .map((b) => `<li>${b.replace(/^- /, '')}</li>`)
@@ -150,7 +154,10 @@ export function DoctorPrepSheet({
     .box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #f8fafc; }
     ul { padding-left: 18px; }
     .notes { min-height: 120px; border: 1px dashed #94a3b8; border-radius: 8px; padding: 10px; color: #334155; }
-    .disclaimer { margin-top: 24px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+    @page { margin: 32px 32px 80px 32px; }
+    .sources { margin-top: 20px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #f8fafc; }
+    .footer { position: fixed; left: 32px; right: 32px; bottom: 20px; font-size: 12px; color: #475569; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+    .footer .disclaimer { color: #475569; }
   </style>
 </head>
 <body>
@@ -177,8 +184,15 @@ export function DoctorPrepSheet({
 
   <h2>Notes</h2>
   <div class="notes">${notes || 'Use this space to capture questions, instructions, and next steps during the appointment.'}</div>
-
-  <div class="disclaimer">${generatorLabel}<br/>${brandFooterDisclaimer ?? 'OncoKind provides informational guidance only and is not a substitute for professional medical advice.'}</div>
+  <div class="sources">
+    <h2 style="margin-top:0;">Sources</h2>
+    <ul>${sourcesHtml}</ul>
+  </div>
+  <div class="footer">
+    <div>${generatorLabel}</div>
+    <div class="disclaimer">${MEDICAL_DISCLAIMER_TEXT}</div>
+    <div>${brandFooterDisclaimer ?? 'OncoKind is an educational support tool. Nothing on this platform constitutes medical advice. Always consult your oncologist or care team. OncoKind is not a substitute for professional medical guidance.'}</div>
+  </div>
 </body>
 </html>`;
   }
@@ -344,6 +358,8 @@ export function DoctorPrepSheet({
           {savingAppointment ? 'Saving appointment…' : 'Save appointment for follow-up check-in'}
         </Button>
       </div>
+      <OutputSources items={sources} className="mt-4" />
+      <MedicalDisclaimer className="mt-3" />
       {reminderMsg && <p className="mt-2 text-sm text-slate-600">{reminderMsg}</p>}
       {savedAppointmentId ? (
         <p className="mt-1 text-xs text-slate-500">

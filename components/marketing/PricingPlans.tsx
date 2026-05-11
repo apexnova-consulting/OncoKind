@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE, PROFESSIONAL_SECURITY_REVIEW_TEXT } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 
 type BillingInterval = 'monthly' | 'yearly';
@@ -52,7 +53,7 @@ const PROFESSIONAL_FEATURES = [
   'Multi-patient dashboard',
   'Batch document analysis',
   'Branded portal (white-label ready)',
-  'HIPAA BAA flow',
+  PROFESSIONAL_SECURITY_REVIEW_TEXT,
   'Clinic integrations',
   'Dedicated support',
 ];
@@ -236,30 +237,16 @@ export function PricingPlans({
               </li>
             ))}
           </ul>
-          {isSignedIn && (enterpriseUnlimitedPriceId || enterprisePerSeatPriceId) ? (
-            <div className="mt-8 space-y-3">
-              {enterpriseUnlimitedPriceId ? (
-                <form action="/api/checkout" method="POST">
-                  <input type="hidden" name="priceId" value={enterpriseUnlimitedPriceId} />
-                  <Button type="submit" variant="outline" className="w-full">
-                    Professional — Unlimited
-                  </Button>
-                </form>
-              ) : null}
-              {enterprisePerSeatPriceId ? (
-                <form action="/api/checkout" method="POST">
-                  <input type="hidden" name="priceId" value={enterprisePerSeatPriceId} />
-                  <Button type="submit" variant="outline" className="w-full">
-                    Professional — Per seat
-                  </Button>
-                </form>
-              ) : null}
-            </div>
-          ) : (
-            <Button asChild variant="outline" className="mt-8 w-full border-[var(--color-primary-800)]">
-              <a href="mailto:hello@oncokind.com?subject=Enterprise%20Inquiry">Contact Us</a>
-            </Button>
-          )}
+          <Button asChild variant="outline" className="mt-8 w-full border-[var(--color-primary-800)]">
+            <a href="https://calendly.com/oncokind-support" target="_blank" rel="noreferrer">
+              Book a Demo →
+            </a>
+          </Button>
+          <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
+            For care navigators, patient advocates, and clinical teams
+          </p>
+          <p className="mt-3 text-sm text-[var(--color-text-muted)]">{PROFESSIONAL_HIPAA_NOTE}</p>
+          <p className="mt-2 text-sm text-[var(--color-text-muted)]">{PATH_B_PRIVACY_LANGUAGE}</p>
         </div>
       </div>
 

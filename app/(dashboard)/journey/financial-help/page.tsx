@@ -4,6 +4,7 @@ import { BadgeDollarSign, Clock3 } from 'lucide-react';
 import { getProfile } from '@/lib/auth';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer } from '@/components/disclosures/OutputDisclosures';
 
 type MatchRow = {
   fund_id: string;
@@ -150,6 +151,7 @@ export default async function FinancialHelpPage() {
               })}
             </div>
           )}
+          <MedicalDisclaimer className="mt-5" />
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">

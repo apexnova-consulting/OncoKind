@@ -60,7 +60,7 @@ const sections = [
     title: '9. Privacy and Security',
     body: [
       'Our Privacy Policy explains how we collect, use, store, and disclose information. By using the Services, you acknowledge that no security system is perfect and that electronic transmission and storage always involve some risk.',
-      'Unless we have expressly agreed otherwise in a separate signed written agreement, OncoKind is not acting as your business associate under HIPAA and these Terms do not create a Business Associate Agreement.',
+      'OncoKind is an educational support tool and not a covered entity. Unless we have expressly agreed otherwise in a separate signed written agreement, these Terms do not create a Business Associate Agreement.',
     ],
   },
   {
@@ -120,7 +120,7 @@ const sections = [
   {
     title: '18. Contact Us',
     body: [
-      'If you have questions about these Terms, please contact us at hello@oncokind.com.',
+      'If you have questions about these Terms, please contact us at support@oncokind.com.',
     ],
   },
 ] as const;
@@ -144,7 +144,7 @@ export default function TermsPage() {
           community content, limitations of liability, and dispute resolution.
         </p>
         <p className="mt-4 text-sm font-medium tracking-[var(--tracking-wide)] text-[var(--color-text-muted)]">
-          Last updated: May 4, 2026
+          Last updated: May 11, 2026
         </p>
 
         <div className="mt-12 space-y-10">

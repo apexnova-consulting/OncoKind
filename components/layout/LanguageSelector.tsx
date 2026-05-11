@@ -30,15 +30,22 @@ export function LanguageSelector() {
 
   useEffect(() => {
     if (!open) return;
+    function handleKeydown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    }
     function handleOutside(e: MouseEvent | TouchEvent) {
       const root = rootRef.current;
       if (root && !root.contains(e.target as Node)) {
         setOpen(false);
       }
     }
+    document.addEventListener('keydown', handleKeydown);
     document.addEventListener('mousedown', handleOutside);
     document.addEventListener('touchstart', handleOutside);
     return () => {
+      document.removeEventListener('keydown', handleKeydown);
       document.removeEventListener('mousedown', handleOutside);
       document.removeEventListener('touchstart', handleOutside);
     };
@@ -70,7 +77,7 @@ export function LanguageSelector() {
         onTouchEnd={toggle}
       >
         <Globe className="h-4 w-4 shrink-0 text-[var(--color-primary-600)]" aria-hidden />
-        <span>English</span>
+        <span>{DISPLAY[lang]}</span>
       </button>
       {open && (
         <ul

@@ -4,6 +4,8 @@ import { DM_Sans, Lora } from 'next/font/google';
 import './globals.css';
 import { TrustFooter } from '@/components/layout/TrustFooter';
 import { PwaRegister } from '@/components/PwaRegister';
+import { AnalyticsScripts } from '@/components/analytics/AnalyticsScripts';
+import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { getBrandTheme } from '@/lib/branding';
 import { getLanguageFromCookies } from '@/lib/i18n-server';
 
@@ -81,8 +83,18 @@ export default async function RootLayout({
         className="flex min-h-screen flex-col bg-[var(--color-bg-page)] text-accent"
         style={brandTheme.cssVariables as CSSProperties}
       >
+        <a
+          href="#main-content"
+          className="skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[130] focus:rounded-full focus:bg-[var(--color-primary-900)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Skip to main content
+        </a>
         <PwaRegister />
-        {children}
+        <AnalyticsScripts />
+        <div id="main-content" tabIndex={-1} className="contents">
+          {children}
+        </div>
+        <CookieConsentBanner />
         <TrustFooter />
       </body>
     </html>

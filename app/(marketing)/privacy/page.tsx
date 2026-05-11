@@ -62,7 +62,7 @@ const sections = [
     title: '9. Data Security',
     body: [
       'We use administrative, technical, and organizational safeguards designed to protect personal information. These measures may include encryption at rest for sensitive structured data, controlled access, row-level database protections, server-side secrets management, and moderation or abuse-prevention controls.',
-      'No system is perfectly secure. Accordingly, we cannot guarantee absolute security, and you use the Services at your own risk. If you believe your account or information has been compromised, contact us promptly at hello@oncokind.com.',
+      'No system is perfectly secure. Accordingly, we cannot guarantee absolute security, and you use the Services at your own risk. If you believe your account or information has been compromised, contact us promptly at support@oncokind.com.',
     ],
   },
   {
@@ -101,7 +101,7 @@ const sections = [
   {
     title: '15. HIPAA and Covered-Entity Status',
     body: [
-      'OncoKind is designed with healthcare privacy in mind, but unless we have explicitly entered into a separate written agreement stating otherwise, this Privacy Policy does not create a Business Associate Agreement and our Services are not offered as HIPAA-covered clinical services.',
+      "OncoKind is built with privacy at its core. No raw report data retained. Educational tool — not a covered entity. Unless we have explicitly entered into a separate written agreement stating otherwise, this Privacy Policy does not create a Business Associate Agreement.",
     ],
   },
   {
@@ -113,7 +113,7 @@ const sections = [
   {
     title: '17. Contact Us',
     body: [
-      'If you have questions about this Privacy Policy or would like to submit a privacy request, please contact us at hello@oncokind.com.',
+      'If you have questions about this Privacy Policy or would like to submit a privacy request, please contact us at support@oncokind.com.',
     ],
   },
 ] as const;
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
           paid subscriptions.
         </p>
         <p className="mt-4 text-sm font-medium tracking-[var(--tracking-wide)] text-[var(--color-text-muted)]">
-          Last updated: May 4, 2026
+          Last updated: May 11, 2026
         </p>
 
         <div className="mt-12 space-y-10">

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { BadgeDollarSign } from 'lucide-react';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer } from '@/components/disclosures/OutputDisclosures';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type MatchRow = {
@@ -124,6 +125,7 @@ export async function LiveFundingFeedCard() {
         <Button asChild className="mt-4">
           <Link href="/journey/financial-help">Open Financial Help</Link>
         </Button>
+        <MedicalDisclaimer className="mt-4" />
       </CardContent>
     </Card>
   );

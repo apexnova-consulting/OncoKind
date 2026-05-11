@@ -116,6 +116,11 @@ export default function SignupPage() {
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-slate-600">
+            <Link href="/trust" className="underline text-slate-800 underline-offset-4">
+              How we protect your data →
+            </Link>
+          </p>
+          <p className="mt-4 text-center text-sm text-slate-600">
             Already have an account? <Link href="/login" className="text-slate-800 underline">Sign in</Link>
           </p>
         </CardContent>

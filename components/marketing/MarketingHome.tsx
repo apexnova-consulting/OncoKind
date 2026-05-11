@@ -60,13 +60,13 @@ const steps = [
 
 const features = [
   {
-    href: '/signup',
+    href: '/features/doctor-prep-sheet',
     title: 'Doctor Prep Sheet',
     desc: 'Walk into every appointment fully prepared.',
     Icon: Calendar,
   },
   {
-    href: '/journey/trials',
+    href: '/features/clinical-trial-matching',
     title: 'Clinical Trial Matching',
     desc: 'Find trials you may qualify for, explained in plain language.',
     Icon: FlaskConical,
@@ -102,24 +102,18 @@ const features = [
     Icon: HandCoins,
   },
   {
-    href: '/journey/insurance-support',
+    href: '/features/insurance-denial-defense',
     title: 'Insurance Support',
     desc: 'Decode denials and generate structured appeal packets with Advocate access.',
     Icon: ShieldCheck,
-  },
-  {
-    href: '/',
-    title: 'Multi-Language',
-    desc: 'Available in English, Spanish, 中文, and Tagalog.',
-    Icon: Globe,
   },
 ];
 
 const trustTiles = [
   {
     Icon: Shield,
-    title: 'HIPAA-Conscious Design',
-    desc: 'Designed with clinicians and caregivers with privacy in mind.',
+    title: 'Privacy-First Design',
+    desc: 'Built with privacy at its core. No raw report data retained.',
   },
   {
     Icon: Lock,
@@ -214,7 +208,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               </div>
               <p className="mt-6 flex flex-wrap items-center gap-2 text-xs font-medium tracking-[var(--tracking-wide)] text-[var(--color-text-muted)]">
                 <Lock className="h-3.5 w-3.5" aria-hidden />
-                HIPAA-conscious · Zero raw report retention
+                Built with privacy at its core · No raw report data retained
               </p>
             </div>
             <div className="flex justify-center lg:justify-end">
@@ -386,6 +380,21 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
         </div>
       </section>
 
+      <section className="bg-white px-4 pb-4">
+        <div className="mx-auto max-w-[var(--max-width-content)] rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-100)] p-8 shadow-[var(--shadow-sm)]">
+          <blockquote className="font-display text-2xl font-medium leading-snug text-[var(--color-primary-900)] sm:text-3xl">
+            &ldquo;I built this because someone I love was diagnosed and I had no idea what any of it
+            meant.
+            <br className="hidden sm:block" />
+            <br className="hidden sm:block" />
+            No family should have to feel that alone.&rdquo;
+          </blockquote>
+          <p className="mt-6 text-sm font-semibold uppercase tracking-[var(--tracking-widest)] text-[var(--color-primary-700)]">
+            Mike Nielson, Founder of OncoKind
+          </p>
+        </div>
+      </section>
+
       {/* Pricing preview */}
       <section className="bg-[var(--color-surface-200)] px-4 py-[var(--section-padding-y)]">
         <div className="mx-auto max-w-[var(--max-width-full)]">
@@ -484,7 +493,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                     'Multi-patient dashboard',
                     'Batch document analysis',
                     'Branded portal',
-                    'HIPAA BAA flow',
+                    'Enterprise security review available upon request',
                     'Clinic integrations',
                     'Dedicated support',
                   ].map((f) => (
@@ -495,7 +504,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   ))}
                 </ul>
                 <Button asChild variant="outline" className="mt-8 w-full border-[var(--color-primary-800)]">
-                  <Link href="/pricing#enterprise">Contact</Link>
+                  <Link href="/professional">Book a Demo</Link>
                 </Button>
               </div>
             </Reveal>

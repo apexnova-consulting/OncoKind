@@ -14,7 +14,7 @@ export async function SiteHeader() {
   const navLinks = [
     { href: '/#how-it-works', label: t['nav.howItWorks'] },
     { href: '/signup', label: t['nav.caregiverTools'] },
-    { href: '/resources', label: 'Resources' },
+    { href: '/learn', label: 'Resources' },
     { href: '/community', label: 'Community' },
   ];
 

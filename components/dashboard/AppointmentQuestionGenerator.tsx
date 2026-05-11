@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { Input } from '@/components/ui/input';
+import { getCancerProfileSources } from '@/lib/disclosures';
 
 export function AppointmentQuestionGenerator() {
   const [topic, setTopic] = useState('');
@@ -62,11 +64,15 @@ export function AppointmentQuestionGenerator() {
           </Button>
         </form>
         {questions.length > 0 && (
-          <ul className="list-disc list-inside text-sm text-slate-700 space-y-1">
-            {questions.map((q, i) => (
-              <li key={i}>{q}</li>
-            ))}
-          </ul>
+          <>
+            <ul className="list-disc list-inside text-sm text-slate-700 space-y-1">
+              {questions.map((q, i) => (
+                <li key={i}>{q}</li>
+              ))}
+            </ul>
+            <OutputSources items={getCancerProfileSources(topic || 'Relevant oncology topic')} className="mt-4" />
+            <MedicalDisclaimer className="mt-3" />
+          </>
         )}
       </CardContent>
     </Card>
