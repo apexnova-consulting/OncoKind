@@ -27,27 +27,27 @@ const dmSans = DM_Sans({
   style: ['normal', 'italic'],
 });
 
+const SITE_DESCRIPTION =
+  'Translate your loved one\'s pathology report into plain English. Generate Doctor Prep Sheets, match clinical trials, fight insurance denials. Built by a caregiver, for caregivers.';
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com'),
   title: {
     default: 'OncoKind — Clarity for Families Navigating Cancer',
     template: '%s | OncoKind',
   },
-  description:
-    'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
+  description: SITE_DESCRIPTION,
   openGraph: {
     type: 'website',
     title: 'OncoKind — Clarity for Families Navigating Cancer',
-    description:
-      'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
+    description: SITE_DESCRIPTION,
     siteName: 'OncoKind',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'OncoKind — Clarity for Families Navigating Cancer',
-    description:
-      'AI-powered oncology clarity platform. Transform pathology reports into understandable insights and relevant clinical trial matches — for families and professional advocates.',
+    description: SITE_DESCRIPTION,
   },
   manifest: '/manifest.json',
   appleWebApp: {
@@ -59,9 +59,26 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0d1b2a',
+  themeColor: '#2e6b5e',
   width: 'device-width',
   initialScale: 1,
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'OncoKind',
+  applicationCategory: 'HealthApplication',
+  description:
+    'AI-powered cancer navigation platform for family caregivers. Translates pathology reports, generates Doctor Prep Sheets, matches clinical trials, and supports insurance appeals.',
+  url: 'https://www.oncokind.com',
+  offers: [
+    { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
+    { '@type': 'Offer', name: 'Caregiver Pro', price: '19', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Advocate Plan', price: '49', priceCurrency: 'USD', billingIncrement: 'P1M' },
+  ],
+  operatingSystem: 'Web, iOS (PWA), Android (PWA)',
+  author: { '@type': 'Person', name: 'Mike Nielson' },
 };
 
 export default async function RootLayout({
@@ -78,6 +95,10 @@ export default async function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body
         className="flex min-h-screen flex-col bg-[var(--color-bg-page)] text-accent"

@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Primary — Deep Navy */
+    /* Primary — Deep Navy (preserved for backward compat) */
     --color-primary-900: #0d1b2a;
     --color-primary-800: #1b2d42;
     --color-primary-700: #243b55;
@@ -12,33 +12,54 @@
     --color-primary-500: #3a6186;
 
     /* Warm neutral surfaces */
-    --color-surface-100: #faf8f5;
-    --color-surface-200: #f2ede6;
-    --color-surface-300: #e8e0d5;
-    --color-surface-400: #d5c9b8;
+    --color-surface-100: #fafaf8;
+    --color-surface-200: #f4f3ef;
+    --color-surface-300: #e8e6e0;
+    --color-surface-400: #d4d1c9;
 
-    /* Accent — warm amber */
-    --color-accent-400: #e8a838;
-    --color-accent-500: #d4922a;
-    --color-accent-600: #b87a1e;
+    /* Accent — warm amber (badges, ratings, footer accents) */
+    --color-accent-400: #c9943a;
+    --color-accent-500: #b07a28;
+    --color-accent-600: #8b5e2a;
 
-    /* Sage */
-    --color-sage-400: #7a9e8e;
-    --color-sage-500: #5f8474;
-    --color-sage-600: #4a6b5c;
+    /* Sage — Brand primary green (updated to spec) */
+    --color-sage-400: #a8c5be;
+    --color-sage-500: #2e6b5e;
+    --color-sage-600: #245a4e;
+
+    /* Brand palette (Warm Precision spec) */
+    --brand-primary: #2e6b5e;
+    --brand-secondary: #4a9b8a;
+    --brand-accent: #e8845c;
+    --brand-gold: #c9943a;
+    --brand-soft: #a8c5be;
 
     /* Text */
-    --color-text-primary: #0d1b2a;
+    --color-text-primary: #1a2332;
     --color-text-secondary: #4a5568;
-    --color-text-muted: #718096;
-    --color-text-inverse: #faf8f5;
+    --color-text-muted: #8896a4;
+    --color-text-inverse: #f8f9fa;
+    --text-brand: #2e6b5e;
 
-    /* Semantic */
-    --color-bg-page: #faf8f5;
-    --color-bg-section-alt: #f2ede6;
-    --color-bg-dark: #0d1b2a;
-    --color-border: #e2d9ce;
-    --color-border-subtle: #ede7df;
+    /* Semantic backgrounds */
+    --color-bg-page: #fafaf8;
+    --color-bg-section-alt: #f4f3ef;
+    --color-bg-dark: #1c2b3a;
+    --color-border: #d4d1c9;
+    --color-border-subtle: #e8e6e0;
+
+    /* Named background tokens (spec aliases) */
+    --bg-base: #fafaf8;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f4f3ef;
+    --bg-deep: #1c2b3a;
+    --bg-warm: #fdf6ee;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(160deg, #fafaf8 0%, #f0f7f5 40%, #fdf6ee 100%);
+    --gradient-cta: linear-gradient(135deg, #2e6b5e 0%, #4a9b8a 100%);
+    --gradient-warm: linear-gradient(135deg, #fdf6ee 0%, #f4f3ef 100%);
+    --gradient-deep: linear-gradient(160deg, #1c2b3a 0%, #243447 100%);
 
     /* Typography scale */
     --text-xs: 0.75rem;
@@ -85,10 +106,12 @@
     --radius-2xl: 2rem;
     --radius-full: 9999px;
 
-    --shadow-sm: 0 1px 3px rgba(13, 27, 42, 0.08), 0 1px 2px rgba(13, 27, 42, 0.05);
-    --shadow-md: 0 4px 12px rgba(13, 27, 42, 0.1), 0 2px 6px rgba(13, 27, 42, 0.06);
-    --shadow-lg: 0 12px 32px rgba(13, 27, 42, 0.12), 0 4px 12px rgba(13, 27, 42, 0.08);
-    --shadow-xl: 0 24px 48px rgba(13, 27, 42, 0.16), 0 8px 20px rgba(13, 27, 42, 0.1);
+    --shadow-sm: 0 1px 3px rgba(26, 35, 50, 0.08), 0 1px 2px rgba(26, 35, 50, 0.06);
+    --shadow-md: 0 4px 16px rgba(26, 35, 50, 0.10), 0 2px 4px rgba(26, 35, 50, 0.06);
+    --shadow-lg: 0 8px 32px rgba(26, 35, 50, 0.12), 0 4px 8px rgba(26, 35, 50, 0.08);
+    --shadow-xl: 0 24px 48px rgba(26, 35, 50, 0.16), 0 8px 20px rgba(26, 35, 50, 0.10);
+    --shadow-card: 0 2px 8px rgba(26, 35, 50, 0.06), 0 0 1px rgba(26, 35, 50, 0.08);
+    --shadow-glow-sage: 0 0 32px rgba(46, 107, 94, 0.15);
 
     --max-width-content: 720px;
     --max-width-wide: 1100px;
@@ -111,17 +134,17 @@
     --bp-xl: 1280px;
     --bp-2xl: 1536px;
 
-    /* Legacy shadcn-style HSL tokens — map to new neutrals for any remaining usage */
-    --background: 250 248 245;
-    --foreground: 13 27 42;
-    --primary: 46 77 107;
-    --success: 95 132 116;
+    /* Legacy shadcn-style HSL tokens — mapped to updated neutrals */
+    --background: 250 250 248;
+    --foreground: 26 35 50;
+    --primary: 46 107 94;
+    --success: 46 107 94;
     --card: 255 255 255;
-    --card-foreground: 13 27 42;
-    --muted: 242 237 230;
-    --muted-foreground: 113 128 150;
-    --border: 226 217 206;
-    --ring: 232 168 56;
+    --card-foreground: 26 35 50;
+    --muted: 244 243 239;
+    --muted-foreground: 136 150 164;
+    --border: 212 209 201;
+    --ring: 201 148 58;
   }
 
   body {
@@ -251,4 +274,62 @@
   inset: 0;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Empathy Filter badge */
+.empathy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: #fdf6ee;
+  border: 1px solid #f0d5b8;
+  color: #8b5e2a;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Feature badge */
+.feature-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: #f0f7f5;
+  color: var(--brand-primary);
+  border: 1px solid #c5ddd9;
+}
+
+/* Gradient CTA utility (used on primary buttons) */
+.bg-gradient-sage {
+  background: var(--gradient-cta);
+  color: #ffffff;
+}
+.bg-gradient-sage:hover {
+  opacity: 0.92;
+}
+
+/* Section eyebrow — small label above headings */
+.eyebrow {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+/* Print styles for Doctor Prep Sheet and Care Timeline */
+@media print {
+  header, footer, nav, .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .print-page-break { page-break-before: always; }
 }

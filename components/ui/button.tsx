@@ -9,11 +9,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'rounded-full bg-[var(--color-accent-400)] px-7 py-3.5 text-[var(--color-primary-900)] shadow-sm hover:bg-[var(--color-accent-500)] motion-safe:hover:-translate-y-px motion-safe:hover:shadow-md',
+          'rounded-full bg-[var(--brand-primary)] px-7 py-3.5 text-white shadow-[0_4px_16px_rgba(46,107,94,0.30)] hover:bg-[var(--brand-secondary)] hover:shadow-[0_6px_24px_rgba(46,107,94,0.38)] motion-safe:hover:-translate-y-px',
         secondary:
           'rounded-full bg-[var(--color-surface-200)] text-[var(--color-primary-800)] hover:bg-[var(--color-surface-300)]',
         outline:
-          'rounded-full border-[1.5px] border-[var(--color-primary-700)] bg-transparent text-[var(--color-primary-800)] hover:bg-[var(--color-primary-900)] hover:text-[var(--color-text-inverse)]',
+          'rounded-full border-[1.5px] border-[var(--color-border-default,var(--color-primary-700))] bg-transparent text-[var(--color-text-primary)] hover:border-[var(--brand-primary)] hover:bg-[#f0f7f5] hover:text-[var(--brand-primary)]',
         ghost: 'rounded-full hover:bg-[var(--color-surface-200)]',
         link: 'h-auto min-h-[44px] rounded-none px-1 py-2 font-medium text-primary underline-offset-4 hover:underline',
       },

@@ -12,10 +12,12 @@ export async function SiteHeader() {
   } = await supabase.auth.getUser();
 
   const navLinks = [
-    { href: '/#how-it-works', label: t['nav.howItWorks'] },
-    { href: '/signup', label: t['nav.caregiverTools'] },
-    { href: '/learn', label: 'Resources' },
+    { href: '/#how-it-works', label: 'How It Works' },
+    { href: '/#features', label: 'Features' },
+    { href: '/pricing', label: 'Pricing' },
+    { href: '/professional', label: 'For Professionals' },
     { href: '/community', label: 'Community' },
+    { href: '/learn', label: 'Resources' },
   ];
 
   return (
