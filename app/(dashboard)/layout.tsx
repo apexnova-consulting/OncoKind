@@ -25,7 +25,7 @@ export default async function DashboardLayout({
     { data: profile },
   ] = await Promise.all([
     supabase.auth.getSession(),
-    supabase.from('profiles').select('mfa_enabled').eq('id', user.id).maybeSingle(),
+    supabase.from('profiles').select('mfa_enabled, subscription_tier').eq('id', user.id).maybeSingle(),
   ]);
 
   const aal = readAalFromAccessToken(session?.access_token);
@@ -43,6 +43,7 @@ export default async function DashboardLayout({
           logoUrl: brandTheme.logoUrl,
         }}
         isAdmin={adminContext.isAdmin}
+        isProfessional={profile?.subscription_tier === 'professional'}
       />
       {children}
     </>

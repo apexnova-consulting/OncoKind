@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/features/insurance-denial-defense',
     '/signup',
     '/login',
+    '/prior-auth-pro',
   ];
 
   const resourceRoutes = RESOURCE_ARTICLES.map((article) => `/resources/${article.slug}`);

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Cloud, MoonStar } from 'lucide-react';
+import { Cloud, MoonStar, FileText, ExternalLink } from 'lucide-react';
 import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
 import { LanguageSelector } from '@/components/layout/LanguageSelector';
@@ -10,9 +10,11 @@ import { LanguageSelector } from '@/components/layout/LanguageSelector';
 export function DashboardNav({
   brand,
   isAdmin = false,
+  isProfessional = false,
 }: {
   brand: { displayName: string; logoUrl: string | null };
   isAdmin?: boolean;
+  isProfessional?: boolean;
 }) {
   const router = useRouter();
 
@@ -60,6 +62,21 @@ export function DashboardNav({
             <MoonStar className="h-4 w-4" />
             Quiet Room
           </Link>
+          {isProfessional && (
+            <a
+              href="/prior-auth"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-1 text-sm text-slate-600 hover:text-slate-900 sm:inline-flex"
+            >
+              <FileText className="h-4 w-4" />
+              Prior Auth
+              <ExternalLink className="h-3 w-3 text-slate-400" />
+              <span className="ml-0.5 rounded-full bg-[#6B8F71] px-1.5 py-0.5 text-[10px] font-medium text-white">
+                NEW
+              </span>
+            </a>
+          )}
           {isAdmin ? (
             <Link href="/admin/organizations" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
               Admin
