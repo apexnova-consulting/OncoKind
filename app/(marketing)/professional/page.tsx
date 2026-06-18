@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
@@ -38,24 +39,69 @@ export default function ProfessionalPage() {
           </div>
         </section>
 
+        {/* KindAuth Prior Auth Engine — flagship Professional feature */}
+        <section className="rounded-[var(--radius-xl)] bg-[#1C2B2D] p-8 sm:p-10">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#6B8F71]/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#6B8F71]">
+                New — Included in Professional
+              </p>
+              <h2 className="font-display text-3xl font-semibold text-white">
+                Prior Auth Engine
+              </h2>
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-300">
+                Stop losing 3 hours per prior authorization. Generate complete prior auth requests,
+                step therapy exception letters (with state law citations), and continued stay
+                defenses in under 2 minutes — from a dedicated workspace built for Directors of
+                Nursing, Social Workers, and Care Coordinators.
+              </p>
+              <ul className="mt-4 space-y-1.5 text-sm text-slate-300">
+                {[
+                  'Prior Authorization Request generator',
+                  'Step Therapy Exception — cites your state\'s reform law by statute',
+                  'Continued Stay / Medical Necessity Defense',
+                  'Denial Letter Analyzer — plain-English breakdown + appeal strategy',
+                  'Outcome tracking: approved / denied / on appeal',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="mt-0.5 text-[#6B8F71]">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex shrink-0 flex-col gap-3">
+              <Button asChild className="bg-[#6B8F71] text-white hover:bg-[#5a7a60]">
+                <Link href="/prior-auth-pro">See Full Details →</Link>
+              </Button>
+              <Button asChild className="border border-slate-600 bg-transparent text-white hover:bg-white/10">
+                <a href="https://calendly.com/oncokind-support" target="_blank" rel="noreferrer">
+                  Book a Demo
+                </a>
+              </Button>
+            </div>
+          </div>
+        </section>
+
         <section className="grid gap-6 md:grid-cols-2">
           {[
             {
               title: 'What the Professional tier provides',
               bullets: [
+                'Prior Authorization Engine (KindAuth) — all three document types',
                 'Multi-patient workflow support for advocates and care teams',
+                'Insurance denial defense and structured appeal packets',
                 'Branded outputs and batch-oriented document review',
-                'Insurance denial support and structured caregiver prep tools',
                 'Enterprise security review available upon request',
               ],
             },
             {
               title: 'Who it is for',
               bullets: [
+                'Directors of Nursing and Care Coordinators at SNFs and group homes',
                 'Independent patient advocates supporting multiple clients',
                 'Concierge and navigation teams preparing families for oncology visits',
                 'Organizations that need a guided, caregiver-facing education layer',
-                'Teams evaluating custom onboarding and compliance requirements',
               ],
             },
           ].map((section) => (
