@@ -58,19 +58,10 @@ CREATE INDEX IF NOT EXISTS prior_auth_cases_status_idx      ON public.prior_auth
 
 ALTER TABLE public.prior_auth_cases ENABLE ROW LEVEL SECURITY;
 
--- Users see their own cases OR cases belonging to their organization
+-- Users see only their own cases (org-level sharing can be layered in later)
 CREATE POLICY "Users can view their own prior auth cases"
   ON public.prior_auth_cases FOR SELECT
-  USING (
-    auth.uid() = user_id
-    OR organization_id IN (
-      SELECT id FROM public.organizations WHERE owner_id = auth.uid()
-    )
-    OR organization_id IN (
-      SELECT organization_id FROM public.enterprise_patient_assignments
-      WHERE assigned_by = auth.uid()
-    )
-  );
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert their own prior auth cases"
   ON public.prior_auth_cases FOR INSERT
