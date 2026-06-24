@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OncoKind — Pre-Launch QA Testing Guide</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1a2a2c;
+    background: #fff;
+    padding: 40px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { padding: 0; font-size: 11px; }
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    h2 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+    .section-card { page-break-inside: avoid; }
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: #1C2B2D;
+    color: white;
+    padding: 48px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: #6B8F71;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: #E8C37A;
+  }
+  .cover p { color: #94a3b8; font-size: 14px; margin-bottom: 6px; }
+  .cover-meta { display: flex; gap: 32px; margin-top: 24px; }
+  .cover-meta div { }
+  .cover-meta .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; }
+  .cover-meta .value { font-size: 13px; color: #e2e8f0; font-weight: 500; }
+
+  /* ── Account table ── */
+  .accounts-section {
+    background: #F8F6F2;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .accounts-section h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1C2B2D;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #6B8F71;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: #1C2B2D;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th:first-child { border-radius: 6px 0 0 6px; }
+  th:last-child { border-radius: 0 6px 6px 0; }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #e8ecef;
+    font-size: 12px;
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .tier-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tier-free    { background: #f1f5f9; color: #64748b; }
+  .tier-pro     { background: #dbeafe; color: #1d4ed8; }
+  .tier-advocate { background: #ede9fe; color: #7c3aed; }
+  .tier-professional { background: #dcfce7; color: #15803d; }
+  .tier-enterprise { background: #1C2B2D; color: #E8C37A; }
+
+  /* ── Section cards ── */
+  .section-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #1C2B2D;
+    color: white;
+  }
+  .section-num {
+    width: 28px;
+    height: 28px;
+    background: #6B8F71;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+  .section-header .section-sub {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-left: auto;
+  }
+  .section-body { padding: 16px 20px; }
+
+  /* ── Subsections ── */
+  .subsection { margin-bottom: 20px; }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1C2B2D;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e8ecef;
+  }
+
+  /* ── Checklist items ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-text { flex: 1; color: #374151; }
+  .check-note {
+    font-size: 10px;
+    color: #94a3b8;
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  /* ── SQL blocks ── */
+  .sql-block {
+    background: #0f172a;
+    color: #e2e8f0;
+    font-family: 'SF Mono', 'Fira Code', 'Monaco', monospace;
+    font-size: 10px;
+    line-height: 1.6;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .sql-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #6B8F71;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  /* ── Alert boxes ── */
+  .alert {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .alert-warning { background: #fffbeb; border: 1px solid #fbbf24; color: #92400e; }
+  .alert-info    { background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; }
+  .alert-success { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+  .alert-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* ── Sign-off table ── */
+  .signoff-table td, .signoff-table th {
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    font-size: 12px;
+  }
+  .signoff-table th { background: #F8F6F2; color: #1C2B2D; }
+  .status-col { width: 80px; text-align: center; }
+
+  /* ── Tier pills ── */
+  .required-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+  .req-professional { background: #dcfce7; color: #15803d; }
+  .req-advocate     { background: #ede9fe; color: #7c3aed; }
+  .req-pro          { background: #dbeafe; color: #1d4ed8; }
+  .req-all          { background: #f1f5f9; color: #475569; }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Confidential — Internal QA Document</div>
+  <h1>OncoKind Pre-Launch<br/>QA Testing Guide</h1>
+  <p>Complete manual testing script for all user tiers, features, and production readiness checks.</p>
+  <p>Run every section before approving a public launch.</p>
+  <div class="cover-meta">
+    <div><div class="label">Version</div><div class="value">1.0 — June 2026</div></div>
+    <div><div class="label">Author</div><div class="value">Mike Nielson, Founder</div></div>
+    <div><div class="label">App URL</div><div class="value">oncokind.com</div></div>
+    <div><div class="label">Sections</div><div class="value">15 Sections · 130+ Checks</div></div>
+  </div>
+</div>
+
+<!-- ══ STEP 0: SETUP ══════════════════════════════════════════════════════ -->
+<div class="accounts-section">
+  <h2>STEP 0 — Pre-QA Setup: Run These SQL Migrations First</h2>
+  <div class="alert alert-warning">
+    <span class="alert-icon">⚠️</span>
+    <div>Run both SQL blocks in <strong>Supabase Studio → SQL Editor</strong> before creating any test accounts. If the Prior Auth tables already exist, the first block will succeed silently (IF NOT EXISTS).</div>
+  </div>
+  <div class="sql-label">Migration A — Prior Auth Engine Tables</div>
+  <div class="sql-block">-- Paste contents of: supabase/migrations/20260618000000_prior_auth_engine.sql
+-- (Creates prior_auth_cases, prior_auth_denial_uploads, prior_auth_drug_trials)</div>
+  <div class="sql-label">Migration B — Add 'professional' Tier to CHECK Constraint</div>
+  <div class="sql-block">ALTER TABLE public.profiles
+  DROP CONSTRAINT IF EXISTS profiles_subscription_tier_check;
+
+ALTER TABLE public.profiles
+  ADD CONSTRAINT profiles_subscription_tier_check
+    CHECK (subscription_tier IN ('free', 'pro', 'advocate', 'professional', 'enterprise'));</div>
+</div>
+
+<!-- ══ TEST ACCOUNTS ══════════════════════════════════════════════════════ -->
+<div class="accounts-section">
+  <h2>STEP 1 — Test Account Setup</h2>
+  <div class="alert alert-info">
+    <span class="alert-icon">ℹ️</span>
+    <div>Create all 5 accounts at <strong>oncokind.com/signup</strong> first. If you hit the email rate limit (3/hr), create remaining accounts via <strong>Supabase Studio → Authentication → Users → Add User</strong>. Then run the SQL below to set tiers.</div>
+  </div>
+
+  <table style="margin-bottom:16px">
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Tier</th>
+        <th>What It Tests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Free User</strong></td>
+        <td>qa-free@oncokind.com</td>
+        <td>QAtest2026!</td>
+        <td><span class="tier-badge tier-free">Free</span></td>
+        <td>Report limits, upgrade prompts, read-only community</td>
+      </tr>
+      <tr>
+        <td><strong>Caregiver Pro</strong></td>
+        <td>qa-pro@oncokind.com</td>
+        <td>QAtest2026!</td>
+        <td><span class="tier-badge tier-pro">Pro</span></td>
+        <td>Unlimited reports, Prep Sheet, Clinical Trials, Timeline</td>
+      </tr>
+      <tr>
+        <td><strong>Advocate</strong></td>
+        <td>qa-advocate@oncokind.com</td>
+        <td>QAtest2026!</td>
+        <td><span class="tier-badge tier-advocate">Advocate</span></td>
+        <td>Insurance Denial Defense, Financial Aid, Appeal Packets</td>
+      </tr>
+      <tr>
+        <td><strong>Professional</strong></td>
+        <td>qa-professional@oncokind.com</td>
+        <td>QAtest2026!</td>
+        <td><span class="tier-badge tier-professional">Professional</span></td>
+        <td>Prior Auth Engine (KindAuth), all lower-tier features</td>
+      </tr>
+      <tr>
+        <td><strong>Admin</strong></td>
+        <td>qa-admin@oncokind.com</td>
+        <td>QAtest2026!</td>
+        <td><span class="tier-badge tier-enterprise">Enterprise</span></td>
+        <td>Admin panel, organizations, community moderation</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sql-label">Run in Supabase SQL Editor after creating all 5 accounts</div>
+  <div class="sql-block">UPDATE public.profiles SET subscription_tier = 'free'         WHERE email = 'qa-free@oncokind.com';
+UPDATE public.profiles SET subscription_tier = 'pro'          WHERE email = 'qa-pro@oncokind.com';
+UPDATE public.profiles SET subscription_tier = 'advocate'     WHERE email = 'qa-advocate@oncokind.com';
+UPDATE public.profiles SET subscription_tier = 'professional' WHERE email = 'qa-professional@oncokind.com';
+UPDATE public.profiles SET subscription_tier = 'enterprise'   WHERE email = 'qa-admin@oncokind.com';
+
+-- Verify all 5 rows updated correctly:
+SELECT email, subscription_tier FROM public.profiles
+  WHERE email LIKE 'qa-%@oncokind.com' ORDER BY email;</div>
+  <div class="alert alert-success">
+    <span class="alert-icon">✅</span>
+    <div>Expected result: 5 rows returned, each with the correct tier value listed above.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION 1 ══════════════════════════════════════════════════════════ -->
+<div class="section-card page-break">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>Public Marketing Pages</h2>
+    <span class="section-sub">No login required · Use incognito window</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="subsection-title">Homepage (/)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Page loads without errors in browser console</div></li>
+        <li><div class="check-box"></div><div class="check-text">Hero headline and primary CTA render correctly</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Upload Your First Report" CTA navigates to /signup</div></li>
+        <li><div class="check-box"></div><div class="check-text">Founder video present, does NOT autoplay, has controls</div></li>
+        <li><div class="check-box"></div><div class="check-text">Pricing preview shows all 4 tiers (Free, Caregiver Pro, Advocate, Professional)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Feature grid — 8 cards visible, all "Learn more" links work</div></li>
+        <li><div class="check-box"></div><div class="check-text">Final CTA section renders at bottom of page</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">About (/about)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Headline: "This is not a startup story. This is a life's work."</div></li>
+        <li><div class="check-box"></div><div class="check-text">Founder video present, no autoplay, has controls, portrait fits container</div></li>
+        <li><div class="check-box"></div><div class="check-text">Visual timeline renders</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Get Started Free" CTA navigates to /signup</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Pricing (/pricing)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">All 4 tier cards visible (Free, Caregiver Pro, Advocate, Professional)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Monthly/Yearly toggle works — prices update</div></li>
+        <li><div class="check-box"></div><div class="check-text">Feature comparison table renders (17 rows)</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Book a Demo" on Professional tier links to Calendly</div></li>
+        <li><div class="check-box"></div><div class="check-text">FAQ section shows 5 questions, all expand correctly</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">For Professionals (/professional)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">KindAuth Prior Auth Engine section visible near top of page</div></li>
+        <li><div class="check-box"></div><div class="check-text">"See Full Details →" links to /prior-auth-pro</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Book a Demo" links to Calendly and opens in new tab</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Prior Auth Pro (/prior-auth-pro) <span class="required-badge req-professional">New</span></div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Page loads publicly — no login required</div></li>
+        <li><div class="check-box"></div><div class="check-text">Three workflow cards: Prior Authorization, Step Therapy Exception, Continued Stay</div></li>
+        <li><div class="check-box"></div><div class="check-text">Stats bar: 90M+, 2–4 hrs, 45–60% render correctly</div></li>
+        <li><div class="check-box"></div><div class="check-text">How It Works — 4 numbered steps visible</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Start Free — Professional Plan" → /signup?plan=professional</div></li>
+        <li><div class="check-box"></div><div class="check-text">Legal disclaimer footer present at bottom</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Other Marketing Pages</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">/learn — article index loads, at least 2 articles readable</div></li>
+        <li><div class="check-box"></div><div class="check-text">/resources — resource index loads, at least 1 resource opens</div></li>
+        <li><div class="check-box"></div><div class="check-text">/community — community hub loads, categories visible</div></li>
+        <li><div class="check-box"></div><div class="check-text">/trust — loads without errors</div></li>
+        <li><div class="check-box"></div><div class="check-text">/privacy — loads, data retention language present</div></li>
+        <li><div class="check-box"></div><div class="check-text">/terms — loads without errors</div></li>
+        <li><div class="check-box"></div><div class="check-text">/security — loads without errors</div></li>
+        <li><div class="check-box"></div><div class="check-text">/support — loads, support@oncokind.com visible</div></li>
+        <li><div class="check-box"></div><div class="check-text">/waitlist — form submits successfully, success state shows</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Navigation & SEO</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Main nav links all work: How It Works, Features, Pricing, For Professionals, Prior Auth Engine, Community, Resources</div></li>
+        <li><div class="check-box"></div><div class="check-text">Footer — 5 columns visible, copyright year is 2026</div></li>
+        <li><div class="check-box"></div><div class="check-text">View page source on / — &lt;title&gt; tag present, JSON-LD block in &lt;head&gt;</div></li>
+        <li><div class="check-box"></div><div class="check-text">oncokind.com/robots.txt — /dashboard/, /api/, /prior-auth disallowed</div></li>
+        <li><div class="check-box"></div><div class="check-text">oncokind.com/sitemap.xml — /prior-auth-pro appears in list</div></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SECTION 2 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>Authentication Flow</h2>
+    <span class="section-sub">All accounts · Test sign up, login, logout, gates</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection">
+      <div class="subsection-title">Signup (/signup)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Form renders with email + password fields</div></li>
+        <li><div class="check-box"></div><div class="check-text">Weak password → error message shown before submit</div></li>
+        <li><div class="check-box"></div><div class="check-text">Valid credentials → account created, redirects to dashboard</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Login (/login)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Valid credentials → redirects to /dashboard</div></li>
+        <li><div class="check-box"></div><div class="check-text">Wrong password → error message displayed (not silent)</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Forgot password" link present and functional</div></li>
+        <li><div class="check-box"></div><div class="check-text">After login, visiting /login again redirects away (no loop)</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Logout & Auth Gates</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Sign out → returns to homepage</div></li>
+        <li><div class="check-box"></div><div class="check-text">Visit /dashboard while logged out → redirects to /login</div></li>
+        <li><div class="check-box"></div><div class="check-text">Visit /prior-auth while logged out → redirects to /login?redirect=/prior-auth</div></li>
+        <li><div class="check-box"></div><div class="check-text">Visit /journey/timeline while logged out → redirects to /login</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 3 ══════════════════════════════════════════════════════════ -->
+<div class="section-card page-break">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>Free Tier</h2>
+    <span class="section-sub">Login: qa-free@oncokind.com / QAtest2026!</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection">
+      <div class="subsection-title">Dashboard & Reports</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Dashboard loads — upgrade CTA for Advocate Plan visible</div></li>
+        <li><div class="check-box"></div><div class="check-text">Navigate to /reports — upload a PDF report</div></li>
+        <li><div class="check-box"></div><div class="check-text">Report processes and shows AI Cancer Profile on detail page</div></li>
+        <li><div class="check-box"></div><div class="check-text">Try uploading a second report — usage limit message or upgrade prompt shown</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Feature Gates (all should show upgrade prompt, not the feature)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Doctor Prep Sheet → upgrade prompt shown</div></li>
+        <li><div class="check-box"></div><div class="check-text">Clinical Trial Matching → upgrade prompt shown</div></li>
+        <li><div class="check-box"></div><div class="check-text">Insurance Denial Defense → upgrade prompt shown</div></li>
+        <li><div class="check-box"></div><div class="check-text">Visit /prior-auth → redirected to /dashboard/billing?upgrade=prior-auth</div></li>
+        <li><div class="check-box"></div><div class="check-text">/dashboard/billing → shows Free plan, upgrade CTAs visible</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Community & Quiet Room</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">/community — can read posts (read-only for Free tier)</div></li>
+        <li><div class="check-box"></div><div class="check-text">/quiet-room — loads and is accessible</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 4 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Caregiver Pro Tier</h2>
+    <span class="section-sub">Login: qa-pro@oncokind.com / QAtest2026!</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection">
+      <div class="subsection-title">Pro Features <span class="required-badge req-pro">Pro+</span></div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Upload 2+ reports — no limit error</div></li>
+        <li><div class="check-box"></div><div class="check-text">Doctor Prep Sheet (/journey/second-opinion) — generates, PDF export works</div></li>
+        <li><div class="check-box"></div><div class="check-text">Clinical Trial Matching (/journey/trials) — results load for a test zip code</div></li>
+        <li><div class="check-box"></div><div class="check-text">Care Timeline (/journey/timeline) — loads, can add entries</div></li>
+        <li><div class="check-box"></div><div class="check-text">Appointment Check-In — accessible and functional</div></li>
+        <li><div class="check-box"></div><div class="check-text">Community — can read AND post (full access)</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Feature Gates (Pro should NOT have these)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Insurance Denial Defense → upgrade prompt for Advocate</div></li>
+        <li><div class="check-box"></div><div class="check-text">Financial Aid Tracker → upgrade prompt</div></li>
+        <li><div class="check-box"></div><div class="check-text">Visit /prior-auth → redirected to /dashboard/billing?upgrade=prior-auth</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 5 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Advocate Tier</h2>
+    <span class="section-sub">Login: qa-advocate@oncokind.com / QAtest2026!</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection">
+      <div class="subsection-title">Advocate-Only Features <span class="required-badge req-advocate">Advocate+</span></div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Insurance Denial Defense (/journey/insurance-support) — page loads</div></li>
+        <li><div class="check-box"></div><div class="check-text">Upload/paste denial text → AI analysis generated successfully</div></li>
+        <li><div class="check-box"></div><div class="check-text">Structured Appeal Packet — generates and can be downloaded/printed</div></li>
+        <li><div class="check-box"></div><div class="check-text">Financial Aid Tracker (/journey/financial-help) — loads with aid categories</div></li>
+        <li><div class="check-box"></div><div class="check-text">All Pro features still accessible (Prep Sheet, Clinical Trials, Timeline)</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Feature Gates</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Visit /prior-auth → redirected to /dashboard/billing?upgrade=prior-auth</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 6 ══════════════════════════════════════════════════════════ -->
+<div class="section-card page-break">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <h2>Professional Tier — Prior Auth Engine (KindAuth)</h2>
+    <span class="section-sub">Login: qa-professional@oncokind.com / QAtest2026! · <strong style="color:#E8C37A">Most critical section</strong></span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="subsection-title">Entry Points</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Dashboard — dark "Prior Auth Engine" card visible at top of /dashboard</div></li>
+        <li><div class="check-box"></div><div class="check-text">Dashboard nav — "Prior Auth" link with "NEW" badge visible in top nav</div></li>
+        <li><div class="check-box"></div><div class="check-text">Clicking either entry point opens /prior-auth in a <strong>new browser tab</strong></div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Prior Auth Hub (/prior-auth)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Standalone dark workspace header: "OncoKind | Prior Auth Engine"</div></li>
+        <li><div class="check-box"></div><div class="check-text">"← Back to Dashboard" link returns to /dashboard</div></li>
+        <li><div class="check-box"></div><div class="check-text">Stats row shows (Total Cases, Ready to Submit, In Review, Approved)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Three workflow cards: Prior Authorization, Step Therapy Exception, Continued Stay Defense</div></li>
+        <li><div class="check-box"></div><div class="check-text">Filter tabs: All, Prior, Step, Continued</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">New Case — Prior Authorization Request</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Click "New Prior Auth" → /prior-auth/new?type=prior_auth</div></li>
+        <li><div class="check-box"></div><div class="check-text">5-step progress bar renders, Step 1 pre-selected</div></li>
+        <li><div class="check-box"></div><div class="check-text">Step 1: Enter Patient Ref (e.g. "Room 14B"), Facility Name, State "PA", Physician</div></li>
+        <li><div class="check-box"></div><div class="check-text">Step 2: Enter Payer "Aetna", Plan, Member ID (last 4)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Step 3: Medication "Keytruda 200mg", ICD-10 "C34.10", Diagnosis "Lung Cancer", check Urgent</div></li>
+        <li><div class="check-box"></div><div class="check-text">Step 4 Review — all fields shown correctly, amber disclaimer visible</div></li>
+        <li><div class="check-box"></div><div class="check-text">Click "Generate Document →" — loading spinner shows, takes 5–15 seconds</div></li>
+        <li><div class="check-box"></div><div class="check-text">Redirects to case workspace /prior-auth/[id]</div></li>
+        <li><div class="check-box"></div><div class="check-text">Generated document appears (400–600 word formal letter)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Document contains [bracketed placeholders] for physician signature</div></li>
+        <li><div class="check-box"></div><div class="check-text">Amber "review placeholders" bar visible below document</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Document Actions</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Edit document directly in textarea — changes persist while on page</div></li>
+        <li><div class="check-box"></div><div class="check-text">Copy button — copies text to clipboard, shows "Copied!" confirmation</div></li>
+        <li><div class="check-box"></div><div class="check-text">Print / PDF button — print dialog opens with document and disclaimer footer</div></li>
+        <li><div class="check-box"></div><div class="check-text">Print preview shows "Important: AI-assisted document…" footer at bottom</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">New Case — Step Therapy Exception</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Return to /prior-auth, click "New Step Therapy"</div></li>
+        <li><div class="check-box"></div><div class="check-text">6-step form (includes State & Law step)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Add 2 previously tried medications with failure checkboxes</div></li>
+        <li><div class="check-box"></div><div class="check-text">Step 4 State Law — shows auto-detected PA law citation</div></li>
+        <li><div class="check-box"></div><div class="check-text">Generated document cites Pennsylvania Act 2018-146 statute by name</div></li>
+        <li><div class="check-box"></div><div class="check-text">Sidebar shows "State Law Applied" card with full citation</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Drug Trial History" sidebar card shows the 2 medications you entered</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">New Case — Continued Stay Defense</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Return to /prior-auth, click "New Continued Stay"</div></li>
+        <li><div class="check-box"></div><div class="check-text">Enter Admission Date, Functional Status description, Discharge Barriers</div></li>
+        <li><div class="check-box"></div><div class="check-text">Generated document uses InterQual-adjacent language ("meets criteria for skilled care")</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Denial Letter Analyzer</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Open any case workspace, scroll to "Analyze a Denial Letter" sidebar card</div></li>
+        <li><div class="check-box"></div><div class="check-text">Paste sample denial text (minimum 20 characters)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Click "Analyze Denial" — spinner shows, returns in 5–10 seconds</div></li>
+        <li><div class="check-box"></div><div class="check-text">Analysis shows all 6 sections: Denial Reason, Denial Code, Appeal Basis, Urgency, Missing Info, Next Step</div></li>
+        <li><div class="check-box"></div><div class="check-text">"Clear / Analyze another" resets the form</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Status Tracking & Outcome Modal</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Status dropdown: change "Ready" → "Submitted" → saves without error</div></li>
+        <li><div class="check-box"></div><div class="check-text">Change status to "Approved" → outcome modal appears</div></li>
+        <li><div class="check-box"></div><div class="check-text">Add optional notes, click Confirm — status updates in case list</div></li>
+        <li><div class="check-box"></div><div class="check-text">Change status to "Denied" → red outcome modal appears, Confirm works</div></li>
+        <li><div class="check-box"></div><div class="check-text">Case list on /prior-auth shows correct status badges for all cases</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Case List & Filtering</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">All 3 cases appear in the case list on /prior-auth</div></li>
+        <li><div class="check-box"></div><div class="check-text">Stats row now shows correct counts</div></li>
+        <li><div class="check-box"></div><div class="check-text">Filter tabs correctly show/hide cases by type</div></li>
+        <li><div class="check-box"></div><div class="check-text">Clicking a case row navigates to its workspace</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Access Gate Verification</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Log out, log in as qa-free@oncokind.com → /prior-auth redirects to billing page</div></li>
+        <li><div class="check-box"></div><div class="check-text">Log in as qa-pro@oncokind.com → /prior-auth redirects to billing page</div></li>
+        <li><div class="check-box"></div><div class="check-text">Log in as qa-advocate@oncokind.com → /prior-auth redirects to billing page</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Database Verification (run in Supabase SQL Editor)</div>
+      <div class="sql-label">AI Audit Log — confirm every generation was logged</div>
+      <div class="sql-block">SELECT user_id, model, feature, created_at
+FROM public.ai_audit_log
+WHERE feature LIKE 'prior_auth_%'
+ORDER BY created_at DESC LIMIT 5;
+-- Expected: 1 row per generation, no raw text stored</div>
+      <div class="sql-label">PHI Check — confirm no real patient data stored</div>
+      <div class="sql-block">SELECT patient_identifier, facility_name, payer_name,
+       ai_generated_document IS NOT NULL as has_doc
+FROM public.prior_auth_cases ORDER BY created_at DESC LIMIT 5;
+-- Expected: patient_identifier = "Room 14B" or similar reference only</div>
+      <ul class="checklist" style="margin-top:10px">
+        <li><div class="check-box"></div><div class="check-text">AI audit log has 1 row per generation with feature = prior_auth_[type]</div></li>
+        <li><div class="check-box"></div><div class="check-text">No raw prompt text or response text stored in audit log (only hashes)</div></li>
+        <li><div class="check-box"></div><div class="check-text">patient_identifier is a reference code, not a real patient name or DOB</div></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SECTION 7 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <h2>Admin / Enterprise Tier</h2>
+    <span class="section-sub">Login: qa-admin@oncokind.com / QAtest2026!</span>
+  </div>
+  <div class="section-body">
+    <ul class="checklist">
+      <li><div class="check-box"></div><div class="check-text">Dashboard loads — "Admin" link visible in dashboard nav</div></li>
+      <li><div class="check-box"></div><div class="check-text">/admin/organizations — page loads (may be empty list in test)</div></li>
+      <li><div class="check-box"></div><div class="check-text">/admin/community — community moderation page loads</div></li>
+      <li><div class="check-box"></div><div class="check-text">Prior Auth Engine card visible on dashboard (enterprise includes professional access)</div></li>
+      <li><div class="check-box"></div><div class="check-text">/prior-auth — workspace loads successfully</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 8 ══════════════════════════════════════════════════════════ -->
+<div class="section-card page-break">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <h2>Security & Data Isolation</h2>
+    <span class="section-sub">RLS verification · API auth checks</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection">
+      <div class="subsection-title">RLS Isolation — Run in Supabase SQL Editor</div>
+      <div class="sql-block">-- Confirm each user only has their own cases (no cross-user leakage)
+SELECT p.email, COUNT(c.id) as case_count
+FROM public.profiles p
+LEFT JOIN public.prior_auth_cases c ON c.user_id = p.id
+WHERE p.email LIKE 'qa-%@oncokind.com'
+GROUP BY p.email ORDER BY p.email;
+-- Expected: only qa-professional and qa-admin rows have case_count > 0</div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">API Auth Check — Run in Browser Console (logged out)</div>
+      <div class="sql-block">fetch('/api/prior-auth/cases').then(r => r.json()).then(console.log)
+// Expected: { error: "Unauthorized" }</div>
+      <div class="sql-label">Run while logged in as qa-free@oncokind.com</div>
+      <div class="sql-block">fetch('/api/prior-auth/cases').then(r => r.json()).then(console.log)
+// Expected: { error: "Professional tier required" } (403)</div>
+    </div>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-box"></div><div class="check-text">Logged-out API call returns 401 Unauthorized (not case data)</div></li>
+      <li><div class="check-box"></div><div class="check-text">Free-tier API call returns 403 Professional tier required</div></li>
+      <li><div class="check-box"></div><div class="check-text">RLS query shows cases belong only to their respective owners</div></li>
+      <li><div class="check-box"></div><div class="check-text">/dashboard/security page loads and shows security settings</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 9 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <h2>Navigation & Cross-Page</h2>
+    <span class="section-sub">Site-wide consistency checks</span>
+  </div>
+  <div class="section-body">
+    <ul class="checklist">
+      <li><div class="check-box"></div><div class="check-text">Logo on all pages links back to /</div></li>
+      <li><div class="check-box"></div><div class="check-text">All 7 marketing nav links work (now includes Prior Auth Engine)</div></li>
+      <li><div class="check-box"></div><div class="check-text">Footer — 5 columns, Cancer Support Community helpline visible</div></li>
+      <li><div class="check-box"></div><div class="check-text">Footer copyright year = 2026</div></li>
+      <li><div class="check-box"></div><div class="check-text">"Join Waitlist" link in footer goes to /waitlist</div></li>
+      <li><div class="check-box"></div><div class="check-text">support@oncokind.com in footer opens mail client</div></li>
+      <li><div class="check-box"></div><div class="check-text">Dashboard nav — Professional user sees Prior Auth link with "NEW" badge</div></li>
+      <li><div class="check-box"></div><div class="check-text">Dashboard nav — Free/Pro/Advocate user does NOT see Prior Auth link</div></li>
+      <li><div class="check-box"></div><div class="check-text">Language selector in dashboard nav is visible and functional</div></li>
+      <li><div class="check-box"></div><div class="check-text">Visit /this-page-does-not-exist → 404 page shown (not blank white)</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 10 ══════════════════════════════════════════════════════════ -->
+<div class="section-card page-break">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <h2>Mobile & Accessibility</h2>
+    <span class="section-sub">Test at 375px viewport (iPhone) + keyboard navigation</span>
+  </div>
+  <div class="section-body">
+    <div class="subsection">
+      <div class="subsection-title">Mobile (Chrome DevTools → 375px or real iPhone)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Homepage hero — readable, CTAs tappable (min 44px height)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Pricing page — cards stack vertically, all text readable</div></li>
+        <li><div class="check-box"></div><div class="check-text">Prior Auth new case form — all inputs usable on mobile keyboard</div></li>
+        <li><div class="check-box"></div><div class="check-text">Prior Auth workspace — document textarea scrollable, Copy button works</div></li>
+        <li><div class="check-box"></div><div class="check-text">Dashboard nav — horizontally scrollable or hamburger works on mobile</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Accessibility</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Tab through homepage — visible focus ring on all interactive elements</div></li>
+        <li><div class="check-box"></div><div class="check-text">No keyboard traps anywhere in the flow</div></li>
+        <li><div class="check-box"></div><div class="check-text">Images have descriptive alt text (check DevTools → Accessibility panel)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Body copy minimum 16px font size</div></li>
+        <li><div class="check-box"></div><div class="check-text">Sage green buttons pass 4.5:1 contrast ratio</div></li>
+      </ul>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Reduced Motion (macOS System Settings → Accessibility → Reduce Motion)</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Reload homepage with Reduce Motion enabled — animations are instant, no fade/slide</div></li>
+        <li><div class="check-box"></div><div class="check-text">Prior Auth workspace still fully functional with reduced motion</div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 11 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <h2>Performance (Lighthouse)</h2>
+    <span class="section-sub">Chrome DevTools → Lighthouse tab → Desktop mode</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Target Performance</th>
+          <th>Target A11y</th>
+          <th>Target SEO</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>/</strong> (Homepage)</td>
+          <td>≥ 90</td>
+          <td>≥ 95</td>
+          <td>≥ 95</td>
+          <td>_____ / _____ / _____</td>
+        </tr>
+        <tr>
+          <td><strong>/pricing</strong></td>
+          <td>≥ 85</td>
+          <td>≥ 95</td>
+          <td>≥ 95</td>
+          <td>_____ / _____ / _____</td>
+        </tr>
+        <tr>
+          <td><strong>/prior-auth-pro</strong></td>
+          <td>≥ 85</td>
+          <td>≥ 95</td>
+          <td>≥ 95</td>
+          <td>_____ / _____ / _____</td>
+        </tr>
+        <tr>
+          <td><strong>/about</strong></td>
+          <td>≥ 85</td>
+          <td>≥ 95</td>
+          <td>≥ 90</td>
+          <td>_____ / _____ / _____</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ SECTION 12 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <h2>Email Flows</h2>
+    <span class="section-sub">Requires Resend API key configured in Vercel</span>
+  </div>
+  <div class="section-body">
+    <ul class="checklist">
+      <li><div class="check-box"></div><div class="check-text">Sign up with a real email → confirmation email received (if email confirmation enabled)</div></li>
+      <li><div class="check-box"></div><div class="check-text">Sign up for waitlist at /waitlist → confirmation email received within 60 seconds</div></li>
+      <li><div class="check-box"></div><div class="check-text">Waitlist email has correct OncoKind branding, no broken links</div></li>
+      <li><div class="check-box"></div><div class="check-text">Password reset → link in email works, can reset and log in with new password</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 13 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">13</div>
+    <h2>Stripe Billing</h2>
+    <span class="section-sub">Test card: 4242 4242 4242 4242 · Any future expiry · Any CVC</span>
+  </div>
+  <div class="section-body">
+    <div class="alert alert-warning">
+      <span class="alert-icon">⚠️</span>
+      <div>Use Stripe test mode only. Confirm your Stripe price IDs are set in Vercel environment variables before testing.</div>
+    </div>
+    <ul class="checklist">
+      <li><div class="check-box"></div><div class="check-text">From /pricing, click "Get Caregiver Pro" → Stripe checkout page loads</div></li>
+      <li><div class="check-box"></div><div class="check-text">Complete test purchase → redirected back to dashboard</div></li>
+      <li><div class="check-box"></div><div class="check-text">/dashboard/billing shows active Pro subscription after purchase</div></li>
+      <li><div class="check-box"></div><div class="check-text">From /pricing, click "Get Advocate" → Stripe checkout loads</div></li>
+      <li><div class="check-box"></div><div class="check-text">Subscription status visible and accurate in /dashboard/billing</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 14 ══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num">14</div>
+    <h2>Error States</h2>
+    <span class="section-sub">Confirm graceful failure — no silent crashes or blank pages</span>
+  </div>
+  <div class="section-body">
+    <ul class="checklist">
+      <li><div class="check-box"></div><div class="check-text">Visit /prior-auth/00000000-0000-0000-0000-000000000000 (fake ID) → 404 page shown</div></li>
+      <li><div class="check-box"></div><div class="check-text">Prior Auth form — click Generate with empty required fields → error or validation shown</div></li>
+      <li><div class="check-box"></div><div class="check-text">Denial analyzer — submit with fewer than 20 characters → error message shown</div></li>
+      <li><div class="check-box"></div><div class="check-text">Login with wrong password → clear error message (not blank page)</div></li>
+      <li><div class="check-box"></div><div class="check-text">Visit any unknown URL → custom 404 page (not Vercel default)</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 15 ══════════════════════════════════════════════════════════ -->
+<div class="section-card page-break">
+  <div class="section-header">
+    <div class="section-num">15</div>
+    <h2>Final Pre-Launch Infrastructure Checklist</h2>
+    <span class="section-sub">Complete before flipping the switch to public</span>
+  </div>
+  <div class="section-body">
+
+    <div class="subsection">
+      <div class="subsection-title">Content</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">No placeholder text (lorem ipsum, "TODO", "[Your Name]") on any public page</div></li>
+        <li><div class="check-box"></div><div class="check-text">All email addresses monitored: hello@oncokind.com, support@oncokind.com</div></li>
+        <li><div class="check-box"></div><div class="check-text">Calendly link (https://calendly.com/oncokind-support) opens and is live</div></li>
+        <li><div class="check-box"></div><div class="check-text">Founder video on /about plays correctly, portrait fits container</div></li>
+        <li><div class="check-box"></div><div class="check-text">Copyright year in footer = 2026</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Infrastructure</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Vercel deployment — latest commit is green (no build errors)</div></li>
+        <li><div class="check-box"></div><div class="check-text">Supabase project is on a paid plan (free tier has connection limits)</div></li>
+        <li><div class="check-box"></div><div class="check-text">status.oncokind.com (Instatus) shows "All Systems Operational"</div></li>
+        <li><div class="check-box"></div><div class="check-text">ANTHROPIC_API_KEY set in Vercel environment variables</div></li>
+        <li><div class="check-box"></div><div class="check-text">RESEND_API_KEY set in Vercel environment variables</div></li>
+        <li><div class="check-box"></div><div class="check-text">All Stripe price IDs set (STRIPE_PRICE_ID_PRO_MONTHLY, ADVOCATE_MONTHLY, etc.)</div></li>
+        <li><div class="check-box"></div><div class="check-text">NEXT_PUBLIC_APP_URL set to https://www.oncokind.com</div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">SEO & Analytics</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div><div class="check-text">Google Search Console — site submitted and domain verified</div></li>
+        <li><div class="check-box"></div><div class="check-text">robots.txt accessible at oncokind.com/robots.txt</div></li>
+        <li><div class="check-box"></div><div class="check-text">sitemap.xml accessible at oncokind.com/sitemap.xml</div></li>
+        <li><div class="check-box"></div><div class="check-text">OG image renders correctly when URL pasted in Slack or Twitter</div></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SIGN-OFF TABLE ══════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-header">
+    <div class="section-num" style="background:#E8C37A;color:#1C2B2D">✓</div>
+    <h2>QA Sign-Off</h2>
+    <span class="section-sub">Complete before launch approval</span>
+  </div>
+  <div class="section-body">
+    <table class="signoff-table">
+      <thead>
+        <tr>
+          <th>Section</th>
+          <th>Description</th>
+          <th>Tester</th>
+          <th>Date</th>
+          <th class="status-col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td>Migrations & Setup</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>1</td><td>Public Marketing Pages</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>2</td><td>Authentication Flow</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>3</td><td>Free Tier</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>4</td><td>Caregiver Pro Tier</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>5</td><td>Advocate Tier</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>6</td><td>Professional / KindAuth</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>7</td><td>Admin / Enterprise</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>8</td><td>Security & RLS</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>9</td><td>Navigation</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>10</td><td>Mobile & Accessibility</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>11</td><td>Performance (Lighthouse)</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>12</td><td>Email Flows</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>13</td><td>Stripe Billing</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>14</td><td>Error States</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+        <tr><td>15</td><td>Final Infrastructure</td><td></td><td></td><td class="status-col">☐ Pass</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:24px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;">
+      <div style="display:flex;gap:48px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Go / No-Go Decision</div>
+          <div style="font-size:18px;font-weight:700;color:#1C2B2D;border-bottom:2px solid #1C2B2D;padding-bottom:4px;min-width:180px;">&nbsp;</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Approved By</div>
+          <div style="font-size:18px;font-weight:700;color:#1C2B2D;border-bottom:2px solid #1C2B2D;padding-bottom:4px;min-width:180px;">&nbsp;</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Launch Date</div>
+          <div style="font-size:18px;font-weight:700;color:#1C2B2D;border-bottom:2px solid #1C2B2D;padding-bottom:4px;min-width:180px;">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px;font-size:11px;color:#94a3b8;text-align:center;">
+      OncoKind QA Testing Guide · Version 1.0 · June 2026 · oncokind.com
+    </div>
+  </div>
+</div>
+
+<!-- Print button (hidden in PDF) -->
+<div class="no-print" style="text-align:center;margin-top:32px;padding:24px;">
+  <button onclick="window.print()" style="background:#1C2B2D;color:white;border:none;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-right:12px;">
+    🖨 Save as PDF (File → Print → Save as PDF)
+  </button>
+  <span style="font-size:12px;color:#94a3b8;">Use Chrome or Edge for best print results · Set margins to Minimum</span>
+</div>
+
+</body>
+</html>

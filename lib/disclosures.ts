@@ -2,7 +2,7 @@ export const MEDICAL_DISCLAIMER_TEXT =
   'For educational support only. Not medical advice. Always consult your oncology team before making any treatment decisions.';
 
 export const GLOBAL_SITE_DISCLAIMER_TEXT =
-  'OncoKind is an educational support tool. Nothing on this platform constitutes medical advice. Always consult your oncologist or care team. OncoKind is not a substitute for professional medical guidance.';
+  'OncoKind is an educational support tool. Nothing on this site constitutes medical advice. Always consult your oncologist or care team before making any treatment decisions. OncoKind is not a substitute for professional medical guidance.';
 
 export const PATH_B_PRIVACY_LANGUAGE =
   'Built with privacy at its core. No raw report data retained. Educational tool — not a covered entity.';

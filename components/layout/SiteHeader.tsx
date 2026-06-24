@@ -16,7 +16,6 @@ export async function SiteHeader() {
     { href: '/#features', label: 'Features' },
     { href: '/pricing', label: 'Pricing' },
     { href: '/professional', label: 'For Professionals' },
-    { href: '/prior-auth-pro', label: 'Prior Auth Engine' },
     { href: '/community', label: 'Community' },
     { href: '/learn', label: 'Resources' },
   ];

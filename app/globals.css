@@ -22,44 +22,47 @@
     --color-accent-500: #b07a28;
     --color-accent-600: #8b5e2a;
 
-    /* Sage — Brand primary green (updated to spec) */
-    --color-sage-400: #a8c5be;
-    --color-sage-500: #2e6b5e;
-    --color-sage-600: #245a4e;
+    /* Teal — Brand primary (Implementation Brief spec) */
+    --color-sage-400: #9FE1CB;
+    --color-sage-500: #0F6E56;
+    --color-sage-600: #085041;
+    --color-teal-light: #E1F5EE;
+    --color-teal-mid: #9FE1CB;
+    --color-teal-dark: #085041;
 
-    /* Brand palette (Warm Precision spec) */
-    --brand-primary: #2e6b5e;
-    --brand-secondary: #4a9b8a;
+    /* Brand palette (Implementation Brief spec) */
+    --brand-primary: #0F6E56;
+    --brand-secondary: #0F6E56;
     --brand-accent: #e8845c;
     --brand-gold: #c9943a;
-    --brand-soft: #a8c5be;
+    --brand-soft: #9FE1CB;
 
     /* Text */
-    --color-text-primary: #1a2332;
-    --color-text-secondary: #4a5568;
-    --color-text-muted: #8896a4;
+    --color-text-primary: #1e2d2b;
+    --color-text-secondary: #5a6b68;
+    --color-text-muted: #5a6b68;
     --color-text-inverse: #f8f9fa;
-    --text-brand: #2e6b5e;
+    --text-brand: #0F6E56;
 
     /* Semantic backgrounds */
-    --color-bg-page: #fafaf8;
-    --color-bg-section-alt: #f4f3ef;
-    --color-bg-dark: #1c2b3a;
-    --color-border: #d4d1c9;
-    --color-border-subtle: #e8e6e0;
+    --color-bg-page: #f7faf9;
+    --color-bg-section-alt: #f7faf9;
+    --color-bg-dark: #1e2d2b;
+    --color-border: #cdd8d5;
+    --color-border-subtle: #cdd8d5;
 
     /* Named background tokens (spec aliases) */
-    --bg-base: #fafaf8;
+    --bg-base: #ffffff;
     --bg-surface: #ffffff;
-    --bg-subtle: #f4f3ef;
-    --bg-deep: #1c2b3a;
-    --bg-warm: #fdf6ee;
+    --bg-subtle: #f7faf9;
+    --bg-deep: #1e2d2b;
+    --bg-warm: #FAEEDA;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(160deg, #fafaf8 0%, #f0f7f5 40%, #fdf6ee 100%);
-    --gradient-cta: linear-gradient(135deg, #2e6b5e 0%, #4a9b8a 100%);
-    --gradient-warm: linear-gradient(135deg, #fdf6ee 0%, #f4f3ef 100%);
-    --gradient-deep: linear-gradient(160deg, #1c2b3a 0%, #243447 100%);
+    --gradient-hero: linear-gradient(160deg, #ffffff 0%, #E1F5EE 50%, #f7faf9 100%);
+    --gradient-cta: linear-gradient(135deg, #0F6E56 0%, #085041 100%);
+    --gradient-warm: linear-gradient(135deg, #FAEEDA 0%, #f7faf9 100%);
+    --gradient-deep: linear-gradient(160deg, #1e2d2b 0%, #243447 100%);
 
     /* Typography scale */
     --text-xs: 0.75rem;
