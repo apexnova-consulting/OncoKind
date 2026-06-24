@@ -7,6 +7,7 @@ import {
   Calendar,
   Check,
   ChevronDown,
+  ClipboardList,
   FileCheck,
   FileText,
   FlaskConical,
@@ -164,6 +165,14 @@ const features = [
     Icon: MessageCircle,
     tag: 'All plans',
     tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
+  },
+  {
+    href: '/prior-auth-pro',
+    title: 'Prior Authorization Engine',
+    desc: 'Generate a complete prior authorization letter in minutes — built around your loved one\'s exact diagnosis, biomarkers, and NCCN guidelines. Turn a 10-hour task into one upload.',
+    Icon: ClipboardList,
+    tag: 'Professional',
+    tagStyle: 'bg-[#1e2d2b] text-white border border-[#1e2d2b]',
   },
 ];
 
@@ -572,7 +581,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">What OncoKind builds for you</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              Eight tools. One mission: prepare you for what&apos;s next.
+              Nine tools. One mission: prepare you for what&apos;s next.
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
               Every feature was built because a caregiver needed it and couldn&apos;t find it
