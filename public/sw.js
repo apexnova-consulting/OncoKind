@@ -50,5 +50,13 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Everything else (pages, RSC, JSON, images): always network — no stale UI after deploy
-  event.respondWith(fetch(request));
+  event.respondWith(
+    fetch(request).catch(() =>
+      new Response('Network error — please check your connection.', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'text/plain' },
+      })
+    )
+  );
 });

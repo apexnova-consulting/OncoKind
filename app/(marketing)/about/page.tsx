@@ -167,15 +167,15 @@ export default function AboutPage() {
           <p className="mt-2 text-sm text-white/50">Mike Nielson, Founder, OncoKind</p>
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
-            {/* Video */}
-            <div className="mx-auto w-full max-w-[32rem] overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-[var(--color-primary-900)] p-4 shadow-[var(--shadow-lg)] lg:max-w-none">
+            {/* Video — container tightly wraps the video, no padding gap */}
+            <div className="mx-auto w-full max-w-[28rem] overflow-hidden rounded-[var(--radius-xl)] border border-white/10 shadow-[var(--shadow-lg)] lg:max-w-none">
               <video
-                className="h-auto w-full rounded-[calc(var(--radius-xl)-0.25rem)] object-contain"
+                className="block h-auto w-full object-cover"
                 src="https://res.cloudinary.com/dlfgwspxw/video/upload/q_auto/f_auto/v1778522170/OncoKind_Marketing_2_lhufi5.mp4"
-                muted
-                loop
                 playsInline
                 controls
+                preload="metadata"
+                aria-label="Mike Nielson, Founder of OncoKind, shares the personal story behind why he built the platform"
               />
             </div>
 

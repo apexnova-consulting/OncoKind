@@ -34,6 +34,7 @@ const comparisonRows: [string, string, string, string, string][] = [
   ['Branded portal', '—', '—', '—', '✓'],
   ['HIPAA BAA', '—', '—', '—', '✓'],
   ['Enterprise security review', '—', '—', '—', '✓'],
+  ['Prior Auth Engine (KindAuth)', '—', '—', '—', '✓'],
   ['Support', 'Community', 'Email', 'Priority email', 'Dedicated'],
 ];
 
@@ -96,7 +97,7 @@ export default async function PricingPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const showYearlyBilling = false;
+  const showYearlyBilling = true;
 
   const [proMonthly, proYearly, advocateMonthly, advocateYearly] = await Promise.all([
     getPriceDisplay(stripePrices.proMonthly, '$19', '/month'),

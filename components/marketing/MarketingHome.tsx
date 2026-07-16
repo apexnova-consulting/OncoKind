@@ -630,38 +630,58 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
 
       {/* ── 6. Founder Trust Bridge ──────────────────────────── */}
       <section className="bg-[#1e2d2b] px-4 py-[var(--section-padding-y)] text-white">
-        <div className="mx-auto max-w-[var(--max-width-wide)]">
+        <div className="mx-auto max-w-[var(--max-width-full)]">
           <Reveal className="text-center">
             <p className="eyebrow" style={{ color: '#9FE1CB' }}>Why this exists</p>
             <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
               Why this exists — and why it&apos;s personal.
             </h2>
           </Reveal>
-          <Reveal delay={0.1} className="mx-auto mt-10 max-w-2xl">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-8 sm:p-10">
-              <blockquote className="text-[1.05rem] leading-[1.85] text-white/90 italic">
-                &ldquo;I built OncoKind because my mom is fighting Stage 4 cancer and I had no idea
-                what any of it meant. I lost my grandmother to cancer at 9. My grandfather at 15.
-                My dad had a kidney removed at 16. My cousin — who was more like a brother — died
-                one month after his diagnosis at 28. And when my mom&apos;s diagnosis came, I still
-                couldn&apos;t read her pathology report. I still didn&apos;t know what her
-                biomarkers meant. I still sat in a waiting room without the questions I should have
-                been asking. Every feature in OncoKind exists because a family needed it and
-                couldn&apos;t find it anywhere. This is the tool I wish I had.&rdquo;
-              </blockquote>
-              <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#9FE1CB]">
-                — Mike Nielson, Founder &amp; CEO, OncoKind
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.2} className="mt-8 text-center">
-            <Link
-              href="/about"
-              className="text-sm text-white/60 underline-offset-4 hover:text-white hover:underline"
-            >
-              Read the full founder story →
-            </Link>
-          </Reveal>
+
+          <div className="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)] lg:gap-14">
+
+            {/* Video — portrait, no autoplay, controls */}
+            <Reveal className="mx-auto w-full max-w-[18rem] lg:max-w-none">
+              <div className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+                <video
+                  className="block h-auto w-full object-cover"
+                  src="https://res.cloudinary.com/dlfgwspxw/video/upload/q_auto/f_auto/v1778522170/OncoKind_Marketing_2_lhufi5.mp4"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  aria-label="Mike Nielson, Founder of OncoKind, shares the personal story behind why he built the platform"
+                />
+              </div>
+            </Reveal>
+
+            {/* Story + quote */}
+            <Reveal delay={0.1}>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-8 sm:p-10">
+                <blockquote className="text-[1.05rem] leading-[1.85] text-white/90 italic">
+                  &ldquo;I built OncoKind because my mom is fighting Stage 4 cancer and I had no
+                  idea what any of it meant. I lost my grandmother to cancer at 9. My grandfather
+                  at 15. My dad had a kidney removed at 16. My cousin — who was more like a
+                  brother — died one month after his diagnosis at 28. And when my mom&apos;s
+                  diagnosis came, I still couldn&apos;t read her pathology report. I still
+                  didn&apos;t know what her biomarkers meant. I still sat in a waiting room without
+                  the questions I should have been asking. Every feature in OncoKind exists because
+                  a family needed it and couldn&apos;t find it anywhere. This is the tool I wish I
+                  had.&rdquo;
+                </blockquote>
+                <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#9FE1CB]">
+                  — Mike Nielson, Founder &amp; CEO, OncoKind
+                </p>
+              </div>
+              <div className="mt-6">
+                <Link
+                  href="/about"
+                  className="text-sm text-white/60 underline-offset-4 hover:text-white hover:underline"
+                >
+                  Read the full founder story →
+                </Link>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
