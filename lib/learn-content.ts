@@ -1216,6 +1216,90 @@ export const LEARN_ARTICLES: LearnArticle[] = [
       },
     ],
   },
+  {
+    slug: 'palliative-care-vs-hospice',
+    title: 'Palliative Care vs. Hospice: What\'s the Difference?',
+    metaDescription:
+      'Most families confuse palliative care with hospice. They are very different — and understanding the difference can change what support is available to your loved one right now.',
+    category: 'Caregiver Guides',
+    excerpt:
+      'Palliative care can start at any point in cancer treatment, even during active therapy. Hospice is different. Here\'s what each means in plain language.',
+    sections: [
+      {
+        heading: 'The single most important thing to know',
+        paragraphs: [
+          'Palliative care and hospice are not the same thing. Palliative care can start the day of a cancer diagnosis — even while treatment is actively ongoing. Hospice is a specific type of end-of-life care for people who are no longer seeking curative treatment.',
+          'Many families avoid asking about palliative care because they assume it means giving up. It does not. It means adding a layer of specialized support — for symptoms, for communication, for quality of life — that runs alongside whatever treatment is already happening.',
+          'This distinction matters because families who access palliative care early often report better quality of life. The conversation is worth having, and this is the right time to have it.',
+        ],
+      },
+      {
+        heading: 'What palliative care actually is',
+        paragraphs: [
+          'Palliative care is specialized medical care focused on providing relief from the symptoms, side effects, and stress of a serious illness. It is delivered by a team of doctors, nurses, and other specialists who work alongside your loved one\'s primary oncology team.',
+          'The goal is to improve quality of life for both your loved one and your family. Palliative care specialists can help manage pain, fatigue, nausea, anxiety, and other side effects of treatment. They also help with difficult conversations and decision-making.',
+          'Palliative care is appropriate at any stage of cancer and can be provided together with curative or treatment-focused care. It is covered by most insurance plans, including Medicare and Medicaid.',
+        ],
+        bullets: [
+          'Available at any stage of cancer — including during active treatment',
+          'Focused on comfort, symptom relief, and quality of life',
+          'Works alongside your existing oncology team, not instead of them',
+          'Includes emotional and family support — not just physical symptoms',
+          'Covered by most insurance, including Medicare Part B',
+        ],
+      },
+      {
+        heading: 'What hospice is — and isn\'t',
+        paragraphs: [
+          'Hospice is a specific program for people who have decided to stop curative treatment and focus entirely on comfort care, typically when a physician has determined that life expectancy is six months or less if the illness follows its expected course.',
+          'Hospice is not giving up — it is a considered, often deeply compassionate choice that many families describe as giving their loved one the best possible final months. Hospice teams provide intensive support at home, in a facility, or in a dedicated hospice setting.',
+          'The key difference: palliative care runs alongside any treatment. Hospice replaces curative treatment and becomes the primary focus of care.',
+        ],
+        bullets: [
+          'For people no longer seeking curative treatment',
+          'Requires a physician to certify a prognosis of six months or less if the illness runs its expected course',
+          'Intensive comfort-focused care delivered at home or in a facility',
+          'Deeply compassionate — many families say it was the most supported they felt',
+          'Can be reversed — a person can leave hospice to pursue treatment if they choose',
+        ],
+      },
+      {
+        heading: 'Questions to ask your oncology team',
+        paragraphs: [
+          'You do not need to wait for your oncologist to bring this up. These questions are appropriate at any point in care and will not be perceived as giving up.',
+        ],
+        bullets: [
+          'Is palliative care available to us now, alongside treatment?',
+          'Is there a palliative care specialist on or affiliated with this care team?',
+          'What symptoms or side effects would palliative care help manage?',
+          'How is palliative care different from the support we\'re already getting?',
+          'When would hospice become something we should think about?',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Will asking about palliative care upset my oncologist?',
+        answer:
+          'No. Most oncologists welcome the question. Palliative care specialists support the oncology team — they do not compete with it. If a care team responds negatively, that itself is useful information.',
+      },
+      {
+        question: 'Does insurance cover palliative care?',
+        answer:
+          'Most private insurance plans, Medicare, and Medicaid cover palliative care services. Coverage varies, so it is worth confirming with your insurance what is included. Hospice is covered under Medicare Hospice Benefit, which is separate from regular Medicare.',
+      },
+      {
+        question: 'Can my loved one receive palliative care and still participate in a clinical trial?',
+        answer:
+          'Often yes, but this depends on the specific trial. Ask both your oncologist and the trial coordinator. Palliative care is frequently compatible with active trial participation.',
+      },
+      {
+        question: 'How do I bring this up with my loved one if they don\'t want to talk about it?',
+        answer:
+          'You can frame palliative care as "extra support" rather than a conversation about the future. Focusing on symptom relief and quality of life — rather than prognosis — is often an easier entry point. A palliative care specialist can also help facilitate these conversations.',
+      },
+    ],
+  },
 ];
 
 export function getLearnArticle(slug: string) {

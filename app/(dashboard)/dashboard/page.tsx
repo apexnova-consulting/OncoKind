@@ -3,14 +3,63 @@ import { TrialMatchesCard } from '@/components/dashboard/TrialMatchesCard';
 import { AppointmentQuestionGenerator } from '@/components/dashboard/AppointmentQuestionGenerator';
 import { CaregiverWellbeingCheckin } from '@/components/dashboard/CaregiverWellbeingCheckin';
 import { LiveFundingFeedCard } from '@/components/dashboard/LiveFundingFeedCard';
+import { GoalsOfCareCard } from '@/components/dashboard/GoalsOfCareCard';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, ExternalLink } from 'lucide-react';
 import { getProfile } from '@/lib/auth';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { getPatientReport } from '@/lib/patient-reports';
+
+const GOC_ENABLED = process.env.NEXT_PUBLIC_GOALS_OF_CARE_ENABLED === 'true';
+
+async function checkGoalsOfCareTrigger(userId: string): Promise<boolean> {
+  if (!GOC_ENABLED) return false;
+  try {
+    const supabase = await createServerSupabaseClient();
+
+    // Trigger 1: Stage IV / metastatic in latest report
+    const { data: reports } = await supabase
+      .from('patient_reports')
+      .select('id')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (reports?.[0]?.id) {
+      const report = await getPatientReport(reports[0].id, userId);
+      const stage = report?.biomarkers?.tnm_stage?.toLowerCase() ?? '';
+      const cancerType = report?.biomarkers?.cancer_type_inferred?.toLowerCase() ?? '';
+      if (
+        stage.includes('iv') ||
+        stage.includes('4') ||
+        cancerType.includes('metastatic') ||
+        cancerType.includes('stage 4')
+      ) {
+        return true;
+      }
+    }
+
+    // Trigger 2: 2nd or later line of treatment in Care Timeline
+    const { data: txEntries } = await supabase
+      .from('care_timeline_entries')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('milestone_type', 'treatment_start')
+      .limit(3);
+
+    if ((txEntries?.length ?? 0) >= 2) return true;
+
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 export default async function DashboardPage() {
-  const { isPro, isProfessional } = await getProfile();
+  const { isPro, isProfessional, user } = await getProfile();
+  const gocTriggered = user ? await checkGoalsOfCareTrigger(user.id) : false;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
@@ -57,6 +106,7 @@ export default async function DashboardPage() {
           </Card>
         )}
 
+        {GOC_ENABLED && <GoalsOfCareCard triggered={gocTriggered} />}
         <CaregiverWellbeingCheckin />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <PathologyTranslationCard />

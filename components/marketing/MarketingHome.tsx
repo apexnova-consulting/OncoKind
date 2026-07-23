@@ -658,15 +658,15 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             <Reveal delay={0.1}>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-8 sm:p-10">
                 <blockquote className="text-[1.05rem] leading-[1.85] text-white/90 italic">
-                  &ldquo;I built OncoKind because my mom is fighting Stage 4 cancer and I had no
-                  idea what any of it meant. I lost my grandmother to cancer at 9. My grandfather
-                  at 15. My dad had a kidney removed at 16. My cousin — who was more like a
-                  brother — died one month after his diagnosis at 28. And when my mom&apos;s
-                  diagnosis came, I still couldn&apos;t read her pathology report. I still
-                  didn&apos;t know what her biomarkers meant. I still sat in a waiting room without
-                  the questions I should have been asking. Every feature in OncoKind exists because
-                  a family needed it and couldn&apos;t find it anywhere. This is the tool I wish I
-                  had.&rdquo;
+                  &ldquo;I built OncoKind because my mom fought Stage 4 cancer, and I had no idea
+                  what any of it meant. She passed away on July 4, 2026. I lost my grandmother to
+                  cancer at 9. My grandfather at 15. My dad had a kidney removed at 16. My cousin
+                  — who was more like a brother — died one month after his diagnosis at 28. And
+                  when my mom&apos;s diagnosis came, I still couldn&apos;t read her pathology
+                  report. I still didn&apos;t know what her biomarkers meant. I still sat in a
+                  waiting room without the questions I should have been asking. Every feature in
+                  OncoKind exists because a family needed it and couldn&apos;t find it anywhere.
+                  This is the tool I wish I had.&rdquo;
                 </blockquote>
                 <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#9FE1CB]">
                   — Mike Nielson, Founder &amp; CEO, OncoKind

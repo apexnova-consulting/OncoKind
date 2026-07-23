@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Shield, Scale, Eye } from 'lucide-react';
 import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
 import { Button } from '@/components/ui/button';
@@ -6,11 +7,11 @@ import { Button } from '@/components/ui/button';
 export const metadata = {
   title: 'About OncoKind — Built by a Caregiver, for Caregivers',
   description:
-    'Mike Nielson built OncoKind while caring for his mother with Stage 4 cancer. Read the story behind the platform designed to give every family the clarity they deserve.',
+    'Mike Nielson built OncoKind while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
   openGraph: {
     title: 'About OncoKind — Built by a Caregiver, for Caregivers',
     description:
-      'Mike Nielson built OncoKind while caring for his mother with Stage 4 cancer. Read the story behind the platform designed to give every family the clarity they deserve.',
+      'Mike Nielson built OncoKind while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
   },
 };
 
@@ -167,16 +168,22 @@ export default function AboutPage() {
           <p className="mt-2 text-sm text-white/50">Mike Nielson, Founder, OncoKind</p>
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
-            {/* Video — container tightly wraps the video, no padding gap */}
-            <div className="mx-auto w-full max-w-[28rem] overflow-hidden rounded-[var(--radius-xl)] border border-white/10 shadow-[var(--shadow-lg)] lg:max-w-none">
-              <video
-                className="block h-auto w-full object-cover"
-                src="https://res.cloudinary.com/dlfgwspxw/video/upload/q_auto/f_auto/v1778522170/OncoKind_Marketing_2_lhufi5.mp4"
-                playsInline
-                controls
-                preload="metadata"
-                aria-label="Mike Nielson, Founder of OncoKind, shares the personal story behind why he built the platform"
-              />
+            {/* Founder photo — swap /images/founder-photo.jpg when photo is ready */}
+            <div className="mx-auto w-full max-w-[22rem] lg:max-w-none">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-xl)] border border-white/10 shadow-[var(--shadow-lg)] bg-[#162420]">
+                {/* Replace src with actual photo path once supplied */}
+                <Image
+                  src="/images/founder-photo.jpg"
+                  alt="Founder's mother"
+                  fill
+                  className="object-cover object-top"
+                  onError={undefined}
+                  unoptimized
+                />
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-[#9FE1CB]/80 italic">
+                Dedicated to my mom, who faced her cancer with more courage than I&apos;ve ever had to.
+              </p>
             </div>
 
             {/* Story */}
@@ -187,7 +194,7 @@ export default function AboutPage() {
                   I lost my grandmother at 9. My grandfather at 15. My dad had a kidney removed at
                   16. At 28, I lost my cousin — one month after his diagnosis.
                 </p>
-                <p className="font-medium text-white">And today, my mom is fighting Stage 4 metastatic cancer.</p>
+                <p className="font-medium text-white">My mom fought Stage 4 metastatic cancer with grace and courage. She passed away on July 4, 2026.</p>
                 <p>
                   When she was diagnosed, I became her caregiver. I sat in appointments I
                   didn&apos;t understand, went home and searched terms I couldn&apos;t pronounce,
