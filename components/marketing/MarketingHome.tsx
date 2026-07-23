@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowRight,
+  BookHeart,
   Calendar,
   Check,
   ChevronDown,
@@ -174,6 +176,14 @@ const features = [
     tag: 'Professional',
     tagStyle: 'bg-[#1e2d2b] text-white border border-[#1e2d2b]',
   },
+  {
+    href: '/journey/goals-of-care',
+    title: 'Goals of Care Prep Sheet',
+    desc: 'When the conversation shifts to what matters most, OncoKind prepares you for it. AI-personalized questions to guide goals-of-care conversations with your care team — with empathy, not fear.',
+    Icon: BookHeart,
+    tag: 'New',
+    tagStyle: 'bg-[#FAEEDA] text-[#8b5e2a] border border-[#f0d5b8]',
+  },
 ];
 
 const faqs = [
@@ -212,18 +222,19 @@ function HeroDemoCard() {
         </p>
       </div>
       <div className="divide-y divide-[#cdd8d5]">
-        <DemoRow label="Cancer type" value="Non-small cell lung cancer (NSCLC)" />
-        <DemoRow label="Stage" value="Stage IIIA" />
+        <DemoRow label="Cancer type" value="Vulvar squamous cell carcinoma" />
+        <DemoRow label="Stage" value="Stage IV" />
         <DemoRow
-          label="PD-L1 biomarker"
-          value="60%"
-          note="Immunotherapy may be especially effective"
+          label="HPV status"
+          value="Positive (p16+)"
+          note="Associated with immunotherapy eligibility"
           notePositive
         />
         <DemoRow
-          label="EGFR"
-          value="Negative"
-          note="Targeted therapies not the current focus"
+          label="PD-L1 (CPS)"
+          value="≥10 — Positive"
+          note="Pembrolizumab being evaluated"
+          notePositive
         />
         <div className="flex items-start gap-3 px-5 py-3.5 bg-[#f7faf9]">
           <span className="text-sm text-[#5a6b68] font-medium min-w-[120px] shrink-0">Next step</span>
@@ -235,7 +246,7 @@ function HeroDemoCard() {
       </div>
       <div className="px-5 py-3 bg-[#f7faf9] border-t border-[#cdd8d5]">
         <p className="text-xs text-[#5a6b68]">
-          Fictional sample patient. For educational illustration only.
+          Based on Rosemarie N. For educational illustration only.
         </p>
       </div>
     </div>
@@ -581,7 +592,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">What OncoKind builds for you</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              Nine tools. One mission: prepare you for what&apos;s next.
+              Ten tools. One mission: prepare you for what&apos;s next.
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
               Every feature was built because a caregiver needed it and couldn&apos;t find it
@@ -640,18 +651,21 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
 
           <div className="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)] lg:gap-14">
 
-            {/* Video — portrait, no autoplay, controls */}
+            {/* Mom's photo */}
             <Reveal className="mx-auto w-full max-w-[18rem] lg:max-w-none">
-              <div className="overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
-                <video
-                  className="block h-auto w-full object-cover"
-                  src="https://res.cloudinary.com/dlfgwspxw/video/upload/q_auto/f_auto/v1778522170/OncoKind_Marketing_2_lhufi5.mp4"
-                  controls
-                  playsInline
-                  preload="metadata"
-                  aria-label="Mike Nielson, Founder of OncoKind, shares the personal story behind why he built the platform"
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+                <Image
+                  src="/images/founder-photo.jpg"
+                  alt="Founder's mother"
+                  fill
+                  sizes="(max-width: 1024px) 288px, 360px"
+                  className="object-cover object-top"
+                  priority
                 />
               </div>
+              <p className="mt-3 text-sm leading-relaxed text-[#9FE1CB]/70 italic text-center">
+                Dedicated to my mom, who faced her cancer with more courage than I&apos;ve ever had to.
+              </p>
             </Reveal>
 
             {/* Story + quote */}

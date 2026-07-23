@@ -19,52 +19,53 @@ type TabId = (typeof tabs)[number]['id'];
 
 const biomarkerCards = [
   {
-    label: 'PD-L1: 60%',
+    label: 'HPV Status: Positive (p16+)',
     tone: 'positive',
     description:
-      'A high PD-L1 score means immunotherapy may be especially effective. This is an important finding.',
+      'HPV-positive vulvar cancer is associated with certain immunotherapy eligibility and can influence treatment planning. This is an important finding to discuss with the oncology team.',
   },
   {
-    label: 'EGFR: Negative',
+    label: 'PD-L1 (CPS): ≥10 — Positive',
+    tone: 'positive',
+    description:
+      'A CPS of 10 or higher may make your loved one eligible for pembrolizumab (immunotherapy). Your oncologist will evaluate whether this is part of the treatment plan.',
+  },
+  {
+    label: 'BRCA1/2: Negative',
     tone: 'neutral',
     description:
-      'Certain targeted therapies would not apply here. Your oncologist will focus on other options.',
-  },
-  {
-    label: 'ALK: Negative',
-    tone: 'neutral',
-    description: 'ALK inhibitors are not a current consideration.',
+      'No hereditary BRCA mutation detected. This affects some targeted therapy options, and your oncologist may recommend additional molecular testing.',
   },
 ] as const;
 
 const trialCards = [
   {
-    id: 'keynote-789',
-    title: 'KEYNOTE-789',
-    meta: 'Phase III',
+    id: 'keynote-158',
+    title: 'KEYNOTE-158',
+    meta: 'Phase II',
     category: 'Immunotherapy',
-    summary: 'Pembrolizumab + Chemotherapy for Stage III NSCLC',
-    why: 'PD-L1 ≥ 50%, Stage IIIA, no prior treatment',
-    distance: '~12 miles — Memorial Cancer Center',
+    summary: 'Pembrolizumab for PD-L1 Positive Advanced Solid Tumors (incl. vulvar)',
+    why: 'PD-L1 CPS ≥10, Stage IV, HPV-positive squamous cell carcinoma',
+    distance: '~9 miles — Regional Cancer Center',
     status: 'Enrolling',
     detail:
-      'This sample match highlights why PD-L1 expression and stage matter together. It gives caregivers a concrete trial name to ask about during the first oncology visit.',
+      'This trial evaluates pembrolizumab in patients with PD-L1 positive solid tumors, including vulvar cancer. HPV-positive and high PD-L1 status are both relevant eligibility factors here.',
     doctorPrompt:
-      'Can we talk about whether KEYNOTE-789 or a similar pembrolizumab-based trial is relevant for my stage, PD-L1 score, and treatment plan?',
+      'Given that the PD-L1 CPS is ≥10 and HPV status is positive, are we a candidate for pembrolizumab — either through a trial like KEYNOTE-158 or as standard of care?',
   },
   {
-    id: 'checkmate-816',
-    title: 'CheckMate-816',
-    meta: 'Phase III',
+    id: 'gog-vul-01',
+    title: 'Cisplatin + Paclitaxel + Pembrolizumab',
+    meta: 'Phase II',
     category: 'Combination Therapy',
-    summary: 'Nivolumab + Chemotherapy (Neoadjuvant)',
-    why: 'Stage IIIA, resectable tumor, EGFR/ALK negative',
-    distance: '~28 miles — University Medical Center',
+    summary: 'Chemotherapy Combined with Immunotherapy for Advanced Vulvar Cancer',
+    why: 'Stage IV vulvar squamous cell carcinoma, PD-L1 positive, no prior systemic therapy',
+    distance: '~22 miles — University Medical Center',
     status: 'Enrolling',
     detail:
-      'This example shows how resectability and biomarker exclusions can affect trial fit. It is the kind of plain-language context families need before meeting with the care team.',
+      'This trial evaluates whether adding pembrolizumab to standard chemotherapy improves outcomes in advanced vulvar cancer. It is an example of the combination approach many oncologists are exploring for PD-L1 positive cases.',
     doctorPrompt:
-      'Is CheckMate-816, or another neoadjuvant immunotherapy option, something we should consider because the tumor may be resectable and EGFR / ALK are negative?',
+      'Is there a clinical trial combining chemotherapy with pembrolizumab for Stage IV vulvar cancer that we should consider, given the PD-L1 CPS of ≥10?',
   },
 ] as const;
 
@@ -109,18 +110,21 @@ export function SampleReportDemo() {
             Try a sample caregiver report before you sign up.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[var(--color-surface-300)] sm:text-base">
-            Margaret T., 64 — Non-Small Cell Lung Cancer (NSCLC), Stage IIIA, PD-L1: 60%, EGFR:
-            Negative, ALK: Negative
+            Rosemarie N. — Vulvar Squamous Cell Carcinoma (VSCC), Stage IV, HPV: Positive (p16+),
+            PD-L1 CPS: ≥10, BRCA1/2: Negative
           </p>
           <div className="mt-6 space-y-4 rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
             <InfoRow label="Cancer Type" value="Non-Small Cell Lung Cancer (NSCLC)" />
             <InfoRow label="Stage" value="Stage IIIA" />
             <InfoRow label="Next Milestone" value="First oncology appointment" />
           </div>
-          <p className="mt-6 text-sm leading-relaxed text-[var(--color-surface-300)]">
-            Click through the profile, doctor prep sheet, and sample clinical trial matches to see
-            how OncoKind turns a report into something a caregiver can actually use.
-          </p>
+        <p className="mt-6 text-sm leading-relaxed text-[var(--color-surface-300)]">
+          Click through the profile, doctor prep sheet, and sample clinical trial matches to see
+          how OncoKind turns a pathology report into something a caregiver can actually use.
+        </p>
+        <p className="mt-3 text-xs leading-relaxed text-[var(--color-surface-400)]">
+          Profile based on Rosemarie N. For educational illustration only.
+        </p>
         </aside>
 
         <div>
@@ -229,7 +233,7 @@ export function SampleReportDemo() {
 }
 
 function CancerProfilePanel() {
-  const sources = getCancerProfileSources('Non-Small Cell Lung Cancer');
+  const sources = getCancerProfileSources('Vulvar Squamous Cell Carcinoma');
   return (
     <div className="space-y-5">
       <div className="rounded-[var(--radius-lg)] border border-[rgba(85,136,123,0.18)] bg-[rgba(99,164,145,0.08)] p-5 sm:p-6">
@@ -239,20 +243,20 @@ function CancerProfilePanel() {
               Cancer Profile
             </p>
             <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--color-primary-900)]">
-              Margaret T., 64
+              Rosemarie N.
             </h3>
           </div>
           <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[var(--color-primary-700)]">
-            Fictional sample patient
+            Sample profile
           </span>
         </div>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-[180px_1fr]">
-          <ProfileRow label="Cancer Type" value="Non-Small Cell Lung Cancer (NSCLC)" />
-          <ProfileRow label="Stage" value="Stage IIIA" />
+          <ProfileRow label="Cancer Type" value="Vulvar Squamous Cell Carcinoma (VSCC)" />
+          <ProfileRow label="Stage" value="Stage IV" />
           <ProfileRow
             label="What This Means"
-            value="The cancer has spread to nearby lymph nodes but has not reached distant organs. Stage IIIA is often treated with a combination of approaches."
+            value="Stage IV means the cancer has spread beyond the vulva. The care team will review imaging and other findings to determine the treatment plan. Many options remain on the table and your oncologist will walk through each one."
           />
           <div className="sm:col-span-2">
             <p className="text-sm font-semibold text-[var(--color-primary-900)]">Key Biomarkers</p>
@@ -289,7 +293,7 @@ function CancerProfilePanel() {
 }
 
 function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) {
-  const sources = getCancerProfileSources('Non-Small Cell Lung Cancer');
+  const sources = getCancerProfileSources('Vulvar Squamous Cell Carcinoma');
   return (
     <div className="space-y-4">
       <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-sm)] sm:p-6">
@@ -306,17 +310,18 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
 
         <div className="mt-6 space-y-6 text-sm leading-relaxed text-[var(--color-text-secondary)]">
           <section>
-            <h4 className="font-semibold text-[var(--color-primary-900)]">Understanding Your Diagnosis</h4>
+            <h4 className="font-semibold text-[var(--color-primary-900)]">Understanding the Diagnosis</h4>
             <p className="mt-2">
-              Stage IIIA NSCLC means the cancer is still in the chest, but it has spread beyond
-              the original tumor to nearby lymph nodes. It has not reached distant organs, which is
-              why your care team may talk about a combination of treatments such as chemotherapy,
-              radiation, immunotherapy, or surgery depending on the full picture.
+              Stage IV vulvar squamous cell carcinoma means the cancer has spread beyond the vulva.
+              The HPV-positive (p16+) status and PD-L1 CPS of ≥10 are important findings — they
+              may open the door to immunotherapy options, including pembrolizumab, alongside
+              standard chemotherapy. Your oncology team will review imaging and other details to
+              build the full treatment plan.
             </p>
             <p className="mt-2">
-              This stage often requires careful planning across more than one specialist. Asking how
-              each part of the treatment plan fits together can help you feel more grounded before
-              decisions are made.
+              Treatment for Stage IV vulvar cancer often involves more than one specialist working
+              together. Asking how each part of the plan fits together — and what the goal of
+              treatment is — helps you walk in prepared.
             </p>
           </section>
 
@@ -324,16 +329,23 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
             <h4 className="font-semibold text-[var(--color-primary-900)]">Questions to Ask Your Oncologist</h4>
             <ol className="mt-2 list-decimal space-y-2 pl-5">
               <li>
-                Given my PD-L1 score of 60%, am I a candidate for immunotherapy such as
-                pembrolizumab either alone or in combination?
+                Given the PD-L1 CPS of ≥10 and HPV-positive status, is pembrolizumab
+                (immunotherapy) part of the treatment plan — either alone or combined with
+                chemotherapy?
               </li>
-              <li>Should I be tested for additional biomarkers like ROS1, MET, or KRAS?</li>
-              <li>What is the goal of treatment — curative, control, or palliative?</li>
               <li>
-                What clinical trials are available for Stage IIIA NSCLC with high PD-L1 expression
-                in this area?
+                What chemotherapy regimen is being recommended, and what side effects should we
+                watch for?
               </li>
-              <li>How will we monitor my response to treatment?</li>
+              <li>
+                What is the primary goal of treatment right now — to reduce the cancer, to manage
+                symptoms, or something else?
+              </li>
+              <li>
+                Are there clinical trials for Stage IV vulvar cancer that we should consider, given
+                the PD-L1 and HPV findings?
+              </li>
+              <li>How will we know if the treatment is working, and how often will we check?</li>
             </ol>
           </section>
 

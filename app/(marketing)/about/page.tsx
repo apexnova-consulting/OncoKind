@@ -170,15 +170,14 @@ export default function AboutPage() {
           <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
             {/* Founder photo — swap /images/founder-photo.jpg when photo is ready */}
             <div className="mx-auto w-full max-w-[22rem] lg:max-w-none">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-xl)] border border-white/10 shadow-[var(--shadow-lg)] bg-[#162420]">
-                {/* Replace src with actual photo path once supplied */}
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-xl)] border border-white/10 shadow-[var(--shadow-lg)]">
                 <Image
                   src="/images/founder-photo.jpg"
                   alt="Founder's mother"
                   fill
+                  sizes="(max-width: 768px) 100vw, 420px"
                   className="object-cover object-top"
-                  onError={undefined}
-                  unoptimized
+                  priority
                 />
               </div>
               <p className="mt-3 text-sm leading-relaxed text-[#9FE1CB]/80 italic">
