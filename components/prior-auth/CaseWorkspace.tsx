@@ -60,7 +60,9 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
   const router = useRouter();
   const [documentText, setDocumentText] = useState(caseData.ai_generated_document ?? '');
   const [status, setStatus] = useState(caseData.status);
+  const [statusSaved, setStatusSaved] = useState(false);
   const [denialText, setDenialText] = useState('');
+  const [denialError, setDenialError] = useState('');
   const [denialAnalysis, setDenialAnalysis] = useState(caseData.ai_denial_analysis ?? '');
   const [analyzing, setAnalyzing] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
@@ -81,6 +83,8 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
         }),
       });
       setStatus(newStatus);
+      setStatusSaved(true);
+      setTimeout(() => setStatusSaved(false), 3000);
     } finally {
       setUpdatingStatus(false);
       setShowOutcomeModal(null);
@@ -88,7 +92,11 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
   }
 
   async function analyzeDenial() {
-    if (!denialText.trim()) return;
+    if (denialText.trim().length < 20) {
+      setDenialError('Please enter at least 20 characters of denial letter text.');
+      return;
+    }
+    setDenialError('');
     setAnalyzing(true);
     try {
       const res = await fetch('/api/prior-auth/analyze-denial', {
@@ -163,7 +171,13 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
 
         {/* Status selector */}
         <div className="flex shrink-0 items-center gap-2">
+          {statusSaved && (
+            <span className="text-xs text-[#6B8F71]">Updated</span>
+          )}
+          <label htmlFor="pa-case-status" className="sr-only">Status</label>
           <select
+            id="pa-case-status"
+            aria-label="Status"
             value={status}
             onChange={(e) => {
               const next = e.target.value;
@@ -303,15 +317,21 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
               </div>
             ) : (
               <>
+                <label htmlFor="pa-denial-text" className="sr-only">Denial Letter Text</label>
                 <textarea
+                  id="pa-denial-text"
+                  aria-label="Denial Letter Text"
                   value={denialText}
-                  onChange={(e) => setDenialText(e.target.value)}
+                  onChange={(e) => { setDenialText(e.target.value); setDenialError(''); }}
                   className="h-24 w-full resize-none rounded-lg border border-slate-200 bg-white p-3 text-xs focus:outline-none focus:ring-2 focus:ring-[#6B8F71]"
                   placeholder="Paste denial letter text here..."
                 />
+                {denialError && (
+                  <p className="mt-1 text-xs text-red-500">{denialError}</p>
+                )}
                 <Button
                   onClick={analyzeDenial}
-                  disabled={analyzing || denialText.trim().length < 20}
+                  disabled={analyzing}
                   className="mt-2 h-8 w-full bg-[#1C2B2D] text-xs text-white hover:bg-[#2d4042]"
                 >
                   {analyzing ? (
@@ -363,7 +383,7 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
       {/* Outcome modal */}
       {showOutcomeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
+          <div role="dialog" aria-modal="true" aria-label={`Mark as ${showOutcomeModal}`} className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
             <div className="mb-4 flex items-center gap-3">
               {showOutcomeModal === 'approved' ? (
                 <CheckCircle className="h-6 w-6 text-green-500" />
@@ -374,7 +394,10 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
                 Mark as {showOutcomeModal === 'approved' ? 'Approved' : 'Denied'}
               </h3>
             </div>
+            <label htmlFor="pa-outcome-notes" className="sr-only">Notes</label>
             <textarea
+              id="pa-outcome-notes"
+              aria-label="Notes"
               value={outcomeNotes}
               onChange={(e) => setOutcomeNotes(e.target.value)}
               className="mb-4 h-20 w-full resize-none rounded-lg border border-slate-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#6B8F71]"

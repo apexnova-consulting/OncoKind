@@ -74,6 +74,7 @@ const STATE_LAW_LABELS: Record<string, string> = {
 function getInitialStep(type?: CaseType): number {
   if (!type) return 0;
   if (type === 'continued_stay') return 3;
+  if (type === 'step_therapy') return 3; // start directly at Medication & Drug History
   return 1;
 }
 
@@ -88,7 +89,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
     patient_identifier: '',
     facility_name: '',
     facility_npi: '',
-    facility_state: '',
+    facility_state: initialCaseType === 'step_therapy' ? 'PA' : '',
     facility_type: 'Skilled Nursing Facility',
     prescribing_physician: '',
     payer_name: '',
@@ -109,7 +110,12 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
   });
 
   const steps = STEPS_BY_TYPE[caseType];
-  const currentStepLabel = steps[step] ?? '';
+  // When arriving with a pre-selected type (from a dashboard card), exclude the
+  // "Case Type" step from the visible count so numbering starts at "Step 1".
+  const hasPreselectedType = Boolean(initialCaseType);
+  const displaySteps = hasPreselectedType ? steps.slice(1) : steps;
+  const displayStep = hasPreselectedType ? Math.max(0, step - 1) : step;
+  const currentStepLabel = displaySteps[displayStep] ?? steps[step] ?? '';
 
   function update<K extends keyof FormData>(field: K, value: FormData[K]) {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -169,7 +175,8 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
 
   const isFinalStep =
     step === steps.length - 1 ||
-    (caseType === 'continued_stay' && step === 3);
+    (caseType === 'continued_stay' && step === 3) ||
+    (caseType === 'step_therapy' && step === 4);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -187,39 +194,39 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
       {/* Step indicator */}
       <div
         role="progressbar"
-        aria-valuenow={step + 1}
+        aria-valuenow={displayStep + 1}
         aria-valuemin={1}
-        aria-valuemax={steps.length}
-        aria-label={`Step ${step + 1} of ${steps.length}: ${currentStepLabel}`}
+        aria-valuemax={displaySteps.length}
+        aria-label={`Step ${displayStep + 1} of ${displaySteps.length}: ${currentStepLabel}`}
         className="mb-4 flex items-center gap-2 overflow-x-auto pb-2"
       >
-        {steps.map((label, i) => (
+        {displaySteps.map((label, i) => (
           <div key={i} className="flex shrink-0 items-center gap-2">
             <div
               className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium transition-colors ${
-                i < step
+                i < displayStep
                   ? 'bg-[#6B8F71] text-white'
-                  : i === step
+                  : i === displayStep
                   ? 'bg-[#1C2B2D] text-white'
                   : 'bg-slate-100 text-slate-400'
               }`}
             >
-              {i < step ? '✓' : i + 1}
+              {i < displayStep ? '✓' : i + 1}
             </div>
             <span
               className={`text-xs transition-colors ${
-                i === step ? 'font-medium text-[#1C2B2D]' : 'text-slate-400'
+                i === displayStep ? 'font-medium text-[#1C2B2D]' : 'text-slate-400'
               }`}
             >
               {label}
             </span>
-            {i < steps.length - 1 && <div className="h-px w-6 shrink-0 bg-slate-200" />}
+            {i < displaySteps.length - 1 && <div className="h-px w-6 shrink-0 bg-slate-200" />}
           </div>
         ))}
       </div>
 
       <p className="mb-4 text-xs font-medium text-slate-500" aria-hidden>
-        Step {step + 1} of {steps.length} — {currentStepLabel}
+        Step {displayStep + 1} of {displaySteps.length} — {currentStepLabel}
       </p>
 
       <Card className="border border-slate-200 bg-white p-6">
@@ -278,8 +285,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
             </p>
             <div className={fieldGroupClass}>
               <div>
-                <label className={labelClass}>Patient Identifier (non-PHI) *</label>
+                <label htmlFor="pa-patient-ref" className={labelClass}>Patient Ref (non-PHI) *</label>
                 <input
+                  id="pa-patient-ref"
+                  aria-label="Patient Ref"
                   className={inputClass}
                   placeholder="e.g. Room 14B, Patient A.J., or internal ID"
                   value={formData.patient_identifier}
@@ -287,8 +296,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 />
               </div>
               <div>
-                <label className={labelClass}>Facility Name *</label>
+                <label htmlFor="pa-facility-name" className={labelClass}>Facility Name *</label>
                 <input
+                  id="pa-facility-name"
+                  aria-label="Facility Name"
                   className={inputClass}
                   placeholder="e.g. Sunrise Skilled Nursing Center"
                   value={formData.facility_name}
@@ -297,8 +308,9 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className={labelClass}>Facility NPI</label>
+                  <label htmlFor="pa-facility-npi" className={labelClass}>Facility NPI</label>
                   <input
+                    id="pa-facility-npi"
                     className={inputClass}
                     placeholder="10-digit NPI"
                     value={formData.facility_npi}
@@ -306,19 +318,25 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                   />
                 </div>
                 <div>
-                  <label className={labelClass}>Facility State *</label>
-                  <input
+                  <label htmlFor="pa-facility-state" className={labelClass}>State *</label>
+                  <select
+                    id="pa-facility-state"
+                    aria-label="State"
                     className={inputClass}
-                    placeholder="e.g. PA, NJ, NY"
                     value={formData.facility_state}
-                    maxLength={2}
-                    onChange={(e) => update('facility_state', e.target.value.toUpperCase())}
-                  />
+                    onChange={(e) => update('facility_state', e.target.value)}
+                  >
+                    <option value="">— Select —</option>
+                    {['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'].map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div>
-                <label className={labelClass}>Facility Type</label>
+                <label htmlFor="pa-facility-type" className={labelClass}>Facility Type</label>
                 <select
+                  id="pa-facility-type"
                   className={inputClass}
                   value={formData.facility_type}
                   onChange={(e) => update('facility_type', e.target.value)}
@@ -334,8 +352,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 </select>
               </div>
               <div>
-                <label className={labelClass}>Prescribing Physician</label>
+                <label htmlFor="pa-physician" className={labelClass}>Physician</label>
                 <input
+                  id="pa-physician"
+                  aria-label="Physician"
                   className={inputClass}
                   placeholder="Dr. Jane Smith, MD"
                   value={formData.prescribing_physician}
@@ -357,8 +377,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
             </p>
             <div className={fieldGroupClass}>
               <div>
-                <label className={labelClass}>Insurance Company / Payer Name *</label>
+                <label htmlFor="pa-payer-name" className={labelClass}>Payer Name *</label>
                 <input
+                  id="pa-payer-name"
+                  aria-label="Payer"
                   className={inputClass}
                   placeholder="e.g. UnitedHealthcare, Aetna, Humana"
                   value={formData.payer_name}
@@ -366,8 +388,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 />
               </div>
               <div>
-                <label className={labelClass}>Plan Name</label>
+                <label htmlFor="pa-plan-name" className={labelClass}>Plan Name</label>
                 <input
+                  id="pa-plan-name"
+                  aria-label="Plan"
                   className={inputClass}
                   placeholder="e.g. Medicare Advantage HMO, Medicaid MCO"
                   value={formData.plan_name}
@@ -376,8 +400,9 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className={labelClass}>Payer ID / BIN</label>
+                  <label htmlFor="pa-payer-id" className={labelClass}>Payer ID / BIN</label>
                   <input
+                    id="pa-payer-id"
                     className={inputClass}
                     placeholder="Payer ID from EOB"
                     value={formData.payer_id}
@@ -385,8 +410,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                   />
                 </div>
                 <div>
-                  <label className={labelClass}>Member ID (last 4 only)</label>
+                  <label htmlFor="pa-member-id" className={labelClass}>Member ID (last 4 only)</label>
                   <input
+                    id="pa-member-id"
+                    aria-label="Member ID"
                     className={inputClass}
                     placeholder="xxxx"
                     maxLength={4}
@@ -418,8 +445,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
             </h2>
             <div className={fieldGroupClass}>
               <div>
-                <label className={labelClass}>Medication Name *</label>
+                <label htmlFor="pa-medication" className={labelClass}>Medication *</label>
                 <input
+                  id="pa-medication"
+                  aria-label="Medication"
                   className={inputClass}
                   placeholder="e.g. Risperidone 1mg, Keytruda 200mg"
                   value={formData.medication_name}
@@ -427,8 +456,9 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 />
               </div>
               <div>
-                <label className={labelClass}>NDC / NDA Number</label>
+                <label htmlFor="pa-ndc" className={labelClass}>NDC / NDA Number</label>
                 <input
+                  id="pa-ndc"
                   className={inputClass}
                   placeholder="Optional — from prescription label"
                   value={formData.medication_nda_ndc}
@@ -437,8 +467,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className={labelClass}>ICD-10 Code *</label>
+                  <label htmlFor="pa-icd10" className={labelClass}>ICD-10 Code *</label>
                   <input
+                    id="pa-icd10"
+                    aria-label="ICD-10"
                     className={inputClass}
                     placeholder="e.g. F20.9, C34.10"
                     value={formData.diagnosis_code}
@@ -446,8 +478,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                   />
                 </div>
                 <div>
-                  <label className={labelClass}>Diagnosis Description *</label>
+                  <label htmlFor="pa-diagnosis" className={labelClass}>Diagnosis *</label>
                   <input
+                    id="pa-diagnosis"
+                    aria-label="Diagnosis"
                     className={inputClass}
                     placeholder="e.g. Schizophrenia, Lung Cancer"
                     value={formData.diagnosis_description}
@@ -532,15 +566,17 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                   onChange={(e) => update('clinical_notes', e.target.value)}
                 />
               </div>
-              <label className="flex cursor-pointer items-center gap-2">
+              <label htmlFor="pa-urgent" className="flex cursor-pointer items-center gap-2">
                 <input
+                  id="pa-urgent"
                   type="checkbox"
+                  aria-label="Urgent"
                   checked={formData.is_urgent}
                   onChange={(e) => update('is_urgent', e.target.checked)}
                   className="rounded border-slate-300 text-[#6B8F71] focus:ring-[#6B8F71]"
                 />
                 <span className="text-sm text-slate-600">
-                  This is an urgent request (24–72 hour review required)
+                  Urgent request (24–72 hour review required)
                 </span>
               </label>
             </div>
@@ -619,15 +655,27 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               statute for your facility state.
             </p>
             <div className={fieldGroupClass}>
+              <div>
+                <label htmlFor="pa-law-state" className={labelClass}>Facility State (for law auto-detection)</label>
+                <select
+                  id="pa-law-state"
+                  aria-label="State"
+                  className={`${inputClass} mb-3`}
+                  value={formData.facility_state}
+                  onChange={(e) => update('facility_state', e.target.value)}
+                >
+                  <option value="">— Select —</option>
+                  {['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'].map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
               <div className="rounded-lg border border-[#6B8F71]/20 bg-[#6B8F71]/10 p-4">
-                <div className="mb-1 text-xs font-medium text-[#6B8F71]">
-                  Auto-detected based on facility state:{' '}
-                  {formData.facility_state || 'Not set'}
-                </div>
-                <div className="text-xs leading-relaxed text-slate-600">
+                <div className="mb-1 text-xs font-medium text-[#6B8F71]">State law auto-detected</div>
+                <div className="text-xs font-semibold text-slate-700">
                   {formData.facility_state
                     ? STATE_LAW_LABELS[formData.facility_state] ?? 'Federal CMS Step Therapy Guidance (CMS-4182-F)'
-                    : 'Set your facility state in Step 1 for automatic law detection'}
+                    : 'Select a state above to auto-detect the applicable statute'}
                 </div>
               </div>
               <div>
@@ -685,8 +733,15 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 drafting, not legal or medical advice.
               </p>
             </div>
-            {error && <div className="mb-3 text-xs text-red-500">{error}</div>}
           </div>
+        )}
+
+        {/* Validation / API errors (shown on any step) */}
+        {error && !isFinalStep && (
+          <div className="mt-4 text-xs text-red-500">{error}</div>
+        )}
+        {error && isFinalStep && (
+          <div className="mb-3 text-xs text-red-500">{error}</div>
         )}
 
         {/* Navigation buttons */}
@@ -700,7 +755,14 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
           </button>
           {!isFinalStep ? (
             <Button
-              onClick={() => setStep((s) => s + 1)}
+              onClick={() => {
+                if (step === 1 && !formData.patient_identifier && !formData.facility_name) {
+                  setError('Patient Ref and Facility Name are required fields.');
+                  return;
+                }
+                setError(null);
+                setStep((s) => s + 1);
+              }}
               className="bg-[#1C2B2D] px-6 text-white hover:bg-[#2d4042]"
               disabled={step === 0 && !caseType}
             >

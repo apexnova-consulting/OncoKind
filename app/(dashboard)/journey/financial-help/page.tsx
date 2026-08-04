@@ -40,8 +40,8 @@ export default async function FinancialHelpPage() {
         <div className="mx-auto max-w-5xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">Financial Help</h1>
           <p className="mt-3 text-sm text-slate-600">
-            Live Financial Aid Tracker is an Advocate Plan feature. Upgrade to track diagnosis-aware
-            grants, PAF programs, and HealthWell funds in real time.
+            Live Financial Aid Tracker is an Advocate Plan feature. Unlock access to track
+            diagnosis-aware grants, PAF programs, and HealthWell funds in real time.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link href="/pricing?plan=advocate" className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
@@ -124,10 +124,12 @@ export default async function FinancialHelpPage() {
           </div>
 
           {matchRows.length === 0 ? (
-            <p className="mt-4 text-sm text-slate-600">
-              We have not found a diagnosis-specific fund match yet. As soon as a synced fund opens for your condition,
-              it will appear here and be marked for notification.
-            </p>
+            <div data-testid="aid-category" className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm text-slate-600">
+                No diagnosis-specific fund match found yet. As soon as a synced fund opens for your
+                condition, it will appear here and be marked for notification.
+              </p>
+            </div>
           ) : (
             <div className="mt-4 space-y-4">
               {matchRows.map((match) => {

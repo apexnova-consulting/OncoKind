@@ -122,7 +122,7 @@ export function PriorAuthDashboard({
               <button
                 key={type}
                 onClick={() => router.push(`/prior-auth/new?type=${type}`)}
-                aria-label={`${config.label} — Generate`}
+                aria-label={config.cta}
                 className="group rounded-xl border-2 border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:border-[#6B8F71] hover:bg-[#F8F6F2] focus:outline-none focus:ring-2 focus:ring-[#6B8F71] focus:ring-offset-2"
               >
                 <div className={`mb-3 inline-flex rounded-lg p-2 ${config.bg}`}>

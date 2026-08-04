@@ -1,0 +1,26 @@
+{
+  "name": "oncokind-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E test suite for OncoKind — derived from the OncoKind Pre-Launch QA Testing Guide (v1.0, June 2026)",
+  "scripts": {
+    "test": "playwright test",
+    "test:setup": "playwright test --project=setup",
+    "test:marketing": "playwright test --project=marketing",
+    "test:auth-gates": "playwright test --project=auth-gates",
+    "test:user-tiers": "playwright test --project=user-tiers",
+    "test:prior-auth": "playwright test --project=prior-auth",
+    "test:billing": "playwright test --project=billing",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install --with-deps chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^20.14.0",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.5.0"
+  }
+}

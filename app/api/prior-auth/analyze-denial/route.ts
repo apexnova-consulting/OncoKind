@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  if (profile?.subscription_tier !== 'professional') {
+  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
     return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
   }
 

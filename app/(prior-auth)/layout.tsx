@@ -21,12 +21,25 @@ export default async function PriorAuthLayout({ children }: { children: React.Re
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('subscription_tier, full_name, email')
+    .select('subscription_tier, full_name, email, is_admin')
     .eq('id', user.id)
     .single();
 
+  const allowedEmails = (process.env.ADMIN_EMAILS ?? '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  const email = (profile?.email ?? user.email ?? '').toLowerCase();
+  const isAdmin =
+    Boolean(profile?.is_admin) ||
+    profile?.subscription_tier === 'enterprise' ||
+    (email ? allowedEmails.includes(email) : false);
+
   const allowedTiers = ['professional', 'enterprise'];
-  if (!profile?.subscription_tier || !allowedTiers.includes(profile.subscription_tier)) {
+  const hasAccess =
+    isAdmin ||
+    (profile?.subscription_tier != null && allowedTiers.includes(profile.subscription_tier));
+  if (!hasAccess) {
     redirect('/dashboard/billing?upgrade=prior-auth');
   }
 

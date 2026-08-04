@@ -14,7 +14,7 @@ export const getAdminContext = cache(async () => {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('is_admin, email')
+    .select('is_admin, email, subscription_tier')
     .eq('id', user.id)
     .maybeSingle();
 
@@ -24,7 +24,10 @@ export const getAdminContext = cache(async () => {
     .filter(Boolean);
 
   const email = (profile?.email ?? user.email ?? '').toLowerCase();
-  const isAdmin = Boolean(profile?.is_admin) || (email ? allowedEmails.includes(email) : false);
+  const isAdmin =
+    Boolean(profile?.is_admin) ||
+    profile?.subscription_tier === 'enterprise' ||
+    (email ? allowedEmails.includes(email) : false);
 
   return { user, isAdmin };
 });

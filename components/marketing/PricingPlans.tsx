@@ -83,14 +83,11 @@ function CheckoutForm({
   variant?: 'default' | 'outline';
   className?: string;
 }) {
+  const href = `/api/checkout?plan=${plan}&billingInterval=${billingInterval}`;
   return (
-    <form action="/api/checkout" method="POST">
-      <input type="hidden" name="plan" value={plan} />
-      <input type="hidden" name="billingInterval" value={billingInterval} />
-      <Button type="submit" variant={variant} className={cn('w-full', className)}>
-        {cta}
-      </Button>
-    </form>
+    <Button asChild variant={variant} className={cn('w-full', className)}>
+      <a href={href}>{cta} →</a>
+    </Button>
   );
 }
 

@@ -11,17 +11,19 @@ import {
 
 const defaultPriceId = stripePrices.proMonthly;
 
-export async function POST(request: NextRequest) {
+async function handleCheckout(
+  request: NextRequest,
+  {
+    requestedPlan,
+    requestedBillingInterval,
+    requestedPriceId,
+  }: { requestedPlan: string | null; requestedBillingInterval: string | null; requestedPriceId: string | null }
+): Promise<NextResponse> {
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
   }
-
-  const formData = await request.formData().catch(() => new FormData());
-  const requestedPlan = formData.get('plan');
-  const requestedBillingInterval = formData.get('billingInterval');
-  const requestedPriceId = formData.get('priceId');
 
   let priceId = defaultPriceId;
 
@@ -63,4 +65,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(session.url);
   }
   return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
+}
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
+  return handleCheckout(request, {
+    requestedPlan: searchParams.get('plan'),
+    requestedBillingInterval: searchParams.get('billingInterval') ?? 'monthly',
+    requestedPriceId: searchParams.get('priceId'),
+  });
+}
+
+export async function POST(request: NextRequest) {
+  const formData = await request.formData().catch(() => new FormData());
+  return handleCheckout(request, {
+    requestedPlan: formData.get('plan') as string | null,
+    requestedBillingInterval: formData.get('billingInterval') as string | null,
+    requestedPriceId: formData.get('priceId') as string | null,
+  });
 }

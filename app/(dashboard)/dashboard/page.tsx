@@ -58,9 +58,8 @@ async function checkGoalsOfCareTrigger(userId: string): Promise<boolean> {
 }
 
 export default async function DashboardPage() {
-  const { isPro, isProfessional, user, profile } = await getProfile();
-  const isEnterprise = profile?.subscription_tier === 'enterprise';
-  const hasPriorAuthAccess = isProfessional || isEnterprise;
+  const { isPro, isProfessional, isAdmin, user } = await getProfile();
+  const hasPriorAuthAccess = isProfessional || isAdmin;
   const gocTriggered = user ? await checkGoalsOfCareTrigger(user.id) : false;
 
   return (
