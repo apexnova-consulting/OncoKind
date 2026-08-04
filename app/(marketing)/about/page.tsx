@@ -197,13 +197,13 @@ export default function AboutPage() {
                 <p>
                   When she was diagnosed, I became her caregiver. I sat in appointments I
                   didn&apos;t understand, went home and searched terms I couldn&apos;t pronounce,
-                  and felt completely alone in trying to help her.
+                  and felt scared of what was to come.
                 </p>
                 <p>
-                  Not alone in the sense that she wasn&apos;t there. Alone in the sense that the
-                  entire medical system — as good as it is in many ways — is built for the
+                  The entire medical system — as good as it is in many ways — is built for the
                   specialists, not for the family beside the patient. Pathology reports written for
-                  doctors. Information delivered without empathy. Families left to navigate alone.
+                  doctors. Information delivered without empathy. Families left without the clarity
+                  they deserve.
                 </p>
                 <p>
                   I built OncoKind to change that. Not to replace oncologists — but to make sure

@@ -644,7 +644,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
         <div className="mx-auto max-w-[var(--max-width-full)]">
           <Reveal className="text-center">
             <p className="eyebrow" style={{ color: '#9FE1CB' }}>Why this exists</p>
-            <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
               Why this exists — and why it&apos;s personal.
             </h2>
           </Reveal>
