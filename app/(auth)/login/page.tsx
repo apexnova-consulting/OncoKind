@@ -94,6 +94,9 @@ export default function LoginPage() {
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-slate-600">
+            <Link href="/forgot-password" className="text-slate-800 underline">Forgot password?</Link>
+          </p>
+          <p className="mt-2 text-center text-sm text-slate-600">
             Don’t have an account? <Link href="/signup" className="text-slate-800 underline">Sign up</Link>
           </p>
         </CardContent>

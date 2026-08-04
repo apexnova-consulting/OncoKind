@@ -48,6 +48,7 @@ function labelForType(type: string): string {
 export function CareTimeline({ initialEntries }: Props) {
   const [entries, setEntries] = useState<TimelineEntry[]>(initialEntries);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
   const [milestoneType, setMilestoneType] = useState('follow_up_appointment');
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState('');
@@ -89,6 +90,7 @@ export function CareTimeline({ initialEntries }: Props) {
       setNotes('');
       setReportSummary('');
       setPrepSheetLink('/reports');
+      setFormOpen(false);
     } catch {
       setError('Failed to save timeline entry');
     } finally {
@@ -135,26 +137,43 @@ ${sorted
       <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="font-heading text-lg font-semibold text-accent">Add milestone</h2>
+            <h2 className="font-heading text-lg font-semibold text-accent">Care Timeline</h2>
             <p className="text-sm text-slate-600">Track meaningful moments in your care journey.</p>
           </div>
-          <Button variant="outline" onClick={exportTimeline}>Export Timeline (PDF-ready)</Button>
-        </div>
-        <form onSubmit={addMilestone} className="mt-4 grid gap-3 md:grid-cols-2">
-          <select className="h-10 rounded-md border border-slate-300 px-3" value={milestoneType} onChange={(e) => setMilestoneType(e.target.value)}>
-            {milestoneOptions.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-          <input className="h-10 rounded-md border border-slate-300 px-3" placeholder="Milestone title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-          <input className="h-10 rounded-md border border-slate-300 px-3" type="datetime-local" value={occurredAt} onChange={(e) => setOccurredAt(e.target.value)} required />
-          <input className="h-10 rounded-md border border-slate-300 px-3" placeholder="Prep sheet link (optional)" value={prepSheetLink} onChange={(e) => setPrepSheetLink(e.target.value)} />
-          <textarea className="min-h-[90px] rounded-md border border-slate-300 px-3 py-2 md:col-span-2" placeholder="Notes (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} />
-          <textarea className="min-h-[90px] rounded-md border border-slate-300 px-3 py-2 md:col-span-2" placeholder="Attached report summary (optional)" value={reportSummary} onChange={(e) => setReportSummary(e.target.value)} />
-          <div className="md:col-span-2">
-            <Button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Add Milestone'}</Button>
+          <div className="flex gap-2">
+            <Button onClick={() => setFormOpen((o) => !o)}>Add Entry</Button>
+            <Button variant="outline" onClick={exportTimeline}>Export Timeline</Button>
           </div>
-        </form>
+        </div>
+        {formOpen && (
+          <form onSubmit={addMilestone} className="mt-4 grid gap-3 md:grid-cols-2">
+            <select className="h-10 rounded-md border border-slate-300 px-3" value={milestoneType} onChange={(e) => setMilestoneType(e.target.value)}>
+              {milestoneOptions.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="timeline-title" className="sr-only">Title</label>
+              <input
+                id="timeline-title"
+                aria-label="Title"
+                className="h-10 rounded-md border border-slate-300 px-3"
+                placeholder="Milestone title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+            <input className="h-10 rounded-md border border-slate-300 px-3" type="datetime-local" value={occurredAt} onChange={(e) => setOccurredAt(e.target.value)} required />
+            <input className="h-10 rounded-md border border-slate-300 px-3" placeholder="Prep sheet link (optional)" value={prepSheetLink} onChange={(e) => setPrepSheetLink(e.target.value)} />
+            <textarea className="min-h-[90px] rounded-md border border-slate-300 px-3 py-2 md:col-span-2" placeholder="Notes (optional)" value={notes} onChange={(e) => setNotes(e.target.value)} />
+            <textarea className="min-h-[90px] rounded-md border border-slate-300 px-3 py-2 md:col-span-2" placeholder="Attached report summary (optional)" value={reportSummary} onChange={(e) => setReportSummary(e.target.value)} />
+            <div className="flex gap-2 md:col-span-2">
+              <Button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save Entry'}</Button>
+              <Button type="button" variant="outline" onClick={() => setFormOpen(false)}>Cancel</Button>
+            </div>
+          </form>
+        )}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </section>
 

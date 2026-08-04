@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { BadgeDollarSign, Clock3 } from 'lucide-react';
 import { getProfile } from '@/lib/auth';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
@@ -36,7 +35,22 @@ export default async function FinancialHelpPage() {
   const { user: profileUser, hasAdvocateAccess } = await getProfile();
   if (!profileUser) return null;
   if (!hasAdvocateAccess) {
-    redirect('/pricing?plan=advocate');
+    return (
+      <div className="p-6">
+        <div className="mx-auto max-w-5xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h1 className="text-2xl font-semibold text-slate-900">Financial Help</h1>
+          <p className="mt-3 text-sm text-slate-600">
+            Live Financial Aid Tracker is an Advocate Plan feature. Upgrade to track diagnosis-aware
+            grants, PAF programs, and HealthWell funds in real time.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/pricing?plan=advocate" className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
+              Upgrade to Advocate Plan
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const supabase = await createServerSupabaseClient();
@@ -119,7 +133,7 @@ export default async function FinancialHelpPage() {
               {matchRows.map((match) => {
                 const fund = fundsById.get(match.fund_id);
                 return (
-                  <article key={match.fund_id} className="rounded-lg border border-slate-200 p-4">
+                  <article key={match.fund_id} data-testid="aid-category" className="rounded-lg border border-slate-200 p-4">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <h3 className="font-medium text-slate-900">

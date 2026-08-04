@@ -115,7 +115,17 @@ export function TrialsMatcher({
           <input value={cancerType} onChange={(e) => setCancerType(e.target.value)} placeholder="Cancer type (e.g., lung cancer)" className="h-10 rounded-md border border-slate-300 px-3" />
           <input value={stage} onChange={(e) => setStage(e.target.value)} placeholder="Stage (e.g., IIIA)" className="h-10 rounded-md border border-slate-300 px-3" />
           <input value={biomarkers} onChange={(e) => setBiomarkers(e.target.value)} placeholder="Biomarkers (e.g., PD-L1, EGFR)" className="h-10 rounded-md border border-slate-300 px-3" />
-          <input value={zip} onChange={(e) => setZip(e.target.value)} placeholder="ZIP code" className="h-10 rounded-md border border-slate-300 px-3" />
+          <div className="flex flex-col gap-1">
+            <label htmlFor="trials-zip" className="sr-only">ZIP Code</label>
+            <input
+              id="trials-zip"
+              aria-label="ZIP Code"
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
+              placeholder="ZIP code"
+              className="h-10 rounded-md border border-slate-300 px-3"
+            />
+          </div>
           <select value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="h-10 rounded-md border border-slate-300 px-3">
             <option value={25}>25 miles</option>
             <option value={50}>50 miles</option>
@@ -135,7 +145,7 @@ export function TrialsMatcher({
           </select>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button onClick={fetchTrials} disabled={loading}>{loading ? 'Matching…' : 'Find Matching Trials'}</Button>
+          <Button onClick={fetchTrials} disabled={loading}>{loading ? 'Searching…' : 'Search Trials'}</Button>
           <Button asChild variant="outline"><Link href="/journey">Back to Journey</Link></Button>
         </div>
       </div>
@@ -146,7 +156,7 @@ export function TrialsMatcher({
       {data && (
         <div className="space-y-3">
           <p className="text-sm text-slate-600">
-            Showing {visibleTrials.length} of {data.total} matches. Radius applied: {data.radiusApplied} miles.
+            {data.total} trials found — showing {visibleTrials.length}. Radius applied: {data.radiusApplied} miles.
           </p>
           <div className="grid gap-3">
             {visibleTrials.map((trial, idx) => (

@@ -269,7 +269,7 @@ export function PricingPlans({
             )
           ) : (
             <Button asChild className="mt-8 w-full bg-[var(--brand-gold)] text-[var(--color-primary-900)] hover:opacity-90 hover:shadow-none">
-              <Link href="/signup">Start Advocate Plan →</Link>
+              <Link href="/signup?plan=advocate">Start Advocate Plan →</Link>
             </Button>
           )}
         </div>

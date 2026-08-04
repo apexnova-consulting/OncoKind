@@ -25,7 +25,8 @@ export default async function PriorAuthLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single();
 
-  if (profile?.subscription_tier !== 'professional') {
+  const allowedTiers = ['professional', 'enterprise'];
+  if (!profile?.subscription_tier || !allowedTiers.includes(profile.subscription_tier)) {
     redirect('/dashboard/billing?upgrade=prior-auth');
   }
 
@@ -34,9 +35,11 @@ export default async function PriorAuthLayout({ children }: { children: React.Re
       {/* Standalone workspace header — intentionally separate from SiteHeader */}
       <header className="sticky top-0 z-50 flex items-center justify-between bg-[#1C2B2D] px-6 py-4 shadow-md">
         <div className="flex items-center gap-3">
-          <span className="font-display text-lg font-semibold text-[#E8C37A]">OncoKind</span>
-          <span className="text-sm font-medium text-[#6B8F71]">|</span>
-          <span className="text-sm font-medium text-slate-300">Prior Auth Engine</span>
+          <span className="text-sm font-medium text-slate-300">
+            <span className="font-display text-lg font-semibold text-[#E8C37A]">OncoKind</span>
+            {' | '}
+            <span>Prior Auth Engine</span>
+          </span>
         </div>
         <div className="flex items-center gap-4">
           <span className="hidden text-xs text-slate-400 sm:inline">{profile?.email}</span>

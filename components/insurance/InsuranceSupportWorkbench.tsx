@@ -1,12 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import Link from 'next/link';
+import { useRef, useState } from 'react';
 import { FileText, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { getInsuranceAppealSources, MEDICAL_DISCLAIMER_TEXT } from '@/lib/disclosures';
 
 type DecodedResponse = {
@@ -30,7 +28,7 @@ function printableHtml(result: AppealResponse) {
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>OncoKind Appeal Letter</title>
+  <title>OncoKind Appeal Packet</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 32px; color: #0f172a; line-height: 1.5; }
     h1, h2 { margin-bottom: 8px; }
@@ -44,7 +42,7 @@ function printableHtml(result: AppealResponse) {
   </style>
 </head>
 <body>
-  <h1>Draft Appeal Letter</h1>
+  <h1>Draft Appeal Packet</h1>
   <p class="muted">Insurance: ${result.insuranceName} | Denial: ${result.denialReasonCode}</p>
   <div class="box"><pre>${result.letterOfMedicalNecessity}</pre></div>
   <h2>Next-Step Checklist</h2>
@@ -64,206 +62,212 @@ export function InsuranceSupportWorkbench({
 }: {
   hasAdvocateAccess: boolean;
 }) {
-  const [file, setFile] = useState<File | null>(null);
-  const [decoding, setDecoding] = useState(false);
+  const [denialText, setDenialText] = useState('');
+  const [analyzing, setAnalyzing] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [decoded, setDecoded] = useState<DecodedResponse | null>(null);
   const [appeal, setAppeal] = useState<AppealResponse | null>(null);
+  const downloadRef = useRef<HTMLAnchorElement>(null);
 
-  const advocateRedirect = useMemo(() => '/pricing?plan=advocate', []);
-
-  async function handleDecode(e: React.FormEvent) {
+  async function handleAnalyze(e: React.FormEvent) {
     e.preventDefault();
-    if (!file || file.type !== 'application/pdf') {
-      setError('Please choose a PDF Explanation of Benefits letter.');
+    if (!denialText.trim()) {
+      setError('Please paste your denial letter text.');
       return;
     }
-
     setError(null);
     setAppeal(null);
-    setDecoding(true);
-
+    setAnalyzing(true);
     try {
-      const formData = new FormData();
-      formData.append('pdf', file);
-
-      const res = await fetch('/api/insurance/decode', {
+      const res = await fetch('/api/insurance/decode-text', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: denialText }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data.error || 'Failed to decode denial letter.');
+        setError(data.error || 'Failed to analyze denial letter.');
         return;
       }
       setDecoded(data as DecodedResponse);
     } catch {
-      setError('Failed to decode denial letter.');
+      setError('Failed to analyze denial letter.');
     } finally {
-      setDecoding(false);
+      setAnalyzing(false);
     }
   }
 
   async function handleGenerateAppeal() {
-    if (!decoded) return;
-    if (!hasAdvocateAccess) {
-      window.location.href = advocateRedirect;
-      return;
-    }
-
     setError(null);
     setGenerating(true);
-
     try {
       const res = await fetch('/api/insurance/appeal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ caseId: decoded.caseId }),
+        body: JSON.stringify({ caseId: decoded?.caseId ?? null, denialText }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        if (data.redirectTo) {
-          window.location.href = data.redirectTo;
-          return;
-        }
-        setError(data.error || 'Failed to generate appeal letter.');
+        setError(data.error || 'Failed to generate appeal packet.');
         return;
       }
       setAppeal(data as AppealResponse);
     } catch {
-      setError('Failed to generate appeal letter.');
+      setError('Failed to generate appeal packet.');
     } finally {
       setGenerating(false);
     }
   }
 
-  function exportAppeal() {
+  function downloadAppeal() {
     if (!appeal) return;
-    const w = window.open('', '_blank');
-    if (!w) return;
-    w.document.open();
-    w.document.write(printableHtml(appeal));
-    w.document.close();
-    w.focus();
-    w.print();
+    const html = printableHtml(appeal);
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = downloadRef.current;
+    if (!a) return;
+    a.href = url;
+    a.download = 'appeal-packet.pdf';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
   }
 
   return (
     <div className="space-y-6">
+      {/* Step 1: Paste denial text and analyze */}
       <Card>
         <CardHeader>
-          <CardTitle>Denial Decoder</CardTitle>
+          <CardTitle>Denial Letter Analyzer</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form onSubmit={handleDecode} className="space-y-4">
+          <form onSubmit={handleAnalyze} className="space-y-4">
             <p className="text-sm text-slate-600">
-              Upload an Explanation of Benefits (EOB) PDF. We extract the denial code, explain it in plain English,
-              and prepare the case for appeal generation without retaining the raw PDF.
+              Paste your Explanation of Benefits (EOB) or denial letter text below. We decode the
+              denial code, explain it in plain English, and prepare the case for appeal generation.
             </p>
-            <Input
-              type="file"
-              accept="application/pdf"
+            <label htmlFor="denial-letter-text" className="block text-sm font-medium text-slate-700">
+              Denial Letter / Paste Text
+            </label>
+            <textarea
+              id="denial-letter-text"
+              aria-label="Denial Letter / Paste Text"
+              value={denialText}
               onChange={(e) => {
-                setFile(e.target.files?.[0] ?? null);
+                setDenialText(e.target.value);
                 setError(null);
               }}
+              rows={6}
+              placeholder="Paste your denial letter text here…"
+              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
             />
             {error && <p className="text-sm text-red-600">{error}</p>}
-            <Button type="submit" disabled={decoding}>
-              {decoding ? 'Decoding denial…' : 'Decode denial letter'}
+            <Button type="submit" disabled={analyzing}>
+              {analyzing ? 'Analyzing…' : 'Analyze Denial'}
             </Button>
           </form>
         </CardContent>
       </Card>
 
+      {/* Analysis results */}
       {decoded && (
         <Card>
           <CardHeader>
-            <CardTitle>Decoded denial</CardTitle>
+            <CardTitle>Analysis Results</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-lg border border-slate-200 p-3">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Denial reason code</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Denial Reason</p>
                 <p className="mt-1 font-medium text-slate-900">{decoded.denialReasonCode}</p>
               </div>
               <div className="rounded-lg border border-slate-200 p-3">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Insurance plan</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Insurance Plan</p>
                 <p className="mt-1 font-medium text-slate-900">{decoded.insuranceName}</p>
               </div>
               <div className="rounded-lg border border-slate-200 p-3">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Member services</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Member Services</p>
                 <p className="mt-1 font-medium text-slate-900">{decoded.memberServicesPhone}</p>
               </div>
               <div className="rounded-lg border border-slate-200 p-3">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Appeal deadline</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Appeal Basis / Deadline</p>
                 <p className="mt-1 font-medium text-slate-900">{decoded.appealDeadlineText}</p>
               </div>
             </div>
-
             <div>
-              <p className="text-sm font-semibold text-slate-900">Plain English explanation</p>
+              <p className="text-sm font-semibold text-slate-900">Plain English Explanation</p>
               <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-slate-700">
                 {decoded.plainEnglishBullets.map((bullet, index) => (
                   <li key={index}>{bullet}</li>
                 ))}
               </ul>
             </div>
+          </CardContent>
+        </Card>
+      )}
 
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={handleGenerateAppeal} disabled={generating}>
-                <ShieldCheck className="mr-2 h-4 w-4" aria-hidden />
-                {generating ? 'Generating appeal…' : 'Generate Appeal Letter'}
-              </Button>
-              {!hasAdvocateAccess && (
-                <Button asChild variant="outline">
-                  <Link href={advocateRedirect}>Upgrade to Advocate Plan ($49/mo)</Link>
+      {/* Step 2: Generate Appeal Packet — always visible */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Generate Appeal Packet</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-slate-600">
+            Generate a structured appeal packet including a letter of medical necessity, checklist,
+            and physician signature block.
+          </p>
+          {!appeal ? (
+            <Button onClick={handleGenerateAppeal} disabled={generating}>
+              <ShieldCheck className="mr-2 h-4 w-4" aria-hidden />
+              {generating ? 'Generating…' : 'Generate Appeal Packet'}
+            </Button>
+          ) : (
+            <>
+              <p className="text-sm font-medium text-emerald-700">Appeal packet ready — review below and download.</p>
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">Letter of Medical Necessity</p>
+                <pre className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
+                  {appeal.letterOfMedicalNecessity}
+                </pre>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Next-Step Checklist</p>
+                <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-slate-700">
+                  {appeal.nextStepChecklist.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-lg border border-dashed border-slate-300 p-4 text-sm text-slate-700">
+                <p className="font-medium">Physician signature placeholder</p>
+                <p className="mt-2">{appeal.physicianSignatureLine}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button onClick={downloadAppeal}>
+                  <FileText className="mr-2 h-4 w-4" aria-hidden />
+                  Download Appeal Packet
                 </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setAppeal(null);
+                    handleGenerateAppeal();
+                  }}
+                  disabled={generating}
+                >
+                  Regenerate
+                </Button>
+              </div>
+              <OutputSources items={getInsuranceAppealSources()} />
+              <MedicalDisclaimer />
+            </>
+          )}
+        </CardContent>
+      </Card>
 
-      {appeal && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Draft appeal package</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-              <p className="text-sm font-semibold text-slate-900">Letter of Medical Necessity</p>
-              <pre className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
-                {appeal.letterOfMedicalNecessity}
-              </pre>
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold text-slate-900">Next-step checklist</p>
-              <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-slate-700">
-                {appeal.nextStepChecklist.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-lg border border-dashed border-slate-300 p-4 text-sm text-slate-700">
-              <p className="font-medium">Physician signature placeholder</p>
-              <p className="mt-2">{appeal.physicianSignatureLine}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={exportAppeal}>
-                <FileText className="mr-2 h-4 w-4" aria-hidden />
-                Export / Print PDF
-              </Button>
-            </div>
-            <OutputSources items={getInsuranceAppealSources()} />
-            <MedicalDisclaimer />
-          </CardContent>
-        </Card>
-      )}
+      {/* Hidden anchor used for programmatic download */}
+      {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+      <a ref={downloadRef} className="hidden" aria-hidden />
     </div>
   );
 }

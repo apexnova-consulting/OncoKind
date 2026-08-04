@@ -43,7 +43,10 @@ export default async function DashboardLayout({
           logoUrl: brandTheme.logoUrl,
         }}
         isAdmin={adminContext.isAdmin}
-        isProfessional={profile?.subscription_tier === 'professional'}
+        isProfessional={
+          profile?.subscription_tier === 'professional' ||
+          profile?.subscription_tier === 'enterprise'
+        }
       />
       {children}
     </>

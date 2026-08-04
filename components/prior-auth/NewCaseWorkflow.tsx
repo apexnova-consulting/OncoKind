@@ -71,10 +71,16 @@ const STATE_LAW_LABELS: Record<string, string> = {
   MA: 'Massachusetts G.L. c. 176O §14',
 };
 
+function getInitialStep(type?: CaseType): number {
+  if (!type) return 0;
+  if (type === 'continued_stay') return 3;
+  return 1;
+}
+
 export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseType }) {
   const router = useRouter();
   const [caseType, setCaseType] = useState<CaseType>(initialCaseType ?? 'prior_auth');
-  const [step, setStep] = useState(initialCaseType ? 1 : 0);
+  const [step, setStep] = useState(getInitialStep(initialCaseType));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -103,6 +109,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
   });
 
   const steps = STEPS_BY_TYPE[caseType];
+  const currentStepLabel = steps[step] ?? '';
 
   function update<K extends keyof FormData>(field: K, value: FormData[K]) {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -161,7 +168,8 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
   const fieldGroupClass = 'space-y-4';
 
   const isFinalStep =
-    (step === steps.length - 1);
+    step === steps.length - 1 ||
+    (caseType === 'continued_stay' && step === 3);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -177,7 +185,14 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
       </button>
 
       {/* Step indicator */}
-      <div className="mb-8 flex items-center gap-2 overflow-x-auto pb-2">
+      <div
+        role="progressbar"
+        aria-valuenow={step + 1}
+        aria-valuemin={1}
+        aria-valuemax={steps.length}
+        aria-label={`Step ${step + 1} of ${steps.length}: ${currentStepLabel}`}
+        className="mb-4 flex items-center gap-2 overflow-x-auto pb-2"
+      >
         {steps.map((label, i) => (
           <div key={i} className="flex shrink-0 items-center gap-2">
             <div
@@ -202,6 +217,10 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
           </div>
         ))}
       </div>
+
+      <p className="mb-4 text-xs font-medium text-slate-500" aria-hidden>
+        Step {step + 1} of {steps.length} — {currentStepLabel}
+      </p>
 
       <Card className="border border-slate-200 bg-white p-6">
         {/* ── Step 0: Case Type ── */}
@@ -451,7 +470,12 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                       key={i}
                       className="mb-3 rounded-lg border border-slate-200 bg-slate-50 p-4"
                     >
+                      <label htmlFor={`drug-name-${i}`} className={`${labelClass} sr-only`}>
+                        Medication Name
+                      </label>
                       <input
+                        id={`drug-name-${i}`}
+                        aria-label="Medication Name"
                         className={`${inputClass} mb-2`}
                         placeholder={`Drug #${i + 1} name (e.g. Haloperidol)`}
                         value={trial.drug_name}
@@ -468,8 +492,8 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                       <div className="flex flex-wrap gap-3">
                         {(
                           [
-                            ['was_ineffective',        'Clinically ineffective'],
-                            ['caused_adverse_reaction', 'Adverse reaction'],
+                            ['was_ineffective',        'Failed / Clinically ineffective'],
+                            ['caused_adverse_reaction', 'Adverse reaction / failure'],
                             ['contraindicated',         'Contraindicated'],
                           ] as const
                         ).map(([field, label]) => (
@@ -494,7 +518,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                     onClick={addDrugTrial}
                     className="text-xs font-medium text-[#6B8F71] transition-colors hover:text-[#1C2B2D]"
                   >
-                    + Add another medication
+                    + Add Medication
                   </button>
                 </div>
               )}
@@ -551,8 +575,9 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 </div>
               </div>
               <div>
-                <label className={labelClass}>Admission Date</label>
+                <label htmlFor="cs-admission-date" className={labelClass}>Admission Date</label>
                 <input
+                  id="cs-admission-date"
                   type="date"
                   className={inputClass}
                   value={formData.admission_date}
@@ -560,8 +585,9 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 />
               </div>
               <div>
-                <label className={labelClass}>Current Functional Status / Care Goals</label>
+                <label htmlFor="cs-functional-status" className={labelClass}>Functional Status / Care Goals</label>
                 <textarea
+                  id="cs-functional-status"
                   className={`${inputClass} h-24 resize-none`}
                   placeholder="Describe current ADL status, rehabilitation progress, therapy goals, and why the patient has not yet met discharge criteria..."
                   value={formData.functional_status}
@@ -569,8 +595,9 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 />
               </div>
               <div>
-                <label className={labelClass}>Clinical Notes / Discharge Barriers</label>
+                <label htmlFor="cs-discharge-barriers" className={labelClass}>Discharge Barriers / Clinical Notes</label>
                 <textarea
+                  id="cs-discharge-barriers"
                   className={`${inputClass} h-20 resize-none`}
                   placeholder="What clinical barriers prevent safe discharge at this time? (e.g. wound care, IV medications, fall risk, 24-hour supervision needed)"
                   value={formData.clinical_notes}
@@ -677,7 +704,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               className="bg-[#1C2B2D] px-6 text-white hover:bg-[#2d4042]"
               disabled={step === 0 && !caseType}
             >
-              Continue <ChevronRight className="ml-1 h-4 w-4" />
+              Next <ChevronRight className="ml-1 h-4 w-4" aria-hidden />
             </Button>
           ) : (
             <Button

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { JourneyUploadCard } from '@/components/care/JourneyUploadCard';
 
 export function ReportsUploadPanel() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">

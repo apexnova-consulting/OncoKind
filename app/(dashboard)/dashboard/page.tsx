@@ -58,7 +58,9 @@ async function checkGoalsOfCareTrigger(userId: string): Promise<boolean> {
 }
 
 export default async function DashboardPage() {
-  const { isPro, isProfessional, user } = await getProfile();
+  const { isPro, isProfessional, user, profile } = await getProfile();
+  const isEnterprise = profile?.subscription_tier === 'enterprise';
+  const hasPriorAuthAccess = isProfessional || isEnterprise;
   const gocTriggered = user ? await checkGoalsOfCareTrigger(user.id) : false;
 
   return (
@@ -66,8 +68,8 @@ export default async function DashboardPage() {
       <div className="space-y-8">
         <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
 
-        {/* Prior Auth Engine — Professional tier feature card */}
-        {isProfessional && (
+        {/* Prior Auth Engine — Professional / Enterprise tier feature card */}
+        {hasPriorAuthAccess && (
           <a
             href="/prior-auth"
             target="_blank"

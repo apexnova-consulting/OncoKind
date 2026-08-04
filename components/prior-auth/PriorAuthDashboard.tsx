@@ -88,7 +88,7 @@ export function PriorAuthDashboard({
             Prior Auth Engine
           </h1>
           <p className="text-sm text-slate-500">
-            AI-generated prior authorization, step therapy exceptions, and continued stay letters
+            AI-assisted authorization forms, step therapy support, and continued stay documentation
             {userName ? ` — for ${userName}` : ''}.
           </p>
         </div>
@@ -122,19 +122,20 @@ export function PriorAuthDashboard({
               <button
                 key={type}
                 onClick={() => router.push(`/prior-auth/new?type=${type}`)}
+                aria-label={`${config.label} — Generate`}
                 className="group rounded-xl border-2 border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:border-[#6B8F71] hover:bg-[#F8F6F2] focus:outline-none focus:ring-2 focus:ring-[#6B8F71] focus:ring-offset-2"
               >
                 <div className={`mb-3 inline-flex rounded-lg p-2 ${config.bg}`}>
-                  <Icon className={`h-5 w-5 ${config.color}`} />
+                  <Icon className={`h-5 w-5 ${config.color}`} aria-hidden />
                 </div>
-                <h3 className="mb-1 flex items-center gap-1 text-sm font-semibold text-[#1C2B2D]">
+                <p className="mb-1 flex items-center gap-1 text-sm font-semibold text-[#1C2B2D]">
                   {config.label}
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-300 transition-colors group-hover:text-[#6B8F71]" />
-                </h3>
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-300 transition-colors group-hover:text-[#6B8F71]" aria-hidden />
+                </p>
                 <p className="text-xs leading-relaxed text-slate-500">{config.description}</p>
                 <div className="mt-3">
                   <span className="inline-flex items-center gap-1 text-xs font-medium text-[#6B8F71]">
-                    <Plus className="h-3 w-3" />
+                    <Plus className="h-3 w-3" aria-hidden />
                     {config.cta}
                   </span>
                 </div>
@@ -148,25 +149,33 @@ export function PriorAuthDashboard({
       <Reveal>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-semibold text-[#1C2B2D]">Recent Cases</h2>
-          <div className="flex gap-2">
+          <div role="tablist" className="flex gap-2">
             {(['all', 'prior_auth', 'step_therapy', 'continued_stay'] as FilterOption[]).map(
-              (filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setActiveFilter(filter)}
-                  className={`rounded-full px-3 py-1.5 text-xs transition-colors ${
-                    activeFilter === filter
-                      ? 'bg-[#1C2B2D] text-white'
-                      : 'border border-slate-200 bg-white text-slate-500 hover:border-[#6B8F71]'
-                  }`}
-                >
-                  {filter === 'all'
+              (filter) => {
+                const label =
+                  filter === 'all'
                     ? 'All'
-                    : CASE_TYPE_CONFIG[filter as keyof typeof CASE_TYPE_CONFIG]?.label.split(
-                        ' '
-                      )[0]}
-                </button>
-              )
+                    : filter === 'prior_auth'
+                      ? 'Prior'
+                      : filter === 'step_therapy'
+                        ? 'Step'
+                        : 'Continued';
+                return (
+                  <button
+                    key={filter}
+                    role="tab"
+                    aria-selected={activeFilter === filter}
+                    onClick={() => setActiveFilter(filter)}
+                    className={`rounded-full px-3 py-1.5 text-xs transition-colors ${
+                      activeFilter === filter
+                        ? 'bg-[#1C2B2D] text-white'
+                        : 'border border-slate-200 bg-white text-slate-500 hover:border-[#6B8F71]'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              }
             )}
           </div>
         </div>
@@ -186,6 +195,7 @@ export function PriorAuthDashboard({
               return (
                 <button
                   key={c.id}
+                  data-testid="case-row"
                   onClick={() => router.push(`/prior-auth/${c.id}`)}
                   className="flex w-full items-center gap-4 rounded-lg border border-slate-200 bg-white p-4 text-left transition-all hover:border-[#6B8F71] hover:shadow-sm"
                 >

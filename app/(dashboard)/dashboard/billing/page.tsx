@@ -27,6 +27,19 @@ export default async function BillingPage() {
     <div className="mx-auto max-w-6xl px-4 py-6">
     <div className="max-w-lg space-y-6">
       <h1 className="text-2xl font-bold text-slate-900">Billing</h1>
+      {!isPro && !isLegacyPro && (
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-medium text-slate-700">
+            Current plan: <span className="font-semibold">Free plan</span>
+          </p>
+          <p className="mt-1 text-sm text-slate-600">
+            Upgrade to unlock more features including Doctor Prep Sheet, Clinical Trial Matching, and more.
+          </p>
+          <Link href="/pricing" className="mt-3 inline-block text-sm font-medium text-primary underline underline-offset-4">
+            Upgrade your plan
+          </Link>
+        </div>
+      )}
       {isLegacyPro ? (
         <Card>
           <CardHeader>

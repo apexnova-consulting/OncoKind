@@ -19,7 +19,7 @@ export default async function CommunityLandingPage() {
     .select('category_slug, created_at')
     .eq('moderation_status', 'approved');
 
-  const { user, hasAdvocateAccess } = await getProfile();
+  const { user, isPro } = await getProfile();
 
   const categories = COMMUNITY_CATEGORIES.map((category) => {
     const matches = (approvedThreads ?? []).filter((thread) => thread.category_slug === category.slug);
@@ -50,14 +50,26 @@ export default async function CommunityLandingPage() {
             to keep this space safe and kind.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link href={user ? '/community/new-post' : '/signup'}>
-                {user ? hasAdvocateAccess ? 'Start a New Thread' : 'Upgrade to Post' : 'Get Started Free'}
-              </Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/pricing?plan=advocate">See Advocate Plan</Link>
-            </Button>
+            {user && isPro ? (
+              <Button asChild>
+                <Link href="/community/new-post" role="button">New Post</Link>
+              </Button>
+            ) : user ? (
+              <>
+                <Button asChild variant="outline">
+                  <Link href="/pricing?plan=advocate">Upgrade to Post</Link>
+                </Button>
+              </>
+            ) : (
+              <Button asChild>
+                <Link href="/signup">Get Started Free</Link>
+              </Button>
+            )}
+            {!isPro && (
+              <Button asChild variant="outline">
+                <Link href="/pricing?plan=advocate">See Advocate Plan</Link>
+              </Button>
+            )}
           </div>
         </section>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 type TimelineItem = {
@@ -25,6 +25,8 @@ export function SecondOpinionPacket({
 }: Props) {
   const [treatmentPlan, setTreatmentPlan] = useState('');
   const [openQuestions, setOpenQuestions] = useState('');
+  const [generated, setGenerated] = useState(false);
+  const downloadRef = useRef<HTMLAnchorElement>(null);
 
   const parsedQuestions = useMemo(
     () =>
@@ -35,7 +37,7 @@ export function SecondOpinionPacket({
     [openQuestions]
   );
 
-  function exportPacket() {
+  function buildHtml() {
     const timelineHtml = timeline
       .map(
         (t) => `
@@ -100,11 +102,23 @@ export function SecondOpinionPacket({
 </body>
 </html>`;
 
-    const w = window.open('', '_blank');
-    if (!w) return;
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
+    return html;
+  }
+
+  function generatePacket() {
+    setGenerated(true);
+  }
+
+  function downloadPdf() {
+    const html = buildHtml();
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = downloadRef.current;
+    if (!a) return;
+    a.href = url;
+    a.download = 'second-opinion-packet.pdf';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
   }
 
   return (
@@ -136,9 +150,19 @@ export function SecondOpinionPacket({
             />
           </label>
         </div>
-        <div className="mt-4">
-          <Button onClick={exportPacket}>Export Second Opinion Packet (PDF-ready)</Button>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {!generated ? (
+            <Button onClick={generatePacket}>Generate Packet</Button>
+          ) : (
+            <>
+              <span className="text-sm font-medium text-emerald-700">Packet ready — review below and download.</span>
+              <Button onClick={downloadPdf}>Export PDF</Button>
+            </>
+          )}
         </div>
+        {/* Hidden anchor used for programmatic download */}
+        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+        <a ref={downloadRef} className="hidden" aria-hidden />
       </div>
     </div>
   );

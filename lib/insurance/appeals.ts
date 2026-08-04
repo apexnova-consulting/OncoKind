@@ -225,32 +225,23 @@ function buildFallbackPayload(
   };
 }
 
-export async function decodeInsuranceDenial(file: File, report: PatientReportData | null = null): Promise<{
+async function decodeRawText(rawText: string, report: PatientReportData | null): Promise<{
   payload: DecodedInsurancePayload;
   scrubbedText: string;
   modelId: string;
   denialSummaryEncrypted: string;
 }> {
-  const rawText = await extractTextFromPdfFile(file);
-  const releaseTemporaryArtifact = trackTemporaryArtifact('insurance-pdf');
-
+  const releaseTemporaryArtifact = trackTemporaryArtifact('insurance-text');
   try {
     const scrubbedText = scrubPHI(rawText);
-
     if (!verifyNoPHIRemaining(scrubbedText)) {
       throw new Error('Unable to fully de-identify the insurance document');
     }
-
     const parsedSignals = extractInsuranceSignals(scrubbedText);
     let plainEnglishBullets = buildFallbackPayload(parsedSignals, report).plainEnglishBullets;
     let modelId = 'fallback-rules';
-
     try {
-      const generated = await generateWithAnthropic({
-        scrubbedText,
-        parsedSignals,
-        report,
-      });
+      const generated = await generateWithAnthropic({ scrubbedText, parsedSignals, report });
       if (generated.plainEnglishBullets.length > 0) {
         plainEnglishBullets = generated.plainEnglishBullets.slice(0, 3);
         modelId = DEFAULT_MODEL_ID;
@@ -258,7 +249,6 @@ export async function decodeInsuranceDenial(file: File, report: PatientReportDat
     } catch {
       modelId = 'fallback-rules';
     }
-
     const payload: DecodedInsurancePayload = {
       denialReasonCode: parsedSignals.denialReasonCode,
       insuranceName: parsedSignals.insuranceName,
@@ -266,7 +256,6 @@ export async function decodeInsuranceDenial(file: File, report: PatientReportDat
       appealDeadlineText: parsedSignals.appealDeadlineText,
       plainEnglishBullets,
     };
-
     return {
       payload,
       scrubbedText,
@@ -276,6 +265,23 @@ export async function decodeInsuranceDenial(file: File, report: PatientReportDat
   } finally {
     releaseTemporaryArtifact();
   }
+}
+
+export async function decodeInsuranceDenialText(text: string, report: PatientReportData | null = null) {
+  const MAX_CHARS = 50_000;
+  const rawText = text.slice(0, MAX_CHARS).trim();
+  if (!rawText) throw new Error('No denial text provided');
+  return decodeRawText(rawText, report);
+}
+
+export async function decodeInsuranceDenial(file: File, report: PatientReportData | null = null): Promise<{
+  payload: DecodedInsurancePayload;
+  scrubbedText: string;
+  modelId: string;
+  denialSummaryEncrypted: string;
+}> {
+  const rawText = await extractTextFromPdfFile(file);
+  return decodeRawText(rawText, report);
 }
 
 export async function draftAppealFromDecodedCase({

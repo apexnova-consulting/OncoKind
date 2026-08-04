@@ -1,14 +1,12 @@
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
 import { getProfile } from '@/lib/auth';
 import { InsuranceSupportWorkbench } from '@/components/insurance/InsuranceSupportWorkbench';
+import { Button } from '@/components/ui/button';
 
 export default async function InsuranceSupportPage() {
   const { user, hasAdvocateAccess } = await getProfile();
   if (!user) return null;
-  if (!hasAdvocateAccess) {
-    redirect('/pricing?plan=advocate');
-  }
 
   return (
     <div className="p-6">
@@ -24,7 +22,21 @@ export default async function InsuranceSupportPage() {
           </p>
         </div>
 
-        <InsuranceSupportWorkbench hasAdvocateAccess={hasAdvocateAccess} />
+        {!hasAdvocateAccess ? (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-5">
+            <p className="text-sm font-medium text-amber-900">
+              Insurance Denial Defense is an Advocate Plan feature.
+            </p>
+            <p className="mt-1 text-sm text-amber-700">
+              Upgrade to unlock structured appeal packet generation, denial letter analysis, and financial aid tracking.
+            </p>
+            <Button asChild className="mt-4">
+              <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
+            </Button>
+          </div>
+        ) : (
+          <InsuranceSupportWorkbench hasAdvocateAccess={hasAdvocateAccess} />
+        )}
       </div>
     </div>
   );

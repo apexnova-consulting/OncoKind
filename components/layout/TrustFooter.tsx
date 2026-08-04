@@ -38,7 +38,7 @@ const footerColumns = [
     heading: 'For Professionals',
     links: [
       { href: '/professional', label: 'Professional Overview' },
-      { href: 'https://calendly.com/oncokind-support', label: 'Book a Demo', external: true },
+      { href: 'https://calendly.com/oncokind-support', label: 'Schedule a Demo', external: true },
     ],
   },
   {
