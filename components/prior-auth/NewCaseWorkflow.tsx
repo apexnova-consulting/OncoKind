@@ -17,7 +17,7 @@ type CaseType = 'prior_auth' | 'step_therapy' | 'continued_stay';
 
 const STEPS_BY_TYPE: Record<CaseType, string[]> = {
   prior_auth:    ['Case Type', 'Facility & Patient', 'Insurance', 'Medication & Diagnosis', 'Review'],
-  step_therapy:  ['Case Type', 'Facility & Patient', 'Insurance', 'Medication & Drug History', 'State & Law', 'Review'],
+  step_therapy:  ['Case Type', 'Facility & Patient', 'Insurance', 'Medication & Drug History', 'Jurisdiction', 'Review'],
   continued_stay: ['Case Type', 'Facility & Patient', 'Insurance', 'Diagnosis & Status', 'Review'],
 };
 
@@ -400,11 +400,12 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="pa-payer-id" className={labelClass}>Payer ID / BIN</label>
+                  <label htmlFor="pa-payer-id" className={labelClass}>BIN / Auth ID</label>
                   <input
                     id="pa-payer-id"
+                    aria-label="BIN / Auth ID"
                     className={inputClass}
-                    placeholder="Payer ID from EOB"
+                    placeholder="BIN or Authorization ID from EOB"
                     value={formData.payer_id}
                     onChange={(e) => update('payer_id', e.target.value)}
                   />
@@ -651,12 +652,12 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               State Law Selection
             </h2>
             <p className="mb-6 text-sm text-slate-500">
-              48 states have step therapy reform laws. OncoKind will automatically cite the correct
-              statute for your facility state.
+              48 jurisdictions have enacted step therapy reform statutes. OncoKind will automatically
+              cite the applicable rule for your facility location.
             </p>
             <div className={fieldGroupClass}>
               <div>
-                <label htmlFor="pa-law-state" className={labelClass}>Facility State (for law auto-detection)</label>
+                <label htmlFor="pa-law-state" className={labelClass}>Facility State</label>
                 <select
                   id="pa-law-state"
                   aria-label="State"
@@ -671,7 +672,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 </select>
               </div>
               <div className="rounded-lg border border-[#6B8F71]/20 bg-[#6B8F71]/10 p-4">
-                <div className="mb-1 text-xs font-medium text-[#6B8F71]">State law auto-detected</div>
+                <div className="mb-1 text-xs font-medium text-[#6B8F71]">Statute detected</div>
                 <div className="text-xs font-semibold text-slate-700">
                   {formData.facility_state
                     ? STATE_LAW_LABELS[formData.facility_state] ?? 'Federal CMS Step Therapy Guidance (CMS-4182-F)'

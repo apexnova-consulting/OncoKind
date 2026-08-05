@@ -4,9 +4,8 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 export const getAdminContext = cache(async () => {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
 
   if (!user) {
     return { user: null, isAdmin: false };
@@ -18,7 +17,13 @@ export const getAdminContext = cache(async () => {
     .eq('id', user.id)
     .maybeSingle();
 
-  const allowedEmails = (process.env.ADMIN_EMAILS ?? '')
+  // ADMIN_EMAILS: comma-separated list of admin emails for production.
+  // QA_ADMIN_EMAILS: additional test accounts granted admin access (e.g. qa-admin@oncokind.com).
+  const adminEmailsRaw = [
+    process.env.ADMIN_EMAILS ?? '',
+    process.env.QA_ADMIN_EMAILS ?? '',
+  ].join(',');
+  const allowedEmails = adminEmailsRaw
     .split(',')
     .map((entry) => entry.trim().toLowerCase())
     .filter(Boolean);

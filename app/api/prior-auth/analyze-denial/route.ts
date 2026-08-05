@@ -8,11 +8,9 @@ export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-  if (authError || !user) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
+  if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -36,7 +34,7 @@ export async function POST(request: NextRequest) {
 
   const anthropic = createAnthropicClient();
   const response = await anthropic.messages.create({
-    model: ANTHROPIC_MODELS.heavy,
+    model: ANTHROPIC_MODELS.light,
     max_tokens: 800,
     system:
       'You are a healthcare regulatory specialist. Analyze insurance denial letters clearly and professionally. Never include prognosis, mortality, or survival data in your responses.',

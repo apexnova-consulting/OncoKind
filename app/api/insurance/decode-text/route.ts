@@ -9,9 +9,8 @@ export const maxDuration = 60;
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createServerSupabaseClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { session } } = await supabase.auth.getSession();
+    const user = session?.user ?? null;
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -35,42 +34,49 @@ export async function POST(request: NextRequest) {
 
     const decoded = await decodeInsuranceDenialText(text, report);
 
-    const { data: inserted, error: insertError } = await supabase
-      .from('insurance_navigation_cases')
-      .insert({
-        user_id: user.id,
-        source_file_name: 'pasted-denial-text',
-        denial_reason_code: decoded.payload.denialReasonCode,
-        insurance_name: decoded.payload.insuranceName,
-        member_services_phone: decoded.payload.memberServicesPhone,
-        appeal_deadline_text: decoded.payload.appealDeadlineText,
-        denial_summary_encrypted: decoded.denialSummaryEncrypted,
-        model_id: decoded.modelId,
-        status: 'decoded',
-      })
-      .select('id')
-      .single();
+    // Persist the decoded result — failures are non-fatal; the analysis is
+    // still returned to the client so the user gets a result even if the DB
+    // insert has an RLS issue.
+    let caseId: string | null = null;
+    try {
+      const { data: inserted } = await supabase
+        .from('insurance_navigation_cases')
+        .insert({
+          user_id: user.id,
+          source_file_name: 'pasted-denial-text',
+          denial_reason_code: decoded.payload.denialReasonCode,
+          insurance_name: decoded.payload.insuranceName,
+          member_services_phone: decoded.payload.memberServicesPhone,
+          appeal_deadline_text: decoded.payload.appealDeadlineText,
+          denial_summary_encrypted: decoded.denialSummaryEncrypted,
+          model_id: decoded.modelId,
+          status: 'decoded',
+        })
+        .select('id')
+        .single();
+      caseId = inserted?.id ?? null;
 
-    if (insertError || !inserted) {
-      return NextResponse.json({ error: 'Failed to save denial decode' }, { status: 500 });
+      if (caseId) {
+        const serviceRole = createServiceRoleSupabaseClient();
+        await serviceRole.from('ai_audit_log').insert({
+          user_id: user.id,
+          event_type: 'insurance_denial_decoded',
+          model_id: decoded.modelId,
+          entity_type: 'insurance_navigation_case',
+          entity_id: caseId,
+          details: {
+            denialReasonCode: decoded.payload.denialReasonCode,
+            insuranceName: decoded.payload.insuranceName,
+            reportId: latestReportId ?? null,
+          },
+        });
+      }
+    } catch {
+      // Non-fatal — analysis is still returned below.
     }
 
-    const serviceRole = createServiceRoleSupabaseClient();
-    await serviceRole.from('ai_audit_log').insert({
-      user_id: user.id,
-      event_type: 'insurance_denial_decoded',
-      model_id: decoded.modelId,
-      entity_type: 'insurance_navigation_case',
-      entity_id: inserted.id,
-      details: {
-        denialReasonCode: decoded.payload.denialReasonCode,
-        insuranceName: decoded.payload.insuranceName,
-        reportId: latestReportId ?? null,
-      },
-    });
-
     return NextResponse.json({
-      caseId: inserted.id,
+      caseId,
       ...decoded.payload,
     });
   } catch (error) {

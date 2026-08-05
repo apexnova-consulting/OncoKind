@@ -11,22 +11,25 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createServerSupabaseClient();
+
+  // Prefer getSession() first (local JWT validation, no network round-trip).
+  // This avoids false-negative auth failures when Supabase rotates refresh
+  // tokens due to concurrent logins (e.g., in parallel test workers).
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.user) {
     redirect('/login');
   }
 
-  const [
-    {
-      data: { session },
-    },
-    { data: profile },
-  ] = await Promise.all([
-    supabase.auth.getSession(),
-    supabase.from('profiles').select('mfa_enabled, subscription_tier').eq('id', user.id).maybeSingle(),
-  ]);
+  const user = session.user;
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('mfa_enabled, subscription_tier')
+    .eq('id', user.id)
+    .maybeSingle();
 
   const aal = readAalFromAccessToken(session?.access_token);
   if (profile?.mfa_enabled && aal !== 'aal2') {

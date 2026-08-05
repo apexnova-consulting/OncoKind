@@ -94,6 +94,7 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
   async function analyzeDenial() {
     if (denialText.trim().length < 20) {
       setDenialError('Please enter at least 20 characters of denial letter text.');
+      setDenialText('');
       return;
     }
     setDenialError('');

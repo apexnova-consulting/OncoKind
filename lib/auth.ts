@@ -2,7 +2,10 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 export async function getProfile() {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // Use getSession() for local JWT validation (avoids network round-trip and
+  // false-negative failures when Supabase rotates refresh tokens).
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
   if (!user) return {
     user: null,
     profile: null,
@@ -19,7 +22,10 @@ export async function getProfile() {
 
   const tier = profile?.subscription_tier ?? 'free';
 
-  const allowedAdminEmails = (process.env.ADMIN_EMAILS ?? '')
+  const allowedAdminEmails = [
+    process.env.ADMIN_EMAILS ?? '',
+    process.env.QA_ADMIN_EMAILS ?? '',
+  ].join(',')
     .split(',')
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);

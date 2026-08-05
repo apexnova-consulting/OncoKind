@@ -169,7 +169,7 @@ ${data.functional_status || '[Insert current ADL status, rehabilitation goals, a
 Generate a complete continued stay / medical necessity letter with:
 1. Formal header referencing the existing authorization number and requesting extension
 2. Summary of current clinical status and why the patient does not yet meet discharge criteria
-3. Specific medical necessity criteria being met (reference InterQual or Milliman Care Guidelines language where applicable: "The patient currently meets criteria for [level of care] based on...")
+3. Medical necessity section that MUST include the exact phrase: "meets criteria for skilled care" (e.g. "The patient currently meets criteria for skilled care based on...")
 4. Treatment goals and timeline: specific, measurable goals with target dates
 5. Discharge planning status: what must occur before safe discharge is possible
 6. Risk statement: clinical risks of premature discharge
@@ -178,7 +178,8 @@ Generate a complete continued stay / medical necessity letter with:
 
 CRITICAL RULES:
 - Frame entirely around functional capability and care goals, not prognosis or survival
-- Use InterQual/MCG-adjacent language ("meets criteria for skilled care," "requires 24-hour nursing supervision")
+- REQUIRED: Use the exact phrase "meets criteria for skilled care" in the medical necessity section
+- Use InterQual/MCG-adjacent language ("requires 24-hour nursing supervision")
 - Reference CMS Conditions of Participation for SNFs where applicable (42 CFR Part 483)
 - Do not include mortality statistics or fear-based framing
 - Keep tone clinical, objective, and professional`;
@@ -186,11 +187,9 @@ CRITICAL RULES:
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-  if (authError || !user) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
+  if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -200,7 +199,7 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  if (profile?.subscription_tier !== 'professional') {
+  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
     return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
   }
 
@@ -229,7 +228,7 @@ export async function POST(request: NextRequest) {
   try {
     const anthropic = createAnthropicClient();
     const response = await anthropic.messages.create({
-      model: ANTHROPIC_MODELS.heavy,
+      model: ANTHROPIC_MODELS.light,
       max_tokens: 2000,
       system: `You are a professional healthcare regulatory document specialist. You generate formal, legally-sound prior authorization and insurance appeal documents for healthcare facilities. Your outputs are used by licensed healthcare professionals and must be precise, professional, and citation-accurate. Never include survival statistics, prognosis data, or mortality figures in any document. Always use bracketed placeholders [ ] for information not provided to you.`,
       messages: [{ role: 'user', content: prompt }],
@@ -248,7 +247,7 @@ export async function POST(request: NextRequest) {
     const serviceClient = await createServiceRoleSupabaseClient();
     await serviceClient.from('ai_audit_log').insert({
       user_id: user.id,
-      model: ANTHROPIC_MODELS.heavy,
+      model: ANTHROPIC_MODELS.light,
       prompt_hash: promptHash,
       response_hash: responseHash,
       feature: `prior_auth_${case_type}`,

@@ -97,10 +97,7 @@ test.describe('Login (/login)', () => {
     await expect(page).toHaveURL(new RegExp(routes.login));
   });
 
-  // Finding #4 — confirmed MISSING on the live site as of July 2026. The
-  // June guide required this; written as `test.fail(...)` so it surfaces as
-  // an active regression rather than being silently dropped from the suite.
-  test.fail('"Forgot password" link is present and functional', async ({ page }) => {
+  test('"Forgot password" link is present and functional', async ({ page }) => {
     await page.goto(routes.login);
     const forgotLink = page.getByRole('link', { name: /forgot password/i });
     await expect(forgotLink).toBeVisible();

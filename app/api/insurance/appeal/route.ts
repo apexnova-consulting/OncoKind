@@ -14,9 +14,8 @@ export const maxDuration = 60;
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createServerSupabaseClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { session } } = await supabase.auth.getSession();
+    const user = session?.user ?? null;
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -29,7 +28,9 @@ export async function POST(request: NextRequest) {
       .single();
 
     const hasAdvocateAccess =
-      profile?.subscription_tier === 'advocate' || profile?.subscription_tier === 'enterprise';
+      profile?.subscription_tier === 'advocate' ||
+      profile?.subscription_tier === 'professional' ||
+      profile?.subscription_tier === 'enterprise';
 
     if (!hasAdvocateAccess) {
       return NextResponse.json(

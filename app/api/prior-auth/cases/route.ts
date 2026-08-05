@@ -5,11 +5,9 @@ export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-  if (authError || !user) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
+  if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -19,7 +17,7 @@ export async function GET(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  if (profile?.subscription_tier !== 'professional') {
+  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
     return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
   }
 
@@ -43,11 +41,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-  if (authError || !user) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
+  if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -57,7 +53,7 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  if (profile?.subscription_tier !== 'professional') {
+  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
     return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
   }
 

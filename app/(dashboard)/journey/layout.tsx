@@ -8,7 +8,8 @@ export default async function JourneyLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
   const { count } = user
     ? (await supabase.from('patient_reports').select('*', { count: 'exact', head: true }).eq('user_id', user.id))
     : { count: 0 };

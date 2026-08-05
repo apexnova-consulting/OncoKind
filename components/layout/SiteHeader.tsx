@@ -8,8 +8,9 @@ export async function SiteHeader() {
   const brandTheme = await getBrandTheme();
   const t = await getDictionaryFromCookies();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
 
   const navLinks = [
     { href: '/#how-it-works', label: 'How It Works' },

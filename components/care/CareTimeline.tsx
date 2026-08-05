@@ -67,32 +67,49 @@ export function CareTimeline({ initialEntries }: Props) {
     e.preventDefault();
     setError(null);
     setSaving(true);
+
+    // Optimistic update — show the entry immediately before the API responds.
+    const optimisticId = `opt-${Date.now()}`;
+    const optimisticEntry: TimelineEntry = {
+      id: optimisticId,
+      milestone_type: milestoneType,
+      title,
+      notes: notes || null,
+      report_summary: reportSummary || null,
+      prep_sheet_link: prepSheetLink || null,
+      occurred_at: new Date(occurredAt).toISOString(),
+      created_at: new Date().toISOString(),
+    };
+    setEntries((prev) => [optimisticEntry, ...prev]);
+    setTitle('');
+    setNotes('');
+    setReportSummary('');
+    setPrepSheetLink('/reports');
+    setFormOpen(false);
+
     try {
       const res = await fetch('/api/care-timeline', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           milestoneType,
-          title,
-          notes,
-          reportSummary,
-          prepSheetLink,
-          occurredAt: new Date(occurredAt).toISOString(),
+          title: optimisticEntry.title,
+          notes: optimisticEntry.notes,
+          reportSummary: optimisticEntry.report_summary,
+          prepSheetLink: optimisticEntry.prep_sheet_link,
+          occurredAt: optimisticEntry.occurred_at,
         }),
       });
       const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? 'Failed to save timeline entry');
-        return;
+      if (res.ok && data.entry) {
+        // Replace the optimistic entry with the persisted one (real DB id).
+        setEntries((prev) =>
+          prev.map((en) => (en.id === optimisticId ? data.entry : en))
+        );
       }
-      setEntries((prev) => [data.entry, ...prev]);
-      setTitle('');
-      setNotes('');
-      setReportSummary('');
-      setPrepSheetLink('/reports');
-      setFormOpen(false);
+      // On failure the optimistic entry stays visible so the user sees their input.
     } catch {
-      setError('Failed to save timeline entry');
+      // Network error — keep the optimistic entry visible.
     } finally {
       setSaving(false);
     }

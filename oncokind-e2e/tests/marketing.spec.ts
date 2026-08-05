@@ -123,8 +123,7 @@ test.describe('Homepage (/)', () => {
     }
   });
 
-  // Finding #2 — this card's link 404s live. Written to fail until fixed.
-  test.fail(
+  test(
     '"The Empathy Filter" feature card link does not 404',
     async ({ page, request, baseURL }) => {
       await page.goto(routes.home);
@@ -184,9 +183,7 @@ test.describe('Pricing (/pricing)', () => {
     );
   });
 
-  // Finding #5 — live site omits the plan param for Advocate. Written to the
-  // INTENDED behavior; fails until the link is fixed to match Pro's pattern.
-  test.fail('"Start Advocate Plan" links to /signup?plan=advocate', async ({ page }) => {
+  test('"Start Advocate Plan" links to /signup?plan=advocate', async ({ page }) => {
     await page.goto(routes.pricing);
     await expect(page.getByRole('link', { name: /start advocate plan/i })).toHaveAttribute(
       'href',
@@ -424,10 +421,7 @@ test.describe('Navigation & SEO', () => {
     await expect(page).toHaveTitle(/OncoKind/);
   });
 
-  // Finding #3 — likely prefix-match bug in robots.txt. Written to fail
-  // until an explicit `Allow: /prior-auth-pro` (ordered ahead of the
-  // `Disallow: /prior-auth` rule) is added.
-  test.fail('robots.txt does not disallow the public /prior-auth-pro marketing page', async ({ request, baseURL }) => {
+  test('robots.txt does not disallow the public /prior-auth-pro marketing page', async ({ request, baseURL }) => {
     const response = await request.get(`${baseURL}/robots.txt`);
     expect(response.ok()).toBeTruthy();
     const body = await response.text();
