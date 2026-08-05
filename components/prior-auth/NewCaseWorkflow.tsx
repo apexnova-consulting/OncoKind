@@ -197,7 +197,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
         aria-valuenow={displayStep + 1}
         aria-valuemin={1}
         aria-valuemax={displaySteps.length}
-        aria-label={`Step ${displayStep + 1} of ${displaySteps.length}: ${currentStepLabel}`}
+        aria-label={`Step ${displayStep + 1} of ${displaySteps.length}`}
         className="mb-4 flex items-center gap-2 overflow-x-auto pb-2"
       >
         {displaySteps.map((label, i) => (

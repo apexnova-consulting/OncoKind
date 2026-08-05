@@ -210,15 +210,22 @@ export function PriorAuthDashboard({
                     </div>
                     <div className="truncate text-xs text-slate-400">
                       {c.patient_identifier ? `Patient: ${c.patient_identifier} · ` : ''}
-                      {c.payer_name || 'Payer not set'} · {typeConfig.label}
+                      {c.payer_name || 'Payer not set'} ·{' '}
+                      {c.case_type === 'prior_auth'
+                        ? 'Prior Auth'
+                        : c.case_type === 'step_therapy'
+                          ? 'Step Therapy'
+                          : 'Continued Stay'}
                     </div>
                   </div>
                   <div className="shrink-0">
+                    {/* Icon-only badge to prevent text clashing with stat-row labels */}
                     <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${statusConfig.color}`}
+                      className={`inline-flex items-center rounded-full p-1.5 ${statusConfig.color}`}
+                      aria-label={`Status: ${statusConfig.label}`}
+                      title={statusConfig.label}
                     >
-                      <StatusIcon className="h-3 w-3" />
-                      {statusConfig.label}
+                      <StatusIcon className="h-3 w-3" aria-hidden="true" />
                     </span>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-slate-300" />

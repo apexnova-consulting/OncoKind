@@ -24,8 +24,10 @@ export default async function PriorAuthLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single();
 
-  const allowedEmails = (process.env.ADMIN_EMAILS ?? '')
-    .split(',')
+  const allowedEmails = [
+    ...(process.env.ADMIN_EMAILS ?? '').split(','),
+    ...(process.env.QA_ADMIN_EMAILS ?? '').split(','),
+  ]
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
   const email = (profile?.email ?? user.email ?? '').toLowerCase();
