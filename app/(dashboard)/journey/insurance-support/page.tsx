@@ -28,7 +28,7 @@ export default async function InsuranceSupportPage() {
               Insurance Denial Defense is an Advocate Plan feature.
             </p>
             <p className="mt-1 text-sm text-amber-700">
-              Upgrade to unlock structured appeal packet generation, denial letter analysis, and financial aid tracking.
+              Structured appeal packet generation, denial letter analysis, and financial aid tracking are available on the Advocate Plan.
             </p>
             <Button asChild className="mt-4">
               <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>

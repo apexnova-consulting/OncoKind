@@ -219,7 +219,7 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
                   <FileText className="h-4 w-4 opacity-40" />
                   <span className="text-xs">No document generated yet.</span>
                   <button
-                    onClick={() => router.push(`/prior-auth/new?type=${caseData.case_type}`)}
+                    onClick={() => router.push(`/prior-auth/new/form?type=${caseData.case_type}`)}
                     className="text-xs font-medium text-[#6B8F71] hover:text-[#1C2B2D]"
                   >
                     Regenerate →
@@ -286,7 +286,7 @@ export function CaseWorkspace({ caseData }: { caseData: CaseData }) {
                   {denialAnalysis}
                 </div>
                 <button
-                  onClick={() => setDenialAnalysis('')}
+                  onClick={() => { setDenialAnalysis(''); setDenialText(''); }}
                   className="text-xs text-slate-400 hover:text-slate-600"
                 >
                   Clear / Analyze another

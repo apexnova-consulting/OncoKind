@@ -7,12 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ReportsUploadPanel } from '@/components/reports/ReportsUploadPanel';
 import { formatReadableDate } from '@/lib/time';
 import { getPatientReport } from '@/lib/patient-reports';
+import { getProfile } from '@/lib/auth';
 
 export default async function ReportsPage() {
   const supabase = await createServerSupabaseClient();
   const { data: { session } } = await supabase.auth.getSession();
   const user = session?.user ?? null;
   if (!user) redirect('/login');
+  const { isPro, hasAdvocateAccess } = await getProfile();
+  const isFree = !isPro && !hasAdvocateAccess;
 
   const { data: reports } = await supabase
     .from('patient_reports')
@@ -44,7 +47,7 @@ export default async function ReportsPage() {
           </CardContent>
         </Card>
       ) : null}
-      <ReportsUploadPanel />
+      <ReportsUploadPanel reportCount={reportCards.length} isFree={isFree} />
       <p className="text-sm text-slate-500">
         Need a moment?{' '}
         <Link href="/quiet-room" className="font-semibold text-primary hover:underline">

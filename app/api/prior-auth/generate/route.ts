@@ -76,6 +76,7 @@ CRITICAL RULES:
 - Use formal, regulatory language that insurance reviewers are trained to approve
 - Do not include survival statistics, prognosis data, or fear-based language
 - Do not invent clinical details not provided — use placeholder brackets [ ] for missing information
+- For the physician signature line in the attestation section, use exactly: [PHYSICIAN SIGNATURE LINE] (do not use underscores or blanks — use the bracket format)
 - End with: "This request is submitted in accordance with [Payer Name]'s prior authorization requirements and applicable state and federal regulations."
 - Keep the document under 600 words, structured and scannable`;
 }

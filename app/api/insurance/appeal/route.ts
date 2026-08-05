@@ -101,19 +101,23 @@ export async function POST(request: NextRequest) {
         .eq('user_id', user.id);
     }
 
-    const serviceRole = createServiceRoleSupabaseClient();
-    await serviceRole.from('ai_audit_log').insert({
-      user_id: user.id,
-      event_type: 'appeal_letter_generated',
-      model_id: drafted.modelId,
-      entity_type: 'insurance_navigation_case',
-      entity_id: caseId || null,
-      details: {
-        denialReasonCode: decoded.denialReasonCode,
-        insuranceName: decoded.insuranceName,
-        reportId: latestReportId ?? null,
-      },
-    });
+    try {
+      const serviceRole = createServiceRoleSupabaseClient();
+      await serviceRole.from('ai_audit_log').insert({
+        user_id: user.id,
+        event_type: 'appeal_letter_generated',
+        model_id: drafted.modelId,
+        entity_type: 'insurance_navigation_case',
+        entity_id: caseId || null,
+        details: {
+          denialReasonCode: decoded.denialReasonCode,
+          insuranceName: decoded.insuranceName,
+          reportId: latestReportId ?? null,
+        },
+      });
+    } catch {
+      // Non-fatal — appeal packet is still returned
+    }
 
     return NextResponse.json({
       caseId,

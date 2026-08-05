@@ -121,7 +121,7 @@ export function PriorAuthDashboard({
             return (
               <button
                 key={type}
-                onClick={() => router.push(`/prior-auth/new?type=${type}`)}
+                onClick={() => router.push(`/prior-auth/new/form?type=${type}`)}
                 aria-label={config.cta}
                 className="group rounded-xl border-2 border-slate-200 bg-white p-5 text-left transition-all duration-200 hover:border-[#6B8F71] hover:bg-[#F8F6F2] focus:outline-none focus:ring-2 focus:ring-[#6B8F71] focus:ring-offset-2"
               >
@@ -212,17 +212,17 @@ export function PriorAuthDashboard({
                       {c.patient_identifier ? `Patient: ${c.patient_identifier} · ` : ''}
                       {c.payer_name || 'Payer not set'} ·{' '}
                       {c.case_type === 'prior_auth'
-                        ? 'Prior Auth'
+                        ? 'prior authorization'
                         : c.case_type === 'step_therapy'
-                          ? 'Step Therapy'
-                          : 'Continued Stay'}
+                          ? 'step therapy exception'
+                          : 'continued stay defense'}
                     </div>
                   </div>
                   <div className="shrink-0">
                     {/* Icon-only badge to prevent text clashing with stat-row labels */}
                     <span
                       className={`inline-flex items-center rounded-full p-1.5 ${statusConfig.color}`}
-                      aria-label={`Status: ${statusConfig.label}`}
+                      aria-label={statusConfig.label}
                       title={statusConfig.label}
                     >
                       <StatusIcon className="h-3 w-3" aria-hidden="true" />

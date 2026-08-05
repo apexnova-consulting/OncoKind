@@ -11,7 +11,7 @@ import type { PatientReportData } from '@/lib/patient-reports';
 
 const MAX_PDF_SIZE_BYTES = 10 * 1024 * 1024;
 const MAX_EXTRACTED_CHARS = 100_000;
-const DEFAULT_MODEL_ID = ANTHROPIC_MODELS.heavy;
+const DEFAULT_MODEL_ID = ANTHROPIC_MODELS.light;
 const APPEALS_SYSTEM_PROMPT = `You are a health-tech insurance appeals assistant. Return only valid JSON that matches the requested schema exactly.`;
 const APPEALS_KNOWLEDGE_BASE = `OncoKind insurance appeal knowledge base:
 - Use plain English for denial explanations.
