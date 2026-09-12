@@ -6,7 +6,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      // Explicit allow must appear so crawlers that prefix-match
+      // `Disallow: /prior-auth` do not block the public KindAuth landing page.
+      allow: ['/', '/prior-auth-pro', '/prior-auth-pro/'],
       disallow: ['/api/', '/dashboard/', '/journey/', '/admin/', '/prior-auth/'],
     },
     sitemap: `${baseUrl}/sitemap.xml`,

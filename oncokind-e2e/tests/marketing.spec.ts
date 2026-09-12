@@ -14,18 +14,12 @@ import {
 /**
  * marketing.spec.ts
  * ──────────────────────────────────────────────────────────────────────────
- * Updated Aug 2026 against the LIVE site. See ../SITE_REVIEW_FINDINGS.md
- * for the July write-up; several of those findings have since changed:
- *   - /about, /resources, /community now share the unified public template
- *   - Homepage feature grid is 10 cards (Goals of Care Prep Sheet added)
- *   - Founder video removed; founder story copy remains
- *   - Homepage pricing preview removed
- * Two tests remain EXPECTED TO FAIL (`test.fail(...)`) until fixed:
- *   1. /features/empathy-filter 404s despite being linked from the footer
- *      and homepage feature grid.
- *   2. robots.txt appears to disallow /prior-auth-pro via prefix-matching
- *      on a `Disallow: /prior-auth` rule.
- *   3. "Start Advocate Plan" still omits `?plan=advocate` on /pricing.
+ * Updated Sep 2026 against the LIVE site. See ../SITE_REVIEW_FINDINGS.md
+ * for the July write-up. The previously failing public-site bugs are now
+ * asserted as passing behavior:
+ *   1. /features/empathy-filter is a real feature page.
+ *   2. robots.txt explicitly allows /prior-auth-pro.
+ *   3. "Start Advocate Plan" links to /signup?plan=advocate.
  */
 
 /** Site logo accessible name is "O ncoKind" (split accent span), not "OncoKind". */
@@ -183,12 +177,16 @@ test.describe('Pricing (/pricing)', () => {
     );
   });
 
-  test('"Start Advocate Plan" links to /signup?plan=advocate', async ({ page }) => {
+  test('"Start Advocate Plan" links to /signup?plan=advocate and pre-selects the plan', async ({ page }) => {
     await page.goto(routes.pricing);
     await expect(page.getByRole('link', { name: /start advocate plan/i })).toHaveAttribute(
       'href',
       /\/signup\?plan=advocate/
     );
+    await page.getByRole('link', { name: /start advocate plan/i }).click();
+    await expect(page).toHaveURL(/\/signup\?plan=advocate/);
+    await expect(page.getByText(/selected plan/i)).toBeVisible();
+    await expect(page.getByText(/advocate plan/i).first()).toBeVisible();
   });
 
   test('"Book a Demo" on Professional tier links to Calendly', async ({ page }) => {
@@ -259,6 +257,10 @@ test.describe('Prior Auth Pro (/prior-auth-pro)', () => {
     const response = await page.goto(routes.priorAuthPro);
     expect(response?.ok()).toBeTruthy();
     await expect(page).not.toHaveURL(new RegExp(routes.login));
+    const robotsMeta = await page.locator('meta[name="robots"]').getAttribute('content');
+    if (robotsMeta) {
+      expect(robotsMeta.toLowerCase()).not.toContain('noindex');
+    }
   });
 
   test('three workflow cards render: Prior Authorization, Step Therapy Exception, Continued Stay', async ({
@@ -289,6 +291,8 @@ test.describe('Site template consistency', () => {
       for (const label of newTemplateNavLabels) {
         expect(navLinks.some((l) => l.includes(label)), `Expected nav on ${route} to include "${label}"`).toBeTruthy();
       }
+      await expect(page.getByRole('link', { name: /^Timeline$/ })).toHaveCount(0);
+      await expect(page.getByRole('link', { name: /^Prep Sheet$/ })).toHaveCount(0);
     });
 
     test(`${route} footer has the same ${newTemplateFooterColumnCount} columns as the rest of the site`, async ({
@@ -373,16 +377,10 @@ test.describe('Other marketing pages', () => {
     }
   });
 
-  test('/waitlist shows the closed-waitlist message, not a signup form', async ({ page }) => {
-    // The waitlist retired when the product launched (Section 12 of the
-    // June guide assumed an active signup form — that flow no longer
-    // exists). This replaces the old "/waitlist form submits" test entirely.
+  test('/waitlist redirects to /signup', async ({ page }) => {
     await page.goto(routes.waitlist);
-    await expect(page.getByText(/waitlist is now closed/i)).toBeVisible();
-    await expect(page.getByText(/oncokind has launched/i)).toBeVisible();
-    await expect(page.getByRole('link', { name: /go to oncokind/i })).toHaveAttribute('href', /^\/$|^https?:\/\/(www\.)?oncokind\.com\/?$/);
-    // There should be no lingering email capture form on this page anymore.
-    await expect(page.getByLabel(/email/i)).toHaveCount(0);
+    await expect(page).toHaveURL(/\/signup\/?$/);
+    await expect(page.getByRole('heading', { name: /create account/i })).toBeVisible();
   });
 });
 
@@ -405,6 +403,11 @@ test.describe('Navigation & SEO', () => {
     }
   });
 
+  test('footer does not include a Join Waitlist link', async ({ page }) => {
+    await page.goto(routes.home);
+    await expect(siteFooter(page).getByRole('link', { name: /join waitlist/i })).toHaveCount(0);
+  });
+
   test('Cancer Support Community helpline is visible in the footer', async ({ page }) => {
     await page.goto(routes.home);
     await expect(page.getByText('1-888-793-9355')).toBeVisible();
@@ -421,6 +424,17 @@ test.describe('Navigation & SEO', () => {
     await expect(page).toHaveTitle(/OncoKind/);
   });
 
+  test('pricing metadata matches the live $39 Caregiver Pro price', async ({ page }) => {
+    await page.goto(routes.pricing);
+    const description = await page.locator('meta[name="description"]').getAttribute('content');
+    const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content');
+    const twitterDescription = await page.locator('meta[name="twitter:description"]').getAttribute('content');
+    expect(description).toMatch(/\$39\/month/);
+    expect(description).not.toMatch(/\$19/);
+    expect(ogDescription).toMatch(/\$39\/month/);
+    expect(twitterDescription).toMatch(/\$39\/month/);
+  });
+
   test('robots.txt does not disallow the public /prior-auth-pro marketing page', async ({ request, baseURL }) => {
     const response = await request.get(`${baseURL}/robots.txt`);
     expect(response.ok()).toBeTruthy();
@@ -431,7 +445,9 @@ test.describe('Navigation & SEO', () => {
     // ahead of it, standard robots.txt precedence disallows this page too.
     const hasBlanketDisallow = /Disallow:\s*\/prior-auth\s*$/m.test(body);
     const hasExplicitAllow = /Allow:\s*\/prior-auth-pro/m.test(body);
+    expect(hasExplicitAllow, 'robots.txt should explicitly allow /prior-auth-pro').toBeTruthy();
     expect(hasBlanketDisallow && !hasExplicitAllow, 'robots.txt disallows /prior-auth-pro via prefix match').toBeFalsy();
+    expect(/Disallow:\s*\/prior-auth-pro/m.test(body)).toBeFalsy();
   });
 
   test('robots.txt disallows /dashboard/, /api/, and the authenticated /prior-auth workspace', async ({

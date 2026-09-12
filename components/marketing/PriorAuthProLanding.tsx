@@ -8,24 +8,6 @@ import { Button } from '@/components/ui/button';
 export function PriorAuthProLanding() {
   return (
     <div className="min-h-screen bg-[#F8F6F2]">
-      {/* Slim marketing nav */}
-      <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-        <Link href="/" className="font-display text-xl font-semibold text-[#1C2B2D]">
-          Onco<span className="text-[#6B8F71]">Kind</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link href="/pricing" className="text-sm text-slate-600 hover:text-[#1C2B2D]">
-            Pricing
-          </Link>
-          <Link href="/login" className="text-sm text-slate-600 hover:text-[#1C2B2D]">
-            Log In
-          </Link>
-          <Button asChild className="bg-[#6B8F71] text-sm text-white hover:bg-[#5a7a60]">
-            <Link href="/signup">Start Free</Link>
-          </Button>
-        </div>
-      </header>
-
       {/* Hero */}
       <section className="mx-auto max-w-4xl px-6 pb-16 pt-20 text-center">
         <Reveal>

@@ -5,6 +5,17 @@ export const metadata: Metadata = {
   title: 'The Empathy Filter',
   description:
     'OncoKind\'s Empathy Filter transforms clinical language into compassionate, plain-English communication — helping caregivers and patients understand difficult information without losing the facts.',
+  openGraph: {
+    title: 'The Empathy Filter',
+    description:
+      'OncoKind\'s Empathy Filter transforms clinical language into compassionate, plain-English communication — helping caregivers and patients understand difficult information without losing the facts.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Empathy Filter',
+    description:
+      'OncoKind\'s Empathy Filter transforms clinical language into compassionate, plain-English communication — helping caregivers and patients understand difficult information without losing the facts.',
+  },
 };
 
 export default function EmpathyFilterFeaturePage() {

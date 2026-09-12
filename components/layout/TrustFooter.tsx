@@ -12,7 +12,6 @@ const footerColumns = [
       { href: '/#sample-demo', label: 'Try Demo' },
       { href: '/community', label: 'Community' },
       { href: '/learn', label: 'Resources' },
-      { href: '/waitlist', label: 'Join Waitlist' },
     ],
   },
   {

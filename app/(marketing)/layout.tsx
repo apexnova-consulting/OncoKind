@@ -1,5 +1,4 @@
 import { SiteHeader } from '@/components/layout/SiteHeader';
-import { WaitlistBanner } from '@/components/marketing/WaitlistBanner';
 
 export default function MarketingLayout({
   children,
@@ -9,7 +8,6 @@ export default function MarketingLayout({
   return (
     <>
       <SiteHeader />
-      <WaitlistBanner />
       {children}
     </>
   );

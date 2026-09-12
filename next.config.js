@@ -23,6 +23,15 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/waitlist',
+        destination: '/signup',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

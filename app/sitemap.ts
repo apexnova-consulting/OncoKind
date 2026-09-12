@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/features/doctor-prep-sheet',
     '/features/clinical-trial-matching',
     '/features/insurance-denial-defense',
+    '/features/empathy-filter',
     '/signup',
     '/login',
     '/prior-auth-pro',

@@ -69,7 +69,7 @@ export const routes = {
   about: '/about',
   pricing: '/pricing',
   forProfessionals: '/professional',
-  priorAuthPro: '/prior-auth-pro', // robots.txt blocks this — see finding #3
+  priorAuthPro: '/prior-auth-pro',
   learn: '/learn', // "Resources" nav target
   resources: '/resources', // DIFFERENT content than /learn, not a redirect/alias
   community: '/community',
@@ -78,7 +78,7 @@ export const routes = {
   terms: '/terms',
   security: '/security', // orphaned — not linked from the footer
   support: '/support',
-  waitlist: '/waitlist', // closed/retired — no longer a signup form
+  waitlist: '/waitlist',
   mission: '/mission',
   signup: '/signup',
   login: '/login',
@@ -103,7 +103,7 @@ export const routes = {
   featureDoctorPrepSheet: '/features/doctor-prep-sheet',
   featureClinicalTrialMatching: '/features/clinical-trial-matching',
   featureInsuranceDenialDefense: '/features/insurance-denial-defense',
-  featureEmpathyFilter: '/features/empathy-filter', // confirmed 404 live — finding #2
+  featureEmpathyFilter: '/features/empathy-filter',
 } as const;
 
 // Main nav labels (home, pricing, professional, about, resources, community,
@@ -138,7 +138,7 @@ export const homepageFeatureCards = [
   { name: 'Doctor Prep Sheet', href: routes.featureDoctorPrepSheet },
   { name: 'Clinical Trial Matching', href: routes.featureClinicalTrialMatching },
   { name: 'Insurance Denial Defense', href: routes.featureInsuranceDenialDefense },
-  { name: 'The Empathy Filter', href: routes.featureEmpathyFilter }, // 404s live
+  { name: 'The Empathy Filter', href: routes.featureEmpathyFilter },
   { name: 'Second Opinion Mode', href: routes.journeySecondOpinion },
   { name: 'Financial Help', href: routes.journeyFinancialHelp },
   { name: 'Care Timeline', href: routes.journeyTimeline },
@@ -157,7 +157,7 @@ export const pricingTiers = {
     name: 'Advocate Plan',
     price: '$49',
     cta: 'Start Advocate Plan',
-    href: '/signup?plan=advocate', // intended — live site currently omits the param
+    href: '/signup?plan=advocate',
     badge: 'Most Popular',
   },
   professional: {

@@ -74,7 +74,7 @@ const jsonLd = {
   url: 'https://www.oncokind.com',
   offers: [
     { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
-    { '@type': 'Offer', name: 'Caregiver Pro', price: '19', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Caregiver Pro', price: '39', priceCurrency: 'USD', billingIncrement: 'P1M' },
     { '@type': 'Offer', name: 'Advocate Plan', price: '49', priceCurrency: 'USD', billingIncrement: 'P1M' },
   ],
   operatingSystem: 'Web, iOS (PWA), Android (PWA)',

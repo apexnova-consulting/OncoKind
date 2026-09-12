@@ -18,7 +18,7 @@ import {
  *   - Tier/API checks log in fresh per test so shared storageState isn't
  *     invalidated by earlier login-flow tests reusing the same QA accounts.
  *
- * Finding #4 — "Forgot password" remains missing; kept as test.fail(...).
+ * Finding #4 — forgot-password flow is now a first-class auth page.
  */
 
 async function loginAs(page: Page, user: TestUser) {
@@ -102,7 +102,12 @@ test.describe('Login (/login)', () => {
     const forgotLink = page.getByRole('link', { name: /forgot password/i });
     await expect(forgotLink).toBeVisible();
     await forgotLink.click();
-    await expect(page).toHaveURL(/forgot|reset/i);
+    await expect(page).toHaveURL(/\/forgot-password/);
+    await expect(page.getByRole('heading', { name: /forgot your password/i })).toBeVisible();
+    await expect(page.getByLabel(/email/i)).toBeVisible();
+    await page.getByLabel(/email/i).fill('nobody@example.com');
+    await page.getByRole('button', { name: /send reset link/i }).click();
+    await expect(page.getByText(/if an account exists/i)).toBeVisible();
   });
 
   test('"Don\'t have an account? Sign up" links to /signup', async ({ page }) => {

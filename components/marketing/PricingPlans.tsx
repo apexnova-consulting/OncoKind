@@ -104,7 +104,7 @@ export function PricingPlans({
   const activeBillingInterval = showBillingToggle ? billingInterval : 'monthly';
 
   const proActivePrice = proPricing?.[activeBillingInterval] ?? {
-    amount: '$19',
+    amount: '$39',
     cadenceLabel: '/month',
     configured: false,
   };

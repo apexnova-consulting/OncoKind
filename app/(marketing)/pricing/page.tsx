@@ -6,14 +6,20 @@ import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosu
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 
+const PRICING_DESCRIPTION =
+  'Free, $39/month, $49/month, and $999/month plans for families and care professionals navigating cancer. No credit card required to start.';
+
 export const metadata = {
   title: 'OncoKind Pricing — Start Free, Upgrade When Ready',
-  description:
-    'Free, $19/month, $49/month, and $999/month plans for families and care professionals navigating cancer. No credit card required to start.',
+  description: PRICING_DESCRIPTION,
   openGraph: {
     title: 'OncoKind Pricing — Start Free, Upgrade When Ready',
-    description:
-      'Free, $19/month, $49/month, and $999/month plans for families and care professionals navigating cancer. No credit card required to start.',
+    description: PRICING_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'OncoKind Pricing — Start Free, Upgrade When Ready',
+    description: PRICING_DESCRIPTION,
   },
 };
 
@@ -100,8 +106,8 @@ export default async function PricingPage() {
   const showYearlyBilling = true;
 
   const [proMonthly, proYearly, advocateMonthly, advocateYearly] = await Promise.all([
-    getPriceDisplay(stripePrices.proMonthly, '$19', '/month'),
-    getPriceDisplay(stripePrices.proYearly, '$190', '/year'),
+    getPriceDisplay(stripePrices.proMonthly, '$39', '/month'),
+    getPriceDisplay(stripePrices.proYearly, '$390', '/year'),
     getPriceDisplay(stripePrices.advocateMonthly, '$49', '/month'),
     getPriceDisplay(stripePrices.advocateYearly, '$490', '/year'),
   ]);
