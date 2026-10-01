@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicClient, ANTHROPIC_MODELS } from '@/lib/anthropic';
+import { createAnthropicClient, ANTHROPIC_MODELS, getAnthropicErrorMessage } from '@/lib/anthropic';
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 
 export const runtime = 'nodejs';
@@ -280,7 +280,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ document: generatedDocument, case_id });
   } catch (error) {
-    console.error('Prior auth generation error:', error);
+    console.error('Prior auth generation error:', getAnthropicErrorMessage(error));
     return NextResponse.json({ error: 'Generation failed' }, { status: 500 });
   }
 }

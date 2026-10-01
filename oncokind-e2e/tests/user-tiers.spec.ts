@@ -234,9 +234,9 @@ test.describe('Admin / Enterprise Tier (Section 7)', () => {
     expect(response?.ok()).toBeTruthy();
   });
 
-  test('Prior Auth Engine card is visible (enterprise includes professional access)', async ({ page }) => {
+  test('KindAuth card is visible (enterprise includes professional access)', async ({ page }) => {
     await page.goto(routes.dashboard);
-    await expect(page.getByText(/prior auth engine/i)).toBeVisible();
+    await expect(page.getByText(/kindauth/i)).toBeVisible();
   });
 
   test('/prior-auth workspace loads successfully for admin', async ({ page }) => {

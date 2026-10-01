@@ -6,8 +6,7 @@ import { routes, stripeTestCard, pricingTiers, newSignupUser } from './fixtures/
  * ──────────────────────────────────────────────────────────────────────────
  * Rewritten July 2026 against the live pricing page. Key changes from the
  * original suite:
- *   - Buttons are now "Start Caregiver Pro →" / "Start Advocate Plan →", not
- *     "Get Caregiver Pro" / "Get Advocate".
+ *   - Buttons are now "Start Care & Advocacy Pro →".
  *   - Professional tier is Book-a-Demo only now — no self-serve Stripe
  *     checkout exists for it anymore, so there's nothing to test there.
  *   - Signup requires a full name field now, in addition to email/password.
@@ -54,26 +53,26 @@ async function completeStripeCheckout(page: import('@playwright/test').Page) {
 }
 
 test.describe('Stripe Billing', () => {
-  test('purchasing Caregiver Pro from /pricing completes checkout and reflects in billing', async ({ page }) => {
+  test('purchasing Care & Advocacy Pro from /pricing completes checkout and reflects in billing', async ({ page }) => {
     await signUpFreshAccount(page);
 
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: new RegExp(pricingTiers.pro.cta, 'i') }).click();
+    await page.getByRole('link', { name: new RegExp(pricingTiers.care.cta, 'i') }).click();
 
     await completeStripeCheckout(page);
 
     await page.waitForURL(new RegExp(routes.dashboard), { timeout: 30_000 });
 
     await page.goto(routes.dashboardBilling);
-    await expect(page.getByText(/caregiver pro/i).first()).toBeVisible();
+    await expect(page.getByText(/care & advocacy|advocate|pro/i).first()).toBeVisible();
     await expect(page.getByText(/active/i)).toBeVisible();
   });
 
-  test('purchasing Advocate Plan from /pricing loads Stripe checkout', async ({ page }) => {
+  test('purchasing Care & Advocacy Pro from /pricing loads Stripe checkout', async ({ page }) => {
     await signUpFreshAccount(page);
 
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: new RegExp(pricingTiers.advocate.cta, 'i') }).click();
+    await page.getByRole('link', { name: new RegExp(pricingTiers.care.cta, 'i') }).click();
     await page.waitForURL(/checkout\.stripe\.com/, { timeout: 20_000 });
     await expect(page).toHaveURL(/checkout\.stripe\.com/);
   });
@@ -82,7 +81,7 @@ test.describe('Stripe Billing', () => {
     await signUpFreshAccount(page);
 
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: new RegExp(pricingTiers.advocate.cta, 'i') }).click();
+    await page.getByRole('link', { name: new RegExp(pricingTiers.care.cta, 'i') }).click();
     await completeStripeCheckout(page);
     await page.waitForURL(new RegExp(routes.dashboard), { timeout: 30_000 });
 

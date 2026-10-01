@@ -3,6 +3,7 @@
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { CONSENT_COOKIE_NAME, decodeConsent } from '@/lib/consent';
+import { captureUtmFromLocation, flushQueuedAnalytics } from '@/lib/analytics';
 
 function readConsent() {
   if (typeof document === 'undefined') return null;
@@ -22,12 +23,24 @@ export function AnalyticsScripts() {
     const syncConsent = () => {
       const consent = readConsent();
       setEnabled(Boolean(consent?.analytics));
+      captureUtmFromLocation();
     };
 
     syncConsent();
     window.addEventListener('oncokind-consent-updated', syncConsent);
     return () => window.removeEventListener('oncokind-consent-updated', syncConsent);
   }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const interval = window.setInterval(() => {
+      if (typeof window.gtag === 'function') {
+        flushQueuedAnalytics();
+        window.clearInterval(interval);
+      }
+    }, 250);
+    return () => window.clearInterval(interval);
+  }, [enabled]);
 
   if (!measurementId || !enabled) return null;
 

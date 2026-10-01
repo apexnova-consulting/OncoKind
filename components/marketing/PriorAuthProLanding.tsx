@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Reveal, RevealStagger } from '@/components/motion/Reveal';
 import { Shield, FileText, BedDouble, CheckCircle, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { TrackedCalendlyLink } from '@/components/analytics/TrackedCalendlyLink';
 
 export function PriorAuthProLanding() {
   return (
@@ -13,7 +14,7 @@ export function PriorAuthProLanding() {
         <Reveal>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#6B8F71]/10 px-4 py-2 text-xs font-medium text-[#6B8F71]">
             <Shield className="h-3.5 w-3.5" />
-            OncoKind Prior Auth Engine — For Care Facilities
+            KindAuth Pro — For Care Facilities
           </div>
           <h1 className="font-display mb-6 text-4xl font-semibold leading-tight text-[#1C2B2D] md:text-5xl">
             Stop Losing 3 Hours
@@ -21,9 +22,8 @@ export function PriorAuthProLanding() {
             Per Prior Authorization
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-lg leading-relaxed text-slate-500">
-            AI-generated prior auth requests, step therapy exception letters, and continued stay
-            defenses — built for Directors of Nursing, Social Workers, and Care Coordinators at
-            SNFs, group homes, and rehab centers.
+            For care teams: draft prior authorization requests, step-therapy exception letters with
+            state statute citations, and continued-stay appeals in minutes.
           </p>
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Button
@@ -38,13 +38,11 @@ export function PriorAuthProLanding() {
               asChild
               className="border border-slate-200 bg-white px-8 py-3 text-base text-[#1C2B2D] hover:bg-slate-50"
             >
-              <Link href="mailto:hello@oncokind.com">
-                Book a Demo
-              </Link>
+              <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
             </Button>
           </div>
           <p className="mt-4 text-xs text-slate-400">
-            No credit card required. Professional plan includes full Prior Auth Engine access.
+            No credit card required. Professional plan includes full KindAuth Pro access.
           </p>
         </Reveal>
       </section>
@@ -190,7 +188,7 @@ export function PriorAuthProLanding() {
             Ready to stop losing hours to prior auth paperwork?
           </h2>
           <p className="mx-auto mb-8 max-w-xl text-sm text-[#E8F0E9]">
-            OncoKind Professional includes full Prior Auth Engine access. Unlimited cases, all three
+            OncoKind Professional includes full KindAuth Pro access. Unlimited cases, all three
             document types, outcome tracking, and the Denial Analyzer — included at $999/month.
           </p>
           <Button
@@ -208,7 +206,7 @@ export function PriorAuthProLanding() {
       {/* Disclaimer footer */}
       <footer className="bg-[#1C2B2D] py-6 text-center">
         <p className="text-xs text-slate-400">
-          OncoKind Prior Auth is an AI-assisted document drafting tool. All generated documents
+          KindAuth is an AI-assisted document drafting tool. All generated documents
           must be reviewed by a licensed healthcare professional prior to submission. Not a
           substitute for legal or clinical judgment.{' '}
           <Link href="/" className="hover:text-white">

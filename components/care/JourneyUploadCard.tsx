@@ -7,6 +7,7 @@ import { FileUp, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { scrubAndProcessPathology } from '@/app/actions/scrubAndProcessPathology';
 import { motion, AnimatePresence } from 'framer-motion';
+import { track } from '@/lib/analytics';
 
 export function JourneyUploadCard({
   reportCount = 0,
@@ -27,11 +28,14 @@ export function JourneyUploadCard({
     }
     setError(null);
     setUploading(true);
+    track('report_upload_started');
     try {
       const formData = new FormData();
       formData.set('pdf', file);
       const result = await scrubAndProcessPathology(formData);
       if (result.success) {
+        track('report_upload_completed');
+        track('profile_generated');
         router.push(`/journey/diagnosis/${result.reportId}`);
         router.refresh();
       } else {

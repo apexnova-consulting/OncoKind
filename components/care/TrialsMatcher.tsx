@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { getClinicalTrialSources } from '@/lib/disclosures';
+import { track } from '@/lib/analytics';
 
 type Tier = 'free' | 'pro' | 'professional';
 
@@ -80,6 +81,7 @@ export function TrialsMatcher({
         return;
       }
       setData(json);
+      track('trial_matches_viewed', { result_count: Array.isArray(json.studies) ? json.studies.length : 0 });
     } catch {
       setError('Unable to fetch trials right now.');
       setData(null);

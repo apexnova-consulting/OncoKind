@@ -30,9 +30,9 @@ import {
 test.use({ storageState: users.professional.storageState });
 
 test.describe('Entry points', () => {
-  test('dashboard shows a dark "Prior Auth Engine" card', async ({ page }) => {
+  test('dashboard shows a dark KindAuth card', async ({ page }) => {
     await page.goto(routes.dashboard);
-    await expect(page.getByText(/prior auth engine/i).first()).toBeVisible();
+    await expect(page.getByText(/kindauth/i).first()).toBeVisible();
   });
 
   test('dashboard nav shows a "Prior Auth" link with a "NEW" badge', async ({ page }) => {
@@ -56,7 +56,10 @@ test.describe('Entry points', () => {
 test.describe('Prior Auth Hub (/prior-auth)', () => {
   test('renders a standalone dark workspace header', async ({ page }) => {
     await page.goto(routes.priorAuthHub);
-    await expect(page.getByText('OncoKind | Prior Auth Engine')).toBeVisible();
+    await expect(page.getByText('OncoKind | KindAuth')).toBeVisible();
+    await expect(
+      page.getByText(/Pilot: use de-identified case details only/i)
+    ).toBeVisible();
   });
 
   test('"Back to Dashboard" returns to /dashboard', async ({ page }) => {

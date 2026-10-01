@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { MEDICAL_DISCLAIMER_TEXT, PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
+import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
 
 const lastReviewed = 'May 11, 2026';
 
@@ -207,6 +208,8 @@ export default function TrustPage() {
             </p>
           </div>
         </section>
+
+        <ClinicalAdvisorSection />
 
         <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
           <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { getCancerProfileSources, MEDICAL_DISCLAIMER_TEXT } from '@/lib/disclosures';
+import { track } from '@/lib/analytics';
 
 type Props = {
   isPro: boolean;
@@ -198,6 +199,7 @@ export function DoctorPrepSheet({
   }
 
   function openPrintablePrepSheet() {
+    track('prep_sheet_exported');
     const html = printablePrepSheetHtml();
     const w = window.open('', '_blank');
     if (!w) return;

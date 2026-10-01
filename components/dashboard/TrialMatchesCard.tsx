@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { getClinicalTrialSources } from '@/lib/disclosures';
+import { track } from '@/lib/analytics';
 
 type Trial = { id?: string; title?: string; status?: string; url?: string };
 
@@ -19,7 +20,9 @@ export function TrialMatchesCard() {
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
-        setTrials(Array.isArray(data) ? data : data?.studies ?? []);
+        const nextTrials = Array.isArray(data) ? data : data?.studies ?? [];
+        setTrials(nextTrials);
+        track('trial_matches_viewed', { result_count: nextTrials.length });
       })
       .catch(() => {
         if (!cancelled) setTrials([]);

@@ -5,6 +5,7 @@ import './globals.css';
 import { TrustFooter } from '@/components/layout/TrustFooter';
 import { PwaRegister } from '@/components/PwaRegister';
 import { AnalyticsScripts } from '@/components/analytics/AnalyticsScripts';
+import { IdentifyAnalyticsUser } from '@/components/analytics/FunnelPageView';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { getBrandTheme } from '@/lib/branding';
 import { getLanguageFromCookies } from '@/lib/i18n-server';
@@ -74,8 +75,9 @@ const jsonLd = {
   url: 'https://www.oncokind.com',
   offers: [
     { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
-    { '@type': 'Offer', name: 'Caregiver Pro', price: '39', priceCurrency: 'USD', billingIncrement: 'P1M' },
-    { '@type': 'Offer', name: 'Advocate Plan', price: '49', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Care & Advocacy Pro', price: '29', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Care & Advocacy Pro (annual)', price: '279', priceCurrency: 'USD', billingIncrement: 'P1Y' },
+    { '@type': 'Offer', name: 'Professional', price: '999', priceCurrency: 'USD', billingIncrement: 'P1M' },
   ],
   operatingSystem: 'Web, iOS (PWA), Android (PWA)',
   author: { '@type': 'Person', name: 'Mike Nielson' },
@@ -112,6 +114,7 @@ export default async function RootLayout({
         </a>
         <PwaRegister />
         <AnalyticsScripts />
+        <IdentifyAnalyticsUser />
         <div id="main-content" tabIndex={-1} className="contents">
           {children}
         </div>

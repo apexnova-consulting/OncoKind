@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { detectIdentifierWarningInValues } from '@/lib/identifier-warnings';
 
 type CaseType = 'prior_auth' | 'step_therapy' | 'continued_stay';
 
@@ -116,6 +117,17 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
   const displaySteps = hasPreselectedType ? steps.slice(1) : steps;
   const displayStep = hasPreselectedType ? Math.max(0, step - 1) : step;
   const currentStepLabel = displaySteps[displayStep] ?? steps[step] ?? '';
+  const identifierWarning = detectIdentifierWarningInValues([
+    formData.patient_identifier,
+    formData.member_id_masked,
+    formData.clinical_notes,
+    formData.diagnosis_description,
+    formData.prescribing_physician,
+    formData.functional_status,
+    formData.step_therapy_drugs_tried,
+    formData.admission_date,
+    ...formData.drug_trials.flatMap((trial) => [trial.drug_name, trial.reason_discontinued]),
+  ]);
 
   function update<K extends keyof FormData>(field: K, value: FormData[K]) {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -228,6 +240,16 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
       <p className="mb-4 text-xs font-medium text-slate-500" aria-hidden>
         Step {displayStep + 1} of {displaySteps.length} — {currentStepLabel}
       </p>
+
+      {identifierWarning ? (
+        <div
+          role="status"
+          className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+        >
+          {identifierWarning} You can continue, but please replace identifiers with de-identified
+          case details.
+        </div>
+      ) : null}
 
       <Card className="border border-slate-200 bg-white p-6">
         {/* ── Step 0: Case Type ── */}

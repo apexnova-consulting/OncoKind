@@ -1,13 +1,11 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server';
-import { getStripeClient } from '@/lib/stripe';
 import { Check, Minus } from 'lucide-react';
-import { hasEnterprisePrices, stripePrices } from '@/lib/stripe-prices';
 import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 
 const PRICING_DESCRIPTION =
-  'Free, $39/month, $49/month, and $999/month plans for families and care professionals navigating cancer. No credit card required to start.';
+  'Free, Care & Advocacy Pro at $29/month or $279/year, and Professional at $999/month. No credit card required to start.';
 
 export const metadata = {
   title: 'OncoKind Pricing — Start Free, Upgrade When Ready',
@@ -23,36 +21,42 @@ export const metadata = {
   },
 };
 
-const comparisonRows: [string, string, string, string, string][] = [
-  ['Report processing', '1/month', 'Unlimited', 'Unlimited', 'Unlimited + batch'],
-  ['AI Cancer Profile', '✓', '✓', '✓', '✓'],
-  ['Doctor Prep Sheet (PDF)', '—', '✓', '✓', '✓ Branded'],
-  ['Clinical Trial Matching', 'Limited', 'Full (50mi)', 'Full (50mi)', 'Full + custom'],
-  ['Care Timeline', 'Basic', '✓', '✓', '✓'],
-  ['Second Opinion Mode', '—', '✓', '✓', '✓'],
-  ['Appointment Check-In', '—', '✓', '✓', '✓'],
-  ['Insurance Denial Defense', '—', '—', '✓', '✓'],
-  ['Live Financial Aid Tracker', '—', '—', '✓', '✓'],
-  ['NCCN-Aligned Advocate Sheets', '—', '—', '✓', '✓'],
-  ['Community Access', 'Read only', '✓', '✓', '✓'],
-  ['Multi-patient dashboard', '—', '—', '—', '✓'],
-  ['Batch document analysis', '—', '—', '—', '✓'],
-  ['Branded portal', '—', '—', '—', '✓'],
-  ['HIPAA BAA', '—', '—', '—', '✓'],
-  ['Enterprise security review', '—', '—', '—', '✓'],
-  ['Prior Auth Engine (KindAuth)', '—', '—', '—', '✓'],
-  ['Support', 'Community', 'Email', 'Priority email', 'Dedicated'],
+const comparisonRows: [string, string, string, string][] = [
+  ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
+  ['AI Cancer Profile', '✓', '✓', '✓'],
+  ['Doctor Prep Sheet (PDF)', '—', '✓', '✓ Branded'],
+  ['Clinical Trial Matching', 'Limited', 'Full (50mi)', 'Full + custom'],
+  ['Care Timeline', 'Basic', '✓', '✓'],
+  ['Second Opinion Mode', '—', '✓', '✓'],
+  ['Appointment Check-In', '—', '✓', '✓'],
+  ['Insurance Denial Defense', '—', '✓', '✓'],
+  ['Live Financial Aid Tracker', '—', '✓', '✓'],
+  ['NCCN-Aligned Advocate Sheets', '—', '✓', '✓'],
+  ['Community Access', 'Read only', '✓', '✓'],
+  ['KindAuth Pro', '—', '✓', '✓'],
+  ['Multi-patient dashboard', '—', '—', '✓'],
+  ['Batch document analysis', '—', '—', '✓'],
+  ['Branded portal', '—', '—', '✓'],
+  ['HIPAA BAA', '—', '—', 'Available on request'],
+  ['Enterprise security review', '—', '—', '✓'],
+  ['Support', 'Community', 'Priority email', 'Dedicated'],
 ];
 
 function ComparisonCell({ value }: { value: string }) {
   if (value === '—' || value === '') {
-    return <Minus className="mx-auto h-4 w-4 text-[var(--color-text-muted)]" aria-hidden />;
+    return (
+      <span className="inline-flex items-center justify-center">
+        <Minus className="h-4 w-4 text-[var(--color-text-muted)]" aria-hidden />
+        <span className="sr-only">Not included</span>
+      </span>
+    );
   }
   if (value.includes('✓')) {
     const rest = value.replace(/✓/g, '').trim();
     return (
       <span className="inline-flex items-center justify-center gap-1 font-medium text-[var(--brand-primary)]">
         <Check className="h-4 w-4 shrink-0" aria-hidden />
+        <span className="sr-only">Included</span>
         {rest ? <span className="text-[var(--color-text-secondary)]">{rest}</span> : null}
       </span>
     );
@@ -60,63 +64,22 @@ function ComparisonCell({ value }: { value: string }) {
   return <>{value}</>;
 }
 
-type PriceDisplay = {
-  amount: string;
-  cadenceLabel: string;
-  configured: boolean;
+const TIER_HEADERS = ['Free', 'Care & Advocacy Pro', 'Professional'] as const;
+
+const CARE_DISPLAY_PRICING = {
+  monthly: { amount: '$29', cadenceLabel: '/month', configured: true },
+  yearly: { amount: '$279', cadenceLabel: '/year', configured: true },
 };
-
-async function getPriceDisplay(
-  priceId: string,
-  fallbackAmount: string,
-  fallbackCadenceLabel: string
-): Promise<PriceDisplay> {
-  if (!priceId) {
-    return { amount: fallbackAmount, cadenceLabel: fallbackCadenceLabel, configured: false };
-  }
-  try {
-    const price = await getStripeClient().prices.retrieve(priceId);
-    const amount =
-      typeof price.unit_amount === 'number'
-        ? new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: price.currency.toUpperCase(),
-            maximumFractionDigits: 0,
-          }).format(price.unit_amount / 100)
-        : fallbackAmount;
-    const cadenceLabel =
-      price.recurring?.interval === 'year'
-        ? '/year'
-        : price.recurring?.interval === 'month'
-          ? '/month'
-          : fallbackCadenceLabel;
-    return { amount, cadenceLabel, configured: true };
-  } catch {
-    return { amount: fallbackAmount, cadenceLabel: fallbackCadenceLabel, configured: true };
-  }
-}
-
-const TIER_HEADERS = ['Free', 'Caregiver Pro', 'Advocate Plan', 'Professional'] as const;
 
 export default async function PricingPage() {
   const supabase = await createServerSupabaseClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const showYearlyBilling = true;
-
-  const [proMonthly, proYearly, advocateMonthly, advocateYearly] = await Promise.all([
-    getPriceDisplay(stripePrices.proMonthly, '$39', '/month'),
-    getPriceDisplay(stripePrices.proYearly, '$390', '/year'),
-    getPriceDisplay(stripePrices.advocateMonthly, '$49', '/month'),
-    getPriceDisplay(stripePrices.advocateYearly, '$490', '/year'),
-  ]);
 
   return (
     <main className="bg-[var(--bg-base)] px-4 py-16 sm:py-24">
       <div className="mx-auto max-w-[var(--max-width-full)]">
-
-        {/* Header */}
         <div className="text-center">
           <p className="eyebrow">Simple, transparent pricing</p>
           <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
@@ -132,21 +95,11 @@ export default async function PricingPage() {
 
         <PricingPlans
           isSignedIn={!!user}
-          proPricing={{
-            monthly: { ...proMonthly, configured: !!stripePrices.proMonthly },
-            yearly: { ...proYearly, configured: !!stripePrices.proYearly },
-          }}
-          advocatePricing={{
-            monthly: { ...advocateMonthly, configured: !!stripePrices.advocateMonthly },
-            yearly: { ...advocateYearly, configured: !!stripePrices.advocateYearly },
-          }}
-          enterpriseUnlimitedPriceId={hasEnterprisePrices ? stripePrices.enterpriseUnlimited : undefined}
-          enterprisePerSeatPriceId={hasEnterprisePrices ? stripePrices.enterprisePerSeat : undefined}
-          highlightAdvocate
-          showBillingToggle={showYearlyBilling}
+          carePricing={CARE_DISPLAY_PRICING}
+          highlightCare
+          showBillingToggle
         />
 
-        {/* FAQ */}
         <section className="mx-auto mt-20 max-w-3xl" aria-labelledby="faq-heading">
           <h2 id="faq-heading" className="text-center font-display text-2xl font-semibold text-[var(--color-text-primary)]">
             Common questions
@@ -185,13 +138,12 @@ export default async function PricingPage() {
           </div>
         </section>
 
-        {/* Comparison table */}
         <section className="mt-20" id="comparison">
           <h2 className="text-center font-display text-2xl font-semibold text-[var(--color-text-primary)]">
             Full Feature Comparison
           </h2>
           <div className="mt-8 overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] shadow-[var(--shadow-sm)]">
-            <table className="w-full min-w-[720px] border-collapse bg-white text-left text-sm">
+            <table className="w-full min-w-[640px] border-collapse bg-white text-left text-sm">
               <thead className="sticky top-16 z-20 lg:top-[4.25rem]">
                 <tr className="border-b border-[var(--color-border)] bg-[var(--bg-subtle)] shadow-[var(--shadow-sm)]">
                   <th className="px-5 py-4 font-sans font-semibold text-[var(--color-text-primary)]">
@@ -210,7 +162,7 @@ export default async function PricingPage() {
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map(([feature, free, pro, advocate, prof], row) => (
+                {comparisonRows.map(([feature, free, care, prof], row) => (
                   <tr
                     key={feature}
                     className={cn(
@@ -218,15 +170,14 @@ export default async function PricingPage() {
                       row % 2 === 1 && 'bg-[var(--bg-subtle)]/50'
                     )}
                   >
-                    <td className="px-5 py-3.5 font-medium text-[var(--color-text-primary)]">{feature}</td>
+                    <th scope="row" className="px-5 py-3.5 font-medium text-[var(--color-text-primary)]">
+                      {feature}
+                    </th>
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={free} />
                     </td>
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
-                      <ComparisonCell value={pro} />
-                    </td>
-                    <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
-                      <ComparisonCell value={advocate} />
+                      <ComparisonCell value={care} />
                     </td>
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={prof} />

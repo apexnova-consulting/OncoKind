@@ -4,7 +4,9 @@ import { AppointmentQuestionGenerator } from '@/components/dashboard/Appointment
 import { CaregiverWellbeingCheckin } from '@/components/dashboard/CaregiverWellbeingCheckin';
 import { LiveFundingFeedCard } from '@/components/dashboard/LiveFundingFeedCard';
 import { GoalsOfCareCard } from '@/components/dashboard/GoalsOfCareCard';
+import { CheckoutSuccessTracker } from '@/components/analytics/CheckoutSuccessTracker';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, ExternalLink } from 'lucide-react';
@@ -64,10 +66,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
+      <Suspense fallback={null}>
+        <CheckoutSuccessTracker />
+      </Suspense>
       <div className="space-y-8">
         <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
 
-        {/* Prior Auth Engine — Professional / Enterprise tier feature card */}
+        {/* KindAuth — Professional / Enterprise tier feature card */}
         {hasPriorAuthAccess && (
           <a
             href="/prior-auth"
@@ -80,7 +85,7 @@ export default async function DashboardPage() {
             </div>
             <div className="flex-1">
               <div className="mb-1 flex items-center gap-2">
-                <span className="font-semibold text-sm">Prior Auth Engine</span>
+                <span className="font-semibold text-sm">KindAuth</span>
                 <span className="rounded-full bg-[#6B8F71] px-2 py-0.5 text-xs text-white">New</span>
               </div>
               <p className="text-xs leading-relaxed text-slate-300">
@@ -94,14 +99,14 @@ export default async function DashboardPage() {
         {!isPro && (
           <Card className="border-amber-300 bg-amber-50/40">
             <CardHeader>
-              <CardTitle>Upgrade to Advocate Plan</CardTitle>
+              <CardTitle>Upgrade to Care &amp; Advocacy Pro</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-slate-700">
                 Unlock Second Opinion packet export, expanded trial matching, and advanced prep tools.
               </p>
               <Button asChild className="mt-4">
-                <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
+                <Link href="/pricing?plan=advocate">Upgrade to Care &amp; Advocacy Pro</Link>
               </Button>
             </CardContent>
           </Card>

@@ -1,11 +1,11 @@
 export const SIGNUP_PLANS = {
   pro: {
-    name: 'Caregiver Pro',
-    priceLabel: '$39/month',
+    name: 'Care & Advocacy Pro',
+    priceLabel: '$29/month or $279/year',
   },
   advocate: {
-    name: 'Advocate Plan',
-    priceLabel: '$49/month',
+    name: 'Care & Advocacy Pro',
+    priceLabel: '$29/month or $279/year',
   },
   professional: {
     name: 'Professional',

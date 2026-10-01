@@ -1,9 +1,10 @@
 'use client';
 
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { parseSignupPlan, SIGNUP_PLANS } from '@/lib/plans';
+import { captureUtmFromLocation, identifyAnalyticsUser, track } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,6 +20,11 @@ function SignupForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    captureUtmFromLocation();
+    track('signup_started', { plan: selectedPlan ?? 'none' });
+  }, [selectedPlan]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,6 +48,11 @@ function SignupForm() {
         setError(data.error || 'Sign-up failed. Please try again.');
         setLoading(false);
         return;
+      }
+
+      track('signup_completed', { plan: selectedPlan ?? 'none' });
+      if (typeof data.userId === 'string') {
+        identifyAnalyticsUser(data.userId);
       }
 
       if (selectedPlan === 'pro' || selectedPlan === 'advocate') {

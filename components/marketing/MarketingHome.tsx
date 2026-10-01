@@ -27,6 +27,8 @@ import { Button } from '@/components/ui/button';
 import { SampleReportDemo } from '@/components/marketing/SampleReportDemo';
 import { SectionWave } from '@/components/marketing/SectionWave';
 import { Reveal, RevealStagger } from '@/components/motion/Reveal';
+import { FunnelPageView } from '@/components/analytics/FunnelPageView';
+import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 import { cn } from '@/lib/utils';
 
 /* ─────────────────────────────────────────────────────────────
@@ -35,19 +37,25 @@ import { cn } from '@/lib/utils';
 
 const stats = [
   {
-    figure: '91%',
-    desc: 'of cancer caregivers feel ill-equipped to navigate medical terminology and clinical trials',
-    cite: 'JCO Oncology Practice, 2023',
+    figure: '87%',
+    desc: 'of physicians report that prior authorization requirements lead to care delays for critical treatments.',
+    sourceName: 'American Medical Association (2024)',
+    sourceUrl:
+      'https://www.ama-assn.org/press-center/press-releases/ama-survey-shows-physicians-patients-heavily-burdened-prior-authorization',
   },
   {
-    figure: '99.9%',
-    desc: 'of insurance denials are never appealed — and about half who do appeal, win',
-    cite: 'Industry research',
+    figure: '12% - 18%',
+    desc: 'of standard prior authorization requests across health plans are initially denied.',
+    sourceName: 'Kaiser Family Foundation (2025)',
+    sourceUrl:
+      'https://www.kff.org/medicare/issue-brief/over-4-million-medicare-advantage-prior-authorization-requests-were-denied-in-2024/',
   },
   {
-    figure: '~20 min',
-    desc: 'average oncology appointment length, often while the family is in shock',
-    cite: 'Healthcare system data',
+    figure: '80%+',
+    desc: 'of appealed prior authorization denials are ultimately overturned, proving initial denials are often unjust.',
+    sourceName: 'Kaiser Family Foundation (2024)',
+    sourceUrl:
+      'https://www.kff.org/medicare/issue-brief/over-4-million-medicare-advantage-prior-authorization-requests-were-denied-in-2024/',
   },
 ];
 
@@ -125,13 +133,13 @@ const features = [
     title: 'Insurance Denial Defense',
     desc: 'Upload your denial letter. OncoKind decodes the stated reason in plain English and generates a structured appeal packet — including the regulatory language insurers respond to.',
     Icon: ShieldCheck,
-    tag: 'Advocate Plan',
+    tag: 'Care & Advocacy Pro',
     tagStyle: 'bg-[#FAEEDA] text-[#8b5e2a] border border-[#f0d5b8]',
   },
   {
     href: '/features/empathy-filter',
     title: 'The Empathy Filter',
-    desc: 'Every output removes survival statistics and fear-based language. You get clarity and preparation — not prognosis. No other tool has built this by design.',
+    desc: 'Every output removes survival statistics and fear-based language. You get clarity and preparation — not prognosis.',
     Icon: Heart,
     tag: 'Our differentiator',
     tagStyle: 'bg-[#FAEEDA] text-[#8b5e2a] border border-[#f0d5b8]',
@@ -157,7 +165,7 @@ const features = [
     title: 'Care Timeline',
     desc: 'A living record of your loved one\'s cancer journey. Document diagnoses, appointments, and milestones — so you always know exactly where you\'ve been and what comes next.',
     Icon: GitBranch,
-    tag: 'Pro + Advocate',
+    tag: 'Care & Advocacy Pro',
     tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
   },
   {
@@ -170,10 +178,10 @@ const features = [
   },
   {
     href: '/prior-auth-pro',
-    title: 'Prior Authorization Engine',
-    desc: 'Generate a complete prior authorization letter in minutes — built around your loved one\'s exact diagnosis, biomarkers, and NCCN guidelines. Turn a 10-hour task into one upload.',
+    title: 'KindAuth',
+    desc: "For care teams: draft prior authorization requests, step-therapy exception letters with state statute citations, and continued-stay appeals in minutes.",
     Icon: ClipboardList,
-    tag: 'Professional',
+    tag: 'KindAuth Pro',
     tagStyle: 'bg-[#1e2d2b] text-white border border-[#1e2d2b]',
   },
   {
@@ -222,18 +230,13 @@ function HeroDemoCard() {
         </p>
       </div>
       <div className="divide-y divide-[#cdd8d5]">
-        <DemoRow label="Cancer type" value="Vulvar squamous cell carcinoma" />
-        <DemoRow label="Stage" value="Stage IV" />
-        <DemoRow
-          label="HPV status"
-          value="Positive (p16+)"
-          note="Associated with immunotherapy eligibility"
-          notePositive
-        />
+        <DemoRow label="Cancer type" value={ROSEMARIE_SAMPLE.cancerTypeShort} />
+        <DemoRow label="Stage" value={ROSEMARIE_SAMPLE.stage} />
+        <DemoRow label="HPV status" value={ROSEMARIE_SAMPLE.hpv.value} />
         <DemoRow
           label="PD-L1 (CPS)"
-          value="≥10 — Positive"
-          note="Pembrolizumab being evaluated"
+          value={ROSEMARIE_SAMPLE.pdl1.value}
+          note={ROSEMARIE_SAMPLE.pdl1.heroNote}
           notePositive
         />
         <div className="flex items-start gap-3 px-5 py-3.5 bg-[#f7faf9]">
@@ -246,7 +249,7 @@ function HeroDemoCard() {
       </div>
       <div className="px-5 py-3 bg-[#f7faf9] border-t border-[#cdd8d5]">
         <p className="text-xs text-[#5a6b68]">
-          Based on Rosemarie N. For educational illustration only.
+          {ROSEMARIE_SAMPLE.illustrationNote}
         </p>
       </div>
     </div>
@@ -332,6 +335,7 @@ function FAQAccordion() {
 export function MarketingHome({ signedIn }: { signedIn: boolean }) {
   return (
     <main className="bg-white">
+      <FunnelPageView event="landing_view" />
 
       {/* ── 1. Hero ──────────────────────────────────────────── */}
       <section
@@ -430,14 +434,23 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
 
           {/* Stats */}
           <RevealStagger className="mt-10 grid gap-6 sm:grid-cols-3" stagger={0.08}>
-            {stats.map((s) => (
+            {stats
+              .filter((s) => Boolean(s.sourceName && s.sourceUrl))
+              .map((s) => (
               <div
                 key={s.figure}
                 className="rounded-2xl border border-[#cdd8d5] bg-white p-7 text-center shadow-sm"
               >
                 <p className="font-bold text-[2.5rem] leading-none text-[#0F6E56]">{s.figure}</p>
                 <p className="mt-3 text-sm leading-[1.7] text-[#5a6b68]">{s.desc}</p>
-                <p className="mt-2 text-xs text-[#5a6b68]/70">{s.cite}</p>
+                <a
+                  href={s.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-block text-xs font-semibold text-[#0F6E56] underline-offset-4 hover:underline"
+                >
+                  {s.sourceName}
+                </a>
               </div>
             ))}
           </RevealStagger>
@@ -484,8 +497,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             </h2>
             <p className="mt-5 text-[1rem] leading-[1.75] text-[#5a6b68]">
               Every word OncoKind generates passes through our Empathy Filter — removing survival
-              rates, mortality framing, and fear-based language before it reaches you. No other
-              tool has built this by design.
+              rates, mortality framing, and fear-based language before it reaches you.
             </p>
           </Reveal>
 

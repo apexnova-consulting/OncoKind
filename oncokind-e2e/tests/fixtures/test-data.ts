@@ -143,7 +143,7 @@ export const homepageFeatureCards = [
   { name: 'Financial Help', href: routes.journeyFinancialHelp },
   { name: 'Care Timeline', href: routes.journeyTimeline },
   { name: 'Community Access', href: routes.community },
-  { name: 'Prior Authorization Engine', href: routes.priorAuthPro },
+  { name: 'KindAuth', href: routes.priorAuthPro },
   { name: 'Goals of Care Prep Sheet', href: routes.journeyGoalsOfCare },
 ] as const;
 
@@ -152,13 +152,13 @@ export const homepageFeatureCards = [
 // INTENDED param and will fail until fixed.
 export const pricingTiers = {
   free: { name: 'Free', price: '$0', cta: 'Get Started Free', href: routes.signup },
-  pro: { name: 'Caregiver Pro', price: '$39', cta: 'Start Caregiver Pro', href: '/signup?plan=pro' },
-  advocate: {
-    name: 'Advocate Plan',
-    price: '$49',
-    cta: 'Start Advocate Plan',
+  care: {
+    name: 'Care & Advocacy Pro',
+    price: '$279',
+    monthlyPrice: '$29',
+    cta: 'Start Care & Advocacy Pro',
     href: '/signup?plan=advocate',
-    badge: 'Most Popular',
+    badge: 'Best for insurance issues',
   },
   professional: {
     name: 'Professional',
@@ -168,9 +168,7 @@ export const pricingTiers = {
   },
 } as const;
 
-// Pricing page's feature-comparison table. Counted directly from the live
-// table July 2026 — recount if the page changes, this is a brittle number by
-// nature.
+// Pricing page's feature-comparison table. Counted from the 3-tier launch table.
 export const pricingComparisonRowCount = 18;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight

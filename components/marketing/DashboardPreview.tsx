@@ -1,6 +1,7 @@
 'use client';
 
 import { CancerProfileSummaryCard } from '@/components/care/CancerProfileSummaryCard';
+import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 
 /**
  * Polished product preview for the homepage hero — stacked depth, slight rotation.
@@ -28,14 +29,10 @@ export function DashboardPreview() {
         <div className="rounded-[var(--radius-xl)] bg-white shadow-[var(--shadow-xl)] motion-safe:hover:-translate-y-0.5 motion-safe:transition-transform motion-safe:duration-300">
           <div className="p-4 sm:p-5">
             <CancerProfileSummaryCard
-              type="Non-Small Cell Lung Cancer"
-              stage="Stage IIIA"
-              biomarkers={['PD-L1: 60%', 'EGFR: Negative']}
-              recommendedNextSteps={[
-                'Meet with oncologist',
-                'Discuss immunotherapy',
-                'Review clinical trials',
-              ]}
+              type={ROSEMARIE_SAMPLE.cancerType}
+              stage={ROSEMARIE_SAMPLE.stage}
+              biomarkers={[ROSEMARIE_SAMPLE.hpv.label, ROSEMARIE_SAMPLE.pdl1.label]}
+              recommendedNextSteps={[...ROSEMARIE_SAMPLE.recommendedNextSteps]}
               showCta={false}
               compact
             />

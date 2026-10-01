@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Sign the new user in so the session cookies are set on the response.
-    const response = NextResponse.json({ ok: true });
+    const response = NextResponse.json({ ok: true, userId: createData.user.id });
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

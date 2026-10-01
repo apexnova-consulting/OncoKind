@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { FunnelPageView } from '@/components/analytics/FunnelPageView';
+import { TrackedCalendlyLink } from '@/components/analytics/TrackedCalendlyLink';
 
 export const metadata: Metadata = {
   title: 'OncoKind for Care Navigators & Patient Advocates',
@@ -18,6 +20,7 @@ const useCases = [
 export default function ProfessionalPage() {
   return (
     <main className="bg-[var(--color-bg-page)] px-4 py-16 sm:py-24">
+      <FunnelPageView event="professional_page_view" />
       <div className="mx-auto max-w-[var(--max-width-wide)] space-y-10">
         <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-md)] sm:p-10">
           <p className="text-sm font-semibold uppercase tracking-[var(--tracking-widest)] text-[var(--color-accent-600)]">
@@ -32,9 +35,7 @@ export default function ProfessionalPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
-              <a href="https://calendly.com/oncokind-support" target="_blank" rel="noreferrer">
-                Book a Demo
-              </a>
+              <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
             </Button>
           </div>
         </section>
@@ -47,13 +48,11 @@ export default function ProfessionalPage() {
                 New — Included in Professional
               </p>
               <h2 className="font-display text-3xl font-semibold text-white">
-                Prior Auth Engine
+                KindAuth Pro
               </h2>
               <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-300">
-                Stop losing 3 hours per prior authorization. Generate complete prior auth requests,
-                step therapy exception letters (with state law citations), and continued stay
-                defenses in under 2 minutes — from a dedicated workspace built for Directors of
-                Nursing, Social Workers, and Care Coordinators.
+                For care teams: draft prior authorization requests, step-therapy exception letters
+                with state statute citations, and continued-stay appeals in minutes.
               </p>
               <ul className="mt-4 space-y-1.5 text-sm text-slate-300">
                 {[
@@ -75,9 +74,7 @@ export default function ProfessionalPage() {
                 <Link href="/prior-auth-pro">See Full Details →</Link>
               </Button>
               <Button asChild className="border border-slate-600 bg-transparent text-white hover:bg-white/10">
-                <a href="https://calendly.com/oncokind-support" target="_blank" rel="noreferrer">
-                  Book a Demo
-                </a>
+                <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
               </Button>
             </div>
           </div>
@@ -88,7 +85,7 @@ export default function ProfessionalPage() {
             {
               title: 'What the Professional tier provides',
               bullets: [
-                'Prior Authorization Engine (KindAuth) — all three document types',
+                'KindAuth Pro — all three document types',
                 'Multi-patient workflow support for advocates and care teams',
                 'Insurance denial defense and structured appeal packets',
                 'Branded outputs and batch-oriented document review',
@@ -137,9 +134,7 @@ export default function ProfessionalPage() {
           </div>
           <div className="mt-8">
             <Button asChild>
-              <a href="https://calendly.com/oncokind-support" target="_blank" rel="noreferrer">
-                Book a Demo
-              </a>
+              <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
             </Button>
           </div>
         </section>

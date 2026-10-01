@@ -134,6 +134,22 @@ test.describe('Homepage (/)', () => {
     }
   });
 
+  test('Rosemarie sample demo does not mention NSCLC', async ({ page }) => {
+    await page.goto(routes.home);
+    const demo = page.locator('#sample-demo');
+    await expect(demo).toBeVisible();
+    await expect(demo.getByText(/vulvar/i).first()).toBeVisible();
+    await expect(demo.getByText(/nsclc|non-small cell lung/i)).toHaveCount(0);
+  });
+
+  test('homepage stats cite AMA and KFF sources', async ({ page }) => {
+    await page.goto(routes.home);
+    await expect(page.getByRole('link', { name: /american medical association \(2024\)/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /kaiser family foundation \(2025\)/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /kaiser family foundation \(2024\)/i })).toBeVisible();
+    await expect(page.getByText(/industry research|healthcare system data/i)).toHaveCount(0);
+  });
+
   test('final CTA section renders at bottom of page', async ({ page }) => {
     await page.goto(routes.home);
     await page.keyboard.press('End');
@@ -142,51 +158,41 @@ test.describe('Homepage (/)', () => {
 });
 
 test.describe('Pricing (/pricing)', () => {
-  test('all 4 tier cards visible with current pricing', async ({ page }) => {
+  test('all 3 tier cards visible with current pricing', async ({ page }) => {
     await page.goto(routes.pricing);
     for (const tier of Object.values(pricingTiers)) {
-      // Prefer heading role so "Free" isn't confused with "Get Started Free" / "2 months free".
       await expect(page.getByRole('heading', { name: tier.name, exact: true })).toBeVisible();
       if (tier.price !== '$0') {
         await expect(page.getByText(tier.price, { exact: false }).first()).toBeVisible();
       }
     }
-    await expect(page.getByText(pricingTiers.advocate.badge)).toBeVisible();
+    await expect(page.getByText(pricingTiers.care.badge)).toBeVisible();
+    await expect(page.getByText(/most popular/i)).toHaveCount(0);
   });
 
-  test('monthly/yearly toggle updates displayed prices', async ({ page }) => {
-    // Confirmed fixed live (was flagged missing in the June guide).
+  test('annual is the default billing interval and monthly toggle updates the price', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByText(/2 months free/i)).toBeVisible();
+    await expect(page.getByText(/save ~20%/i).first()).toBeVisible();
+    await expect(page.getByText('$279').first()).toBeVisible();
 
-    const proCard = page.getByText(pricingTiers.pro.name).locator('..');
-    const monthlyPrice = await proCard.getByText(pricingTiers.pro.price).first().innerText();
-
-    await page.getByRole('tab', { name: /yearly/i }).or(page.getByText('Yearly')).click();
-    await page.waitForTimeout(300); // allow price re-render
-
-    const yearlyPriceLocator = proCard.getByText(/\$\d/).first();
-    await expect(yearlyPriceLocator).not.toHaveText(monthlyPrice);
+    await page.getByRole('button', { name: /^monthly$/i }).click();
+    await expect(page.getByText('$29').first()).toBeVisible();
   });
 
-  test('"Start Caregiver Pro" links to /signup?plan=pro', async ({ page }) => {
+  test('"Start Care & Advocacy Pro" links to /signup?plan=advocate', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByRole('link', { name: /start caregiver pro/i })).toHaveAttribute(
-      'href',
-      /\/signup\?plan=pro/
-    );
-  });
-
-  test('"Start Advocate Plan" links to /signup?plan=advocate and pre-selects the plan', async ({ page }) => {
-    await page.goto(routes.pricing);
-    await expect(page.getByRole('link', { name: /start advocate plan/i })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /start care & advocacy pro/i })).toHaveAttribute(
       'href',
       /\/signup\?plan=advocate/
     );
-    await page.getByRole('link', { name: /start advocate plan/i }).click();
+  });
+
+  test('signup from Care & Advocacy Pro pre-selects the plan', async ({ page }) => {
+    await page.goto(routes.pricing);
+    await page.getByRole('link', { name: /start care & advocacy pro/i }).click();
     await expect(page).toHaveURL(/\/signup\?plan=advocate/);
     await expect(page.getByText(/selected plan/i)).toBeVisible();
-    await expect(page.getByText(/advocate plan/i).first()).toBeVisible();
+    await expect(page.getByText(/care & advocacy pro/i).first()).toBeVisible();
   });
 
   test('"Book a Demo" on Professional tier links to Calendly', async ({ page }) => {
@@ -204,10 +210,14 @@ test.describe('Pricing (/pricing)', () => {
     await expect(table.locator('tbody tr')).toHaveCount(pricingComparisonRowCount);
   });
 
-  test('feature comparison table includes a Prior Auth Engine (KindAuth) row', async ({ page }) => {
-    // Confirmed added since the June guide's QA notes suggested it.
+  test('feature comparison table includes a KindAuth Pro row with accessible included labels', async ({
+    page,
+  }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByText(/prior auth engine \(kindauth\)/i)).toBeVisible();
+    const kindAuthRow = page.locator('tr', { hasText: 'KindAuth Pro' }).first();
+    await expect(kindAuthRow).toBeVisible();
+    await expect(kindAuthRow.getByText('Not included')).toHaveCount(1);
+    await expect(kindAuthRow.getByText('Included')).toHaveCount(2);
   });
 
   test('pricing FAQ shows all 5 questions', async ({ page }) => {
@@ -219,9 +229,9 @@ test.describe('Pricing (/pricing)', () => {
 });
 
 test.describe('For Professionals (/professional)', () => {
-  test('Prior Auth Engine section visible with "See Full Details" link', async ({ page }) => {
+  test('KindAuth Pro section visible with "See Full Details" link', async ({ page }) => {
     await page.goto(routes.forProfessionals);
-    await expect(page.getByRole('heading', { name: /prior auth engine/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /kindauth pro/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /see full details/i })).toHaveAttribute(
       'href',
       new RegExp(routes.priorAuthPro)
@@ -424,15 +434,16 @@ test.describe('Navigation & SEO', () => {
     await expect(page).toHaveTitle(/OncoKind/);
   });
 
-  test('pricing metadata matches the live $39 Caregiver Pro price', async ({ page }) => {
+  test('pricing metadata matches Care & Advocacy Pro at $29/$279', async ({ page }) => {
     await page.goto(routes.pricing);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content');
     const twitterDescription = await page.locator('meta[name="twitter:description"]').getAttribute('content');
-    expect(description).toMatch(/\$39\/month/);
-    expect(description).not.toMatch(/\$19/);
-    expect(ogDescription).toMatch(/\$39\/month/);
-    expect(twitterDescription).toMatch(/\$39\/month/);
+    expect(description).toMatch(/\$29\/month/);
+    expect(description).toMatch(/\$279\/year/);
+    expect(description).not.toMatch(/\$39\/month/);
+    expect(ogDescription).toMatch(/\$29\/month/);
+    expect(twitterDescription).toMatch(/\$29\/month/);
   });
 
   test('robots.txt does not disallow the public /prior-auth-pro marketing page', async ({ request, baseURL }) => {
@@ -491,9 +502,9 @@ test.describe('Responsive layout (Section 10 — runs against the `mobile-market
     test.skip(!isMobile, 'Only meaningful on the mobile project');
     await page.goto(routes.pricing);
     const freeHeading = page.getByRole('heading', { name: pricingTiers.free.name, exact: true });
-    const proHeading = page.getByRole('heading', { name: pricingTiers.pro.name, exact: true });
+    const careHeading = page.getByRole('heading', { name: pricingTiers.care.name, exact: true });
     const freeCard = freeHeading.locator('xpath=ancestor::div[contains(@class,"rounded")][1]');
-    const proCard = proHeading.locator('xpath=ancestor::div[contains(@class,"rounded")][1]');
+    const proCard = careHeading.locator('xpath=ancestor::div[contains(@class,"rounded")][1]');
     const firstBox = await freeCard.boundingBox();
     const secondBox = await proCard.boundingBox();
     expect(firstBox && secondBox).toBeTruthy();

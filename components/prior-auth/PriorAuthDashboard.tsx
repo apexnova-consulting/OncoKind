@@ -85,12 +85,19 @@ export function PriorAuthDashboard({
       <Reveal>
         <div className="mb-8">
           <h1 className="font-display mb-1 text-2xl font-semibold text-[#1C2B2D]">
-            Prior Auth Engine
+            KindAuth
           </h1>
           <p className="text-sm text-slate-500">
             AI-assisted authorization forms, step therapy support, and continued stay documentation
             {userName ? ` — for ${userName}` : ''}.
           </p>
+          <div
+            role="status"
+            className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950"
+          >
+            Pilot: use de-identified case details only. Do not enter patient names, dates of birth,
+            MRNs, member IDs, phone numbers or addresses.
+          </div>
         </div>
       </Reveal>
 

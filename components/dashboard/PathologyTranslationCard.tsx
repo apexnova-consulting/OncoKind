@@ -7,6 +7,7 @@ import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/Outpu
 import { Input } from '@/components/ui/input';
 import { getCancerProfileSources } from '@/lib/disclosures';
 import { createClient } from '@/lib/supabase-client';
+import { track } from '@/lib/analytics';
 
 export function PathologyTranslationCard() {
   const [file, setFile] = useState<File | null>(null);
@@ -23,6 +24,7 @@ export function PathologyTranslationCard() {
     }
     setErrorMsg(null);
     setStatus('uploading');
+    track('report_upload_started');
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -51,6 +53,8 @@ export function PathologyTranslationCard() {
       }
       setResult(data);
       setStatus('done');
+      track('report_upload_completed');
+      track('profile_generated');
     } catch {
       setErrorMsg('Something went wrong.');
       setStatus('error');

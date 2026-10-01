@@ -42,5 +42,6 @@ export function createCheckoutSession(params: {
     subscription_data: {
       metadata: params.userId ? { supabase_user_id: params.userId } : undefined,
     },
+    metadata: params.userId ? { supabase_user_id: params.userId } : undefined,
   });
 }

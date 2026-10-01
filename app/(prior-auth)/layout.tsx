@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 export const metadata: Metadata = {
-  title: 'OncoKind Prior Auth | Authorization & Appeal Engine',
+  title: 'KindAuth | Authorization & Appeal Engine',
   description:
     'AI-powered prior authorization, step therapy exception, and continued stay defense for care facilities.',
   robots: { index: false, follow: false },
@@ -52,7 +52,7 @@ export default async function PriorAuthLayout({ children }: { children: React.Re
           <span className="text-sm font-medium text-slate-300">
             <span className="font-display text-lg font-semibold text-[#E8C37A]">OncoKind</span>
             {' | '}
-            <span>Prior Auth Engine</span>
+            <span>KindAuth</span>
           </span>
         </div>
         <div className="flex items-center gap-4">

@@ -5,12 +5,12 @@ export const GLOBAL_SITE_DISCLAIMER_TEXT =
   'OncoKind is an educational support tool. Nothing on this site constitutes medical advice. Always consult your oncologist or care team before making any treatment decisions. OncoKind is not a substitute for professional medical guidance.';
 
 export const PATH_B_PRIVACY_LANGUAGE =
-  'Built with privacy at its core. No raw report data retained. Educational tool — not a covered entity.';
+  'Family plans are an educational tool. OncoKind is not a covered entity. No raw report data retained.';
 
 export const PROFESSIONAL_SECURITY_REVIEW_TEXT = 'Enterprise security review available upon request';
 
 export const PROFESSIONAL_HIPAA_NOTE =
-  "HIPAA BAA available — contact us to discuss your organization's compliance requirements.";
+  'HIPAA BAA available for qualified organizations.';
 
 export const APPOINTMENT_EXPLANATION_NOTE =
   'Explanation based on established oncology literature. Verify specifics with your care team.';

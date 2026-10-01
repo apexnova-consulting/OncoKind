@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Heart, Shield, Scale, Eye } from 'lucide-react';
 import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
 import { Button } from '@/components/ui/button';
+import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
 
 export const metadata = {
   title: 'About OncoKind — Built by a Caregiver, for Caregivers',
@@ -287,6 +288,12 @@ export default function AboutPage() {
               <Link href="/trust">How we protect your data →</Link>
             </Button>
           </div>
+        </div>
+      </section>
+
+      <section className="px-4 pb-16">
+        <div className="mx-auto max-w-[var(--max-width-wide)]">
+          <ClinicalAdvisorSection />
         </div>
       </section>
 

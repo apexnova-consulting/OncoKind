@@ -1,12 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, CheckSquare, FileText, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { getCancerProfileSources, getClinicalTrialSources } from '@/lib/disclosures';
+import { ROSEMARIE_BIOMARKERS, ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
+import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 const tabs = [
@@ -17,58 +19,6 @@ const tabs = [
 
 type TabId = (typeof tabs)[number]['id'];
 
-const biomarkerCards = [
-  {
-    label: 'HPV Status: Positive (p16+)',
-    tone: 'positive',
-    description:
-      'HPV-positive vulvar cancer is associated with certain immunotherapy eligibility and can influence treatment planning. This is an important finding to discuss with the oncology team.',
-  },
-  {
-    label: 'PD-L1 (CPS): ≥10 — Positive',
-    tone: 'positive',
-    description:
-      'A CPS of 10 or higher may make your loved one eligible for pembrolizumab (immunotherapy). Your oncologist will evaluate whether this is part of the treatment plan.',
-  },
-  {
-    label: 'BRCA1/2: Negative',
-    tone: 'neutral',
-    description:
-      'No hereditary BRCA mutation detected. This affects some targeted therapy options, and your oncologist may recommend additional molecular testing.',
-  },
-] as const;
-
-const trialCards = [
-  {
-    id: 'keynote-158',
-    title: 'KEYNOTE-158',
-    meta: 'Phase II',
-    category: 'Immunotherapy',
-    summary: 'Pembrolizumab for PD-L1 Positive Advanced Solid Tumors (incl. vulvar)',
-    why: 'PD-L1 CPS ≥10, Stage IV, HPV-positive squamous cell carcinoma',
-    distance: '~9 miles — Regional Cancer Center',
-    status: 'Enrolling',
-    detail:
-      'This trial evaluates pembrolizumab in patients with PD-L1 positive solid tumors, including vulvar cancer. HPV-positive and high PD-L1 status are both relevant eligibility factors here.',
-    doctorPrompt:
-      'Given that the PD-L1 CPS is ≥10 and HPV status is positive, are we a candidate for pembrolizumab — either through a trial like KEYNOTE-158 or as standard of care?',
-  },
-  {
-    id: 'gog-vul-01',
-    title: 'Cisplatin + Paclitaxel + Pembrolizumab',
-    meta: 'Phase II',
-    category: 'Combination Therapy',
-    summary: 'Chemotherapy Combined with Immunotherapy for Advanced Vulvar Cancer',
-    why: 'Stage IV vulvar squamous cell carcinoma, PD-L1 positive, no prior systemic therapy',
-    distance: '~22 miles — University Medical Center',
-    status: 'Enrolling',
-    detail:
-      'This trial evaluates whether adding pembrolizumab to standard chemotherapy improves outcomes in advanced vulvar cancer. It is an example of the combination approach many oncologists are exploring for PD-L1 positive cases.',
-    doctorPrompt:
-      'Is there a clinical trial combining chemotherapy with pembrolizumab for Stage IV vulvar cancer that we should consider, given the PD-L1 CPS of ≥10?',
-  },
-] as const;
-
 export function SampleReportDemo() {
   const [activeTab, setActiveTab] = useState<TabId>('profile');
   const [expandedTrialId, setExpandedTrialId] = useState<string | null>(null);
@@ -76,6 +26,10 @@ export function SampleReportDemo() {
 
   const activeIndex = useMemo(() => tabs.findIndex((tab) => tab.id === activeTab), [activeTab]);
   const activeTabLabel = tabs[activeIndex]?.label ?? tabs[0].label;
+
+  useEffect(() => {
+    track('sample_demo_step_viewed', { step: activeIndex + 1 });
+  }, [activeIndex]);
 
   function goToTab(index: number) {
     if (index < 0 || index >= tabs.length) return;
@@ -110,20 +64,20 @@ export function SampleReportDemo() {
             Try a sample caregiver report before you sign up.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[var(--color-surface-300)] sm:text-base">
-            Rosemarie N. — Vulvar Squamous Cell Carcinoma (VSCC), Stage IV, HPV: Positive (p16+),
-            PD-L1 CPS: ≥10, BRCA1/2: Negative
+            {ROSEMARIE_SAMPLE.patientName} — {ROSEMARIE_SAMPLE.cancerType}, {ROSEMARIE_SAMPLE.stage}, HPV:{' '}
+            {ROSEMARIE_SAMPLE.hpv.value}, PD-L1 CPS: ≥10, BRCA1/2: Negative
           </p>
           <div className="mt-6 space-y-4 rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
-            <InfoRow label="Cancer Type" value="Non-Small Cell Lung Cancer (NSCLC)" />
-            <InfoRow label="Stage" value="Stage IIIA" />
-            <InfoRow label="Next Milestone" value="First oncology appointment" />
+            <InfoRow label="Cancer Type" value={ROSEMARIE_SAMPLE.cancerType} />
+            <InfoRow label="Stage" value={ROSEMARIE_SAMPLE.stage} />
+            <InfoRow label="Next Milestone" value={ROSEMARIE_SAMPLE.nextMilestone} />
           </div>
         <p className="mt-6 text-sm leading-relaxed text-[var(--color-surface-300)]">
           Click through the profile, doctor prep sheet, and sample clinical trial matches to see
           how OncoKind turns a pathology report into something a caregiver can actually use.
         </p>
         <p className="mt-3 text-xs leading-relaxed text-[var(--color-surface-400)]">
-          Profile based on Rosemarie N. For educational illustration only.
+          {ROSEMARIE_SAMPLE.illustrationNote}
         </p>
         </aside>
 
@@ -233,7 +187,7 @@ export function SampleReportDemo() {
 }
 
 function CancerProfilePanel() {
-  const sources = getCancerProfileSources('Vulvar Squamous Cell Carcinoma');
+  const sources = getCancerProfileSources(ROSEMARIE_SAMPLE.cancerType);
   return (
     <div className="space-y-5">
       <div className="rounded-[var(--radius-lg)] border border-[rgba(85,136,123,0.18)] bg-[rgba(99,164,145,0.08)] p-5 sm:p-6">
@@ -243,7 +197,7 @@ function CancerProfilePanel() {
               Cancer Profile
             </p>
             <h3 className="mt-2 font-display text-2xl font-semibold text-[var(--color-primary-900)]">
-              Rosemarie N.
+              {ROSEMARIE_SAMPLE.patientName}
             </h3>
           </div>
           <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[var(--color-primary-700)]">
@@ -252,16 +206,13 @@ function CancerProfilePanel() {
         </div>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-[180px_1fr]">
-          <ProfileRow label="Cancer Type" value="Vulvar Squamous Cell Carcinoma (VSCC)" />
-          <ProfileRow label="Stage" value="Stage IV" />
-          <ProfileRow
-            label="What This Means"
-            value="Stage IV means the cancer has spread beyond the vulva. The care team will review imaging and other findings to determine the treatment plan. Many options remain on the table and your oncologist will walk through each one."
-          />
+          <ProfileRow label="Cancer Type" value={ROSEMARIE_SAMPLE.cancerType} />
+          <ProfileRow label="Stage" value={ROSEMARIE_SAMPLE.stage} />
+          <ProfileRow label="What This Means" value={ROSEMARIE_SAMPLE.whatThisMeans} />
           <div className="sm:col-span-2">
             <p className="text-sm font-semibold text-[var(--color-primary-900)]">Key Biomarkers</p>
             <div className="mt-3 space-y-3">
-              {biomarkerCards.map((marker) => (
+              {ROSEMARIE_BIOMARKERS.map((marker) => (
                 <div
                   key={marker.label}
                   className="rounded-[var(--radius-md)] border border-white/80 bg-white/80 p-4"
@@ -269,9 +220,9 @@ function CancerProfilePanel() {
                   <span
                     className={cn(
                       'inline-flex rounded-full px-3 py-1 text-xs font-semibold',
-                      marker.tone === 'positive'
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : 'bg-slate-100 text-slate-700'
+                      'label' in marker && marker.label.includes('Negative')
+                        ? 'bg-slate-100 text-slate-700'
+                        : 'bg-emerald-100 text-emerald-700'
                     )}
                   >
                     {marker.label}
@@ -283,7 +234,7 @@ function CancerProfilePanel() {
               ))}
             </div>
           </div>
-          <ProfileRow label="Next Milestone" value="First oncology appointment" />
+          <ProfileRow label="Next Milestone" value={ROSEMARIE_SAMPLE.nextMilestone} />
         </dl>
       </div>
       <OutputSources items={sources} />
@@ -293,7 +244,7 @@ function CancerProfilePanel() {
 }
 
 function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) {
-  const sources = getCancerProfileSources('Vulvar Squamous Cell Carcinoma');
+  const sources = getCancerProfileSources(ROSEMARIE_SAMPLE.cancerType);
   return (
     <div className="space-y-4">
       <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-sm)] sm:p-6">
@@ -311,13 +262,7 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
         <div className="mt-6 space-y-6 text-sm leading-relaxed text-[var(--color-text-secondary)]">
           <section>
             <h4 className="font-semibold text-[var(--color-primary-900)]">Understanding the Diagnosis</h4>
-            <p className="mt-2">
-              Stage IV vulvar squamous cell carcinoma means the cancer has spread beyond the vulva.
-              The HPV-positive (p16+) status and PD-L1 CPS of ≥10 are important findings — they
-              may open the door to immunotherapy options, including pembrolizumab, alongside
-              standard chemotherapy. Your oncology team will review imaging and other details to
-              build the full treatment plan.
-            </p>
+            <p className="mt-2">{ROSEMARIE_SAMPLE.prepDiagnosis}</p>
             <p className="mt-2">
               Treatment for Stage IV vulvar cancer often involves more than one specialist working
               together. Asking how each part of the plan fits together — and what the goal of
@@ -328,52 +273,24 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
           <section>
             <h4 className="font-semibold text-[var(--color-primary-900)]">Questions to Ask Your Oncologist</h4>
             <ol className="mt-2 list-decimal space-y-2 pl-5">
-              <li>
-                Given the PD-L1 CPS of ≥10 and HPV-positive status, is pembrolizumab
-                (immunotherapy) part of the treatment plan — either alone or combined with
-                chemotherapy?
-              </li>
-              <li>
-                What chemotherapy regimen is being recommended, and what side effects should we
-                watch for?
-              </li>
-              <li>
-                What is the primary goal of treatment right now — to reduce the cancer, to manage
-                symptoms, or something else?
-              </li>
-              <li>
-                Are there clinical trials for Stage IV vulvar cancer that we should consider, given
-                the PD-L1 and HPV findings?
-              </li>
-              <li>How will we know if the treatment is working, and how often will we check?</li>
+              {ROSEMARIE_SAMPLE.prepQuestions.map((question) => (
+                <li key={question}>{question}</li>
+              ))}
             </ol>
           </section>
 
           <section>
             <h4 className="font-semibold text-[var(--color-primary-900)]">What to Bring</h4>
             <ul className="mt-2 space-y-2">
-              {[
-                'Imaging files',
-                'Medication list',
-                'Insurance card',
-                'Support person',
-                'This sheet',
-              ].map((item) => (
+              {['Imaging files', 'Medication list', 'Insurance card', 'Support person', 'This sheet'].map(
+                (item) => (
                 <li key={item} className="flex items-start gap-2">
                   <CheckSquare className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-sage-500)]" />
                   <span>{item}</span>
                 </li>
-              ))}
+                )
+              )}
             </ul>
-          </section>
-
-          <section>
-            <h4 className="font-semibold text-[var(--color-primary-900)]">Important Reminder</h4>
-            <p className="mt-2">
-              If the conversation starts moving too fast, you can always ask your doctor to slow
-              down, repeat something, or explain it another way. You do not have to understand
-              everything at once to ask good questions.
-            </p>
           </section>
         </div>
       </div>
@@ -410,7 +327,7 @@ function TrialMatchesPanel({
       </div>
 
       <div className="space-y-4">
-        {trialCards.map((trial) => {
+        {ROSEMARIE_SAMPLE.trials.map((trial) => {
           const expanded = expandedTrialId === trial.id;
           return (
             <article
