@@ -60,9 +60,11 @@ type FilterOption = 'all' | 'prior_auth' | 'step_therapy' | 'continued_stay';
 export function PriorAuthDashboard({
   initialCases,
   userName,
+  isMultiPatient = false,
 }: {
   initialCases: PriorAuthCase[];
   userName: string;
+  isMultiPatient?: boolean;
 }) {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<FilterOption>('all');
@@ -98,6 +100,19 @@ export function PriorAuthDashboard({
             Pilot: use de-identified case details only. Do not enter patient names, dates of birth,
             MRNs, member IDs, phone numbers or addresses.
           </div>
+          {!isMultiPatient ? (
+            <p className="mt-3 text-sm text-slate-600">
+              Standard KindAuth is limited to a single patient. Professional unlocks multi-patient
+              batch appeals.
+            </p>
+          ) : (
+            <a
+              href="/admin/multi-patient"
+              className="mt-3 inline-flex text-sm font-medium text-[#6B8F71] hover:underline"
+            >
+              Open multi-patient batch workspace →
+            </a>
+          )}
         </div>
       </Reveal>
 

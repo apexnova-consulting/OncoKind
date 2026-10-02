@@ -60,8 +60,8 @@ async function checkGoalsOfCareTrigger(userId: string): Promise<boolean> {
 }
 
 export default async function DashboardPage() {
-  const { isPro, isProfessional, isAdmin, user } = await getProfile();
-  const hasPriorAuthAccess = isProfessional || isAdmin;
+  const { isPro, isProfessional, isAdmin, hasKindAuthAccess, user } = await getProfile();
+  const hasPriorAuthAccess = hasKindAuthAccess || isProfessional || isAdmin;
   const gocTriggered = user ? await checkGoalsOfCareTrigger(user.id) : false;
 
   return (
@@ -90,6 +90,7 @@ export default async function DashboardPage() {
               </div>
               <p className="text-xs leading-relaxed text-slate-300">
                 Generate prior auth requests, step therapy exceptions, and continued stay letters — opens in a dedicated workspace
+                {isProfessional ? ' (KindAuth Pro, multi-patient).' : ' (standard KindAuth, single-patient).'}
               </p>
             </div>
             <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-white" />

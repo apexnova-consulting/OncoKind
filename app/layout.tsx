@@ -76,7 +76,7 @@ const jsonLd = {
   offers: [
     { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
     { '@type': 'Offer', name: 'Care & Advocacy Pro', price: '29', priceCurrency: 'USD', billingIncrement: 'P1M' },
-    { '@type': 'Offer', name: 'Care & Advocacy Pro (annual)', price: '279', priceCurrency: 'USD', billingIncrement: 'P1Y' },
+    { '@type': 'Offer', name: 'Care & Advocacy Pro (annual)', price: '199', priceCurrency: 'USD', billingIncrement: 'P1Y' },
     { '@type': 'Offer', name: 'Professional', price: '999', priceCurrency: 'USD', billingIncrement: 'P1M' },
   ],
   operatingSystem: 'Web, iOS (PWA), Android (PWA)',

@@ -6,6 +6,7 @@ import {
   moderateCommunityText,
   toCommunitySlug,
 } from '@/lib/community';
+import { hasCareAdvocacyAccess } from '@/lib/entitlements';
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
@@ -35,11 +36,10 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .maybeSingle();
 
-  const canPost =
-    profile?.subscription_tier === 'advocate' || profile?.subscription_tier === 'enterprise';
+  const canPost = hasCareAdvocacyAccess(profile?.subscription_tier);
 
   if (!canPost) {
-    return NextResponse.json({ error: 'Posting requires the Advocate Plan.' }, { status: 402 });
+    return NextResponse.json({ error: 'Posting requires Care & Advocacy Pro.' }, { status: 402 });
   }
 
   const moderation = moderateCommunityText(`${title}\n${content}`);

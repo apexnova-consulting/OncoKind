@@ -167,15 +167,15 @@ test.describe('Pricing (/pricing)', () => {
       }
     }
     await expect(page.getByText(pricingTiers.care.badge)).toBeVisible();
-    await expect(page.getByText(/most popular/i)).toHaveCount(0);
+    await expect(page.getByText(/most popular for families/i)).toBeVisible();
   });
 
   test('annual is the default billing interval and monthly toggle updates the price', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByText(/save ~20%/i).first()).toBeVisible();
-    await expect(page.getByText('$279').first()).toBeVisible();
+    await expect(page.getByText(/save ~/i).first()).toBeVisible();
+    await expect(page.getByText('$199').first()).toBeVisible();
 
-    await page.getByRole('button', { name: /^monthly$/i }).click();
+    await page.getByRole('button', { name: /monthly billing/i }).click();
     await expect(page.getByText('$29').first()).toBeVisible();
   });
 
@@ -203,6 +203,11 @@ test.describe('Pricing (/pricing)', () => {
     );
   });
 
+  test('enterprise network banner is visible below the pricing grid', async ({ page }) => {
+    await page.goto(routes.pricing);
+    await expect(page.getByRole('heading', { name: /custom enterprise pricing/i })).toBeVisible();
+  });
+
   test(`feature comparison table renders with ${pricingComparisonRowCount} rows`, async ({ page }) => {
     await page.goto(routes.pricing);
     const table = page.locator('table').first();
@@ -210,14 +215,14 @@ test.describe('Pricing (/pricing)', () => {
     await expect(table.locator('tbody tr')).toHaveCount(pricingComparisonRowCount);
   });
 
-  test('feature comparison table includes a KindAuth Pro row with accessible included labels', async ({
+  test('feature comparison table includes KindAuth insurance appeals with accessible included labels', async ({
     page,
   }) => {
     await page.goto(routes.pricing);
-    const kindAuthRow = page.locator('tr', { hasText: 'KindAuth Pro' }).first();
+    const kindAuthRow = page.locator('tr', { hasText: 'KindAuth insurance appeals' }).first();
     await expect(kindAuthRow).toBeVisible();
     await expect(kindAuthRow.getByText('Not included')).toHaveCount(1);
-    await expect(kindAuthRow.getByText('Included')).toHaveCount(2);
+    await expect(kindAuthRow.getByText('Included')).toHaveCount(3);
   });
 
   test('pricing FAQ shows all 5 questions', async ({ page }) => {
@@ -434,13 +439,13 @@ test.describe('Navigation & SEO', () => {
     await expect(page).toHaveTitle(/OncoKind/);
   });
 
-  test('pricing metadata matches Care & Advocacy Pro at $29/$279', async ({ page }) => {
+  test('pricing metadata matches Care & Advocacy Pro at $29/$199', async ({ page }) => {
     await page.goto(routes.pricing);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content');
     const twitterDescription = await page.locator('meta[name="twitter:description"]').getAttribute('content');
     expect(description).toMatch(/\$29\/month/);
-    expect(description).toMatch(/\$279\/year/);
+    expect(description).toMatch(/\$199\/year/);
     expect(description).not.toMatch(/\$39\/month/);
     expect(ogDescription).toMatch(/\$29\/month/);
     expect(twitterDescription).toMatch(/\$29\/month/);

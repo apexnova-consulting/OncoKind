@@ -19,6 +19,7 @@ import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
 import { getPatientReport } from '@/lib/patient-reports';
+import { hasCareAdvocacyAccess } from '@/lib/entitlements';
 import {
   ANTHROPIC_MODELS,
   asAnthropicRequest,
@@ -120,6 +121,23 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     } = await supabase.auth.getUser();
     if (!user) {
       return { success: false, error: 'Unauthorized' };
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_tier')
+      .eq('id', user.id)
+      .maybeSingle();
+    const { count: reportCount } = await supabase
+      .from('patient_reports')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id);
+    if (!hasCareAdvocacyAccess(profile?.subscription_tier) && (reportCount ?? 0) >= 1) {
+      return {
+        success: false,
+        error:
+          'TRIAL_LIMIT_REACHED: Upgrade to Care & Advocacy Pro to unlock unlimited report analyses.',
+      };
     }
 
     const { data: previousReports } = await supabase

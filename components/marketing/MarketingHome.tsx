@@ -213,7 +213,7 @@ const faqs = [
   },
   {
     q: 'What does \'free\' actually include?',
-    a: 'One report translation per month, a full Cancer Profile, clinical trial matches, and read-only community access. No credit card required to start. Doctor Prep Sheets, unlimited reports, and insurance denial support are in paid plans. Full details on the pricing page.',
+    a: 'One pathology scan total per account, a full Cancer Profile, clinical trial matches, and read-only community access. No credit card required to start. Unlimited scans, Doctor Prep Sheets, and KindAuth appeals are in Care & Advocacy Pro. Full details on the pricing page.',
   },
 ];
 

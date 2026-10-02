@@ -3,9 +3,10 @@ import { Check, Minus } from 'lucide-react';
 import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
+import { hasProfessionalPrice } from '@/lib/stripe-prices';
 
 const PRICING_DESCRIPTION =
-  'Free, Care & Advocacy Pro at $29/month or $279/year, and Professional at $999/month. No credit card required to start.';
+  'Free, Care & Advocacy Pro at $29/month or $199/year, and Professional at $999/month. No credit card required to start.';
 
 export const metadata = {
   title: 'OncoKind Pricing — Start Free, Upgrade When Ready',
@@ -21,25 +22,16 @@ export const metadata = {
   },
 };
 
-const comparisonRows: [string, string, string, string][] = [
-  ['Report processing', '1/month', 'Unlimited', 'Unlimited + batch'],
-  ['AI Cancer Profile', '✓', '✓', '✓'],
-  ['Doctor Prep Sheet (PDF)', '—', '✓', '✓ Branded'],
-  ['Clinical Trial Matching', 'Limited', 'Full (50mi)', 'Full + custom'],
-  ['Care Timeline', 'Basic', '✓', '✓'],
-  ['Second Opinion Mode', '—', '✓', '✓'],
-  ['Appointment Check-In', '—', '✓', '✓'],
-  ['Insurance Denial Defense', '—', '✓', '✓'],
-  ['Live Financial Aid Tracker', '—', '✓', '✓'],
-  ['NCCN-Aligned Advocate Sheets', '—', '✓', '✓'],
-  ['Community Access', 'Read only', '✓', '✓'],
-  ['KindAuth Pro', '—', '✓', '✓'],
-  ['Multi-patient dashboard', '—', '—', '✓'],
-  ['Batch document analysis', '—', '—', '✓'],
-  ['Branded portal', '—', '—', '✓'],
-  ['HIPAA BAA', '—', '—', 'Available on request'],
-  ['Enterprise security review', '—', '—', '✓'],
-  ['Support', 'Community', 'Priority email', 'Dedicated'],
+const comparisonRows: [string, string, string, string, string][] = [
+  ['Report processing', '1 total scan', 'Unlimited', 'Batch intake', 'EHR auto-sync'],
+  ['AI Cancer Profile & Care Map', '✓ Basic', '✓ Full', '✓ Advanced', '✓ Custom UI'],
+  ['Doctor Prep Sheets (PDF)', '—', '✓ Standard', '✓ Co-branded', '✓ Clinic template'],
+  ['KindAuth insurance appeals', '—', '✓ Self-serve', '✓ Multi-patient', '✓ Automated rules'],
+  ['Multi-patient admin panel', '—', '—', '✓', '✓'],
+  ['HIPAA BAA & SLA', '—', '—', '✓ Standard BAA', '✓ Dedicated SLA'],
+  ['Clinical Trial Matching', 'Limited', '✓', '✓', '✓ Custom'],
+  ['Community Access', 'Read only', '✓', '✓', '✓'],
+  ['Support', 'Community', 'Priority email', 'Dedicated', 'Named CSM'],
 ];
 
 function ComparisonCell({ value }: { value: string }) {
@@ -64,11 +56,11 @@ function ComparisonCell({ value }: { value: string }) {
   return <>{value}</>;
 }
 
-const TIER_HEADERS = ['Free', 'Care & Advocacy Pro', 'Professional'] as const;
+const TIER_HEADERS = ['Free Trial', 'Care & Advocacy Pro', 'Professional', 'Enterprise'] as const;
 
 const CARE_DISPLAY_PRICING = {
   monthly: { amount: '$29', cadenceLabel: '/month', configured: true },
-  yearly: { amount: '$279', cadenceLabel: '/year', configured: true },
+  yearly: { amount: '$199', cadenceLabel: '/year', configured: true },
 };
 
 export default async function PricingPage() {
@@ -83,10 +75,11 @@ export default async function PricingPage() {
         <div className="text-center">
           <p className="eyebrow">Simple, transparent pricing</p>
           <h1 className="mt-4 font-display text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
-            Simple pricing for the hardest journey.
+            Simple, transparent pricing for the hardest journey.
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-[var(--color-text-secondary)]">
-            Start free. No credit card. Upgrade only when you&apos;re ready.
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)]">
+            Clear, compassionate support for families — backed by enterprise-grade advocacy tools for
+            oncology care teams.
           </p>
           <p className="mt-2 text-sm font-medium text-[var(--color-text-muted)]">
             No surprise billing · Cancel anytime · No contracts
@@ -96,6 +89,7 @@ export default async function PricingPage() {
         <PricingPlans
           isSignedIn={!!user}
           carePricing={CARE_DISPLAY_PRICING}
+          professionalConfigured={hasProfessionalPrice}
           highlightCare
           showBillingToggle
         />
@@ -140,14 +134,14 @@ export default async function PricingPage() {
 
         <section className="mt-20" id="comparison">
           <h2 className="text-center font-display text-2xl font-semibold text-[var(--color-text-primary)]">
-            Full Feature Comparison
+            Feature entitlement matrix
           </h2>
           <div className="mt-8 overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] shadow-[var(--shadow-sm)]">
-            <table className="w-full min-w-[640px] border-collapse bg-white text-left text-sm">
+            <table className="w-full min-w-[720px] border-collapse bg-white text-left text-sm">
               <thead className="sticky top-16 z-20 lg:top-[4.25rem]">
                 <tr className="border-b border-[var(--color-border)] bg-[var(--bg-subtle)] shadow-[var(--shadow-sm)]">
                   <th className="px-5 py-4 font-sans font-semibold text-[var(--color-text-primary)]">
-                    Feature
+                    Platform feature
                   </th>
                   {TIER_HEADERS.map((h) => (
                     <th
@@ -162,7 +156,7 @@ export default async function PricingPage() {
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map(([feature, free, care, prof], row) => (
+                {comparisonRows.map(([feature, free, care, prof, enterprise], row) => (
                   <tr
                     key={feature}
                     className={cn(
@@ -181,6 +175,9 @@ export default async function PricingPage() {
                     </td>
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={prof} />
+                    </td>
+                    <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
+                      <ComparisonCell value={enterprise} />
                     </td>
                   </tr>
                 ))}

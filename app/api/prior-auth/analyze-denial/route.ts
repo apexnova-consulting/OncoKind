@@ -1,28 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { createAnthropicClient, ANTHROPIC_MODELS } from '@/lib/anthropic';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { requireKindAuthUser } from '@/lib/kindauth-access';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
-  const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const user = session?.user ?? null;
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('subscription_tier')
-    .eq('id', user.id)
-    .single();
-
-  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
-    return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
-  }
+  const auth = await requireKindAuthUser();
+  if ('error' in auth) return auth.error;
+  const { user, supabase } = auth;
 
   const { denial_text, case_id } = await request.json();
   if (!denial_text || denial_text.trim().length < 20) {

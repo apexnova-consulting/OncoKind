@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Button } from '@/components/ui/button';
 import { JourneyUploadCard } from '@/components/care/JourneyUploadCard';
+import { getProfile } from '@/lib/auth';
 import { JourneyTimeline } from '@/components/care/JourneyTimeline';
 import { CancerProfileSummaryCard } from '@/components/care/CancerProfileSummaryCard';
 import { getPatientReport } from '@/lib/patient-reports';
@@ -12,6 +13,7 @@ export default async function JourneyPage() {
   const user = session?.user ?? null;
   if (!user) return null;
 
+  const { isPro } = await getProfile();
   const { data: reports } = await supabase
     .from('patient_reports')
     .select('id, created_at')
@@ -93,7 +95,7 @@ export default async function JourneyPage() {
         </p>
         {!report && (
           <div className="mt-8">
-            <JourneyUploadCard />
+            <JourneyUploadCard reportCount={reports?.length ?? 0} isFree={!isPro} />
           </div>
         )}
         {report && (

@@ -10,6 +10,7 @@ import {
   getAnthropicMaintenanceMessage,
   isAnthropicRateLimit,
 } from '@/lib/anthropic';
+import { hasCareAdvocacyAccess } from '@/lib/entitlements';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -47,6 +48,25 @@ export async function POST(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_tier')
+      .eq('id', user.id)
+      .maybeSingle();
+    const { count: reportCount } = await supabase
+      .from('patient_reports')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id);
+    if (!hasCareAdvocacyAccess(profile?.subscription_tier) && (reportCount ?? 0) >= 1) {
+      return NextResponse.json(
+        {
+          error: 'Trial limit reached. Upgrade to Care & Advocacy Pro to unlock unlimited report analyses.',
+          code: 'TRIAL_LIMIT_REACHED',
+        },
+        { status: 402 }
+      );
     }
 
     const body = await request.json().catch(() => ({}));

@@ -7,8 +7,8 @@ import { routes, stripeTestCard, pricingTiers, newSignupUser } from './fixtures/
  * Rewritten July 2026 against the live pricing page. Key changes from the
  * original suite:
  *   - Buttons are now "Start Care & Advocacy Pro →".
- *   - Professional tier is Book-a-Demo only now — no self-serve Stripe
- *     checkout exists for it anymore, so there's nothing to test there.
+ *   - Professional still offers "Book a Demo" (Calendly) plus self-serve
+ *     checkout when signed in and a Professional Stripe price is configured.
  *   - Signup requires a full name field now, in addition to email/password.
  *
  * Test isolation: each test signs up a brand-new throwaway account rather
@@ -90,10 +90,10 @@ test.describe('Stripe Billing', () => {
     await expect(page.getByText(/active/i)).toBeVisible();
   });
 
-  test('Professional tier has no self-serve checkout — "Book a Demo" only', async ({ page }) => {
-    // Confirmed live: Professional ($999/mo) links to Calendly, not Stripe.
+  test('Professional still offers a Calendly demo CTA', async ({ page }) => {
     await page.goto(routes.pricing);
     const professionalCta = page.getByRole('link', { name: new RegExp(pricingTiers.professional.cta, 'i') });
-    await expect(professionalCta).toHaveAttribute('href', /calendly\.com\/oncokind-support/);
+    await expect(professionalCta.first()).toHaveAttribute('href', /calendly\.com\/oncokind-support/);
+    await expect(page.getByRole('link', { name: /start professional/i }).first()).toBeVisible();
   });
 });

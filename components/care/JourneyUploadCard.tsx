@@ -19,11 +19,16 @@ export function JourneyUploadCard({
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  function openLimitModal() {
+    setShowUpgradeModal(true);
+    setError(null);
+  }
 
   async function handleUpload(file: File) {
-    // Free-tier: allow only 1 report
     if (isFree && reportCount >= 1) {
-      setError('Limit reached — upgrade to upload more reports.');
+      openLimitModal();
       return;
     }
     setError(null);
@@ -38,6 +43,8 @@ export function JourneyUploadCard({
         track('profile_generated');
         router.push(`/journey/diagnosis/${result.reportId}`);
         router.refresh();
+      } else if (result.error?.includes('TRIAL_LIMIT_REACHED')) {
+        openLimitModal();
       } else {
         setError(result.error);
       }
@@ -51,9 +58,8 @@ export function JourneyUploadCard({
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Show limit error immediately (synchronously) before async upload
     if (isFree && reportCount >= 1) {
-      setError('Limit reached — upgrade to upload more reports.');
+      openLimitModal();
       return;
     }
     handleUpload(file);
@@ -74,6 +80,11 @@ export function JourneyUploadCard({
         <p className="mt-2 text-center text-sm text-slate-600">
           Pathology reports, imaging notes — we&apos;ll extract key information and explain it in plain language.
         </p>
+        {isFree ? (
+          <p className="mt-2 text-center text-xs text-slate-500">
+            Free includes 1 total scan per account.
+          </p>
+        ) : null}
         {uploading && (
           <div className="mt-4 flex items-center gap-2 text-sm text-primary">
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -109,6 +120,31 @@ export function JourneyUploadCard({
           )}
         </AnimatePresence>
       </div>
+
+      {showUpgradeModal ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div
+            role="dialog"
+            aria-labelledby="trial-limit-title"
+            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+          >
+            <h3 id="trial-limit-title" className="font-display text-xl font-semibold text-slate-900">
+              Trial Limit Reached
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              Upgrade to Care &amp; Advocacy Pro to unlock unlimited report analyses.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Button asChild className="flex-1">
+                <Link href="/pricing?plan=advocate">Upgrade now</Link>
+              </Button>
+              <Button type="button" variant="outline" className="flex-1" onClick={() => setShowUpgradeModal(false)}>
+                Not now
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </motion.div>
   );
 }

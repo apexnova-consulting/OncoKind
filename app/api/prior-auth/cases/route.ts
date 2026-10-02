@@ -1,34 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { requireKindAuthUser } from '@/lib/kindauth-access';
 
 export const runtime = 'nodejs';
 
+function normalizePatientRef(value: unknown): string {
+  return typeof value === 'string' ? value.trim().toLowerCase() : '';
+}
+
 export async function GET(request: NextRequest) {
-  const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const user = session?.user ?? null;
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('subscription_tier')
-    .eq('id', user.id)
-    .single();
-
-  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
-    return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
-  }
+  const auth = await requireKindAuthUser();
+  if ('error' in auth) return auth.error;
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status');
   const caseType = searchParams.get('case_type');
 
-  let query = supabase
+  let query = auth.supabase
     .from('prior_auth_cases')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', auth.user.id)
     .order('created_at', { ascending: false });
 
   if (status) query = query.eq('status', status);
@@ -36,26 +26,12 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ cases: data });
+  return NextResponse.json({ cases: data, multiPatient: auth.isMultiPatient });
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const user = session?.user ?? null;
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('subscription_tier, organization_id')
-    .eq('id', user.id)
-    .single();
-
-  if (profile?.subscription_tier !== 'professional' && profile?.subscription_tier !== 'enterprise') {
-    return NextResponse.json({ error: 'Professional tier required' }, { status: 403 });
-  }
+  const auth = await requireKindAuthUser();
+  if ('error' in auth) return auth.error;
 
   const body = await request.json();
   const {
@@ -85,11 +61,34 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Valid case_type required' }, { status: 400 });
   }
 
-  const { data, error } = await supabase
+  if (!auth.isMultiPatient) {
+    const incoming = normalizePatientRef(patient_identifier);
+    const { data: existing } = await auth.supabase
+      .from('prior_auth_cases')
+      .select('patient_identifier')
+      .eq('user_id', auth.user.id);
+    const known = new Set(
+      (existing ?? [])
+        .map((row) => normalizePatientRef(row.patient_identifier))
+        .filter(Boolean)
+    );
+    if (incoming && known.size > 0 && !known.has(incoming)) {
+      return NextResponse.json(
+        {
+          error:
+            'Care & Advocacy Pro is limited to a single patient. Upgrade to Professional for multi-patient KindAuth Pro.',
+          redirectTo: '/pricing?reason=b2b_required',
+        },
+        { status: 403 }
+      );
+    }
+  }
+
+  const { data, error } = await auth.supabase
     .from('prior_auth_cases')
     .insert({
-      user_id: user.id,
-      organization_id: profile?.organization_id ?? null,
+      user_id: auth.user.id,
+      organization_id: auth.profile?.organization_id ?? null,
       case_type,
       status: 'draft',
       patient_identifier,

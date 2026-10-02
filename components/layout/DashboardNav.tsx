@@ -11,10 +11,12 @@ export function DashboardNav({
   brand,
   isAdmin = false,
   isProfessional = false,
+  hasKindAuthAccess = false,
 }: {
   brand: { displayName: string; logoUrl: string | null };
   isAdmin?: boolean;
   isProfessional?: boolean;
+  hasKindAuthAccess?: boolean;
 }) {
   const router = useRouter();
 
@@ -62,7 +64,7 @@ export function DashboardNav({
             <MoonStar className="h-4 w-4" />
             Quiet Room
           </Link>
-          {isProfessional && (
+          {hasKindAuthAccess && (
             <a
               href="/prior-auth"
               target="_blank"
@@ -76,6 +78,11 @@ export function DashboardNav({
                 NEW
               </span>
             </a>
+          )}
+          {isProfessional && (
+            <Link href="/admin/multi-patient" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
+              Multi-patient
+            </Link>
           )}
           {isAdmin ? (
             <Link href="/admin/organizations" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">

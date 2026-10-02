@@ -154,11 +154,11 @@ export const pricingTiers = {
   free: { name: 'Free', price: '$0', cta: 'Get Started Free', href: routes.signup },
   care: {
     name: 'Care & Advocacy Pro',
-    price: '$279',
+    price: '$199',
     monthlyPrice: '$29',
     cta: 'Start Care & Advocacy Pro',
     href: '/signup?plan=advocate',
-    badge: 'Best for insurance issues',
+    badge: 'Most Popular for Families',
   },
   professional: {
     name: 'Professional',
@@ -168,8 +168,8 @@ export const pricingTiers = {
   },
 } as const;
 
-// Pricing page's feature-comparison table. Counted from the 3-tier launch table.
-export const pricingComparisonRowCount = 18;
+// Pricing page's feature-comparison table (4 public tiers, 9 entitlement rows).
+export const pricingComparisonRowCount = 9;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.

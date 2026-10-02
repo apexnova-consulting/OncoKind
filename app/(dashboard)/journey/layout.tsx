@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { ProgressStrip } from '@/components/care/ProgressStrip';
 import { JourneySidebar } from '@/components/care/JourneySidebar';
+import { hasCareAdvocacyAccess } from '@/lib/entitlements';
 
 export default async function JourneyLayout({
   children,
@@ -17,8 +18,7 @@ export default async function JourneyLayout({
   const { data: profile } = user
     ? await supabase.from('profiles').select('subscription_tier').eq('id', user.id).maybeSingle()
     : { data: null };
-  const hasAdvocateAccess =
-    profile?.subscription_tier === 'advocate' || profile?.subscription_tier === 'enterprise';
+  const hasAdvocateAccess = hasCareAdvocacyAccess(profile?.subscription_tier);
 
   const currentStage = hasReport ? 'treatment-planning' : 'diagnosis';
   const completedStages: ('diagnosis' | 'treatment-planning' | 'active-treatment' | 'monitoring')[] = hasReport ? ['diagnosis'] : [];

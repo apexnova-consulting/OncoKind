@@ -9,7 +9,7 @@ import {
   stripePrices,
 } from '@/lib/stripe-prices';
 
-const defaultPriceId = stripePrices.proMonthly;
+const defaultPriceId = stripePrices.careProMonthly;
 
 async function handleCheckout(
   request: NextRequest,
@@ -22,18 +22,26 @@ async function handleCheckout(
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+    const login = new URL('/login', request.nextUrl.origin);
+    login.searchParams.set('redirect', request.nextUrl.pathname + request.nextUrl.search);
+    return NextResponse.redirect(login);
   }
 
   let priceId = defaultPriceId;
+  let planKey = requestedPlan ?? 'advocate';
 
   if (
     typeof requestedPlan === 'string' &&
-    typeof requestedBillingInterval === 'string' &&
-    isCheckoutPlanKey(requestedPlan) &&
-    isBillingInterval(requestedBillingInterval)
+    isCheckoutPlanKey(requestedPlan)
   ) {
-    priceId = resolveCheckoutPriceId(requestedPlan, requestedBillingInterval);
+    const interval =
+      requestedPlan === 'professional'
+        ? 'monthly'
+        : isBillingInterval(requestedBillingInterval)
+          ? requestedBillingInterval
+          : 'yearly';
+    priceId = resolveCheckoutPriceId(requestedPlan, interval);
+    planKey = requestedPlan;
     if (!priceId) {
       return NextResponse.json({ error: 'Selected billing option is not configured' }, { status: 503 });
     }
@@ -45,6 +53,7 @@ async function handleCheckout(
     return NextResponse.json({ error: 'Checkout not configured' }, { status: 503 });
   }
   const base = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
+  const successPlan = planKey === 'professional' ? 'professional' : 'care_advocacy_pro';
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -55,10 +64,11 @@ async function handleCheckout(
   const session = await createCheckoutSession({
     customerId: profile?.stripe_customer_id ?? undefined,
     customerEmail: profile?.stripe_customer_id ? undefined : user.email ?? undefined,
-    successUrl: `${base}/dashboard?checkout=success`,
+    successUrl: `${base}/dashboard?checkout=success&plan=${successPlan}`,
     cancelUrl: `${base}/dashboard/billing`,
     priceId,
     userId: user.id,
+    planKey,
   });
 
   if (session.url) {
@@ -71,7 +81,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   return handleCheckout(request, {
     requestedPlan: searchParams.get('plan'),
-    requestedBillingInterval: searchParams.get('billingInterval') ?? 'monthly',
+    requestedBillingInterval: searchParams.get('billingInterval') ?? 'yearly',
     requestedPriceId: searchParams.get('priceId'),
   });
 }

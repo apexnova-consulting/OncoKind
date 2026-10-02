@@ -55,7 +55,9 @@ function SignupForm() {
         identifyAnalyticsUser(data.userId);
       }
 
-      if (selectedPlan === 'pro' || selectedPlan === 'advocate') {
+      if (selectedPlan === 'professional') {
+        window.location.href = '/api/checkout?plan=professional&billingInterval=monthly';
+      } else if (selectedPlan === 'pro' || selectedPlan === 'advocate') {
         router.push(`/pricing?plan=${selectedPlan}`);
       } else {
         router.push('/journey');

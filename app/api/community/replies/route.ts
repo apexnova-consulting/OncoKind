@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { buildPublicDisplayName, moderateCommunityText } from '@/lib/community';
+import { hasCareAdvocacyAccess } from '@/lib/entitlements';
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
@@ -33,11 +34,10 @@ export async function POST(request: NextRequest) {
       .maybeSingle(),
   ]);
 
-  const canPost =
-    profile?.subscription_tier === 'advocate' || profile?.subscription_tier === 'enterprise';
+  const canPost = hasCareAdvocacyAccess(profile?.subscription_tier);
 
   if (!canPost) {
-    return NextResponse.json({ error: 'Posting requires the Advocate Plan.' }, { status: 402 });
+    return NextResponse.json({ error: 'Posting requires Care & Advocacy Pro.' }, { status: 402 });
   }
   if (!thread) {
     return NextResponse.json({ error: 'That thread could not be found.' }, { status: 404 });

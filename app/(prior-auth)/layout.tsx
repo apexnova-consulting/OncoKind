@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { hasKindAuthSelfServe } from '@/lib/entitlements';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 export const metadata: Metadata = {
@@ -36,10 +37,7 @@ export default async function PriorAuthLayout({ children }: { children: React.Re
     profile?.subscription_tier === 'enterprise' ||
     (email ? allowedEmails.includes(email) : false);
 
-  const allowedTiers = ['professional', 'enterprise'];
-  const hasAccess =
-    isAdmin ||
-    (profile?.subscription_tier != null && allowedTiers.includes(profile.subscription_tier));
+  const hasAccess = isAdmin || hasKindAuthSelfServe(profile?.subscription_tier);
   if (!hasAccess) {
     redirect('/dashboard/billing?upgrade=prior-auth');
   }

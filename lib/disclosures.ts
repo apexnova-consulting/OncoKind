@@ -10,7 +10,7 @@ export const PATH_B_PRIVACY_LANGUAGE =
 export const PROFESSIONAL_SECURITY_REVIEW_TEXT = 'Enterprise security review available upon request';
 
 export const PROFESSIONAL_HIPAA_NOTE =
-  'HIPAA BAA available for qualified organizations.';
+  'Professional includes a standard HIPAA BAA for qualified organizations. Family plans are an educational tool.';
 
 export const APPOINTMENT_EXPLANATION_NOTE =
   'Explanation based on established oncology literature. Verify specifics with your care team.';

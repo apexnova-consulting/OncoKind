@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE, PROFESSIONAL_SECURITY_REVIEW_TEXT } from '@/lib/disclosures';
+import { ANNUAL_SAVINGS_PERCENT } from '@/lib/stripe-prices';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
@@ -24,56 +25,60 @@ type PlanPricing = {
 type Props = {
   isSignedIn: boolean;
   carePricing: PlanPricing;
+  professionalConfigured?: boolean;
   highlightCare?: boolean;
   showBillingToggle?: boolean;
 };
 
 const FREE_FEATURES = [
-  '1 report/month — AI Cancer Profile',
+  '1 total scan trial — AI Cancer Profile',
   'Basic care map',
-  'Empathy Filter on all outputs',
-  'Read-only Community Access',
+  'Empathy Filter Engine',
+  'Community Access',
 ];
 
 const CARE_ADVOCACY_FEATURES = [
-  'Everything in Free',
-  'Unlimited reports and Doctor Prep Sheets',
-  'Clinical Trial Matching and Care Timeline',
+  'Unlimited patient scans',
+  'Doctor Prep Sheets (PDF)',
+  'Clinical Trial Matching',
+  'Standard KindAuth appeals (single-patient)',
   'Insurance Denial Defense',
-  'Full KindAuth Pro appeal generation engine',
-  'Denial analysis & medical necessity mapping',
-  'Automated records & document intake',
-  'Unlimited appeal letter exports',
+  'Care Timeline and appointment prep',
   'Priority email support',
 ];
 
 const PROFESSIONAL_FEATURES = [
   'Everything in Care & Advocacy Pro',
-  'KindAuth Pro for care teams',
+  'KindAuth Pro engine (multi-patient)',
   'Multi-patient dashboard',
-  'Batch document processing',
-  'Branded portal (white-label ready)',
+  'Batch document analysis',
+  'Co-branded Doctor Prep Sheets',
   PROFESSIONAL_SECURITY_REVIEW_TEXT,
-  'HIPAA BAA available for qualified organizations',
-  'Clinic integrations',
+  'Standard HIPAA BAA',
   'Dedicated support channel',
 ];
 
 function CheckoutForm({
+  plan,
   billingInterval,
   cta,
   className,
 }: {
+  plan: 'advocate' | 'professional';
   billingInterval: BillingInterval;
   cta: string;
   className?: string;
 }) {
-  const href = `/api/checkout?plan=advocate&billingInterval=${billingInterval}`;
+  const href = `/api/checkout?plan=${plan}&billingInterval=${billingInterval}`;
   return (
     <Button asChild className={cn('w-full', className)}>
       <a
         href={href}
-        onClick={() => track('checkout_started', { plan: 'care_advocacy_pro' })}
+        onClick={() =>
+          track('checkout_started', {
+            plan: plan === 'professional' ? 'professional' : 'care_advocacy_pro',
+          })
+        }
       >
         {cta} →
       </a>
@@ -84,14 +89,14 @@ function CheckoutForm({
 export function PricingPlans({
   isSignedIn,
   carePricing,
+  professionalConfigured = false,
   highlightCare = false,
   showBillingToggle = false,
 }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('yearly');
   const activeBillingInterval = showBillingToggle ? billingInterval : 'yearly';
   const careActivePrice = carePricing[activeBillingInterval];
-
-  const yearlySavingsLabel = useMemo(() => 'Save ~20%', []);
+  const yearlySavingsLabel = useMemo(() => `Save ~${ANNUAL_SAVINGS_PERCENT}%`, []);
 
   return (
     <>
@@ -108,7 +113,7 @@ export function PricingPlans({
                   : 'text-[var(--color-text-secondary)]'
               )}
             >
-              Monthly
+              Monthly Billing
             </button>
             <button
               type="button"
@@ -120,7 +125,7 @@ export function PricingPlans({
                   : 'text-[var(--color-text-secondary)]'
               )}
             >
-              Annual
+              Annual Billing
               <span className="ml-1.5 rounded-full bg-[#f0f7f5] px-1.5 py-0.5 text-[0.65rem] font-bold text-[var(--brand-primary)]">
                 {yearlySavingsLabel}
               </span>
@@ -131,17 +136,19 @@ export function PricingPlans({
 
       {showBillingToggle && activeBillingInterval === 'yearly' ? (
         <p className="mt-3 text-center text-sm font-medium text-[var(--brand-primary)]">
-          {yearlySavingsLabel} on annual billing
+          {yearlySavingsLabel} versus monthly billing
         </p>
       ) : null}
 
       <div className="mt-16 grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
         <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
           <span className="inline-flex w-fit rounded-full bg-[var(--bg-subtle)] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-[var(--color-text-muted)]">
-            For First Steps
+            Diagnostic Clarity
           </span>
           <h2 className="mt-3 font-display text-xl font-semibold text-[var(--color-text-primary)]">Free</h2>
-          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Understand your first report.</p>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+            First steps — one pathology scan without recurring abuse.
+          </p>
           <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">$0</p>
           <p className="text-sm text-[var(--color-text-muted)]">forever</p>
           <ul className="mt-7 flex-1 space-y-3">
@@ -166,13 +173,13 @@ export function PricingPlans({
           )}
         >
           <span className="absolute -right-1 top-4 rotate-3 rounded-full bg-[var(--brand-gold)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--color-primary-900)]">
-            Best for insurance issues
+            Most Popular for Families
           </span>
           <span className="inline-flex w-fit rounded-full bg-white/10 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-[var(--brand-gold)]">
-            For Families Navigating Care
+            For Families Under Active Care
           </span>
           <h2 className="mt-3 font-display text-xl font-semibold text-white">Care &amp; Advocacy Pro</h2>
-          <p className="mt-1 text-sm text-white/70">Clarity, appeals, and KindAuth Pro in one plan.</p>
+          <p className="mt-1 text-sm text-white/70">Full navigation suite plus standard KindAuth appeals.</p>
           <p className="mt-5 font-display text-4xl font-semibold text-white sm:text-5xl">
             {careActivePrice.amount}
           </p>
@@ -189,6 +196,7 @@ export function PricingPlans({
             careActivePrice.configured ? (
               <div className="mt-8">
                 <CheckoutForm
+                  plan="advocate"
                   billingInterval={activeBillingInterval}
                   cta="Start Care & Advocacy Pro"
                   className="bg-[var(--brand-gold)] text-[var(--color-primary-900)] hover:opacity-90 hover:shadow-none"
@@ -211,13 +219,13 @@ export function PricingPlans({
           className="hover-lift-card flex h-full scroll-mt-24 flex-col rounded-[var(--radius-xl)] border-2 border-[var(--color-primary-800)] bg-white p-7 shadow-[var(--shadow-md)]"
         >
           <span className="inline-flex w-fit rounded-full bg-[var(--color-primary-900)] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-white">
-            For Care Teams
+            Care Teams &amp; Clinics
           </span>
           <h2 className="mt-3 font-display text-xl font-semibold text-[var(--color-text-primary)]">
             Professional
           </h2>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-            KindAuth Pro for facilities and navigation teams.
+            KindAuth Pro for advocates, navigators, and outpatient clinics.
           </p>
           <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">$999</p>
           <p className="text-sm text-[var(--color-text-muted)]">/month</p>
@@ -229,16 +237,37 @@ export function PricingPlans({
               </li>
             ))}
           </ul>
-          <Button asChild variant="outline" className="mt-8 w-full">
-            <a
-              href="https://calendly.com/oncokind-support"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => track('demo_booked_click', { plan: 'professional' })}
-            >
-              Book a Demo →
-            </a>
-          </Button>
+          {isSignedIn && professionalConfigured ? (
+            <div className="mt-8 space-y-3">
+              <CheckoutForm plan="professional" billingInterval="monthly" cta="Start Professional" />
+              <Button asChild variant="outline" className="w-full">
+                <a
+                  href="https://calendly.com/oncokind-support"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track('demo_booked_click', { plan: 'professional' })}
+                >
+                  Book a Demo
+                </a>
+              </Button>
+            </div>
+          ) : (
+            <div className="mt-8 space-y-3">
+              <Button asChild className="w-full">
+                <Link href="/signup?plan=professional">Start Professional →</Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <a
+                  href="https://calendly.com/oncokind-support"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track('demo_booked_click', { plan: 'professional' })}
+                >
+                  Book a Demo
+                </a>
+              </Button>
+            </div>
+          )}
           <p className="mt-4 text-xs leading-relaxed text-[var(--color-text-muted)]">
             {PROFESSIONAL_HIPAA_NOTE}
           </p>
@@ -247,6 +276,31 @@ export function PricingPlans({
           </p>
         </div>
       </div>
+
+      <section className="mt-10 rounded-[var(--radius-xl)] border border-[var(--color-primary-800)] bg-[var(--color-primary-900)] p-8 text-white shadow-[var(--shadow-md)]">
+        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[var(--brand-gold)]">
+          Health Systems &amp; Oncology Networks
+        </p>
+        <div className="mt-3 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-2xl font-semibold">Custom Enterprise Pricing</h2>
+            <p className="mt-2 text-sm leading-relaxed text-white/75">
+              Streamline prior authorization appeals, custom workflows, and EHR integration (Epic/Cerner) at
+              scale.
+            </p>
+          </div>
+          <Button asChild className="shrink-0 bg-[var(--brand-gold)] text-[var(--color-primary-900)] hover:opacity-90">
+            <a
+              href="https://calendly.com/oncokind-support"
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => track('demo_booked_click', { plan: 'enterprise' })}
+            >
+              Talk to sales →
+            </a>
+          </Button>
+        </div>
+      </section>
     </>
   );
 }

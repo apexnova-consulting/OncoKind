@@ -32,7 +32,12 @@ export function createCheckoutSession(params: {
   cancelUrl: string;
   priceId: string;
   userId?: string;
+  planKey?: string;
 }) {
+  const metadata = {
+    ...(params.userId ? { supabase_user_id: params.userId } : {}),
+    ...(params.planKey ? { plan_key: params.planKey } : {}),
+  };
   return getStripeClient().checkout.sessions.create({
     mode: 'subscription',
     ...(params.customerId ? { customer: params.customerId } : { customer_email: params.customerEmail }),
@@ -40,8 +45,8 @@ export function createCheckoutSession(params: {
     success_url: params.successUrl,
     cancel_url: params.cancelUrl,
     subscription_data: {
-      metadata: params.userId ? { supabase_user_id: params.userId } : undefined,
+      metadata: Object.keys(metadata).length ? metadata : undefined,
     },
-    metadata: params.userId ? { supabase_user_id: params.userId } : undefined,
+    metadata: Object.keys(metadata).length ? metadata : undefined,
   });
 }

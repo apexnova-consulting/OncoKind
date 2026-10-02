@@ -61,15 +61,15 @@ export default async function BillingPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Advocate Plan</CardTitle>
+          <CardTitle>Care &amp; Advocacy Pro</CardTitle>
           <CardDescription>
-            Insurance denial defense, live financial aid tracking, and NCCN-aligned advocate sheets for caregivers.
+            Unlimited scans, Doctor Prep Sheets, trial matching, and standard KindAuth appeals.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {hasAdvocateAccess ? (
             <>
-              <p className="text-sm text-slate-600">You have Advocate-level access.</p>
+              <p className="text-sm text-slate-600">You have Care &amp; Advocacy Pro access.</p>
               {portalUrl && (
                 <Button asChild>
                   <a href={portalUrl}>Manage subscription</a>
@@ -78,25 +78,25 @@ export default async function BillingPage() {
             </>
           ) : hasAdvocatePrices ? (
             <div className="space-y-3">
-              {stripePrices.advocateMonthly && (
+              {stripePrices.careProMonthly && (
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="advocate" />
                   <input type="hidden" name="billingInterval" value="monthly" />
-                  <Button type="submit" className="w-full">Advocate Monthly</Button>
+                  <Button type="submit" className="w-full">Care &amp; Advocacy Pro Monthly</Button>
                 </form>
               )}
-              {stripePrices.advocateYearly && (
+              {stripePrices.careProAnnual && (
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="plan" value="advocate" />
                   <input type="hidden" name="billingInterval" value="yearly" />
-                  <Button type="submit" variant="outline" className="w-full">Advocate Yearly</Button>
+                  <Button type="submit" variant="outline" className="w-full">Care &amp; Advocacy Pro Yearly</Button>
                 </form>
               )}
             </div>
           ) : (
             <>
               <p className="text-sm text-slate-600">
-                Set `STRIPE_PRICE_ID_ADVOCATE_MONTHLY` and optionally `STRIPE_PRICE_ID_ADVOCATE_YEARLY` to enable Advocate checkout.
+                Set `STRIPE_PRICE_ID_CARE_PRO_MONTHLY` and `STRIPE_PRICE_ID_CARE_PRO_ANNUAL` to enable checkout.
               </p>
               <Button asChild variant="secondary">
                 <Link href="/pricing?plan=advocate">View pricing</Link>
