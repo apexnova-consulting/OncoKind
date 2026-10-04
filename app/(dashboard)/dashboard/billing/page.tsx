@@ -4,13 +4,12 @@ import { getStripeClient } from '@/lib/stripe';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { stripePrices, hasAdvocatePrices } from '@/lib/stripe-prices';
 
 export default async function BillingPage() {
-  const { user, profile, isPro, hasAdvocateAccess } = await getProfile();
+  const { user, profile, isPro } = await getProfile();
   if (!user) redirect('/login');
 
-  const isLegacyPro = profile?.subscription_status === 'pro' && !hasAdvocateAccess;
+  const isLegacyPro = false;
 
   let portalUrl = '';
   if (profile?.stripe_customer_id && isPro) {
@@ -61,47 +60,25 @@ export default async function BillingPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Care &amp; Advocacy Pro</CardTitle>
+          <CardTitle>Paid plans</CardTitle>
           <CardDescription>
-            Unlimited scans, Doctor Prep Sheets, trial matching, and standard KindAuth appeals.
+            Caregiver Pro is $39/month or $390/year. Advocate Plan is $49/month or $490/year and adds insurance and financial tools.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {hasAdvocateAccess ? (
+          {isPro ? (
             <>
-              <p className="text-sm text-slate-600">You have Care &amp; Advocacy Pro access.</p>
+              <p className="text-sm text-slate-600">You have a paid OncoKind plan.</p>
               {portalUrl && (
                 <Button asChild>
                   <a href={portalUrl}>Manage subscription</a>
                 </Button>
               )}
             </>
-          ) : hasAdvocatePrices ? (
-            <div className="space-y-3">
-              {stripePrices.careProMonthly && (
-                <form action="/api/checkout" method="POST">
-                  <input type="hidden" name="plan" value="advocate" />
-                  <input type="hidden" name="billingInterval" value="monthly" />
-                  <Button type="submit" className="w-full">Care &amp; Advocacy Pro Monthly</Button>
-                </form>
-              )}
-              {stripePrices.careProAnnual && (
-                <form action="/api/checkout" method="POST">
-                  <input type="hidden" name="plan" value="advocate" />
-                  <input type="hidden" name="billingInterval" value="yearly" />
-                  <Button type="submit" variant="outline" className="w-full">Care &amp; Advocacy Pro Yearly</Button>
-                </form>
-              )}
-            </div>
           ) : (
-            <>
-              <p className="text-sm text-slate-600">
-                Set `STRIPE_PRICE_ID_CARE_PRO_MONTHLY` and `STRIPE_PRICE_ID_CARE_PRO_ANNUAL` to enable checkout.
-              </p>
-              <Button asChild variant="secondary">
-                <Link href="/pricing?plan=advocate">View pricing</Link>
-              </Button>
-            </>
+            <Button asChild>
+              <Link href="/pricing">View pricing</Link>
+            </Button>
           )}
         </CardContent>
       </Card>

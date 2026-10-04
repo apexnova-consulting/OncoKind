@@ -3,32 +3,31 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { MarketingHome } from '@/components/marketing/MarketingHome';
 
 export const metadata: Metadata = {
-  title: 'OncoKind — Clarity for Families Navigating Cancer',
+  title: 'Clarity for families navigating cancer',
   description:
-    'OncoKind translates your loved one\'s pathology report into plain English, prepares you for every oncology appointment, and guides your family through every step of the cancer journey — without survival statistics, without fear.',
+    'Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock Doctor Prep Sheet PDFs, full trial matching, and insurance advocacy.',
   alternates: {
     canonical: 'https://www.oncokind.com/',
   },
   openGraph: {
-    title: 'OncoKind — Clarity for Families Navigating Cancer',
+    title: 'Clarity for families navigating cancer',
     description:
-      'Translate your loved one\'s pathology report into plain English. Generate Doctor Prep Sheets, match clinical trials, and navigate cancer — without survival statistics, without fear.',
+      'Upload your first report free and get your Cancer Profile in minutes.',
     url: 'https://www.oncokind.com/',
     type: 'website',
     images: [
       {
-        url: '/og-home.png',
+        url: 'https://www.oncokind.com/og-home.png',
         width: 1200,
         height: 630,
-        alt: 'OncoKind — Clarity for families navigating cancer',
+        alt: 'OncoKind Cancer Profile preview',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OncoKind — Clarity for Families Navigating Cancer',
-    description:
-      'Translate your loved one\'s pathology report into plain English. Generate Doctor Prep Sheets, match clinical trials, and navigate cancer — without survival statistics, without fear.',
+    title: 'Clarity for families navigating cancer',
+    description: 'Upload your first report free and get your Cancer Profile in minutes.',
   },
   keywords: [
     'how to read a pathology report',
@@ -51,7 +50,7 @@ const jsonLdFAQ = {
       name: 'Is this medical advice? Can I trust what OncoKind tells me?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'OncoKind is an educational preparation tool — it helps you understand what your loved one\'s report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is sourced from NCCN guidelines and NCI resources. Your oncology team remains your primary guide.',
+        text: 'OncoKind is an educational preparation tool. It helps you understand what your loved one\'s report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is sourced from NCCN guidelines and NCI resources. Your oncology team remains your primary guide.',
       },
     },
     {
@@ -75,7 +74,7 @@ const jsonLdFAQ = {
       name: 'My oncologist is very thorough. Do I really need this?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Most oncologists are thorough — and most appointments are 15–20 minutes long, while the family is still processing the diagnosis. OncoKind doesn't replace your oncologist. It helps you arrive at the appointment with the right questions and understand what you heard afterward.",
+        text: "Most oncologists are thorough, and most appointments are 15 to 20 minutes long, while the family is still processing the diagnosis. OncoKind doesn't replace your oncologist. It helps you arrive at the appointment with the right questions and understand what you heard afterward.",
       },
     },
     {
@@ -83,7 +82,7 @@ const jsonLdFAQ = {
       name: "What does 'free' actually include?",
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'One report translation per month, a full Cancer Profile, clinical trial matches, and read-only community access. No credit card required to start. Doctor Prep Sheets, unlimited reports, and insurance denial support are in paid plans. Full details on the pricing page.',
+        text: 'One pathology scan total per account and a Cancer Profile. Trial matching on Free is a preview of the top 3 matches. Doctor Prep Sheet PDFs and full matching are on Caregiver Pro. Insurance tools are on Advocate Plan.',
       },
     },
   ],
@@ -96,12 +95,12 @@ const jsonLdSoftware = {
   applicationCategory: 'HealthApplication',
   operatingSystem: 'Web',
   description:
-    'OncoKind translates pathology reports into plain English, generates Doctor Prep Sheets, matches clinical trials, and guides families through the cancer journey — without survival statistics, without fear.',
+    'OncoKind translates pathology reports into plain English and helps families prepare for oncology visits, without survival statistics and without fear.',
   offers: {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'USD',
-    description: 'Free tier — one report per month, Cancer Profile, clinical trial matches',
+    description: 'Free tier. One scan, Cancer Profile, limited trial matching preview',
   },
   url: 'https://www.oncokind.com',
 };

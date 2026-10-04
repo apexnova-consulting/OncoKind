@@ -10,12 +10,13 @@ export const PATH_B_PRIVACY_LANGUAGE =
 export const PROFESSIONAL_SECURITY_REVIEW_TEXT = 'Enterprise security review available upon request';
 
 export const PROFESSIONAL_HIPAA_NOTE =
-  'Professional includes a standard HIPAA BAA for qualified organizations. Family plans are an educational tool.';
+  'HIPAA BAA available on request for qualified Professional organizations.';
 
 export const APPOINTMENT_EXPLANATION_NOTE =
   'Explanation based on established oncology literature. Verify specifics with your care team.';
 
-const DEFAULT_NCCN_VERSION = process.env.NEXT_PUBLIC_NCCN_GUIDELINES_VERSION ?? 'current';
+const DEFAULT_NCCN_VERSION =
+  process.env.NEXT_PUBLIC_NCCN_GUIDELINES_VERSION ?? '2.2026 (reviewed October 2026)';
 const DEFAULT_TRIALS_VERIFIED_AT =
   process.env.NEXT_PUBLIC_CLINICAL_TRIALS_LAST_VERIFIED_AT ?? new Date().toISOString();
 
@@ -48,7 +49,7 @@ export function getCancerProfileSources(cancerType?: string) {
   const label = cancerType?.trim() || 'Relevant cancer type';
 
   return [
-    `NCCN Clinical Practice Guidelines in Oncology — ${label}, Version ${DEFAULT_NCCN_VERSION}`,
+    `NCCN Clinical Practice Guidelines in Oncology. ${label}. Version ${DEFAULT_NCCN_VERSION}`,
     'National Cancer Institute (cancer.gov)',
     `Accessed: ${formatMonthYear(new Date())}`,
     APPOINTMENT_EXPLANATION_NOTE,
@@ -59,7 +60,7 @@ export function getClinicalTrialSources() {
   return [
     'Trial data sourced from ClinicalTrials.gov',
     `Last verified: ${formatLongDate(DEFAULT_TRIALS_VERIFIED_AT)}`,
-    'Trial status may change — confirm eligibility directly with the trial site.',
+    'Trial status may change. Confirm eligibility directly with the trial site.',
   ];
 }
 

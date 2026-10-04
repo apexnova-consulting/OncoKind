@@ -29,25 +29,25 @@ const dmSans = DM_Sans({
 });
 
 const SITE_DESCRIPTION =
-  'Translate your loved one\'s pathology report into plain English. Generate Doctor Prep Sheets, match clinical trials, fight insurance denials. Built by a caregiver, for caregivers.';
+  'Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock Doctor Prep Sheet PDFs, full trial matching, and insurance advocacy.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com'),
   title: {
-    default: 'OncoKind — Clarity for Families Navigating Cancer',
+    default: 'Clarity for families navigating cancer',
     template: '%s | OncoKind',
   },
   description: SITE_DESCRIPTION,
   openGraph: {
     type: 'website',
-    title: 'OncoKind — Clarity for Families Navigating Cancer',
+    title: 'Clarity for families navigating cancer',
     description: SITE_DESCRIPTION,
     siteName: 'OncoKind',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OncoKind — Clarity for Families Navigating Cancer',
+    title: 'Clarity for families navigating cancer',
     description: SITE_DESCRIPTION,
   },
   manifest: '/manifest.json',
@@ -75,8 +75,10 @@ const jsonLd = {
   url: 'https://www.oncokind.com',
   offers: [
     { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
-    { '@type': 'Offer', name: 'Care & Advocacy Pro', price: '29', priceCurrency: 'USD', billingIncrement: 'P1M' },
-    { '@type': 'Offer', name: 'Care & Advocacy Pro (annual)', price: '199', priceCurrency: 'USD', billingIncrement: 'P1Y' },
+    { '@type': 'Offer', name: 'Caregiver Pro', price: '39', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Caregiver Pro (annual)', price: '390', priceCurrency: 'USD', billingIncrement: 'P1Y' },
+    { '@type': 'Offer', name: 'Advocate Plan', price: '49', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: 'Advocate Plan (annual)', price: '490', priceCurrency: 'USD', billingIncrement: 'P1Y' },
     { '@type': 'Offer', name: 'Professional', price: '999', priceCurrency: 'USD', billingIncrement: 'P1M' },
   ],
   operatingSystem: 'Web, iOS (PWA), Android (PWA)',

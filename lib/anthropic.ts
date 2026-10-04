@@ -1,9 +1,12 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { LLM_DASH_RULE } from '@/lib/typography';
 
 export const ANTHROPIC_MODELS = {
   heavy: 'claude-sonnet-4-6',
   light: 'claude-haiku-4-5',
 } as const;
+
+export { LLM_DASH_RULE };
 
 type CacheTtl = '5m' | '1h';
 

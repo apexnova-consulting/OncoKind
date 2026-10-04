@@ -1,61 +1,62 @@
-/**
- * Stripe price IDs.
- * Preferred v2 env vars (Care & Advocacy Pro / Professional) fall back to
- * legacy Advocate / Pro / Enterprise IDs so checkout keeps working until the
- * new products are created in Stripe and wired in Vercel.
- */
+import {
+  canonicalCheckoutPlan,
+  isCheckoutPlanKey as isCatalogCheckoutPlan,
+  type BillingInterval,
+  type CheckoutPlanKey,
+} from '@/lib/pricing-config';
+
+export type { BillingInterval, CheckoutPlanKey };
 
 export const stripePrices = {
-  careProMonthly:
-    process.env.STRIPE_PRICE_ID_CARE_PRO_MONTHLY ??
-    process.env.STRIPE_PRICE_ID_ADVOCATE_MONTHLY ??
+  caregiverMonthly:
+    process.env.STRIPE_PRICE_ID_CAREGIVER_MONTHLY ??
     process.env.STRIPE_PRICE_ID_PRO_MONTHLY ??
     process.env.STRIPE_PRICE_ID ??
     '',
-  careProAnnual:
-    process.env.STRIPE_PRICE_ID_CARE_PRO_ANNUAL ??
-    process.env.STRIPE_PRICE_ID_ADVOCATE_YEARLY ??
-    process.env.STRIPE_PRICE_ID_PRO_YEARLY ??
-    '',
+  caregiverYearly:
+    process.env.STRIPE_PRICE_ID_CAREGIVER_YEARLY ?? process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? '',
+  advocateMonthly: process.env.STRIPE_PRICE_ID_ADVOCATE_MONTHLY ?? '',
+  advocateYearly: process.env.STRIPE_PRICE_ID_ADVOCATE_YEARLY ?? '',
   professionalMonthly:
     process.env.STRIPE_PRICE_ID_PROFESSIONAL_MONTHLY ??
     process.env.STRIPE_PRICE_ID_ENTERPRISE_UNLIMITED ??
     '',
-  /** @deprecated Use careProMonthly */
-  proMonthly:
-    process.env.STRIPE_PRICE_ID_PRO_MONTHLY ?? process.env.STRIPE_PRICE_ID ?? '',
+  /** @deprecated */
+  proMonthly: process.env.STRIPE_PRICE_ID_PRO_MONTHLY ?? process.env.STRIPE_PRICE_ID ?? '',
   proYearly: process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? '',
-  advocateMonthly: process.env.STRIPE_PRICE_ID_ADVOCATE_MONTHLY ?? '',
-  advocateYearly: process.env.STRIPE_PRICE_ID_ADVOCATE_YEARLY ?? '',
+  careProMonthly:
+    process.env.STRIPE_PRICE_ID_CAREGIVER_MONTHLY ??
+    process.env.STRIPE_PRICE_ID_PRO_MONTHLY ??
+    process.env.STRIPE_PRICE_ID ??
+    '',
+  careProAnnual:
+    process.env.STRIPE_PRICE_ID_CAREGIVER_YEARLY ?? process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? '',
   enterpriseUnlimited: process.env.STRIPE_PRICE_ID_ENTERPRISE_UNLIMITED ?? '',
   enterprisePerSeat: process.env.STRIPE_PRICE_ID_ENTERPRISE_PER_SEAT ?? '',
 } as const;
 
-export const hasProPrices = !!(stripePrices.careProMonthly || stripePrices.proMonthly);
+export const hasProPrices = !!stripePrices.caregiverMonthly;
+export const hasAdvocatePrices = !!stripePrices.advocateMonthly;
+export const hasProfessionalPrice = !!stripePrices.professionalMonthly;
 export const hasEnterprisePrices = !!(
   stripePrices.enterpriseUnlimited || stripePrices.enterprisePerSeat
 );
-export const hasAdvocatePrices = !!(
-  stripePrices.careProMonthly || stripePrices.advocateMonthly
-);
-export const hasProfessionalPrice = !!stripePrices.professionalMonthly;
-
-export type BillingInterval = 'monthly' | 'yearly';
-export type CheckoutPlanKey = 'pro' | 'advocate' | 'care' | 'professional';
 
 export function isBillingInterval(value: string | null): value is BillingInterval {
   return value === 'monthly' || value === 'yearly';
 }
 
 export function isCheckoutPlanKey(value: string | null): value is CheckoutPlanKey {
-  return value === 'pro' || value === 'advocate' || value === 'care' || value === 'professional';
+  return isCatalogCheckoutPlan(value);
 }
 
 export function resolveCheckoutPriceId(plan: CheckoutPlanKey, interval: BillingInterval): string {
-  if (plan === 'professional') {
-    return stripePrices.professionalMonthly;
+  const canonical = canonicalCheckoutPlan(plan);
+  if (canonical === 'professional') return stripePrices.professionalMonthly;
+  if (canonical === 'advocate') {
+    return interval === 'yearly' ? stripePrices.advocateYearly : stripePrices.advocateMonthly;
   }
-  return interval === 'yearly' ? stripePrices.careProAnnual : stripePrices.careProMonthly;
+  return interval === 'yearly' ? stripePrices.caregiverYearly : stripePrices.caregiverMonthly;
 }
 
 export function isKnownStripePriceId(priceId: string | null): boolean {
@@ -63,27 +64,21 @@ export function isKnownStripePriceId(priceId: string | null): boolean {
   return Object.values(stripePrices).includes(priceId);
 }
 
-export function tierFromPriceId(priceId: string | undefined): 'advocate' | 'professional' | 'enterprise' | 'pro' {
-  if (!priceId) return 'advocate';
-  if (
-    priceId === stripePrices.professionalMonthly ||
-    priceId === process.env.STRIPE_PRICE_ID_PROFESSIONAL_MONTHLY
-  ) {
-    return 'professional';
-  }
-  if (
-    priceId === stripePrices.enterpriseUnlimited ||
-    priceId === stripePrices.enterprisePerSeat
-  ) {
-    if (priceId === stripePrices.professionalMonthly) return 'professional';
+export function tierFromPriceId(
+  priceId: string | undefined
+): 'pro' | 'advocate' | 'professional' | 'enterprise' {
+  if (!priceId) return 'pro';
+  if (priceId === stripePrices.professionalMonthly) return 'professional';
+  if (priceId === stripePrices.enterpriseUnlimited || priceId === stripePrices.enterprisePerSeat) {
     return 'enterprise';
   }
-  return 'advocate';
+  if (priceId === stripePrices.advocateMonthly || priceId === stripePrices.advocateYearly) {
+    return 'advocate';
+  }
+  return 'pro';
 }
 
-export const CARE_PRO_MONTHLY_AMOUNT = 29;
-export const CARE_PRO_ANNUAL_AMOUNT = 199;
+export const CAREGIVER_MONTHLY_AMOUNT = 39;
+export const ADVOCATE_MONTHLY_AMOUNT = 49;
 export const PROFESSIONAL_MONTHLY_AMOUNT = 999;
-export const ANNUAL_SAVINGS_PERCENT = Math.round(
-  (1 - CARE_PRO_ANNUAL_AMOUNT / (CARE_PRO_MONTHLY_AMOUNT * 12)) * 100
-);
+export const ANNUAL_SAVINGS_PERCENT = 17;

@@ -166,33 +166,33 @@ test.describe('Pricing (/pricing)', () => {
         await expect(page.getByText(tier.price, { exact: false }).first()).toBeVisible();
       }
     }
-    await expect(page.getByText(pricingTiers.care.badge)).toBeVisible();
+    await expect(page.getByText(pricingTiers.caregiver.badge)).toBeVisible();
     await expect(page.getByText(/most popular for families/i)).toBeVisible();
   });
 
   test('annual is the default billing interval and monthly toggle updates the price', async ({ page }) => {
     await page.goto(routes.pricing);
     await expect(page.getByText(/save ~/i).first()).toBeVisible();
-    await expect(page.getByText('$199').first()).toBeVisible();
+    await expect(page.getByText('$390').first()).toBeVisible();
 
     await page.getByRole('button', { name: /monthly billing/i }).click();
-    await expect(page.getByText('$29').first()).toBeVisible();
+    await expect(page.getByText('$39').first()).toBeVisible();
   });
 
-  test('"Start Care & Advocacy Pro" links to /signup?plan=advocate', async ({ page }) => {
+  test('"Start Caregiver Pro" links to /signup?plan=pro', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByRole('link', { name: /start care & advocacy pro/i })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /start caregiver pro/i }).first()).toHaveAttribute(
       'href',
-      /\/signup\?plan=advocate/
+      /\/signup\?plan=pro/
     );
   });
 
-  test('signup from Care & Advocacy Pro pre-selects the plan', async ({ page }) => {
+  test('signup from Caregiver Pro pre-selects the plan', async ({ page }) => {
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: /start care & advocacy pro/i }).click();
-    await expect(page).toHaveURL(/\/signup\?plan=advocate/);
+    await page.getByRole('link', { name: /start caregiver pro/i }).first().click();
+    await expect(page).toHaveURL(/\/signup\?plan=pro/);
     await expect(page.getByText(/selected plan/i)).toBeVisible();
-    await expect(page.getByText(/care & advocacy pro/i).first()).toBeVisible();
+    await expect(page.getByText(/caregiver pro/i).first()).toBeVisible();
   });
 
   test('"Book a Demo" on Professional tier links to Calendly', async ({ page }) => {
@@ -215,14 +215,13 @@ test.describe('Pricing (/pricing)', () => {
     await expect(table.locator('tbody tr')).toHaveCount(pricingComparisonRowCount);
   });
 
-  test('feature comparison table includes KindAuth insurance appeals with accessible included labels', async ({
+  test('feature comparison table includes KindAuth on Professional only', async ({
     page,
   }) => {
     await page.goto(routes.pricing);
-    const kindAuthRow = page.locator('tr', { hasText: 'KindAuth insurance appeals' }).first();
+    const kindAuthRow = page.locator('tr', { hasText: 'KindAuth' }).first();
     await expect(kindAuthRow).toBeVisible();
-    await expect(kindAuthRow.getByText('Not included')).toHaveCount(1);
-    await expect(kindAuthRow.getByText('Included')).toHaveCount(3);
+    await expect(kindAuthRow.getByText('Not included')).toHaveCount(3);
   });
 
   test('pricing FAQ shows all 5 questions', async ({ page }) => {
@@ -439,16 +438,16 @@ test.describe('Navigation & SEO', () => {
     await expect(page).toHaveTitle(/OncoKind/);
   });
 
-  test('pricing metadata matches Care & Advocacy Pro at $29/$199', async ({ page }) => {
+  test('pricing metadata matches Caregiver Pro at $39/$390 and Advocate Plan at $49/$490', async ({ page }) => {
     await page.goto(routes.pricing);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content');
     const twitterDescription = await page.locator('meta[name="twitter:description"]').getAttribute('content');
-    expect(description).toMatch(/\$29\/month/);
-    expect(description).toMatch(/\$199\/year/);
-    expect(description).not.toMatch(/\$39\/month/);
-    expect(ogDescription).toMatch(/\$29\/month/);
-    expect(twitterDescription).toMatch(/\$29\/month/);
+    expect(description).toMatch(/\$39\/month/);
+    expect(description).toMatch(/\$390\/year/);
+    expect(description).toMatch(/\$49\/month/);
+    expect(ogDescription).toMatch(/\$39\/month/);
+    expect(twitterDescription).toMatch(/\$39\/month/);
   });
 
   test('robots.txt does not disallow the public /prior-auth-pro marketing page', async ({ request, baseURL }) => {
@@ -507,7 +506,7 @@ test.describe('Responsive layout (Section 10 — runs against the `mobile-market
     test.skip(!isMobile, 'Only meaningful on the mobile project');
     await page.goto(routes.pricing);
     const freeHeading = page.getByRole('heading', { name: pricingTiers.free.name, exact: true });
-    const careHeading = page.getByRole('heading', { name: pricingTiers.care.name, exact: true });
+    const careHeading = page.getByRole('heading', { name: pricingTiers.caregiver.name, exact: true });
     const freeCard = freeHeading.locator('xpath=ancestor::div[contains(@class,"rounded")][1]');
     const proCard = careHeading.locator('xpath=ancestor::div[contains(@class,"rounded")][1]');
     const firstBox = await freeCard.boundingBox();

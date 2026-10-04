@@ -152,13 +152,21 @@ export const homepageFeatureCards = [
 // INTENDED param and will fail until fixed.
 export const pricingTiers = {
   free: { name: 'Free', price: '$0', cta: 'Get Started Free', href: routes.signup },
-  care: {
-    name: 'Care & Advocacy Pro',
-    price: '$199',
-    monthlyPrice: '$29',
-    cta: 'Start Care & Advocacy Pro',
-    href: '/signup?plan=advocate',
+  caregiver: {
+    name: 'Caregiver Pro',
+    price: '$390',
+    monthlyPrice: '$39',
+    cta: 'Start Caregiver Pro',
+    href: '/signup?plan=pro',
     badge: 'Most Popular for Families',
+  },
+  advocate: {
+    name: 'Advocate Plan',
+    price: '$490',
+    monthlyPrice: '$49',
+    cta: 'Start Advocate Plan',
+    href: '/signup?plan=advocate',
+    badge: 'Insurance & financial navigation',
   },
   professional: {
     name: 'Professional',
@@ -168,8 +176,7 @@ export const pricingTiers = {
   },
 } as const;
 
-// Pricing page's feature-comparison table (4 public tiers, 9 entitlement rows).
-export const pricingComparisonRowCount = 9;
+export const pricingComparisonRowCount = 17;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.

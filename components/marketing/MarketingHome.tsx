@@ -30,6 +30,13 @@ import { Reveal, RevealStagger } from '@/components/motion/Reveal';
 import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 import { cn } from '@/lib/utils';
+import {
+  CONSUMER_HOMEPAGE_FEATURES,
+  HOMEPAGE_HERO,
+  HOMEPAGE_TOOL_COUNT,
+  numberToToolHeadline,
+} from '@/lib/pricing-config';
+import { isFeatureEnabled } from '@/lib/feature-flags';
 
 /* ─────────────────────────────────────────────────────────────
    DATA
@@ -44,8 +51,8 @@ const stats = [
       'https://www.ama-assn.org/press-center/press-releases/ama-survey-shows-physicians-patients-heavily-burdened-prior-authorization',
   },
   {
-    figure: '12% - 18%',
-    desc: 'of standard prior authorization requests across health plans are initially denied.',
+    figure: '4 million+',
+    desc: 'Over 4 million Medicare Advantage prior authorization requests were denied in 2024.',
     sourceName: 'Kaiser Family Foundation (2025)',
     sourceUrl:
       'https://www.kff.org/medicare/issue-brief/over-4-million-medicare-advantage-prior-authorization-requests-were-denied-in-2024/',
@@ -62,19 +69,18 @@ const stats = [
 const testimonials = [
   {
     quote:
-      "I had never heard about clinical trials. No one ever brought them up with me. I was so shocked I didn\u2019t know about this.",
-    attribution: 'Family caregiver — stage IV cancer',
+      "I had never heard about clinical trials. No one ever brought them up with me. I was so shocked I didn't know about this.",
+    attribution: 'Caregiver research interview, family caregiver',
   },
   {
-    quote:
-      "I felt like for a while I was doing this by myself. Not knowing what I was doing.",
-    attribution: 'Family caregiver — advanced cancer',
+    quote: 'I felt like for a while I was doing this by myself. Not knowing what I was doing.',
+    attribution: 'Caregiver research interview, family caregiver',
   },
 ];
 
 const sourceBadges = [
   'NCCN Clinical Guidelines',
-  'NCI — cancer.gov',
+  'NCI (cancer.gov)',
   'JCO Oncology Practice',
   'Oncology Social Workers',
   'Patient Advocates',
@@ -84,7 +90,7 @@ const steps = [
   {
     n: '01',
     title: 'Upload your report',
-    desc: 'Securely upload any pathology report, scan result, or discharge summary — PDF or image. Your raw file is not retained after processing.',
+    desc: 'Securely upload any pathology report, scan result, or discharge summary (PDF or image). Your raw file is not retained after processing.',
     icon: Upload,
     devNote: true,
   },
@@ -98,122 +104,53 @@ const steps = [
   {
     n: '03',
     title: 'Get your Doctor Prep Sheet',
-    desc: 'A personalized list of questions based on your loved one\'s exact diagnosis, stage, and biomarkers. Organized by priority. Exportable as PDF. Ready before Tuesday\'s appointment.',
+    desc: "A personalized list of questions based on your loved one's exact diagnosis, stage, and biomarkers. Organized by priority. PDF export is on Caregiver Pro.",
     icon: FileCheck,
     devNote: false,
   },
   {
     n: '04',
     title: 'Navigate every step from here',
-    desc: 'Track your care timeline, explore clinical trials, respond to insurance denials, find financial aid, and prepare for second opinions — all in one place, at any stage of the journey.',
+    desc: 'Track your care timeline, explore clinical trials, respond to insurance denials, find financial aid, and prepare for second opinions, all in one place.',
     icon: GitBranch,
     devNote: false,
   },
 ];
 
-const features = [
-  {
-    href: '/features/doctor-prep-sheet',
-    title: 'Doctor Prep Sheet',
-    desc: 'Personalized questions based on your loved one\'s exact diagnosis, stage, and biomarkers. Organized by priority. Exportable as PDF before every appointment.',
-    Icon: Calendar,
-    tag: 'Most impactful',
-    tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
-  },
-  {
-    href: '/features/clinical-trial-matching',
-    title: 'Clinical Trial Matching',
-    desc: 'Live matching against ClinicalTrials.gov, filtered by location, cancer type, stage, and biomarkers. Every match explained in plain English.',
-    Icon: FlaskConical,
-    tag: 'Real-time data',
-    tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
-  },
-  {
-    href: '/features/insurance-denial-defense',
-    title: 'Insurance Denial Defense',
-    desc: 'Upload your denial letter. OncoKind decodes the stated reason in plain English and generates a structured appeal packet — including the regulatory language insurers respond to.',
-    Icon: ShieldCheck,
-    tag: 'Care & Advocacy Pro',
-    tagStyle: 'bg-[#FAEEDA] text-[#8b5e2a] border border-[#f0d5b8]',
-  },
-  {
-    href: '/features/empathy-filter',
-    title: 'The Empathy Filter',
-    desc: 'Every output removes survival statistics and fear-based language. You get clarity and preparation — not prognosis.',
-    Icon: Heart,
-    tag: 'Our differentiator',
-    tagStyle: 'bg-[#FAEEDA] text-[#8b5e2a] border border-[#f0d5b8]',
-  },
-  {
-    href: '/journey/second-opinion',
-    title: 'Second Opinion Mode',
-    desc: 'A complete intake packet for a new oncologist: report summary, treatment history, current questions, and key findings — formatted for a new care team.',
-    Icon: FileText,
-    tag: 'Often overlooked',
-    tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
-  },
-  {
-    href: '/journey/financial-help',
-    title: 'Financial Help',
-    desc: 'Live matching to pharmaceutical co-pay programs, foundation grants, and financial aid. Most families never find out these programs exist.',
-    Icon: HandCoins,
-    tag: 'All plans',
-    tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
-  },
-  {
-    href: '/journey/timeline',
-    title: 'Care Timeline',
-    desc: 'A living record of your loved one\'s cancer journey. Document diagnoses, appointments, and milestones — so you always know exactly where you\'ve been and what comes next.',
-    Icon: GitBranch,
-    tag: 'Care & Advocacy Pro',
-    tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
-  },
-  {
-    href: '/community',
-    title: 'Community Access',
-    desc: 'Moderated caregiver conversations, real support. You are not alone in this. Read and participate in caregiver-only discussions, moderated for safety and compassion.',
-    Icon: MessageCircle,
-    tag: 'All plans',
-    tagStyle: 'bg-[#E1F5EE] text-[#0F6E56] border border-[#9FE1CB]',
-  },
-  {
-    href: '/prior-auth-pro',
-    title: 'KindAuth',
-    desc: "For care teams: draft prior authorization requests, step-therapy exception letters with state statute citations, and continued-stay appeals in minutes.",
-    Icon: ClipboardList,
-    tag: 'KindAuth Pro',
-    tagStyle: 'bg-[#1e2d2b] text-white border border-[#1e2d2b]',
-  },
-  {
-    href: '/journey/goals-of-care',
-    title: 'Goals of Care Prep Sheet',
-    desc: 'When the conversation shifts to what matters most, OncoKind prepares you for it. AI-personalized questions to guide goals-of-care conversations with your care team — with empathy, not fear.',
-    Icon: BookHeart,
-    tag: 'New',
-    tagStyle: 'bg-[#FAEEDA] text-[#8b5e2a] border border-[#f0d5b8]',
-  },
-];
+const FEATURE_ICONS = {
+  cancer_profile: Sparkles,
+  doctor_prep: Calendar,
+  second_opinion: FileText,
+  check_in: ClipboardList,
+  timeline: GitBranch,
+  trials: FlaskConical,
+  goals_of_care: BookHeart,
+  insurance: ShieldCheck,
+  financial_aid: HandCoins,
+  community: MessageCircle,
+  empathy_filter: Heart,
+} as const;
 
 const faqs = [
   {
     q: 'Is this medical advice? Can I trust what OncoKind tells me?',
-    a: 'OncoKind is an educational preparation tool — it helps you understand what your loved one\'s report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is sourced from NCCN guidelines and NCI resources. Your oncology team remains your primary guide.',
+    a: "OncoKind is an educational preparation tool. It helps you understand what your loved one's report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is sourced from NCCN guidelines and NCI resources. Your oncology team remains your primary guide.",
   },
   {
-    q: 'What happens to my loved one\'s medical records after I upload them?',
-    a: 'Your raw file is not retained after processing. We extract what\'s needed to build your Cancer Profile, then the document is removed. Storage is encrypted. We have never retained raw PHI and our architecture is designed so that we can\'t.',
+    q: "What happens to my loved one's medical records after I upload them?",
+    a: "Your raw file is not retained after processing. We extract what is needed to build your Cancer Profile, then the document is removed. Storage is encrypted. We have never retained raw PHI and our architecture is designed so that we cannot.",
   },
   {
-    q: 'I\'m not very tech-savvy. Is this hard to use?',
-    a: 'The core experience is: upload a PDF, read the plain-English summary, review your question list. That\'s it. You can see exactly what the output looks like in the sample demo on this page before you create an account. If you can send an email attachment, you can use OncoKind.',
+    q: "I'm not very tech-savvy. Is this hard to use?",
+    a: 'The core experience is: upload a PDF, read the plain-English summary, review your question list. That is it. You can see exactly what the output looks like in the sample demo on this page before you create an account. If you can send an email attachment, you can use OncoKind.',
   },
   {
     q: 'My oncologist is very thorough. Do I really need this?',
-    a: 'Most oncologists are thorough — and most appointments are 15–20 minutes long, while the family is still processing the diagnosis. OncoKind doesn\'t replace your oncologist. It helps you arrive at the appointment with the right questions and understand what you heard afterward.',
+    a: 'Most oncologists are thorough, and most appointments are 15 to 20 minutes long, while the family is still processing the diagnosis. OncoKind does not replace your oncologist. It helps you arrive at the appointment with the right questions and understand what you heard afterward.',
   },
   {
-    q: 'What does \'free\' actually include?',
-    a: 'One pathology scan total per account, a full Cancer Profile, clinical trial matches, and read-only community access. No credit card required to start. Unlimited scans, Doctor Prep Sheets, and KindAuth appeals are in Care & Advocacy Pro. Full details on the pricing page.',
+    q: "What does 'free' actually include?",
+    a: HOMEPAGE_HERO.paidUnlock,
   },
 ];
 
@@ -358,9 +295,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 You shouldn&apos;t have to understand oncology to advocate for someone you love.
               </h1>
               <p className="mt-5 max-w-[30rem] text-[1.05rem] leading-[1.75] text-[#5a6b68] hero-nudge-up hero-nudge-up-delay-2">
-                OncoKind translates your loved one&apos;s pathology report into plain English,
-                prepares you for every oncology appointment, and guides your family through every
-                step of the cancer journey — without survival statistics, without fear.
+                {HOMEPAGE_HERO.subtitle}
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap hero-nudge-up hero-nudge-up-delay-2">
@@ -377,7 +312,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                         data-analytics="hero_cta_click"
                       >
                         <Upload className="h-4 w-4" aria-hidden />
-                        Upload your first report — it&apos;s free
+                        Upload your first report. It is free
                       </Link>
                     </Button>
                     <Button asChild variant="ghost" size="lg" className="text-[#0F6E56] hover:bg-[#E1F5EE]">
@@ -466,7 +401,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <footer className="mt-4 text-sm font-semibold text-[#5a6b68]">
-                  — {t.attribution}
+                  {t.attribution}
                 </footer>
               </blockquote>
             ))}
@@ -496,7 +431,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               OncoKind doesn&apos;t work that way.
             </h2>
             <p className="mt-5 text-[1rem] leading-[1.75] text-[#5a6b68]">
-              Every word OncoKind generates passes through our Empathy Filter — removing survival
+              Every word OncoKind generates passes through our Empathy Filter, removing survival
               rates, mortality framing, and fear-based language before it reaches you.
             </p>
           </Reveal>
@@ -506,12 +441,13 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             <Reveal>
               <div className="h-full rounded-2xl border border-red-200 bg-[#FCEBEB] p-6">
                 <p className="mb-4 text-xs font-bold uppercase tracking-widest text-red-700">
-                  ⚠ What a Google search returns
+                  What a Google search often looks like
                 </p>
-                <p className="font-mono text-sm leading-[1.75] text-red-900">
-                  &ldquo;Non-small cell lung cancer Stage IIIA has a 5-year survival rate of
-                  approximately 36%. Median survival with current treatment protocols is 18–24
-                  months. Prognosis is significantly affected by...&rdquo;
+                <p className="select-none font-mono text-sm leading-[1.75] text-red-900 blur-[6px]" aria-hidden>
+                  [redacted search snippet without numbers]
+                </p>
+                <p className="mt-3 text-sm text-red-800">
+                  Search results often lead with statistics and fear. OncoKind does not show those numbers.
                 </p>
               </div>
             </Reveal>
@@ -558,7 +494,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">How it works</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              From report to ready — in minutes.
+              From report to ready, in minutes.
             </h2>
             <p className="mt-3 text-[1rem] text-[#5a6b68]">
               Four steps. No medical background required.
@@ -595,6 +531,21 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
 
       <SectionWave flip fill="var(--bg-base)" />
 
+      {isFeatureEnabled('feature_first_72_hours') ? (
+        <section className="bg-white px-4 py-12">
+          <div className="mx-auto max-w-[var(--max-width-wide)] rounded-2xl border border-[#cdd8d5] bg-[#f7faf9] p-8">
+            <h2 className="text-2xl font-bold text-[#1e2d2b]">Just diagnosed? Start here</h2>
+            <p className="mt-3 text-[#5a6b68]">
+              The First 72 Hours checklist is a calm, sequenced plan. No countdown clocks. Core tasks are
+              free on every plan.
+            </p>
+            <Link href="/first-72-hours" className="mt-4 inline-flex font-semibold text-[#0F6E56]">
+              Open First 72 Hours
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       {/* ── 5. Features Grid ─────────────────────────────────── */}
       <section
         id="features"
@@ -604,7 +555,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">What OncoKind builds for you</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              Ten tools. One mission: prepare you for what&apos;s next.
+              {numberToToolHeadline(HOMEPAGE_TOOL_COUNT)}
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
               Every feature was built because a caregiver needed it and couldn&apos;t find it
@@ -616,37 +567,35 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
             stagger={0.06}
           >
-            {features.map((f) => (
+            {CONSUMER_HOMEPAGE_FEATURES.map((f) => {
+              const Icon = FEATURE_ICONS[f.id as keyof typeof FEATURE_ICONS] ?? FileText;
+              return (
               <div
-                key={f.title}
+                key={f.id}
                 className="hover-lift-card flex flex-col rounded-2xl border border-[#cdd8d5] bg-white p-6 shadow-sm"
               >
-                <f.Icon
+                <Icon
                   className="h-8 w-8 text-[#0F6E56]"
                   strokeWidth={1.5}
                   aria-hidden
                 />
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <h3 className="text-base font-semibold text-[#1e2d2b]">{f.title}</h3>
-                  <span
-                    className={cn(
-                      'rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide',
-                      f.tagStyle
-                    )}
-                  >
-                    {f.tag}
+                  <h3 className="text-base font-semibold text-[#1e2d2b]">{f.name}</h3>
+                  <span className="rounded-full bg-[#E1F5EE] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-[#0F6E56]">
+                    {f.homepage?.tag}
                   </span>
                 </div>
-                <p className="mt-2 flex-1 text-sm leading-[1.75] text-[#5a6b68]">{f.desc}</p>
+                <p className="mt-2 flex-1 text-sm leading-[1.75] text-[#5a6b68]">{f.homepage?.desc}</p>
                 <Link
-                  href={f.href}
+                  href={f.homepage?.href ?? '/pricing'}
                   className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#0F6E56] hover:text-[#085041]"
                 >
                   Learn more
                   <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 </Link>
               </div>
-            ))}
+            );
+            })}
           </RevealStagger>
         </div>
       </section>
@@ -754,8 +703,8 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               Let us handle the complexity.
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-white/85 text-[1.05rem] leading-[1.75]">
-              Upload your first report free. Get your Cancer Profile, Doctor Prep Sheet, and
-              clinical trial matches in minutes. No credit card. No jargon. No survival statistics.
+              Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock
+              Doctor Prep Sheet PDFs, full trial matching, insurance appeals, and KindAuth for care teams.
             </p>
           </Reveal>
 
@@ -769,7 +718,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   data-analytics="final_cta_click"
                 >
                   <Link href="/signup">
-                    Upload your first report — free
+                    Upload your first report. It is free
                   </Link>
                 </Button>
               </div>

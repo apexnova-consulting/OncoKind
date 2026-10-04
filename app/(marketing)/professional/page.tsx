@@ -5,9 +5,17 @@ import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { TrackedCalendlyLink } from '@/components/analytics/TrackedCalendlyLink';
 
 export const metadata: Metadata = {
-  title: 'OncoKind for Care Navigators & Patient Advocates',
+  title: 'OncoKind for care navigators and patient advocates',
   description:
-    'Explore how OncoKind Professional supports patient advocates, care navigators, and clinical teams with shared workflows and guided support.',
+    'Professional KindAuth workflows for patient advocates, care navigators, and clinical teams. HIPAA BAA available on request.',
+  alternates: { canonical: 'https://www.oncokind.com/professional' },
+  openGraph: {
+    title: 'OncoKind for care navigators and patient advocates',
+    description:
+      'Professional KindAuth workflows for patient advocates, care navigators, and clinical teams.',
+    url: 'https://www.oncokind.com/professional',
+    images: [{ url: 'https://www.oncokind.com/og-home.png', width: 1200, height: 630, alt: 'OncoKind Professional' }],
+  },
 };
 
 const useCases = [
@@ -45,7 +53,7 @@ export default function ProfessionalPage() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#6B8F71]/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#6B8F71]">
-                New — Included in Professional
+                New. Included in Professional
               </p>
               <h2 className="font-display text-3xl font-semibold text-white">
                 KindAuth Pro

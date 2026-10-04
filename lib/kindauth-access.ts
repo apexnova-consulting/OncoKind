@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { hasKindAuthPro, hasKindAuthSelfServe } from '@/lib/entitlements';
+import { hasKindAuthAccess, hasKindAuthPro } from '@/lib/entitlements';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 export async function requireKindAuthUser() {
@@ -30,10 +30,10 @@ export async function requireKindAuthUser() {
     (email ? allowedEmails.includes(email) : false);
 
   const tier = profile?.subscription_tier ?? 'free';
-  if (!isAdmin && !hasKindAuthSelfServe(tier)) {
+  if (!isAdmin && !hasKindAuthAccess(tier)) {
     return {
       error: NextResponse.json(
-        { error: 'Care & Advocacy Pro required', redirectTo: '/pricing?reason=kindauth' },
+        { error: 'Professional plan required for KindAuth', redirectTo: '/pricing?reason=kindauth' },
         { status: 403 }
       ),
     };

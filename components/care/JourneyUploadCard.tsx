@@ -132,11 +132,11 @@ export function JourneyUploadCard({
               Trial Limit Reached
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-slate-600">
-              Upgrade to Care &amp; Advocacy Pro to unlock unlimited report analyses.
+              Upgrade to Caregiver Pro to unlock unlimited report analyses.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Button asChild className="flex-1">
-                <Link href="/pricing?plan=advocate">Upgrade now</Link>
+                <Link href="/pricing?plan=pro">Upgrade now</Link>
               </Button>
               <Button type="button" variant="outline" className="flex-1" onClick={() => setShowUpgradeModal(false)}>
                 Not now

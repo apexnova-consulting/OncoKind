@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
   const canPost = hasCareAdvocacyAccess(profile?.subscription_tier);
 
   if (!canPost) {
-    return NextResponse.json({ error: 'Posting requires Care & Advocacy Pro.' }, { status: 402 });
+    return NextResponse.json({ error: 'Posting requires a paid plan.' }, { status: 402 });
   }
 
   const moderation = moderateCommunityText(`${title}\n${content}`);

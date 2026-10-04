@@ -6,6 +6,8 @@ import { getProfile } from '@/lib/auth';
 import { JourneyTimeline } from '@/components/care/JourneyTimeline';
 import { CancerProfileSummaryCard } from '@/components/care/CancerProfileSummaryCard';
 import { getPatientReport } from '@/lib/patient-reports';
+import { DiagnosisRecencyPrompt } from '@/components/first-72/DiagnosisRecencyPrompt';
+import { Suspense } from 'react';
 
 export default async function JourneyPage() {
   const supabase = await createServerSupabaseClient();
@@ -33,7 +35,7 @@ export default async function JourneyPage() {
           summary: report.biomarkers?.cancer_type_inferred
             ? [report.biomarkers.cancer_type_inferred, report.biomarkers.tnm_stage]
                 .filter(Boolean)
-                .join(' — ')
+                .join(', ')
             : 'Stage identified',
           biomarkers: report.biomarkers?.names ?? [],
         },
@@ -88,6 +90,11 @@ export default async function JourneyPage() {
         <h1 className="font-heading text-2xl font-semibold text-accent">
           Your Cancer Care Journey
         </h1>
+        <Suspense fallback={null}>
+          <div className="mt-4">
+            <DiagnosisRecencyPrompt />
+          </div>
+        </Suspense>
         <p className="mt-2 text-slate-600">
           {report
             ? 'See where you are in your care journey. Expand cards for details and next steps.'

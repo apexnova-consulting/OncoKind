@@ -4,7 +4,7 @@ import { getAdminContext } from '@/lib/admin';
 import { getBrandTheme } from '@/lib/branding';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { DashboardNav } from '@/components/layout/DashboardNav';
-import { hasKindAuthSelfServe, hasMultiPatientAccess } from '@/lib/entitlements';
+import { hasKindAuthAccess as tierHasKindAuth, hasMultiPatientAccess } from '@/lib/entitlements';
 
 export default async function DashboardLayout({
   children,
@@ -48,7 +48,7 @@ export default async function DashboardLayout({
         }}
         isAdmin={adminContext.isAdmin}
         isProfessional={adminContext.isAdmin || hasMultiPatientAccess(profile?.subscription_tier)}
-        hasKindAuthAccess={adminContext.isAdmin || hasKindAuthSelfServe(profile?.subscription_tier)}
+        hasKindAuthAccess={adminContext.isAdmin || tierHasKindAuth(profile?.subscription_tier)}
       />
       {children}
     </>

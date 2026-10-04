@@ -4,6 +4,7 @@
   "nav.login": "Log In",
   "nav.signup": "Get Started Free",
   "nav.goToJourney": "Go to Journey",
+  "nav.first72": "First 72 Hours",
   "footer.about": "About",
   "footer.founder": "Founder",
   "footer.empathyFilter": "Empathy Filter",
@@ -18,5 +19,10 @@
   "wellbeing.prompt": "How are you holding up this week?",
   "wellbeing.ok": "Managing okay",
   "wellbeing.hard": "It's been hard",
-  "wellbeing.support": "I need some support"
+  "wellbeing.support": "I need some support",
+  "first72.title": "A calm plan for the first days",
+  "family.tab": "Family",
+  "family.consent": "I consent to adding or editing my own relative health notes.",
+  "pricing.caregiver": "Caregiver Pro",
+  "pricing.advocate": "Advocate Plan"
 }
