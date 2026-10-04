@@ -10,7 +10,7 @@ import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
 
 export const metadata = {
   title: 'Security | OncoKind',
-  description: 'How OncoKind protects your data — zero raw PHI retention, encryption, and secure AI.',
+  description: 'How OncoKind protects your data: zero raw PHI retention, encryption, and secure AI.',
 };
 
 export default function SecurityPage() {
@@ -35,7 +35,7 @@ export default function SecurityPage() {
               scrub all personally identifiable information (names, dates of
               birth, medical record numbers, phone numbers, emails, addresses).
               Only de-identified, structured data is sent to our AI. The raw
-              extracted text is never stored — not in our database, logs,
+              extracted text is never stored, not in our database, logs,
               storage, or error reporting tools. We retain only the structured
               insights (biomarkers, stage, histology) that help you understand
               your report.

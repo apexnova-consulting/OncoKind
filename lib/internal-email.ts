@@ -42,7 +42,7 @@ export async function queueProfessionalBaaEmail(params: {
   subscriptionId?: string | null;
 }) {
   return sendInternalEmail({
-    subject: 'HIPAA BAA execution required — Professional checkout',
+    subject: 'HIPAA BAA execution required: Professional checkout',
     text: `A Professional plan checkout completed. Queue a HIPAA BAA for execution.\nUser ID: ${params.userId}\nEmail: ${params.email ?? 'unknown'}\nStripe customer: ${params.customerId ?? 'unknown'}\nSubscription: ${params.subscriptionId ?? 'unknown'}`,
     html: `
       <p>A Professional plan checkout completed. Queue a HIPAA Business Associate Agreement for execution.</p>

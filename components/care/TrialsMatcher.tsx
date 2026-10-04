@@ -158,7 +158,7 @@ export function TrialsMatcher({
       {data && (
         <div className="space-y-3">
           <p className="text-sm text-slate-600">
-            {data.total} trials found — showing {visibleTrials.length}. Radius applied: {data.radiusApplied} miles.
+            {data.total} trials found, showing {visibleTrials.length}. Radius applied: {data.radiusApplied} miles.
           </p>
           <div className="grid gap-3">
             {visibleTrials.map((trial, idx) => (

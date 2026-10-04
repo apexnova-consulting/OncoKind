@@ -111,10 +111,9 @@ export const routes = {
 // waitlist). "Prior Auth Engine" is no longer in the public nav anywhere —
 // including /professional — as of Aug 2026.
 export const newTemplateNavLabels = [
-  'How It Works',
   'Features',
   'Pricing',
-  'For Professionals',
+  'Professionals',
   'Community',
   'Resources',
   'Log In',
@@ -132,19 +131,14 @@ export const newTemplateFooterColumnLabels = [
 
 export const newTemplateFooterColumnCount = newTemplateFooterColumnLabels.length;
 
-// Section 1 homepage feature grid — 10 cards as of Aug 2026 (Goals of Care
-// Prep Sheet added; was 9 in July).
+// Homepage spotlight: six high-value cards, plus a See all features link.
 export const homepageFeatureCards = [
-  { name: 'Doctor Prep Sheet', href: routes.featureDoctorPrepSheet },
-  { name: 'Clinical Trial Matching', href: routes.featureClinicalTrialMatching },
-  { name: 'Insurance Denial Defense', href: routes.featureInsuranceDenialDefense },
-  { name: 'The Empathy Filter', href: routes.featureEmpathyFilter },
-  { name: 'Second Opinion Mode', href: routes.journeySecondOpinion },
-  { name: 'Financial Help', href: routes.journeyFinancialHelp },
-  { name: 'Care Timeline', href: routes.journeyTimeline },
-  { name: 'Community Access', href: routes.community },
-  { name: 'KindAuth', href: routes.priorAuthPro },
-  { name: 'Goals of Care Prep Sheet', href: routes.journeyGoalsOfCare },
+  { name: 'AI Cancer Profile & Care Map', href: '/#sample-demo' },
+  { name: 'First 72 Hours checklist', href: '/features/first-72-hours' },
+  { name: 'Doctor Prep Sheet PDF', href: '/features/doctor-prep-sheet' },
+  { name: 'Empathy Filter', href: '/features/empathy-filter' },
+  { name: 'Clinical Trial Matching', href: '/features/clinical-trial-matching' },
+  { name: 'Insurance Denial Defense', href: '/features/insurance-denial-defense' },
 ] as const;
 
 // Pricing (confirmed live). Advocate deliberately has no `plan` param below —

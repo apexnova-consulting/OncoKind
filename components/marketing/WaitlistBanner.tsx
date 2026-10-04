@@ -64,7 +64,7 @@ export function WaitlistBanner() {
       localStorage.setItem(STORAGE_KEY_EMAIL, email.trim().toLowerCase());
     } catch {
       setStatus('error');
-      setErrorMsg('Network error — please try again.');
+      setErrorMsg('Network error. Please try again.');
     }
   }
 
@@ -83,7 +83,7 @@ export function WaitlistBanner() {
           {status === 'success' ? (
             <p className="flex items-center gap-2 text-sm font-medium text-[#1A2332]">
               <Check className="h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
-              You&rsquo;re on the list — we&apos;ll be in touch before launch. Thank you.
+              You&rsquo;re on the list. We&apos;ll be in touch before launch. Thank you.
             </p>
           ) : (
             <p className="text-sm text-[#1A2332]">

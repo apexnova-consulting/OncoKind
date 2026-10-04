@@ -33,7 +33,7 @@ const CASE_TYPE_CONFIG = {
     icon: Shield,
     color: 'text-[#E8C37A]',
     bg: 'bg-[#E8C37A]/10',
-    description: '"Have you tried other meds?" — Fight step therapy requirements with state law',
+    description: '"Have you tried other meds?" Fight step therapy requirements with state law',
     cta: 'New Step Therapy',
   },
   continued_stay: {
@@ -91,7 +91,7 @@ export function PriorAuthDashboard({
           </h1>
           <p className="text-sm text-slate-500">
             AI-assisted authorization forms, step therapy support, and continued stay documentation
-            {userName ? ` — for ${userName}` : ''}.
+            {userName ? ` for ${userName}` : ''}.
           </p>
           <div
             role="status"

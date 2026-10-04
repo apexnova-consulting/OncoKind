@@ -27,7 +27,7 @@ export function GoalsOfCareCard({ triggered }: Props) {
   return (
     <div
       role="region"
-      aria-label="Goals of Care — important conversation resource"
+      aria-label="Goals of Care, important conversation resource"
       className="relative rounded-xl border border-[#9FE1CB] bg-[#E1F5EE] p-5"
     >
       <button
@@ -56,7 +56,7 @@ export function GoalsOfCareCard({ triggered }: Props) {
           <p className="mt-1.5 text-sm leading-[1.7] text-[#5a6b68]">
             Based on your care journey, this is a good time to have a goals-of-care
             conversation with your oncology team. We&apos;ve prepared a gentle question list to
-            help you start it — on your terms, at your pace.
+            help you start it, on your terms, at your pace.
           </p>
           <p className="mt-1 text-xs text-[#5a6b68]/80 italic">
             For educational support only. Not medical advice. Always consult your care team.

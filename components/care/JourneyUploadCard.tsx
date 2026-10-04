@@ -78,7 +78,7 @@ export function JourneyUploadCard({
           Upload Medical Report
         </h2>
         <p className="mt-2 text-center text-sm text-slate-600">
-          Pathology reports, imaging notes — we&apos;ll extract key information and explain it in plain language.
+          Pathology reports, imaging notes. We&apos;ll extract key information and explain it in plain language.
         </p>
         {isFree ? (
           <p className="mt-2 text-center text-xs text-slate-500">

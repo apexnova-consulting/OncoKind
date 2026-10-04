@@ -84,7 +84,7 @@ export function SecondOpinionPacket({
   <div class="box">${reportSummary || 'No report summary available.'}</div>
 
   <h2>Key Biomarkers with Explanations</h2>
-  <ul>${(biomarkers.length ? biomarkers : ['No biomarkers found']).map((b) => `<li>${b} — discuss how this may shape treatment options.</li>`).join('')}</ul>
+  <ul>${(biomarkers.length ? biomarkers : ['No biomarkers found']).map((b) => `<li>${b}: discuss how this may shape treatment options.</li>`).join('')}</ul>
 
   <h2>Current Treatment Plan</h2>
   <div class="box">${treatmentPlan || 'Add your current treatment plan before export for best results.'}</div>
@@ -155,7 +155,7 @@ export function SecondOpinionPacket({
             <Button onClick={generatePacket}>Generate Packet</Button>
           ) : (
             <>
-              <span className="text-sm font-medium text-emerald-700">Packet ready — review below and download.</span>
+              <span className="text-sm font-medium text-emerald-700">Packet ready. Review below and download.</span>
               <Button onClick={downloadPdf}>Export PDF</Button>
             </>
           )}

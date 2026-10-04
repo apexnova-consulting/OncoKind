@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
 
 export const metadata = {
-  title: 'About OncoKind — Built by a Caregiver, for Caregivers',
+  title: 'About OncoKind: Built by a Caregiver, for Caregivers',
   description:
     'Mike Nielson built OncoKind while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
   openGraph: {
-    title: 'About OncoKind — Built by a Caregiver, for Caregivers',
+    title: 'About OncoKind: Built by a Caregiver, for Caregivers',
     description:
       'Mike Nielson built OncoKind while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
   },
@@ -20,12 +20,12 @@ const principles = [
   {
     icon: Heart,
     title: 'Compassion First',
-    desc: 'Every word we output is designed to support, not scare. The Empathy Filter runs on every output we generate — no exceptions.',
+    desc: 'Every word we output is designed to support, not scare. The Empathy Filter runs on every output we generate. No exceptions.',
   },
   {
     icon: Scale,
     title: 'Clinical Boundaries',
-    desc: 'We respect oncologists. We prepare families to work with them, not around them. OncoKind helps you show up ready — your care team makes the decisions.',
+    desc: 'We respect oncologists. We prepare families to work with them, not around them. OncoKind helps you show up ready. Your care team makes the decisions.',
   },
   {
     icon: Shield,
@@ -43,7 +43,7 @@ const timeline = [
   {
     age: 'Age 9',
     event: 'Lost his grandmother to cancer',
-    note: 'His first experience of a family losing someone to cancer — the confusion, the grief, the feeling of helplessness.',
+    note: 'His first experience of a family losing someone to cancer: the confusion, the grief, the feeling of helplessness.',
   },
   {
     age: 'Age 15',
@@ -53,7 +53,7 @@ const timeline = [
   {
     age: 'Age 16',
     event: 'Father had a kidney removed (kidney cancer)',
-    note: 'This time, cancer came for someone who survived — but the experience of navigating the medical system as a teenager left a mark.',
+    note: 'This time, cancer came for someone who survived, but the experience of navigating the medical system as a teenager left a mark.',
   },
   {
     age: 'Age 28',
@@ -63,7 +63,7 @@ const timeline = [
   {
     age: 'Now',
     event: 'His mother: rare Stage 4 metastatic cancer',
-    note: 'While serving as his mother\'s primary caregiver, Mike realized what was missing — not just in the medical system, but in every tool ever built for it.',
+    note: 'While serving as his mother\'s primary caregiver, Mike realized what was missing: not just in the medical system, but in every tool ever built for it.',
   },
 ];
 
@@ -83,8 +83,8 @@ export default function AboutPage() {
             />
           </h1>
           <p className="mt-10 max-w-[40rem] text-xl leading-relaxed text-[var(--color-text-secondary)]">
-            Cancer brings complexity — medical records, pathology reports, clinical trials, insurance
-            denials, financial stress. OncoKind was built to bridge that gap — not from a
+            Cancer brings complexity: medical records, pathology reports, clinical trials, insurance
+            denials, financial stress. OncoKind was built to bridge that gap, not from a
             boardroom, but from a waiting room.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
             <p className="mt-3 leading-relaxed text-[var(--color-text-secondary)]">
               Pathology reports are written for specialists. Terms like &quot;adenocarcinoma,&quot;
               &quot;T2N1M0,&quot; and biomarker statuses can feel opaque and terrifying. We translate
-              that into clear language — without oversimplifying — so you can prepare for
+              that into clear language, without oversimplifying, so you can prepare for
               conversations with your oncologist and explore relevant clinical trial options with
               confidence.
             </p>
@@ -112,7 +112,7 @@ export default function AboutPage() {
             <p className="mt-3 leading-relaxed text-[var(--color-text-secondary)]">
               We use AI to support understanding, not to replace medical judgment. Every summary
               passes our Empathy Filter: no survival statistics, no fear-based language, no
-              deterministic claims. OncoKind is designed to help you prepare — your oncologist
+              deterministic claims. OncoKind is designed to help you prepare. Your oncologist
               remains your primary guide.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function AboutPage() {
             </h2>
             <p className="mt-3 leading-relaxed text-[var(--color-text-secondary)]">
               Most tools in this space are built for patients. OncoKind is built for the person
-              sitting beside them — the adult child, the spouse, the sibling who became the
+              sitting beside them: the adult child, the spouse, the sibling who became the
               caregiver. Entirely different emotional state. Different job to be done. Different
               support needed.
             </p>
@@ -192,7 +192,7 @@ export default function AboutPage() {
                 <p>Cancer has been part of my life for as long as I can remember.</p>
                 <p>
                   I lost my grandmother at 9. My grandfather at 15. My dad had a kidney removed at
-                  16. At 28, I lost my cousin — one month after his diagnosis.
+                  16. At 28, I lost my cousin, one month after his diagnosis.
                 </p>
                 <p className="font-medium text-white">My mom fought Stage 4 metastatic cancer with grace and courage. She passed away on July 4, 2026.</p>
                 <p>
@@ -201,13 +201,13 @@ export default function AboutPage() {
                   and felt scared of what was to come.
                 </p>
                 <p>
-                  The entire medical system — as good as it is in many ways — is built for the
+                  The entire medical system, as good as it is in many ways, is built for the
                   specialists, not for the family beside the patient. Pathology reports written for
                   doctors. Information delivered without empathy. Families left without the clarity
                   they deserve.
                 </p>
                 <p>
-                  I built OncoKind to change that. Not to replace oncologists — but to make sure
+                  I built OncoKind to change that. Not to replace oncologists, but to make sure
                   no family ever sits in a waiting room without understanding what they&apos;re
                   facing and what questions to ask.
                 </p>
@@ -216,7 +216,7 @@ export default function AboutPage() {
                   This disease has taken so much from my family. It won&apos;t take clarity from
                   yours.
                 </p>
-                <p className="font-semibold text-[var(--brand-gold)]">— Mike Nielson, Founder</p>
+                <p className="font-semibold text-[var(--brand-gold)]">Mike Nielson, Founder</p>
               </div>
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function AboutPage() {
             Moments that shaped this work
           </h2>
           <p className="mt-2 text-sm text-[var(--color-text-muted)]">
-            A life spent navigating cancer as a family — before OncoKind existed.
+            A life spent navigating cancer as a family, before OncoKind existed.
           </p>
 
           <div className="relative mt-12 space-y-0">
@@ -282,7 +282,7 @@ export default function AboutPage() {
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button asChild size="lg">
-              <Link href="/signup">Get Started Free — It&apos;s the tool I wish I&apos;d had →</Link>
+              <Link href="/signup">Get Started Free. It&apos;s the tool I wish I&apos;d had →</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
               <Link href="/trust">How we protect your data →</Link>

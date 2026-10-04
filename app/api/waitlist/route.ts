@@ -45,14 +45,14 @@ async function sendConfirmationEmail(email: string, name?: string) {
               <p style="font-family:Georgia,serif; font-style:italic; font-size:24px; color:#1A2332; margin:0 0 8px;">OncoKind</p>
               <p style="font-size:12px; color:#8896A4; margin:0 0 32px; letter-spacing:0.06em; text-transform:uppercase; font-weight:600;">Clarity for families navigating cancer</p>
 
-              <p style="font-size:18px; color:#1A2332; font-weight:600; margin:0 0 16px;">Hi ${firstName} — you&rsquo;re in.</p>
+              <p style="font-size:18px; color:#1A2332; font-weight:600; margin:0 0 16px;">Hi ${firstName}, you&rsquo;re in.</p>
 
               <p style="font-size:16px; color:#4A5568; line-height:1.7; margin:0 0 16px;">
-                Thank you for joining the OncoKind waitlist. We&rsquo;re building something that matters — a platform designed specifically for the family beside the patient. Not for the hospital. Not for the insurance company. For you.
+                Thank you for joining the OncoKind waitlist. We&rsquo;re building something that matters: a platform designed specifically for the family beside the patient. Not for the hospital. Not for the insurance company. For you.
               </p>
 
               <p style="font-size:16px; color:#4A5568; line-height:1.7; margin:0 0 24px;">
-                When we launch, you&rsquo;ll be among the first to know — with early access and founding member pricing.
+                When we launch, you&rsquo;ll be among the first to know, with early access and founding member pricing.
               </p>
 
               <div style="background:#F4F3EF; border-radius:12px; padding:20px 24px; margin:0 0 28px;">
@@ -62,7 +62,7 @@ async function sendConfirmationEmail(email: string, name?: string) {
                   <li>Generates personalized Doctor Prep Sheets before every appointment</li>
                   <li>Matches your family to clinical trials in plain language</li>
                   <li>Helps fight insurance denials with structured appeal packets</li>
-                  <li>Every word passes through the Empathy Filter — no survival stats</li>
+                  <li>Every word passes through the Empathy Filter. No survival stats</li>
                 </ul>
               </div>
 
@@ -71,14 +71,14 @@ async function sendConfirmationEmail(email: string, name?: string) {
               </p>
 
               <p style="font-size:14px; color:#1A2332; font-style:italic; margin:0;">
-                — Mike Nielson, Founder<br />
+                Mike Nielson, Founder<br />
                 <span style="font-size:13px; color:#8896A4; font-style:normal;">OncoKind &middot; <a href="https://www.oncokind.com" style="color:#2E6B5E;">oncokind.com</a></span>
               </p>
             </td>
           </tr>
         </table>
         <p style="font-size:11px; color:#8896A4; margin:20px 0 0; text-align:center;">
-          OncoKind is an educational support tool — not a substitute for professional medical advice.<br />
+          OncoKind is an educational support tool, not a substitute for professional medical advice.<br />
           You received this because you signed up at oncokind.com. <a href="mailto:support@oncokind.com" style="color:#8896A4;">Unsubscribe</a>
         </p>
       </td>

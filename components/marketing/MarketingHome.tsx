@@ -10,6 +10,7 @@ import {
   Check,
   ChevronDown,
   ClipboardList,
+  Clock,
   FileCheck,
   FileText,
   FlaskConical,
@@ -22,6 +23,7 @@ import {
   ShieldCheck,
   Sparkles,
   Upload,
+  Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SampleReportDemo } from '@/components/marketing/SampleReportDemo';
@@ -31,10 +33,8 @@ import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 import { cn } from '@/lib/utils';
 import {
-  CONSUMER_HOMEPAGE_FEATURES,
   HOMEPAGE_HERO,
-  HOMEPAGE_TOOL_COUNT,
-  numberToToolHeadline,
+  HOMEPAGE_SPOTLIGHT_FEATURES,
 } from '@/lib/pricing-config';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 
@@ -129,6 +129,8 @@ const FEATURE_ICONS = {
   financial_aid: HandCoins,
   community: MessageCircle,
   empathy_filter: Heart,
+  first_72: Clock,
+  family: Users,
 } as const;
 
 const faqs = [
@@ -163,7 +165,7 @@ function HeroDemoCard() {
     <div className="rounded-2xl border border-[#cdd8d5] bg-white shadow-[0_8px_32px_rgba(15,110,86,0.10)] overflow-hidden">
       <div className="bg-[#E1F5EE] px-5 py-3 border-b border-[#cdd8d5]">
         <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">
-          Sample Cancer Profile — generated from a pathology report
+          Sample Cancer Profile from a pathology report
         </p>
       </div>
       <div className="divide-y divide-[#cdd8d5]">
@@ -462,10 +464,10 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   </span>
                 </div>
                 <p className="text-sm leading-[1.75] text-[#085041]">
-                  &ldquo;This is Stage IIIA non-small cell lung cancer. The cancer has spread to
-                  nearby lymph nodes but has not reached distant organs. A PD-L1 score of 60%
-                  suggests immunotherapy may be especially effective. Here are the questions to ask
-                  your oncologist next week...&rdquo;
+                  &ldquo;This is Stage IV vulvar squamous cell carcinoma. The cancer has spread
+                  beyond the vulva. HPV-positive (p16+) status and a PD-L1 CPS of ≥10 are important
+                  findings to review with the oncology team. Here are the questions to bring to the
+                  first appointment...&rdquo;
                 </p>
               </div>
             </Reveal>
@@ -555,11 +557,11 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">What OncoKind builds for you</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              {numberToToolHeadline(HOMEPAGE_TOOL_COUNT)}
+              The tools families reach for first.
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
-              Every feature was built because a caregiver needed it and couldn&apos;t find it
-              anywhere else.
+              Six high-value starting points, from the First 72 Hours checklist to trial matching
+              and insurance defense. Every feature exists because a caregiver needed it.
             </p>
           </Reveal>
 
@@ -567,7 +569,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
             stagger={0.06}
           >
-            {CONSUMER_HOMEPAGE_FEATURES.map((f) => {
+            {HOMEPAGE_SPOTLIGHT_FEATURES.map((f) => {
               const Icon = FEATURE_ICONS[f.id as keyof typeof FEATURE_ICONS] ?? FileText;
               return (
               <div
@@ -597,6 +599,16 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
             );
             })}
           </RevealStagger>
+
+          <Reveal className="mt-10 text-center">
+            <Link
+              href="/features"
+              className="inline-flex items-center gap-2 rounded-full border border-[#cdd8d5] bg-white px-5 py-3 text-sm font-semibold text-[#0F6E56] shadow-sm transition-colors hover:border-[#0F6E56] hover:bg-[#E1F5EE]"
+            >
+              See all features
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </Reveal>
         </div>
       </section>
 
@@ -606,7 +618,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow" style={{ color: '#9FE1CB' }}>Why this exists</p>
             <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
-              Why this exists — and why it&apos;s personal.
+              Why this exists, and why it&apos;s personal.
             </h2>
           </Reveal>
 
@@ -635,8 +647,8 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 <blockquote className="text-[1.05rem] leading-[1.85] text-white/90 italic">
                   &ldquo;I built OncoKind because my mom fought Stage 4 cancer, and I had no idea
                   what any of it meant. She passed away on July 4, 2026. I lost my grandmother to
-                  cancer at 9. My grandfather at 15. My dad had a kidney removed at 16. My cousin
-                  — who was more like a brother — died one month after his diagnosis at 28. And
+                  cancer at 9. My grandfather at 15. My dad had a kidney removed at 16. My cousin,
+                  who was more like a brother, died one month after his diagnosis at 28. And
                   when my mom&apos;s diagnosis came, I still couldn&apos;t read her pathology
                   report. I still didn&apos;t know what her biomarkers meant. I still sat in a
                   waiting room without the questions I should have been asking. Every feature in
@@ -644,7 +656,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   This is the tool I wish I had.&rdquo;
                 </blockquote>
                 <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#9FE1CB]">
-                  — Mike Nielson, Founder &amp; CEO, OncoKind
+                  Mike Nielson, Founder &amp; CEO, OncoKind
                 </p>
               </div>
               <div className="mt-6">

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatReadableDate } from '@/lib/time';
 
 export const metadata = {
-  title: 'Appointment Check-In — OncoKind',
+  title: 'Appointment Check-In | OncoKind',
 };
 
 export default async function CheckInIndexPage() {

@@ -80,7 +80,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'cancer-staging-explained',
     title: 'Cancer Staging Explained: What Stage I Through IV Really Means',
     metaDescription:
-      "Cancer staging guides treatment decisions. Here's what each stage means in plain language — and why stage alone doesn't tell the whole story.",
+      "Cancer staging guides treatment decisions. Here's what each stage means in plain language, and why stage alone doesn't tell the whole story.",
     tags: ['Understanding Diagnosis'],
     excerpt:
       'When someone hears the word stage, it can sound like a final verdict, but staging is really a way of organizing information.',
@@ -145,7 +145,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'biomarkers-and-targeted-therapy',
     title: 'Biomarkers and Targeted Therapy: What Your Test Results Mean',
     metaDescription:
-      'Biomarker testing is changing cancer treatment. Learn what EGFR, PD-L1, HER2, and other markers mean — and why they matter for your treatment plan.',
+      'Biomarker testing is changing cancer treatment. Learn what EGFR, PD-L1, HER2, and other markers mean, and why they matter for your treatment plan.',
     tags: ['Understanding Reports', 'Treatment'],
     excerpt:
       'Biomarkers are pieces of information found in the tumor or sometimes in the blood that help doctors understand how a cancer behaves.',
@@ -209,7 +209,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'prepare-for-first-oncology-appointment',
     title: 'How to Prepare for Your First Oncology Appointment',
     metaDescription:
-      "Your first oncology appointment is one of the most important conversations of your life. Here's exactly how to prepare — including the questions to ask.",
+      "Your first oncology appointment is one of the most important conversations of your life. Here's exactly how to prepare, including the questions to ask.",
     tags: ['Appointments', 'Caregiver Tips'],
     excerpt:
       'The first oncology appointment often feels like stepping into a conversation that started before you arrived.',
@@ -285,7 +285,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'understanding-clinical-trials',
     title: 'Understanding Clinical Trials: What They Are and How to Find One',
     metaDescription:
-      "Clinical trials aren't a last resort — they're often a pathway to cutting-edge treatment. Here's how to understand them and find ones you may qualify for.",
+      "Clinical trials aren't a last resort, they're often a pathway to cutting-edge treatment. Here's how to understand them and find ones you may qualify for.",
     tags: ['Clinical Trials'],
     excerpt:
       'Clinical trials are research studies that test new ways to prevent, detect, or treat disease.',
@@ -422,7 +422,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'financial-help-cancer-patients',
     title: 'Financial Help for Cancer Patients: Assistance Programs You May Not Know About',
     metaDescription:
-      'Cancer treatment is expensive. These financial assistance programs can help with co-pays, medication costs, travel, and more — and many go unclaimed.',
+      'Cancer treatment is expensive. These financial assistance programs can help with co-pays, medication costs, travel, and more, and many go unclaimed.',
     tags: ['Insurance & Financial Help'],
     excerpt:
       'Cancer costs add up quickly, and the burden is rarely limited to one bill or one category.',
@@ -487,7 +487,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'second-opinion-oncology',
     title: 'Second Opinions in Oncology: Why They Matter and How to Get One',
     metaDescription:
-      "A second opinion in oncology is not disloyal — it's smart medicine. Here's when to seek one, how to ask, and what to bring.",
+      "A second opinion in oncology is not disloyal, it's smart medicine. Here's when to seek one, how to ask, and what to bring.",
     tags: ['Appointments', 'Treatment'],
     excerpt:
       'A second opinion in oncology is not a betrayal of the first doctor. It is a normal part of careful cancer care.',
@@ -554,7 +554,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'caregiver-burnout',
     title: 'Caregiver Burnout Is Real: How to Recognize It and What to Do',
     metaDescription:
-      'Caring for someone with cancer is one of the hardest things a person can do. Caregiver burnout is real — and recognizing it is the first step to getting support.',
+      'Caring for someone with cancer is one of the hardest things a person can do. Caregiver burnout is real, and recognizing it is the first step to getting support.',
     tags: ['Caregiver Support'],
     excerpt:
       'Caregiver burnout is not weakness, selfishness, or proof that you love the person less.',
@@ -620,7 +620,7 @@ export const RESOURCE_ARTICLES: ResourceArticle[] = [
     slug: 'what-to-expect-during-chemotherapy',
     title: 'What to Expect During Chemotherapy: A Practical Guide for Patients and Families',
     metaDescription:
-      'Starting chemotherapy brings uncertainty. This practical guide helps you and your family know what to expect — before, during, and after each session.',
+      'Starting chemotherapy brings uncertainty. This practical guide helps you and your family know what to expect, before, during, and after each session.',
     tags: ['Treatment'],
     excerpt:
       'Chemotherapy is a word almost everyone recognizes, but many families start treatment with only a vague sense of what the day-to-day reality will be.',

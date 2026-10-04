@@ -1,0 +1,31 @@
+import {
+  BookHeart,
+  Calendar,
+  ClipboardList,
+  Clock,
+  FileText,
+  FlaskConical,
+  GitBranch,
+  HandCoins,
+  Heart,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+  Users,
+} from 'lucide-react';
+
+export const FEATURE_CATALOG_ICONS = {
+  cancer_profile: Sparkles,
+  doctor_prep: Calendar,
+  second_opinion: FileText,
+  check_in: ClipboardList,
+  timeline: GitBranch,
+  trials: FlaskConical,
+  goals_of_care: BookHeart,
+  insurance: ShieldCheck,
+  financial_aid: HandCoins,
+  community: MessageCircle,
+  empathy_filter: Heart,
+  first_72: Clock,
+  family: Users,
+} as const;

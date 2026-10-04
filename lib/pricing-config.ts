@@ -22,7 +22,8 @@ export type CatalogFeature = {
     href: string;
     desc: string;
     tag: string;
-    consumerGrid: boolean;
+    consumerGrid?: boolean;
+    spotlight?: boolean;
   };
   cells: Record<'free' | 'caregiver' | 'advocate' | 'professional', EntitlementCell>;
 };
@@ -157,6 +158,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
       desc: 'Plain-language translation of the pathology report, with Empathy Filter applied.',
       tag: 'Free',
       consumerGrid: true,
+      spotlight: true,
     },
     cells: {
       free: 'Basic',
@@ -173,6 +175,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
       desc: 'Personalized questions based on diagnosis, stage, and biomarkers. PDF export on Caregiver Pro.',
       tag: 'Caregiver Pro',
       consumerGrid: true,
+      spotlight: true,
     },
     cells: {
       free: 'In-app preview',
@@ -237,6 +240,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
       desc: 'Free shows a preview of the top 3 matches. Caregiver Pro unlocks full details within 50 miles.',
       tag: 'Limited on Free',
       consumerGrid: true,
+      spotlight: true,
     },
     cells: {
       free: 'Top 3 preview',
@@ -269,6 +273,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
       desc: 'Decode denial letters and generate a structured appeal packet.',
       tag: 'Advocate Plan',
       consumerGrid: true,
+      spotlight: true,
     },
     cells: {
       free: 'Not included',
@@ -317,6 +322,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
       desc: 'Removes survival statistics and fear-based language from every output.',
       tag: 'All plans',
       consumerGrid: true,
+      spotlight: true,
     },
     cells: {
       free: 'Included',
@@ -328,6 +334,13 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
   {
     id: 'first_72',
     name: 'First 72 Hours checklist',
+    homepage: {
+      href: '/features/first-72-hours',
+      desc: 'A calm, sequenced plan for the first days after a diagnosis. Core checklist on every plan.',
+      tag: 'Free',
+      consumerGrid: true,
+      spotlight: true,
+    },
     cells: {
       free: 'Core checklist',
       caregiver: 'Sync, reminders, PDF',
@@ -338,6 +351,12 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
   {
     id: 'family',
     name: 'OncoKind Family tree',
+    homepage: {
+      href: '/features/oncokind-family',
+      desc: 'Invite relatives, map family history, and prepare for genetic counseling together.',
+      tag: 'Free',
+      consumerGrid: true,
+    },
     cells: {
       free: 'Tree and invites',
       caregiver: 'Plus genetic counseling PDF',
@@ -381,7 +400,22 @@ export const CONSUMER_HOMEPAGE_FEATURES = CATALOG_FEATURES.filter(
   (feature) => feature.homepage?.consumerGrid
 );
 
-export const HOMEPAGE_TOOL_COUNT = CONSUMER_HOMEPAGE_FEATURES.length;
+export const FEATURE_HUB_FEATURES = CATALOG_FEATURES.filter((feature) => feature.homepage);
+
+export const HOMEPAGE_SPOTLIGHT_IDS = [
+  'cancer_profile',
+  'first_72',
+  'doctor_prep',
+  'empathy_filter',
+  'trials',
+  'insurance',
+] as const;
+
+export const HOMEPAGE_SPOTLIGHT_FEATURES = HOMEPAGE_SPOTLIGHT_IDS.map(
+  (id) => CATALOG_FEATURES.find((feature) => feature.id === id)!
+).filter((feature) => feature.homepage?.spotlight);
+
+export const HOMEPAGE_TOOL_COUNT = HOMEPAGE_SPOTLIGHT_FEATURES.length;
 
 export const HOMEPAGE_HERO = {
   title: 'You should not have to understand oncology to advocate for someone you love.',

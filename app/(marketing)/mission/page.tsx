@@ -2,7 +2,7 @@ import { Heart, Ban, MessageCircle, DollarSign } from 'lucide-react';
 
 export const metadata = {
   title: 'Mission | OncoKind',
-  description: 'Technology with kindness at its core — making cancer information understandable and actionable.',
+  description: 'Technology with kindness at its core, making cancer information understandable and actionable.',
 };
 
 const heroPrinciples = [
@@ -21,7 +21,7 @@ export default function MissionPage() {
             Technology with Kindness at Its Core
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--color-surface-300)]">
-            OncoKind exists to make complex cancer information understandable and actionable — without fear.
+            OncoKind exists to make complex cancer information understandable and actionable, without fear.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-px bg-[var(--color-border)] sm:grid-cols-2">
@@ -50,7 +50,7 @@ export default function MissionPage() {
               Before any AI summary reaches you, it passes through our Empathy Filter. We remove survival
               statistics, deterministic language, and fear-based messaging. What remains is calm, empowering
               guidance designed to help you prepare for real conversations with your care team. We believe
-              information should support you — not overwhelm you.
+              information should support you, not overwhelm you.
             </p>
           </section>
 
@@ -62,7 +62,7 @@ export default function MissionPage() {
               Statistics can be misleading and emotionally devastating when taken out of context. Every
               patient is different. We focus on what you can do: prepare questions, understand your biomarkers,
               explore relevant trials, and have informed conversations. We leave prognosis discussions where
-              they belong — with your oncologist.
+              they belong: with your oncologist.
             </p>
           </section>
 
@@ -73,7 +73,7 @@ export default function MissionPage() {
             <p className="mt-4 leading-relaxed text-[var(--color-text-secondary)]">
               Our Doctor Prep Sheets and conversation starters are built to help you make the most of limited
               appointment time. We suggest questions to ask, clarify terms you might have heard, and point to
-              resources — so you feel prepared, not overwhelmed, when you sit down with your oncologist.
+              resources, so you feel prepared, not overwhelmed, when you sit down with your oncologist.
             </p>
           </section>
         </div>
