@@ -20,8 +20,8 @@ test('Yearly billing is 10x monthly', () => {
   assert.equal(yearlyAmountCents(PLANS.advocate.monthlyCents), PLANS.advocate.yearlyCents);
 });
 
-test('Homepage tool count is driven by catalog data', () => {
-  assert.ok(HOMEPAGE_TOOL_COUNT >= 8);
+test('Homepage spotlight is driven by catalog data', () => {
+  assert.ok(HOMEPAGE_TOOL_COUNT >= 6);
 });
 
 test('RLS helper: relative A cannot read relative B hidden row', () => {

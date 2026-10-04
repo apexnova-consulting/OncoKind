@@ -5,7 +5,7 @@ import { GoalsOfCarePrepSheet } from '@/components/care/GoalsOfCarePrepSheet';
 export const metadata = {
   title: 'Goals of Care Prep Sheet',
   description:
-    'A gentle guide to goals-of-care conversations with your oncology team — organized questions, plain language, no survival statistics.',
+    'A gentle guide to goals-of-care conversations with your oncology team: organized questions, plain language, no survival statistics.',
 };
 
 export default async function GoalsOfCarePage() {

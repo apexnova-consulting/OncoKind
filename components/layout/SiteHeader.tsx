@@ -14,13 +14,12 @@ export async function SiteHeader() {
   const user = session?.user ?? null;
 
   const navLinks = [
-    { href: '/#how-it-works', label: 'How It Works' },
-    { href: '/#features', label: 'Features' },
+    { href: '/features', label: 'Features' },
     { href: '/pricing', label: 'Pricing' },
     ...(isFeatureEnabled('feature_first_72_hours')
-      ? [{ href: '/first-72-hours', label: 'First 72 Hours' }]
+      ? [{ href: '/first-72-hours', label: 'First 72' }]
       : []),
-    { href: '/professional', label: 'For Professionals' },
+    { href: '/professional', label: 'Professionals' },
     { href: '/community', label: 'Community' },
     { href: '/learn', label: 'Resources' },
   ];

@@ -101,7 +101,7 @@ const sections = [
   {
     title: '15. HIPAA and Covered-Entity Status',
     body: [
-      "OncoKind is built with privacy at its core. No raw report data retained. Educational tool — not a covered entity. Unless we have explicitly entered into a separate written agreement stating otherwise, this Privacy Policy does not create a Business Associate Agreement.",
+      "OncoKind is built with privacy at its core. No raw report data retained. Educational tool, not a covered entity. Unless we have explicitly entered into a separate written agreement stating otherwise, this Privacy Policy does not create a Business Associate Agreement.",
     ],
   },
   {

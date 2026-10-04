@@ -27,11 +27,11 @@ interface DiagnosisCardsProps {
 export function DiagnosisCards({ report }: DiagnosisCardsProps) {
   const { biomarkers } = report;
   const cancerType = biomarkers.cancer_type_inferred ?? 'Cancer';
-  const histology = biomarkers.histology ?? '—';
-  const tnmStage = biomarkers.tnm_stage ?? '—';
+  const histology = biomarkers.histology ?? '-';
+  const tnmStage = biomarkers.tnm_stage ?? '-';
   const biomarkerPairs = (biomarkers.names ?? []).map((name, i) => ({
     name,
-    status: (biomarkers.statuses ?? [])[i] ?? '—',
+    status: (biomarkers.statuses ?? [])[i] ?? '-',
   }));
 
   const cards = [

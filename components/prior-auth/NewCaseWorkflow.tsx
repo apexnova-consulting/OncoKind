@@ -238,7 +238,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
       </div>
 
       <p className="mb-4 text-xs font-medium text-slate-500" aria-hidden>
-        Step {displayStep + 1} of {displaySteps.length} — {currentStepLabel}
+        Step {displayStep + 1} of {displaySteps.length}: {currentStepLabel}
       </p>
 
       {identifierWarning ? (
@@ -265,7 +265,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               {(
                 [
                   ['prior_auth',    FileText,  'Prior Authorization Request',        "New prescription requiring pre-approval, or a denied medication needing a fresh request"],
-                  ['step_therapy',  Shield,    'Step Therapy Exception',             "\"Have you tried other meds?\" — Assert your patient's legal right to skip step therapy based on prior drug failures"],
+                  ['step_therapy',  Shield,    'Step Therapy Exception',             "\"Have you tried other meds?\" Assert your patient's legal right to skip step therapy based on prior drug failures"],
                   ['continued_stay', BedDouble, 'Continued Stay / Medical Necessity', 'Justify continued inpatient, SNF, group home, or residential care when the insurer wants to discharge'],
                 ] as const
               ).map(([type, Icon, label, desc]) => (
@@ -348,7 +348,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                     value={formData.facility_state}
                     onChange={(e) => update('facility_state', e.target.value)}
                   >
-                    <option value="">— Select —</option>
+                    <option value="">Select</option>
                     {['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'].map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))}
@@ -483,7 +483,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                 <input
                   id="pa-ndc"
                   className={inputClass}
-                  placeholder="Optional — from prescription label"
+                  placeholder="Optional, from prescription label"
                   value={formData.medication_nda_ndc}
                   onChange={(e) => update('medication_nda_ndc', e.target.value)}
                 />
@@ -687,7 +687,7 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
                   value={formData.facility_state}
                   onChange={(e) => update('facility_state', e.target.value)}
                 >
-                  <option value="">— Select —</option>
+                  <option value="">Select</option>
                   {['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'].map((s) => (
                     <option key={s} value={s}>{s}</option>
                   ))}
@@ -728,13 +728,13 @@ export function NewCaseWorkflow({ initialCaseType }: { initialCaseType?: CaseTyp
               {(
                 [
                   ['Case Type',   { prior_auth: 'Prior Authorization', step_therapy: 'Step Therapy Exception', continued_stay: 'Continued Stay Defense' }[caseType]],
-                  ['Patient Ref', formData.patient_identifier || '—'],
-                  ['Facility',    formData.facility_name || '—'],
-                  ['State',       formData.facility_state || '—'],
-                  ['Payer',       formData.payer_name || '—'],
-                  ['Medication',  formData.medication_name || '—'],
-                  ['Diagnosis',   `${formData.diagnosis_code} ${formData.diagnosis_description}`.trim() || '—'],
-                  ['Urgent',      formData.is_urgent ? 'Yes — expedited review' : 'No'],
+                  ['Patient Ref', formData.patient_identifier || '-'],
+                  ['Facility',    formData.facility_name || '-'],
+                  ['State',       formData.facility_state || '-'],
+                  ['Payer',       formData.payer_name || '-'],
+                  ['Medication',  formData.medication_name || '-'],
+                  ['Diagnosis',   `${formData.diagnosis_code} ${formData.diagnosis_description}`.trim() || '-'],
+                  ['Urgent',      formData.is_urgent ? 'Yes, expedited review' : 'No'],
                 ] as [string, string][]
               ).map(([label, value]) => (
                 <div

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { FeatureDetailPage } from '@/components/marketing/FeatureDetailPage';
+import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 
 export const metadata: Metadata = {
   title: 'Clinical Trial Matching',
@@ -8,20 +9,23 @@ export const metadata: Metadata = {
 };
 
 export default function ClinicalTrialMatchingFeaturePage() {
+  const sample = ROSEMARIE_SAMPLE.trials[0];
   return (
     <FeatureDetailPage
-      headline="Find Trials You May Qualify For — Automatically"
+      headline="Find trials you may qualify for, automatically"
       intro="Clinical trial search is one of the hardest parts of cancer research for families. The listings are dense, the eligibility language is technical, and it is not always obvious which details from the report actually matter. OncoKind narrows that search by organizing the inputs that usually shape fit first: biomarkers, stage, diagnosis, and location."
-      primaryCtaLabel="See Your Matches →"
+      primaryCtaLabel="See Your Matches"
       primaryCtaHref="/signup"
+      secondaryCtaLabel="See all features"
+      secondaryCtaHref="/features"
       example={{
         eyebrow: 'Sample trial card',
-        title: 'Margaret T. — sample NSCLC match',
-        body: 'In the demo flow, Margaret T. sees a sample immunotherapy trial card that explains why PD-L1 expression, disease stage, and biomarker exclusions matter together. Instead of just showing a trial name, the result gives plain-language context she can bring into her first oncology appointment.',
+        title: `${ROSEMARIE_SAMPLE.patientName}: sample ${ROSEMARIE_SAMPLE.cancerTypeShort} match`,
+        body: `In the demo flow, ${ROSEMARIE_SAMPLE.patientName} sees a sample immunotherapy trial card for ${sample.title}. It explains why PD-L1 CPS ≥10, Stage IV disease, and HPV-positive status matter together. Instead of just showing a trial name, the result gives plain-language context she can bring into her first oncology appointment.`,
         bullets: [
           'Why the trial may fit the profile',
           'Current study status',
-          'Phase and sponsor information',
+          'Phase and location context',
           'A ready-made question to bring to the oncologist',
         ],
       }}

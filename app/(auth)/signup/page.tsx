@@ -100,7 +100,7 @@ function SignupForm() {
                 Selected plan
               </p>
               <p className="mt-1 font-medium text-slate-900">
-                {planDetails.name} — {planDetails.priceLabel}
+                {planDetails.name}: {planDetails.priceLabel}
               </p>
             </div>
           ) : null}

@@ -13,7 +13,7 @@ const DISPLAY: Record<SupportedLanguage, string> = {
 
 const optionOrder: SupportedLanguage[] = ['en', 'es', 'zh-CN', 'tl'];
 
-export function LanguageSelector() {
+export function LanguageSelector({ compact = false }: { compact?: boolean }) {
   const [lang, setLang] = useState<SupportedLanguage>('en');
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -69,15 +69,20 @@ export function LanguageSelector() {
     <div ref={rootRef} className="relative inline-flex items-center">
       <button
         type="button"
-        className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-100)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary-800)] transition-colors hover:border-[var(--color-primary-600)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2"
+        className={
+          compact
+            ? 'inline-flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-primary-800)] transition-colors hover:bg-[var(--color-surface-200)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2'
+            : 'inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-100)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary-800)] transition-colors hover:border-[var(--color-primary-600)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-400)] focus-visible:ring-offset-2'
+        }
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label="Select language"
+        title={DISPLAY[lang]}
         onClick={toggle}
         onTouchEnd={toggle}
       >
         <Globe className="h-4 w-4 shrink-0 text-[var(--color-primary-600)]" aria-hidden />
-        <span>{DISPLAY[lang]}</span>
+        {compact ? <span className="sr-only">{DISPLAY[lang]}</span> : <span>{DISPLAY[lang]}</span>}
       </button>
       {open && (
         <ul

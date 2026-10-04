@@ -223,7 +223,7 @@ export function InsuranceSupportWorkbench({
             </Button>
           ) : (
             <>
-              <p className="text-sm font-medium text-emerald-700">Appeal packet ready — review below and download.</p>
+              <p className="text-sm font-medium text-emerald-700">Appeal packet ready. Review below and download.</p>
               <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
                 <p className="text-sm font-semibold text-slate-900">Letter of Medical Necessity</p>
                 <pre className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-700">

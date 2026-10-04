@@ -64,7 +64,7 @@ export function SampleReportDemo() {
             Try a sample caregiver report before you sign up.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[var(--color-surface-300)] sm:text-base">
-            {ROSEMARIE_SAMPLE.patientName} — {ROSEMARIE_SAMPLE.cancerType}, {ROSEMARIE_SAMPLE.stage}, HPV:{' '}
+            {ROSEMARIE_SAMPLE.patientName}: {ROSEMARIE_SAMPLE.cancerType}, {ROSEMARIE_SAMPLE.stage}, HPV:{' '}
             {ROSEMARIE_SAMPLE.hpv.value}, PD-L1 CPS: ≥10, BRCA1/2: Negative
           </p>
           <div className="mt-6 space-y-4 rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-5">
@@ -175,7 +175,7 @@ export function SampleReportDemo() {
         </p>
         <div className="mt-4 flex flex-col justify-center gap-3 sm:flex-row">
           <Button asChild>
-            <Link href="/signup">Upload Your Report — It&apos;s Free</Link>
+            <Link href="/signup">Upload Your Report. It&apos;s Free</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/features/doctor-prep-sheet">Learn How It Works</Link>
@@ -249,7 +249,7 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
     <div className="space-y-4">
       <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-sm)] sm:p-6">
         <p className="text-sm font-semibold text-[var(--color-primary-900)]">
-          Doctor Prep Sheet — Oncology Appointment · Prepared by OncoKind
+          Doctor Prep Sheet: Oncology Appointment · Prepared by OncoKind
         </p>
 
         {doctorQuestion ? (
@@ -265,8 +265,8 @@ function DoctorPrepPanel({ doctorQuestion }: { doctorQuestion: string | null }) 
             <p className="mt-2">{ROSEMARIE_SAMPLE.prepDiagnosis}</p>
             <p className="mt-2">
               Treatment for Stage IV vulvar cancer often involves more than one specialist working
-              together. Asking how each part of the plan fits together — and what the goal of
-              treatment is — helps you walk in prepared.
+              together. Asking how each part of the plan fits together, and what the goal of
+              treatment is, helps you walk in prepared.
             </p>
           </section>
 

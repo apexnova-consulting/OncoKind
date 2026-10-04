@@ -12,10 +12,10 @@ export default function InsuranceDenialDefenseFeaturePage() {
     <FeatureDetailPage
       headline="A Denial Is Not the Final Word"
       intro="Insurance denials can stop care momentum at exactly the wrong moment. OncoKind helps families move from panic to structure by decoding the denial, outlining the appeal path, and generating a clean starting draft for the next conversation with the care team."
-      primaryCtaLabel="Start Your Appeal →"
+      primaryCtaLabel="Start Your Appeal"
       primaryCtaHref="/signup"
-      secondaryCtaLabel="Using OncoKind for your clients? Book a Professional demo →"
-      secondaryCtaHref="https://calendly.com/oncokind-support"
+      secondaryCtaLabel="See all features"
+      secondaryCtaHref="/features"
       sections={[
         {
           title: 'What OncoKind generates',

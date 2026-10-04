@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { LEARN_ARTICLES } from '@/lib/learn-content';
 
 export const metadata: Metadata = {
-  title: 'Understanding Cancer — Plain-English Guides for Patients and Families',
+  title: 'Understanding Cancer: Plain-English Guides for Patients and Families',
   description:
     'Explore plain-English guides on biomarkers, staging, treatment, insurance appeals, and caregiver questions from OncoKind.',
 };
@@ -18,7 +18,7 @@ export default function LearnIndexPage() {
             Resources
           </p>
           <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--color-primary-900)]">
-            Understanding Cancer — Plain-English Guides for Patients and Families
+            Understanding Cancer: Plain-English Guides for Patients and Families
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--color-text-secondary)]">
             These guides are written for the moment when a report, diagnosis, or treatment term

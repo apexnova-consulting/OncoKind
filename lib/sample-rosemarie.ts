@@ -13,8 +13,8 @@ export const ROSEMARIE_SAMPLE = {
       "HPV status helps the care team understand how this cancer developed and may be part of treatment discussions. Ask your oncologist what this result means for your loved one's plan.",
   },
   pdl1: {
-    label: 'PD-L1 (CPS): ≥10 — Positive',
-    value: '≥10 — Positive',
+    label: 'PD-L1 (CPS): ≥10, Positive',
+    value: '≥10, Positive',
     heroNote: 'Discuss immunotherapy options with care team',
     description:
       'PD-L1 results help the care team decide whether immunotherapy is an option worth discussing. Ask your oncologist whether it applies here.',
@@ -34,9 +34,9 @@ export const ROSEMARIE_SAMPLE = {
   prepDiagnosis:
     'Stage IV vulvar squamous cell carcinoma means the cancer has spread beyond the vulva. The HPV-positive (p16+) status and PD-L1 CPS of ≥10 are important findings to review with the oncology team. Your care team will review imaging and other details to build the full treatment plan.',
   prepQuestions: [
-    'Given the PD-L1 CPS of ≥10 and HPV-positive status, is immunotherapy part of the treatment discussion — either alone or combined with chemotherapy?',
+    'Given the PD-L1 CPS of ≥10 and HPV-positive status, is immunotherapy part of the treatment discussion, either alone or combined with chemotherapy?',
     'What chemotherapy regimen is being recommended, and what side effects should we watch for?',
-    'What is the primary goal of treatment right now — to reduce the cancer, to manage symptoms, or something else?',
+    'What is the primary goal of treatment right now: to reduce the cancer, to manage symptoms, or something else?',
     'Are there clinical trials for Stage IV vulvar cancer that we should consider, given the PD-L1 and HPV findings?',
     'How will we know if the treatment is working, and how often will we check?',
   ],
@@ -48,12 +48,12 @@ export const ROSEMARIE_SAMPLE = {
       category: 'Immunotherapy',
       summary: 'Pembrolizumab for PD-L1 Positive Advanced Solid Tumors (incl. vulvar)',
       why: 'PD-L1 CPS ≥10, Stage IV, HPV-positive squamous cell carcinoma',
-      distance: '~9 miles — Regional Cancer Center',
+      distance: '~9 miles, Regional Cancer Center',
       status: 'Enrolling',
       detail:
         'This trial evaluates pembrolizumab in patients with PD-L1 positive solid tumors, including vulvar cancer. HPV-positive and high PD-L1 status are both relevant eligibility factors here.',
       doctorPrompt:
-        'Given that the PD-L1 CPS is ≥10 and HPV status is positive, should we discuss immunotherapy — either through a trial like KEYNOTE-158 or as standard of care?',
+        'Given that the PD-L1 CPS is ≥10 and HPV status is positive, should we discuss immunotherapy, either through a trial like KEYNOTE-158 or as standard of care?',
     },
     {
       id: 'gog-vul-01',
@@ -62,7 +62,7 @@ export const ROSEMARIE_SAMPLE = {
       category: 'Combination Therapy',
       summary: 'Chemotherapy Combined with Immunotherapy for Advanced Vulvar Cancer',
       why: 'Stage IV vulvar squamous cell carcinoma, PD-L1 positive, no prior systemic therapy',
-      distance: '~22 miles — University Medical Center',
+      distance: '~22 miles, University Medical Center',
       status: 'Enrolling',
       detail:
         'This trial evaluates whether adding pembrolizumab to standard chemotherapy improves outcomes in advanced vulvar cancer. It is an example of the combination approach many oncologists are exploring for PD-L1 positive cases.',

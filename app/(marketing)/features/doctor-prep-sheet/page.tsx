@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { FeatureDetailPage } from '@/components/marketing/FeatureDetailPage';
+import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 
 export const metadata: Metadata = {
   title: 'Doctor Prep Sheet',
@@ -10,14 +11,16 @@ export const metadata: Metadata = {
 export default function DoctorPrepSheetFeaturePage() {
   return (
     <FeatureDetailPage
-      headline="Walk Into Every Appointment Prepared"
+      headline="Walk into every appointment prepared"
       intro="The Doctor Prep Sheet turns an overwhelming pathology report into a one-page guide you can actually use in the room. It organizes the diagnosis, highlights the biomarker findings that matter most, and gives you a focused list of questions so you can spend your visit getting answers instead of trying to decode jargon on the fly."
-      primaryCtaLabel="Generate Your Prep Sheet Free →"
+      primaryCtaLabel="Generate Your Prep Sheet Free"
       primaryCtaHref="/signup"
+      secondaryCtaLabel="See all features"
+      secondaryCtaHref="/features"
       example={{
         eyebrow: 'Sample output',
-        title: 'Margaret T. — fictional case from the interactive demo',
-        body: 'For Margaret T., a caregiver reviewing a Stage IIIA non-small cell lung cancer report, the prep sheet translates the diagnosis into plain English, explains why the PD-L1 score matters, and surfaces questions about immunotherapy, additional biomarkers, and trial options before the first oncology visit.',
+        title: `${ROSEMARIE_SAMPLE.patientName}: fictional case from the interactive demo`,
+        body: `For ${ROSEMARIE_SAMPLE.patientName}, a caregiver reviewing a ${ROSEMARIE_SAMPLE.stage} ${ROSEMARIE_SAMPLE.cancerTypeShort} report, the prep sheet translates the diagnosis into plain English, explains why PD-L1 CPS ≥10 and HPV-positive (p16+) status matter, and surfaces questions about immunotherapy, additional testing, and trial options before the first oncology visit.`,
         bullets: [
           'Plain-English summary of the diagnosis and stage',
           'Top biomarkers explained in caregiver-friendly language',

@@ -14,7 +14,7 @@ export function PriorAuthProLanding() {
         <Reveal>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#6B8F71]/10 px-4 py-2 text-xs font-medium text-[#6B8F71]">
             <Shield className="h-3.5 w-3.5" />
-            KindAuth Pro — For Care Facilities
+            KindAuth Pro: For Care Facilities
           </div>
           <h1 className="font-display mb-6 text-4xl font-semibold leading-tight text-[#1C2B2D] md:text-5xl">
             Stop Losing 3 Hours
@@ -31,7 +31,7 @@ export function PriorAuthProLanding() {
               className="bg-[#6B8F71] px-8 py-3 text-base text-white hover:bg-[#5a7a60]"
             >
               <Link href="/signup?plan=professional">
-                Start Free — Professional Plan
+                Start Free on the Professional Plan
               </Link>
             </Button>
             <Button
@@ -62,7 +62,7 @@ export function PriorAuthProLanding() {
                 icon: Shield,
                 color: 'text-[#E8C37A] bg-[#E8C37A]/10',
                 title: 'Step Therapy Exception',
-                body: '"Have you tried other meds?" — We cite your state\'s step therapy reform law by statute, document previous drug failures, and assert your patient\'s legal right to skip the step requirement.',
+                body: '"Have you tried other meds?" We cite your state\'s step therapy reform law by statute, document previous drug failures, and assert your patient\'s legal right to skip the step requirement.',
               },
               {
                 icon: BedDouble,
@@ -169,7 +169,7 @@ export function PriorAuthProLanding() {
               'Outcome tracking (approved / denied / appealing)',
               'Print-ready PDF export with disclaimer footer',
               'Unlimited cases',
-              'No PHI stored — staff-controlled patient identifiers',
+              'No PHI stored. Staff-controlled patient identifiers',
               'AI audit log for every generation',
             ].map((feature) => (
               <div key={feature} className="flex items-start gap-2">
@@ -189,14 +189,14 @@ export function PriorAuthProLanding() {
           </h2>
           <p className="mx-auto mb-8 max-w-xl text-sm text-[#E8F0E9]">
             OncoKind Professional includes full KindAuth Pro access. Unlimited cases, all three
-            document types, outcome tracking, and the Denial Analyzer — included at $999/month.
+            document types, outcome tracking, and the Denial Analyzer, included at $999/month.
           </p>
           <Button
             asChild
             className="bg-white px-10 py-3 text-base font-semibold text-[#1C2B2D] hover:bg-[#F8F6F2]"
           >
             <Link href="/signup?plan=professional">
-              Get Started — Professional Plan{' '}
+              Get Started on the Professional Plan{' '}
               <ArrowRight className="ml-2 inline h-4 w-4" />
             </Link>
           </Button>

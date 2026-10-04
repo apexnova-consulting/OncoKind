@@ -228,9 +228,9 @@ export function QuietRoomExperience({
           </p>
           <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--color-text-secondary)]">
             <li>If you&apos;re struggling and need to talk to someone:</li>
-            <li>988 Suicide & Crisis Lifeline — call or text 988</li>
-            <li>Crisis Text Line — text HOME to 741741</li>
-            <li>Family Caregiver Alliance Helpline — 1-800-445-8106</li>
+            <li>988 Suicide & Crisis Lifeline: call or text 988</li>
+            <li>Crisis Text Line: text HOME to 741741</li>
+            <li>Family Caregiver Alliance Helpline: 1-800-445-8106</li>
           </ul>
         </section>
         <section className="rounded-[var(--radius-xl)] bg-white p-6 shadow-[var(--shadow-sm)]">

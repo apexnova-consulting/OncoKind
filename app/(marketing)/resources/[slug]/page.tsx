@@ -90,7 +90,7 @@ export default async function ResourceArticlePage({ params }: PageProps) {
         <div className="mt-8 rounded-[var(--radius-lg)] bg-[var(--color-primary-900)] p-6 text-white">
           <p className="font-display text-2xl font-semibold">Ready to understand your own report?</p>
           <Button asChild className="mt-4">
-            <Link href="/signup">Upload your pathology report — it&apos;s free →</Link>
+            <Link href="/signup">Upload your pathology report. It&apos;s free →</Link>
           </Button>
         </div>
 

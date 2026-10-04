@@ -89,7 +89,7 @@ export default async function DashboardPage() {
                 <span className="rounded-full bg-[#6B8F71] px-2 py-0.5 text-xs text-white">New</span>
               </div>
               <p className="text-xs leading-relaxed text-slate-300">
-                Generate prior auth requests, step therapy exceptions, and continued stay letters — opens in a dedicated workspace
+                Generate prior auth requests, step therapy exceptions, and continued stay letters. Opens in a dedicated workspace
                 {isProfessional ? ' (KindAuth Pro, multi-patient).' : ' (standard KindAuth, single-patient).'}
               </p>
             </div>

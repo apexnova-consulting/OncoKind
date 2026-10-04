@@ -65,9 +65,9 @@ export default function ProfessionalPage() {
               <ul className="mt-4 space-y-1.5 text-sm text-slate-300">
                 {[
                   'Prior Authorization Request generator',
-                  'Step Therapy Exception — cites your state\'s reform law by statute',
+                  'Step Therapy Exception: cites your state\'s reform law by statute',
                   'Continued Stay / Medical Necessity Defense',
-                  'Denial Letter Analyzer — plain-English breakdown + appeal strategy',
+                  'Denial Letter Analyzer: plain-English breakdown + appeal strategy',
                   'Outcome tracking: approved / denied / on appeal',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2">
@@ -93,7 +93,7 @@ export default function ProfessionalPage() {
             {
               title: 'What the Professional tier provides',
               bullets: [
-                'KindAuth Pro — all three document types',
+                'KindAuth Pro: all three document types',
                 'Multi-patient workflow support for advocates and care teams',
                 'Insurance denial defense and structured appeal packets',
                 'Branded outputs and batch-oriented document review',

@@ -15,14 +15,14 @@ const DEFAULT_QUESTIONS = [
     category: 'Understanding the current picture',
     questions: [
       'What does my loved one\'s care team recommend if this treatment stops working?',
-      'What is the primary goal of the current treatment — to control, to reduce symptoms, or something else?',
+      'What is the primary goal of the current treatment: to control, to reduce symptoms, or something else?',
       'What does "stable" mean for this stage and type of cancer?',
     ],
   },
   {
     category: 'Palliative and supportive care',
     questions: [
-      'Is palliative care available to us now, alongside treatment — not instead of it?',
+      'Is palliative care available to us now, alongside treatment, not instead of it?',
       'How is palliative care different from hospice? Can we use both at the same time?',
       'Who on the care team focuses on comfort, symptom management, and quality of life?',
     ],
@@ -38,7 +38,7 @@ const DEFAULT_QUESTIONS = [
   {
     category: 'Practical next steps',
     questions: [
-      'Are there support services — social workers, chaplains, counselors — available to our family now?',
+      'Are there support services (social workers, chaplains, counselors) available to our family now?',
       'What happens if we want to stop or pause the current treatment plan?',
       'How do we reach someone after hours if something changes at home?',
     ],
@@ -46,11 +46,11 @@ const DEFAULT_QUESTIONS = [
 ];
 
 const PALLIATIVE_EXPLAINER = {
-  title: 'Palliative care vs. hospice — what\'s the difference?',
+  title: 'Palliative care vs. hospice: what\'s the difference?',
   points: [
     {
       label: 'Palliative care',
-      text: 'Specialized medical care focused on comfort, symptom relief, and quality of life. It can start at any point during a cancer diagnosis — even during active treatment. It does not mean giving up. It means adding a layer of support.',
+      text: 'Specialized medical care focused on comfort, symptom relief, and quality of life. It can start at any point during a cancer diagnosis, even during active treatment. It does not mean giving up. It means adding a layer of support.',
     },
     {
       label: 'Hospice',
@@ -58,7 +58,7 @@ const PALLIATIVE_EXPLAINER = {
     },
     {
       label: 'The key difference',
-      text: 'Palliative care runs alongside any treatment. Hospice replaces curative treatment. Both are deeply compassionate and evidence-based. Many families who access palliative care early report better quality of life — and sometimes longer life.',
+      text: 'Palliative care runs alongside any treatment. Hospice replaces curative treatment. Both are deeply compassionate and evidence-based. Many families who access palliative care early report better quality of life, and sometimes longer life.',
     },
   ],
 };
@@ -149,8 +149,8 @@ export function GoalsOfCarePrepSheet({ userId: _userId, generatedQuestions }: Pr
           </div>
           <h1 className="text-2xl font-bold text-[#1e2d2b]">Goals of Care Prep Sheet</h1>
           <p className="mt-2 text-[#5a6b68] leading-relaxed">
-            This is a gentle guide to help you start one of the most important — and often
-            overlooked — conversations in cancer care: what your loved one wants their care to
+            This is a gentle guide to help you start one of the most important, and often
+            overlooked, conversations in cancer care: what your loved one wants their care to
             look like, who speaks for them, and what support is available right now.
           </p>
           <p className="mt-2 text-xs text-[#5a6b68]/80 italic">
@@ -232,7 +232,7 @@ export function GoalsOfCarePrepSheet({ userId: _userId, generatedQuestions }: Pr
             Important documents to have on file
           </h2>
           <p className="text-sm text-[#5a6b68]">
-            These are not urgent requirements — they&apos;re practical documents that give your
+            These are not urgent requirements. They&apos;re practical documents that give your
             loved one a voice in their care and make things clearer for your family. Take them
             one at a time.
           </p>
