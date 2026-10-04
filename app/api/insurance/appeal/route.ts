@@ -7,7 +7,7 @@ import {
   type DecodedInsurancePayload,
 } from '@/lib/insurance/appeals';
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
-import { hasCareAdvocacyAccess } from '@/lib/entitlements';
+import { hasInsuranceAdvocacyAccess } from '@/lib/entitlements';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single();
 
-    const hasAdvocateAccess = hasCareAdvocacyAccess(profile?.subscription_tier);
+    const hasAdvocateAccess = hasInsuranceAdvocacyAccess(profile?.subscription_tier);
 
     if (!hasAdvocateAccess) {
       return NextResponse.json(

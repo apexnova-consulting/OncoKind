@@ -60,7 +60,7 @@ function SignupForm() {
       } else if (selectedPlan === 'pro' || selectedPlan === 'advocate') {
         router.push(`/pricing?plan=${selectedPlan}`);
       } else {
-        router.push('/journey');
+        router.push('/journey?welcome=1');
       }
       router.refresh();
     } catch (err) {

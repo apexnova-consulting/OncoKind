@@ -58,9 +58,16 @@ const subprocessors = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Trust & Privacy',
+  title: 'Trust and privacy',
   description:
-    'Learn how OncoKind handles report uploads, protects your data, limits retention, and supports privacy requests.',
+    'How OncoKind handles report uploads, protects your data, limits retention, and supports privacy requests. HIPAA BAA available on request for Professional organizations.',
+  alternates: { canonical: 'https://www.oncokind.com/trust' },
+  openGraph: {
+    title: 'Trust and privacy',
+    description: 'How OncoKind handles report uploads, protects your data, and limits retention.',
+    url: 'https://www.oncokind.com/trust',
+    images: [{ url: 'https://www.oncokind.com/og-home.png', width: 1200, height: 630, alt: 'OncoKind Trust Center' }],
+  },
 };
 
 export default function TrustPage() {
@@ -111,7 +118,7 @@ export default function TrustPage() {
             2. What We Do Not Do
           </h2>
           <ul className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
-            <li>✗ We do not sell your data to any third party — ever.</li>
+            <li>We do not sell your data to any third party, ever.</li>
             <li>✗ We do not share your report content with advertisers.</li>
             <li>✗ We do not store raw report text after your summary is generated.</li>
             <li>✗ We do not use your personal health information to train AI models.</li>

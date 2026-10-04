@@ -36,11 +36,10 @@ export default async function TrialsPage() {
       {!isPro && (
         <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
           <p className="text-sm text-slate-700">
-            You are on the Free tier. Clinical trial matching is limited here — the Advocate Plan includes expanded
-            local trial visibility and richer trial details.
+            You are on the Free tier. Trial matching is a preview of the top 3 matches. Caregiver Pro unlocks full clinical details within 50 miles.
           </p>
           <Button asChild className="mt-3">
-            <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
+            <Link href="/pricing?plan=pro">Upgrade to Caregiver Pro</Link>
           </Button>
         </div>
       )}

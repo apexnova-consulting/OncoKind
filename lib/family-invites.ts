@@ -1,0 +1,5 @@
+import crypto from 'crypto';
+
+export function newInviteToken() {
+  return crypto.randomBytes(24).toString('hex');
+}

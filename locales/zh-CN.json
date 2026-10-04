@@ -18,5 +18,11 @@
   "wellbeing.prompt": "这周你还好吗？",
   "wellbeing.ok": "我还可以",
   "wellbeing.hard": "这周很难",
-  "wellbeing.support": "我需要支持"
+  "wellbeing.support": "我需要支持",
+  "nav.first72": "最初 72 小时",
+  "first72.title": "最初几天的平静计划",
+  "family.tab": "家庭",
+  "family.consent": "我同意添加或编辑我自己的亲属健康记录。",
+  "pricing.caregiver": "Caregiver Pro",
+  "pricing.advocate": "Advocate Plan"
 }

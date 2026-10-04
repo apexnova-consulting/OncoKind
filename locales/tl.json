@@ -18,5 +18,11 @@
   "wellbeing.prompt": "Kumusta ka ngayong linggo?",
   "wellbeing.ok": "Kaya ko pa",
   "wellbeing.hard": "Mahirap ang linggong ito",
-  "wellbeing.support": "Kailangan ko ng suporta"
+  "wellbeing.support": "Kailangan ko ng suporta",
+  "nav.first72": "Unang 72 oras",
+  "first72.title": "Isang mahinahong plano para sa unang mga araw",
+  "family.tab": "Pamilya",
+  "family.consent": "Sumasang-ayon ako na idagdag o i-edit ang sarili kong family health notes.",
+  "pricing.caregiver": "Caregiver Pro",
+  "pricing.advocate": "Advocate Plan"
 }

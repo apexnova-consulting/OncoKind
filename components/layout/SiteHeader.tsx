@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { getBrandTheme } from '@/lib/branding';
 import { SiteHeaderClient } from '@/components/layout/SiteHeaderClient';
 import { getDictionaryFromCookies } from '@/lib/i18n-server';
+import { isFeatureEnabled } from '@/lib/feature-flags';
 
 export async function SiteHeader() {
   const supabase = await createServerSupabaseClient();
@@ -16,6 +17,9 @@ export async function SiteHeader() {
     { href: '/#how-it-works', label: 'How It Works' },
     { href: '/#features', label: 'Features' },
     { href: '/pricing', label: 'Pricing' },
+    ...(isFeatureEnabled('feature_first_72_hours')
+      ? [{ href: '/first-72-hours', label: 'First 72 Hours' }]
+      : []),
     { href: '/professional', label: 'For Professionals' },
     { href: '/community', label: 'Community' },
     { href: '/learn', label: 'Resources' },

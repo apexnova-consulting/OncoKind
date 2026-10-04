@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getCancerProfileSources } from '@/lib/disclosures';
 import { getPatientReport } from '@/lib/patient-reports';
+import { isFeatureEnabled } from '@/lib/feature-flags';
+import { FamilyTab } from '@/components/family/FamilyTab';
 
 export default async function ReportDetailPage({
   params,
@@ -25,7 +27,7 @@ export default async function ReportDetailPage({
   const report = await getPatientReport(id, user.id);
   if (!report) notFound();
 
-  const [{ isPro }, brandTheme] = await Promise.all([getProfile(), getBrandTheme()]);
+  const [{ isPro, profile }, brandTheme] = await Promise.all([getProfile(), getBrandTheme()]);
   const summary =
     report.matchedTrials.analysis_results?.summary ??
     [
@@ -105,6 +107,20 @@ export default async function ReportDetailPage({
         brandLogoUrl={brandTheme.logoUrl}
         brandFooterDisclaimer={brandTheme.footerDisclaimer}
       />
+      {isFeatureEnabled('feature_oncokind_family') ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Family</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FamilyTab
+              reportId={id}
+              cancerType={report.biomarkers.cancer_type_inferred}
+              tier={profile?.subscription_tier}
+            />
+          </CardContent>
+        </Card>
+      ) : null}
     </div>
   );
 }

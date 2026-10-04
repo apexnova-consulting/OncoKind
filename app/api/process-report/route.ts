@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     if (!hasCareAdvocacyAccess(profile?.subscription_tier) && (reportCount ?? 0) >= 1) {
       return NextResponse.json(
         {
-          error: 'Trial limit reached. Upgrade to Care & Advocacy Pro to unlock unlimited report analyses.',
+          error: 'Trial limit reached. Upgrade to Caregiver Pro to unlock unlimited report analyses.',
           code: 'TRIAL_LIMIT_REACHED',
         },
         { status: 402 }

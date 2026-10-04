@@ -1,9 +1,10 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import {
-  hasCareAdvocacyAccess,
-  hasKindAuthSelfServe,
+  hasAdvocateAccess as tierHasAdvocateAccess,
+  hasCaregiverAccess,
+  hasKindAuthAccess as tierHasKindAuthAccess,
   hasMultiPatientAccess,
-} from '@/lib/entitlements';
+} from '@/lib/pricing-config';
 
 const GRACE_PERIOD_MS = 3 * 24 * 60 * 60 * 1000;
 
@@ -46,9 +47,9 @@ export async function getProfile() {
     tier === 'enterprise' ||
     (profileEmail ? allowedAdminEmails.includes(profileEmail) : false);
 
-  const isPro = isAdmin || hasCareAdvocacyAccess(effectiveTier);
-  const hasAdvocateAccess = isAdmin || hasCareAdvocacyAccess(effectiveTier);
-  const hasKindAuthAccess = isAdmin || hasKindAuthSelfServe(effectiveTier);
+  const isPro = isAdmin || hasCaregiverAccess(effectiveTier);
+  const hasAdvocateAccess = isAdmin || tierHasAdvocateAccess(effectiveTier);
+  const hasKindAuthAccess = isAdmin || tierHasKindAuthAccess(effectiveTier);
   const isProfessional = isAdmin || hasMultiPatientAccess(effectiveTier);
 
   return {

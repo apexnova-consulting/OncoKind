@@ -1,11 +1,11 @@
 export const SIGNUP_PLANS = {
   pro: {
-    name: 'Care & Advocacy Pro',
-    priceLabel: '$29/month or $199/year',
+    name: 'Caregiver Pro',
+    priceLabel: '$39/month or $390/year',
   },
   advocate: {
-    name: 'Care & Advocacy Pro',
-    priceLabel: '$29/month or $199/year',
+    name: 'Advocate Plan',
+    priceLabel: '$49/month or $490/year',
   },
   professional: {
     name: 'Professional',
@@ -16,8 +16,7 @@ export const SIGNUP_PLANS = {
 export type SignupPlanKey = keyof typeof SIGNUP_PLANS;
 
 export function parseSignupPlan(value: string | null | undefined): SignupPlanKey | null {
-  if (value === 'pro' || value === 'advocate' || value === 'professional') {
-    return value;
-  }
+  if (value === 'pro' || value === 'caregiver') return 'pro';
+  if (value === 'advocate' || value === 'professional') return value;
   return null;
 }

@@ -9,7 +9,7 @@ import {
   stripePrices,
 } from '@/lib/stripe-prices';
 
-const defaultPriceId = stripePrices.careProMonthly;
+const defaultPriceId = stripePrices.caregiverMonthly;
 
 async function handleCheckout(
   request: NextRequest,
@@ -53,7 +53,8 @@ async function handleCheckout(
     return NextResponse.json({ error: 'Checkout not configured' }, { status: 503 });
   }
   const base = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
-  const successPlan = planKey === 'professional' ? 'professional' : 'care_advocacy_pro';
+  const successPlan =
+    planKey === 'professional' ? 'professional' : planKey === 'advocate' ? 'advocate' : 'caregiver_pro';
 
   const { data: profile } = await supabase
     .from('profiles')

@@ -8,37 +8,40 @@ export type SubscriptionTier =
   | null
   | undefined;
 
-export function normalizeTier(tier: SubscriptionTier): string {
-  return (tier ?? 'free').toLowerCase();
-}
+export {
+  normalizeTier,
+  hasCaregiverAccess,
+  hasAdvocateAccess,
+  hasPaidAccess,
+  hasKindAuthAccess,
+  hasMultiPatientAccess,
+  displayPlanName,
+} from '@/lib/pricing-config';
 
-/** Care & Advocacy Pro and every higher paid tier. Legacy `pro` maps here. */
+import {
+  hasCaregiverAccess,
+  hasAdvocateAccess as hasAdvocatePlanAccess,
+  hasKindAuthAccess,
+} from '@/lib/pricing-config';
+
+/** @deprecated Use hasCaregiverAccess. Paid family navigation (not KindAuth). */
 export function hasCareAdvocacyAccess(tier: SubscriptionTier): boolean {
-  const value = normalizeTier(tier);
-  return value === 'pro' || value === 'advocate' || value === 'professional' || value === 'enterprise';
+  return hasCaregiverAccess(tier);
 }
 
+/** KindAuth is Professional only. */
 export function hasKindAuthSelfServe(tier: SubscriptionTier): boolean {
-  return hasCareAdvocacyAccess(tier);
+  return hasKindAuthAccess(tier);
 }
 
 export function hasKindAuthPro(tier: SubscriptionTier): boolean {
-  const value = normalizeTier(tier);
-  return value === 'professional' || value === 'enterprise';
-}
-
-export function hasMultiPatientAccess(tier: SubscriptionTier): boolean {
-  return hasKindAuthPro(tier);
+  return hasKindAuthAccess(tier);
 }
 
 export function isPaidTier(tier: SubscriptionTier): boolean {
-  return hasCareAdvocacyAccess(tier);
+  return hasCaregiverAccess(tier);
 }
 
-export function displayPlanName(tier: SubscriptionTier): string {
-  const value = normalizeTier(tier);
-  if (value === 'professional') return 'Professional';
-  if (value === 'enterprise') return 'Enterprise';
-  if (hasCareAdvocacyAccess(tier)) return 'Care & Advocacy Pro';
-  return 'Free';
+export function hasInsuranceAdvocacyAccess(tier: SubscriptionTier): boolean {
+  return hasAdvocatePlanAccess(tier);
 }

@@ -136,7 +136,7 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       return {
         success: false,
         error:
-          'TRIAL_LIMIT_REACHED: Upgrade to Care & Advocacy Pro to unlock unlimited report analyses.',
+          'TRIAL_LIMIT_REACHED: Upgrade to Caregiver Pro to unlock unlimited report analyses.',
       };
     }
 

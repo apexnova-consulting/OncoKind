@@ -57,7 +57,7 @@ test.describe('Stripe Billing', () => {
     await signUpFreshAccount(page);
 
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: new RegExp(pricingTiers.care.cta, 'i') }).click();
+    await page.getByRole('link', { name: new RegExp(pricingTiers.caregiver.cta, 'i') }).click();
 
     await completeStripeCheckout(page);
 
@@ -72,7 +72,7 @@ test.describe('Stripe Billing', () => {
     await signUpFreshAccount(page);
 
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: new RegExp(pricingTiers.care.cta, 'i') }).click();
+    await page.getByRole('link', { name: new RegExp(pricingTiers.caregiver.cta, 'i') }).click();
     await page.waitForURL(/checkout\.stripe\.com/, { timeout: 20_000 });
     await expect(page).toHaveURL(/checkout\.stripe\.com/);
   });
@@ -81,7 +81,7 @@ test.describe('Stripe Billing', () => {
     await signUpFreshAccount(page);
 
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: new RegExp(pricingTiers.care.cta, 'i') }).click();
+    await page.getByRole('link', { name: new RegExp(pricingTiers.caregiver.cta, 'i') }).click();
     await completeStripeCheckout(page);
     await page.waitForURL(new RegExp(routes.dashboard), { timeout: 30_000 });
 
