@@ -332,6 +332,56 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     },
   },
   {
+    id: 'complete_the_picture',
+    name: 'Complete the Picture',
+    homepage: {
+      href: '/features/complete-the-picture',
+      desc: 'Complete the Picture. See what your report says, what it does not mention, and the questions worth asking next.',
+      tag: 'Free summary',
+      consumerGrid: true,
+      spotlight: true,
+    },
+    cells: {
+      free: 'Summary plus top 2 questions',
+      caregiver: 'All questions, tracker, PDF, letters',
+      advocate: 'All questions, tracker, PDF, letters',
+      professional: 'Multi-patient view, branded PDFs',
+    },
+  },
+  {
+    id: 'access_agent',
+    name: 'Access Agent',
+    homepage: {
+      href: '/features/access-agent',
+      desc: 'Access Agent. Find out what getting to a trial or specialist may really cost, and where to look for help.',
+      tag: 'Free estimate',
+      consumerGrid: true,
+      spotlight: true,
+    },
+    cells: {
+      free: 'Estimate plus top 3 programs',
+      caregiver: 'All matches, packet PDFs, basic tracker',
+      advocate: 'Full tracker and reminders',
+      professional: 'Full tracker, multi-patient',
+    },
+  },
+  {
+    id: 'voice_call_for_me',
+    name: 'Call for me (beta, invite only)',
+    homepage: {
+      href: '/voice-beta',
+      desc: 'A scoped, user-approved phone tool for process questions. No patient information on calls.',
+      tag: 'Invite only',
+      consumerGrid: true,
+    },
+    cells: {
+      free: 'Not included',
+      caregiver: 'Not included',
+      advocate: 'Metered beta',
+      professional: 'Metered beta',
+    },
+  },
+  {
     id: 'first_72',
     name: 'First 72 Hours checklist',
     homepage: {
@@ -404,11 +454,11 @@ export const FEATURE_HUB_FEATURES = CATALOG_FEATURES.filter((feature) => feature
 
 export const HOMEPAGE_SPOTLIGHT_IDS = [
   'cancer_profile',
-  'first_72',
   'doctor_prep',
+  'complete_the_picture',
+  'access_agent',
+  'first_72',
   'empathy_filter',
-  'trials',
-  'insurance',
 ] as const;
 
 export const HOMEPAGE_SPOTLIGHT_FEATURES = HOMEPAGE_SPOTLIGHT_IDS.map(

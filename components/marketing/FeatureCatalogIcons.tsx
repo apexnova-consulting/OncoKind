@@ -12,6 +12,9 @@ import {
   ShieldCheck,
   Sparkles,
   Users,
+  ScanSearch,
+  MapPin,
+  Phone,
 } from 'lucide-react';
 
 export const FEATURE_CATALOG_ICONS = {
@@ -28,4 +31,7 @@ export const FEATURE_CATALOG_ICONS = {
   empathy_filter: Heart,
   first_72: Clock,
   family: Users,
+  complete_the_picture: ScanSearch,
+  access_agent: MapPin,
+  voice_call_for_me: Phone,
 } as const;

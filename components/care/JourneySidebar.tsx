@@ -11,8 +11,11 @@ import {
   FolderPlus,
   HandCoins,
   ShieldCheck,
+  ScanSearch,
+  MapPin,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { isFeatureEnabled } from '@/lib/feature-flags';
 
 type NavItem = {
   href: string;
@@ -20,11 +23,14 @@ type NavItem = {
   icon: typeof Map;
   upgradeHref?: string;
   advocateOnly?: boolean;
+  agent?: 'feature_complete_the_picture' | 'feature_access_agent';
 };
 
 const navItems: NavItem[] = [
   { href: '/journey', label: 'Journey Map', icon: Map },
   { href: '/journey/ai-navigator', label: 'AI Navigator', icon: MessageCircle },
+  { href: '/journey/complete-the-picture', label: 'Complete the Picture', icon: ScanSearch, agent: 'feature_complete_the_picture' },
+  { href: '/journey/access-agent', label: 'Access Agent', icon: MapPin, agent: 'feature_access_agent' },
   { href: '/journey/documents', label: 'Documents', icon: FileText },
   { href: '/journey/timeline', label: 'Care Timeline', icon: Calendar },
   { href: '/journey/trials', label: 'Clinical Trial Matching', icon: FlaskConical },
@@ -39,7 +45,9 @@ export function JourneySidebar({ hasAdvocateAccess = false }: { hasAdvocateAcces
   return (
     <aside className="w-56 shrink-0 border-r border-slate-200 bg-white">
       <nav className="flex flex-col gap-1 p-4">
-        {navItems.map((item) => {
+        {navItems
+          .filter((item) => !item.agent || isFeatureEnabled(item.agent))
+          .map((item) => {
           const href = item.advocateOnly && !hasAdvocateAccess ? item.upgradeHref ?? item.href : item.href;
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
           const Icon = item.icon;

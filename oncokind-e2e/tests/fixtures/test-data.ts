@@ -134,11 +134,11 @@ export const newTemplateFooterColumnCount = newTemplateFooterColumnLabels.length
 // Homepage spotlight: six high-value cards, plus a See all features link.
 export const homepageFeatureCards = [
   { name: 'AI Cancer Profile & Care Map', href: '/#sample-demo' },
-  { name: 'First 72 Hours checklist', href: '/features/first-72-hours' },
   { name: 'Doctor Prep Sheet PDF', href: '/features/doctor-prep-sheet' },
+  { name: 'Complete the Picture', href: '/features/complete-the-picture' },
+  { name: 'Access Agent', href: '/features/access-agent' },
+  { name: 'First 72 Hours checklist', href: '/features/first-72-hours' },
   { name: 'Empathy Filter', href: '/features/empathy-filter' },
-  { name: 'Clinical Trial Matching', href: '/features/clinical-trial-matching' },
-  { name: 'Insurance Denial Defense', href: '/features/insurance-denial-defense' },
 ] as const;
 
 // Pricing (confirmed live). Advocate deliberately has no `plan` param below —
@@ -170,7 +170,7 @@ export const pricingTiers = {
   },
 } as const;
 
-export const pricingComparisonRowCount = 17;
+export const pricingComparisonRowCount = 20;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.
@@ -180,11 +180,15 @@ export const pricingFaqQuestions = [
   'What cancers does OncoKind support?',
   'Can I cancel anytime?',
   'Is there a discount for financial hardship?',
+  'Does OncoKind tell me which tests or treatments I need?',
+  'Will anyone contact my providers for me?',
 ] as const;
 
 // Homepage FAQ — a SEPARATE 5-question FAQ from the pricing page's FAQ.
 export const homepageFaqQuestions = [
   'Is this medical advice? Can I trust what OncoKind tells me?',
+  'Does OncoKind tell me which tests or treatments I need?',
+  'Will anyone contact my providers for me?',
   "What happens to my loved one's medical records after I upload them?",
   "I'm not very tech-savvy. Is this hard to use?",
   'My oncologist is very thorough. Do I really need this?',

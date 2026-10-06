@@ -1300,6 +1300,71 @@ export const LEARN_ARTICLES: LearnArticle[] = [
       },
     ],
   },
+  {
+    slug: 'biomarker-testing-questions-to-ask',
+    title: 'Biomarker testing: questions to ask your care team',
+    metaDescription:
+      'Plain-language questions about biomarker and genomic testing. Educational support, not medical advice. Guideline-informed.',
+    category: 'Biomarker Explainers',
+    excerpt: 'A calm list of questions families can bring when a report does not mention molecular testing.',
+    sections: [
+      {
+        heading: 'Why this conversation comes up',
+        paragraphs: [
+          'Pathology reports answer some questions and leave others open. Families often see a diagnosis and assume every relevant marker was already checked. That is not always true, and it is not something to guess about.',
+          'The useful move is to ask the care team whether biomarker or genomic testing is recommended for this type of cancer, and how results could affect options, including clinical trials.',
+        ],
+      },
+      {
+        heading: 'Questions worth writing down',
+        paragraphs: [
+          'Keep the questions short. You are not asking the internet to choose a test. You are asking the people who know the case.',
+        ],
+        bullets: [
+          'Was molecular or genomic testing ordered on this sample?',
+          'If it was ordered, when should we expect a patient copy of the report?',
+          'If it was not ordered, is it recommended for this situation, and who decides?',
+          'Is leftover tissue available if more testing is discussed later?',
+        ],
+      },
+      {
+        heading: 'Sources and review',
+        paragraphs: [
+          'This article is educational and guideline-informed. It is not a licensed guideline excerpt. Clinical reviewer: pending named reviewer. Review date: 2026-10-06. Next review due: 2027-01-06.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'travel-and-lodging-help-for-clinical-trials',
+    title: 'Help with travel and lodging for clinical trials',
+    metaDescription:
+      'How families can think about travel, lodging, and assistance programs when a trial or distant specialist is on the table.',
+    category: 'Caregiver Guides',
+    excerpt: 'Estimates, questions, and assistance programs. Not financial advice. No promised funds.',
+    sections: [
+      {
+        heading: 'Start with the practical picture',
+        paragraphs: [
+          'A trial site can look close on a map and still be expensive once visits, lodging, and missed work are counted. Write down the ZIP codes, the expected number of visits, and who would travel as a caregiver.',
+          'OncoKind Access Agent turns that into a range with every assumption visible. The range is an estimate only, not financial advice.',
+        ],
+      },
+      {
+        heading: 'Where help might exist',
+        paragraphs: [
+          'Some foundations and hospitals offer travel or lodging support. Programs change, and funding can pause. Always confirm on the organization site and treat last-verified dates as part of the record.',
+          'OncoKind does not receive payments or referral fees from programs. Sponsor-funded assistance is out of scope until compliance review.',
+        ],
+      },
+      {
+        heading: 'Sources and review',
+        paragraphs: [
+          'Educational overview for caregivers. Clinical reviewer: pending named reviewer. Review date: 2026-10-06. Next review due: 2027-01-06.',
+        ],
+      },
+    ],
+  },
 ];
 
 export function getLearnArticle(slug: string) {

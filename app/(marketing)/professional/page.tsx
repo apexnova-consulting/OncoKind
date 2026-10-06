@@ -97,6 +97,8 @@ export default function ProfessionalPage() {
                 'Multi-patient workflow support for advocates and care teams',
                 'Insurance denial defense and structured appeal packets',
                 'Branded outputs and batch-oriented document review',
+                'Multi-patient Complete the Picture view and branded question PDFs',
+                'Access Agent tracking across patients',
                 'Enterprise security review available upon request',
               ],
             },

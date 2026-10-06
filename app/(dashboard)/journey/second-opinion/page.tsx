@@ -70,9 +70,10 @@ export default async function SecondOpinionPage() {
           <div>
             <h1 className="font-heading text-2xl font-semibold text-accent">Second Opinion Mode</h1>
             <p className="mt-2 text-sm font-semibold text-slate-800">Doctor Prep Sheet</p>
-            <p className="mt-1 text-slate-600">
-              Prepare for your appointment: build a structured second opinion packet from your care data, with questions
-              to ask your doctor.
+            <p className="mt-3">
+              <Link href="/journey/access-agent" className="text-sm font-semibold text-[#0F6E56]">
+                Plan how to get there
+              </Link>
             </p>
           </div>
           <Button asChild variant="outline">
