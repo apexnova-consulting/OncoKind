@@ -23,7 +23,7 @@ export default function FeaturesHubPage() {
             Every tool, built for the family beside the patient.
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-[var(--color-text-secondary)]">
-            Start with the Cancer Profile and First 72 Hours checklist. Then use the rest of the
+            Start with the Cancer Profile, Complete the Picture, and Access Agent. Then use the rest of the
             toolkit as appointments, trials, insurance, and family conversations come up.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">

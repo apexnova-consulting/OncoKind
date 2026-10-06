@@ -178,6 +178,9 @@ export function SampleReportDemo() {
             <Link href="/signup">Upload Your Report. It&apos;s Free</Link>
           </Button>
           <Button asChild variant="outline">
+            <Link href="/features/complete-the-picture">See a Complete the Picture sample</Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link href="/features/doctor-prep-sheet">Learn How It Works</Link>
           </Button>
         </div>

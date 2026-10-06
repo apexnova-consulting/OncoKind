@@ -186,6 +186,13 @@ export function TrialsMatcher({
                       <a href={trial.url} target="_blank" rel="noopener noreferrer">View Trial</a>
                     </Button>
                   )}
+                  <Button asChild variant="outline">
+                    <Link
+                      href={`/journey/access-agent?destination=${encodeURIComponent(trial.title ?? 'trial site')}`}
+                    >
+                      Plan how to get there
+                    </Link>
+                  </Button>
                 </div>
               </article>
             ))}

@@ -19,11 +19,13 @@ import {
   Heart,
   Lock,
   MessageCircle,
+  ScanSearch,
   Shield,
   ShieldCheck,
   Sparkles,
   Upload,
   Users,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SampleReportDemo } from '@/components/marketing/SampleReportDemo';
@@ -35,6 +37,7 @@ import { cn } from '@/lib/utils';
 import {
   HOMEPAGE_HERO,
   HOMEPAGE_SPOTLIGHT_FEATURES,
+  numberToToolHeadline,
 } from '@/lib/pricing-config';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 
@@ -103,13 +106,20 @@ const steps = [
   },
   {
     n: '03',
+    title: 'Check for gaps',
+    desc: 'Complete the Picture shows what the uploaded reports mention, what they do not mention, and questions worth asking next. It does not tell you which test to order.',
+    icon: ScanSearch,
+    devNote: false,
+  },
+  {
+    n: '04',
     title: 'Get your Doctor Prep Sheet',
     desc: "A personalized list of questions based on your loved one's exact diagnosis, stage, and biomarkers. Organized by priority. PDF export is on Caregiver Pro.",
     icon: FileCheck,
     devNote: false,
   },
   {
-    n: '04',
+    n: '05',
     title: 'Navigate every step from here',
     desc: 'Track your care timeline, explore clinical trials, respond to insurance denials, find financial aid, and prepare for second opinions, all in one place.',
     icon: GitBranch,
@@ -131,12 +141,22 @@ const FEATURE_ICONS = {
   empathy_filter: Heart,
   first_72: Clock,
   family: Users,
+  complete_the_picture: ScanSearch,
+  access_agent: MapPin,
 } as const;
 
 const faqs = [
   {
     q: 'Is this medical advice? Can I trust what OncoKind tells me?',
-    a: "OncoKind is an educational preparation tool. It helps you understand what your loved one's report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is sourced from NCCN guidelines and NCI resources. Your oncology team remains your primary guide.",
+    a: "OncoKind is an educational preparation tool. It helps you understand what your loved one's report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is guideline-informed and sourced from public education materials such as NCI resources. Your oncology team remains your primary guide.",
+  },
+  {
+    q: 'Does OncoKind tell me which tests or treatments I need?',
+    a: 'No. OncoKind helps you prepare questions for your care team. Your care team decides what is right for you.',
+  },
+  {
+    q: 'Will anyone contact my providers for me?',
+    a: 'Only if you review and approve it first. Call for me is invite-only, process questions only, and does not speak patient information.',
   },
   {
     q: "What happens to my loved one's medical records after I upload them?",
@@ -499,11 +519,11 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               From report to ready, in minutes.
             </h2>
             <p className="mt-3 text-[1rem] text-[#5a6b68]">
-              Four steps. No medical background required.
+              Five steps. No medical background required.
             </p>
           </Reveal>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-5 lg:gap-5">
             {steps.map((step, i) => (
               <Reveal key={step.n} delay={i * 0.09}>
                 <div className="relative h-full hover-lift-card rounded-2xl border border-[#cdd8d5] bg-white p-7 shadow-sm">
@@ -557,11 +577,10 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">What OncoKind builds for you</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              The tools families reach for first.
+              {numberToToolHeadline(HOMEPAGE_SPOTLIGHT_FEATURES.length)}
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
-              Six high-value starting points, from the First 72 Hours checklist to trial matching
-              and insurance defense. Every feature exists because a caregiver needed it.
+              High-value starting points, including Complete the Picture and Access Agent. Every feature exists because a caregiver needed it.
             </p>
           </Reveal>
 

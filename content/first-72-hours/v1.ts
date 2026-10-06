@@ -62,7 +62,7 @@ export const FIRST_72_TASKS: First72Task[] = [
     script:
       'Has comprehensive biomarker or molecular testing been ordered on this sample? If not, who on the team can review whether it should be?',
     minutes: 10,
-    deepLink: '/journey',
+    deepLink: '/journey/complete-the-picture',
   },
   {
     id: 'appointment-prep',
@@ -146,6 +146,7 @@ export const FIRST_72_TASKS: First72Task[] = [
     script:
       'I am a caregiver for a close family member with a new cancer diagnosis. Can you share the process for medical leave or intermittent leave, including any forms the clinician would need to complete?',
     minutes: 20,
+    deepLink: '/journey/access-agent',
   },
   {
     id: 'financial-scan',
@@ -158,7 +159,7 @@ export const FIRST_72_TASKS: First72Task[] = [
       'Advocate Plan users can open the Live Financial Aid Tracker.',
     ],
     minutes: 15,
-    deepLink: '/journey/financial-help',
+    deepLink: '/journey/access-agent',
   },
   {
     id: 'support-roles',

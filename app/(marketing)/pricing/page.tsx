@@ -94,6 +94,14 @@ export default async function PricingPage() {
                 q: 'Is there a discount for financial hardship?',
                 a: "We never want cost to prevent a family from getting help. Email us at support@oncokind.com and we'll work with you.",
               },
+              {
+                q: 'Does OncoKind tell me which tests or treatments I need?',
+                a: 'No. OncoKind helps you prepare questions for your care team. Your care team decides what is right for you.',
+              },
+              {
+                q: 'Will anyone contact my providers for me?',
+                a: 'Only if you review and approve it first. Call for me is invite-only and does not speak patient information.',
+              },
             ].map(({ q, a }) => (
               <div key={q} className="rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-6">
                 <h3 className="font-semibold">{q}</h3>

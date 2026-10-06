@@ -8,6 +8,8 @@ const footerColumns = [
     links: [
       { href: '/#how-it-works', label: 'How It Works' },
       { href: '/features', label: 'Features' },
+      { href: '/features/complete-the-picture', label: 'Complete the Picture' },
+      { href: '/features/access-agent', label: 'Access Agent' },
       { href: '/pricing', label: 'Pricing' },
       { href: '/#sample-demo', label: 'Try Demo' },
       { href: '/community', label: 'Community' },

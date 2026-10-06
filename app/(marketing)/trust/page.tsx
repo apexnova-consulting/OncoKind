@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { MEDICAL_DISCLAIMER_TEXT, PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
 import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
 
-const lastReviewed = 'May 11, 2026';
+const lastReviewed = 'October 6, 2026';
 
 const collectedData = [
   {
@@ -26,6 +26,21 @@ const collectedData = [
     type: 'Appointment dates',
     what: 'Dates you optionally enter',
     why: 'To trigger your post-appointment check-in',
+  },
+  {
+    type: 'Income band (optional)',
+    what: 'A coarse household income range you may enter in Access Agent',
+    why: 'Only to check assistance program eligibility. Field-encrypted. Not sent to analytics. Deletable.',
+  },
+  {
+    type: 'Call records (beta)',
+    what: 'Structured summaries of approved Call for me process calls',
+    why: 'To show you what was asked and answered. Raw audio is not retained in v1.',
+  },
+  {
+    type: 'Family graph',
+    what: 'Relative invites and claimed seats you choose to add',
+    why: 'To support Family sharing and genetic counseling prep conversations',
   },
 ];
 
@@ -54,6 +69,16 @@ const subprocessors = [
     service: 'Stripe',
     purpose: 'Subscription billing and payment processing',
     data: 'Payment information handled within Stripe checkout flows',
+  },
+  {
+    service: 'Maps distance (optional, when configured)',
+    purpose: 'Travel time and distance for Access Agent estimates',
+    data: 'Origin and destination points only. No names or diagnoses.',
+  },
+  {
+    service: 'Voice vendor (not production until counsel approves)',
+    purpose: 'Invite-only Call for me process questions',
+    data: 'No patient name, date of birth, or diagnosis. Scripted process questions only.',
   },
 ];
 
@@ -189,6 +214,35 @@ export default function TrustPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
+          <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">
+            How Complete the Picture, Access Agent, and Call for me work
+          </h2>
+          <div className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
+            <p>
+              These are guided workflows with typed tools, deterministic rules, and a language model used only
+              for extraction and rewording. A person approves every outbound step. They do not diagnose or choose treatment.
+            </p>
+            <p>
+              We remove names and other identifying details before analysis. The token map stays in your account
+              storage, encrypted, and is used only to put names back in your own view and in letters you generate.
+            </p>
+            <p>
+              Nothing is emailed, printed as a sent letter, or called until you review the exact script or letter
+              and approve it. Call for me never speaks a patient name, date of birth, or diagnosis. Recording is off.
+              Raw audio is not retained.
+            </p>
+            <p>
+              No lab, pharma, or program funding may affect what is shown, ranked, or suggested. No referral fees.
+              No ads. No data sales.
+            </p>
+            <p>
+              Draft wording pending counsel review. Production flags stay off until clinical, legal, and security
+              gates in the Agents brief are recorded.
+            </p>
           </div>
         </section>
 
