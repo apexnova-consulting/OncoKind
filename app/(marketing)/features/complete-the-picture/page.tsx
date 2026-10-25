@@ -1,19 +1,13 @@
-import type { Metadata } from 'next';
 import { FeatureDetailPage } from '@/components/marketing/FeatureDetailPage';
-import { SITE_ORIGIN } from '@/lib/pricing-config';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Complete the Picture',
   description:
     'See what your report says, what it does not mention, and the questions worth asking next. Educational support, not medical advice.',
-  alternates: { canonical: `${SITE_ORIGIN}/features/complete-the-picture` },
-  openGraph: {
-    title: 'Complete the Picture',
-    description: 'Questions for your care team based on what is and is not mentioned in uploaded reports.',
-    url: `${SITE_ORIGIN}/features/complete-the-picture`,
-    images: [{ url: `${SITE_ORIGIN}/og-home.png`, width: 1200, height: 630, alt: 'OncoKind Complete the Picture' }],
-  },
-};
+  path: '/features/complete-the-picture',
+  imageAlt: 'OncoKind Complete the Picture',
+});
 
 export default function CompleteThePictureFeaturePage() {
   return (
@@ -47,7 +41,7 @@ export default function CompleteThePictureFeaturePage() {
           title: 'What it will not do',
           paragraphs: [
             'It will not say you are missing a test. It will not say you need a drug. Your care team decides what is right for you.',
-            'Rules are guideline-informed educational prompts pending written licensing confirmation. Clinical review is required before production flags turn on.',
+            'Questions are guideline-informed and educational. They help you prepare for the appointment. They are not a test order and not a treatment plan.',
           ],
         },
         {

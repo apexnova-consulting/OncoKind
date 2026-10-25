@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   ScanSearch,
   MapPin,
+  Heart,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isFeatureEnabled } from '@/lib/feature-flags';
@@ -31,6 +32,7 @@ const navItems: NavItem[] = [
   { href: '/journey/ai-navigator', label: 'AI Navigator', icon: MessageCircle },
   { href: '/journey/complete-the-picture', label: 'Complete the Picture', icon: ScanSearch, agent: 'feature_complete_the_picture' },
   { href: '/journey/access-agent', label: 'Access Agent', icon: MapPin, agent: 'feature_access_agent' },
+  { href: '/journey/concierge', label: 'Concierge case', icon: Heart },
   { href: '/journey/documents', label: 'Documents', icon: FileText },
   { href: '/journey/timeline', label: 'Care Timeline', icon: Calendar },
   { href: '/journey/trials', label: 'Clinical Trial Matching', icon: FlaskConical },

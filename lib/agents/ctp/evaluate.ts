@@ -41,6 +41,7 @@ export function evaluateCtpRules(input: {
   reportText: string;
   extraction: ExtractedReport;
   cancerType?: string | null;
+  reducedMode?: boolean;
 }): RuleEvaluation[] {
   const cancerType = normalizeCancerType(input.cancerType || input.extraction.cancer_type);
   const applicable = CTP_RULES.filter((rule) => rule.cancer_type === cancerType);
@@ -65,11 +66,17 @@ export function evaluateCtpRules(input: {
 
   return applicable.map((rule) => {
     const found = mentioned(rule.aliases, input.reportText, input.extraction);
+    const reduced = input.reducedMode;
+    const status: RuleFindingStatus = found
+      ? 'found'
+      : reduced
+        ? 'ask_whether_recommended'
+        : 'not_found_in_uploaded';
     return {
       rule_id: rule.rule_id,
       version: rule.version,
       item: rule.item,
-      status: found ? 'found' : 'not_found_in_uploaded',
+      status,
       ask_whether_recommended: found
         ? `This item is mentioned in what you uploaded. You may still ask your care team how it fits the plan.`
         : rule.ask_whether_recommended,

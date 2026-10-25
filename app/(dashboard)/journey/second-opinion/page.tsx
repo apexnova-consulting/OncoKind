@@ -4,6 +4,7 @@ import { getPatientReport } from '@/lib/patient-reports';
 import { Button } from '@/components/ui/button';
 import { SecondOpinionPacket } from '@/components/care/SecondOpinionPacket';
 import { getProfile } from '@/lib/auth';
+import { HandleThisPrompt } from '@/components/concierge/HandleThisPrompt';
 
 type TimelineItem = {
   title: string;
@@ -75,6 +76,9 @@ export default async function SecondOpinionPage() {
                 Plan how to get there
               </Link>
             </p>
+            <div className="mt-4 max-w-xl">
+              <HandleThisPrompt entryPoint="second_opinion" />
+            </div>
           </div>
           <Button asChild variant="outline">
             <Link href="/journey/timeline">Open Care Timeline</Link>

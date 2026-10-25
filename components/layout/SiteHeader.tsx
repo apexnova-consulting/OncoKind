@@ -14,14 +14,12 @@ export async function SiteHeader() {
   const user = session?.user ?? null;
 
   const navLinks = [
-    { href: '/features', label: 'Features' },
+    { href: '/features', label: 'Tools' },
+    ...(isFeatureEnabled('concierge_public_pages') ? [{ href: '/concierge', label: 'Concierge' }] : []),
+    { href: '/professional', label: 'For organizations' },
     { href: '/pricing', label: 'Pricing' },
-    ...(isFeatureEnabled('feature_first_72_hours')
-      ? [{ href: '/first-72-hours', label: 'First 72' }]
-      : []),
-    { href: '/professional', label: 'Professionals' },
-    { href: '/community', label: 'Community' },
-    { href: '/learn', label: 'Resources' },
+    { href: '/learn', label: 'Learn' },
+    { href: '/trust', label: 'Trust' },
   ];
 
   return (

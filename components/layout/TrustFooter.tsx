@@ -6,14 +6,14 @@ const footerColumns = [
   {
     heading: 'Product',
     links: [
-      { href: '/#how-it-works', label: 'How It Works' },
-      { href: '/features', label: 'Features' },
-      { href: '/features/complete-the-picture', label: 'Complete the Picture' },
-      { href: '/features/access-agent', label: 'Access Agent' },
+      { href: '/features', label: 'Tools' },
+      { href: '/concierge', label: 'Concierge' },
+      { href: '/professional', label: 'For organizations' },
       { href: '/pricing', label: 'Pricing' },
-      { href: '/#sample-demo', label: 'Try Demo' },
-      { href: '/community', label: 'Community' },
-      { href: '/learn', label: 'Resources' },
+      { href: '/learn', label: 'Learn' },
+      { href: '/trust', label: 'Trust' },
+      { href: 'mailto:support@oncokind.com', label: 'Contact', external: true },
+      { href: 'https://calendly.com/oncokind-support', label: 'Book a Demo', external: true },
     ],
   },
   {

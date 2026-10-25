@@ -46,7 +46,7 @@ export const FIRST_72_TASKS: First72Task[] = [
     script:
       'Hello, I am the family caregiver. I need a patient copy of the pathology report, recent imaging, and the latest clinic note. Can you tell me how to request those today?',
     minutes: 15,
-    deepLink: '/journey',
+    deepLink: '/concierge/start',
   },
   {
     id: 'biomarker-status',
@@ -118,7 +118,7 @@ export const FIRST_72_TASKS: First72Task[] = [
       'Use Second Opinion Mode if you want a structured packet.',
     ],
     minutes: 15,
-    deepLink: '/journey/second-opinion',
+    deepLink: '/concierge/start',
   },
   {
     id: 'trial-screen',

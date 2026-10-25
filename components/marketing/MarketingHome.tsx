@@ -62,7 +62,7 @@ const stats = [
   },
   {
     figure: '80%+',
-    desc: 'of appealed prior authorization denials are ultimately overturned, proving initial denials are often unjust.',
+    desc: 'In Medicare Advantage, more than 80 percent of appealed prior authorization denials were overturned in the cited KFF brief.',
     sourceName: 'Kaiser Family Foundation (2024)',
     sourceUrl:
       'https://www.kff.org/medicare/issue-brief/over-4-million-medicare-advantage-prior-authorization-requests-were-denied-in-2024/',
@@ -82,7 +82,6 @@ const testimonials = [
 ];
 
 const sourceBadges = [
-  'NCCN Clinical Guidelines',
   'NCI (cancer.gov)',
   'JCO Oncology Practice',
   'Oncology Social Workers',
@@ -143,6 +142,7 @@ const FEATURE_ICONS = {
   family: Users,
   complete_the_picture: ScanSearch,
   access_agent: MapPin,
+  concierge: Heart,
 } as const;
 
 const faqs = [
@@ -156,7 +156,7 @@ const faqs = [
   },
   {
     q: 'Will anyone contact my providers for me?',
-    a: 'Only if you review and approve it first. Call for me is invite-only, process questions only, and does not speak patient information.',
+    a: 'OncoKind Concierge can collect records and follow up with intake offices after you authorize it. A person approves every outbound step. Tools stay self-serve unless you start a Concierge case.',
   },
   {
     q: "What happens to my loved one's medical records after I upload them?",
@@ -344,6 +344,19 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                     </Button>
                   </>
                 )}
+              </div>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <Link href="/features" className="rounded-2xl border border-[#cdd8d5] bg-white p-4 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">Tools</p>
+                  <p className="mt-1 font-semibold text-[#1e2d2b]">Understand and prepare on your own</p>
+                  <p className="mt-1 text-sm text-[#5a6b68]">Self-serve software. Free to start.</p>
+                </Link>
+                <Link href="/concierge" className="rounded-2xl border border-[#cdd8d5] bg-white p-4 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">Concierge</p>
+                  <p className="mt-1 font-semibold text-[#1e2d2b]">Let our team handle it</p>
+                  <p className="mt-1 text-sm text-[#5a6b68]">Records, forms, and follow-up until Case Ready.</p>
+                </Link>
               </div>
 
               {/* Trust micro-copy */}
@@ -580,7 +593,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               {numberToToolHeadline(HOMEPAGE_SPOTLIGHT_FEATURES.length)}
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
-              High-value starting points, including Complete the Picture and Access Agent. Every feature exists because a caregiver needed it.
+              Every live tool, from the same catalog as the Tools page. Nothing is dropped from this grid by accident.
             </p>
           </Reveal>
 
@@ -734,8 +747,8 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               Let us handle the complexity.
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-white/85 text-[1.05rem] leading-[1.75]">
-              Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock
-              Doctor Prep Sheet PDFs, full trial matching, insurance appeals, and KindAuth for care teams.
+              Upload your first report free and get your Cancer Profile in minutes. Or start Concierge
+              and let our team handle the records, forms, and follow-up.
             </p>
           </Reveal>
 

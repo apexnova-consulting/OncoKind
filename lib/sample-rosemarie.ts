@@ -1,10 +1,10 @@
 export const ROSEMARIE_SAMPLE = {
-  patientName: 'Rosemarie N.',
+  patientName: 'Jordan Hale',
   cancerType: 'Vulvar Squamous Cell Carcinoma (VSCC)',
   cancerTypeShort: 'Vulvar squamous cell carcinoma',
   stage: 'Stage IV',
   nextMilestone: 'First oncology appointment',
-  illustrationNote: 'Based on Rosemarie N. For educational illustration only.',
+  illustrationNote: 'Fictional sample. For educational illustration only.',
   hpv: {
     label: 'HPV Status: Positive (p16+)',
     value: 'Positive (p16+)',

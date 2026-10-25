@@ -38,8 +38,9 @@ export const CTP_RULES_META = {
   version: '1.0.0',
   intended_use:
     'Educational question preparation for adult caregivers. Not clinical decision support and not a device that recommends tests or treatments.',
-  language: 'guideline-informed pending written licensing confirmation',
-} as const;
+  language: 'guideline-informed educational prompts',
+  clinical_review_status: 'pending_sign_off' as 'pending_sign_off' | 'signed_off',
+};
 
 const REVIEW = {
   clinical_reviewer: 'Pending named clinical reviewer',

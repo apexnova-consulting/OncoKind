@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { MedicalDisclaimer, OutputSources } from '@/components/disclosures/OutputDisclosures';
 import { getClinicalTrialSources } from '@/lib/disclosures';
 import { track } from '@/lib/analytics';
+import { HandleThisPrompt } from '@/components/concierge/HandleThisPrompt';
 
 type Tier = 'free' | 'pro' | 'professional';
 
@@ -193,6 +194,7 @@ export function TrialsMatcher({
                       Plan how to get there
                     </Link>
                   </Button>
+                  <HandleThisPrompt entryPoint="trials" centerName={trial.title} />
                 </div>
               </article>
             ))}

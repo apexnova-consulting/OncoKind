@@ -16,7 +16,19 @@ export type FunnelEvent =
   | 'subscription_started'
   | 'demo_booked_click'
   | 'professional_page_view'
-  | 'prior_auth_pro_view';
+  | 'prior_auth_pro_view'
+  | 'concierge_page_viewed'
+  | 'concierge_checkout_started'
+  | 'concierge_purchased'
+  | 'intake_started'
+  | 'intake_completed'
+  | 'authorization_signed'
+  | 'case_submission_ready'
+  | 'case_ready'
+  | 'survey_completed'
+  | 'handle_this_prompt_viewed'
+  | 'handle_this_prompt_clicked'
+  | 'pmf_survey_shown';
 
 type Attribution = Partial<Record<(typeof UTM_KEYS)[number], string>>;
 

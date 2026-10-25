@@ -4,6 +4,7 @@ import { evaluateCtpRules, summarizeCtp } from '@/lib/agents/ctp/evaluate';
 import { assertSafeAgentOutput, containsCrisisLanguage, REDACTION_USER_NOTE } from '@/lib/agents/safety';
 import { isPediatricProfile, PEDIATRIC_MESSAGE } from '@/lib/agents/ctp/pediatric';
 import { createIdempotencyKey } from '@/lib/agents/runtime';
+import { isCtpReducedMode } from '@/lib/feature-flags';
 
 export type CtpPipelineInput = {
   reportText: string;
@@ -32,6 +33,7 @@ export function runCompleteThePicture(input: CtpPipelineInput) {
     reportText: redaction.redactedText,
     extraction,
     cancerType: input.cancerType || extraction.cancer_type,
+    reducedMode: isCtpReducedMode(),
   });
   const summary = summarizeCtp(evaluations);
 

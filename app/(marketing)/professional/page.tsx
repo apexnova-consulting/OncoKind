@@ -1,22 +1,15 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { TrackedCalendlyLink } from '@/components/analytics/TrackedCalendlyLink';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'OncoKind for care navigators and patient advocates',
+export const metadata = pageMetadata({
+  title: 'OncoKind for organizations',
   description:
-    'Professional KindAuth workflows for patient advocates, care navigators, and clinical teams. HIPAA BAA available on request.',
-  alternates: { canonical: 'https://www.oncokind.com/professional' },
-  openGraph: {
-    title: 'OncoKind for care navigators and patient advocates',
-    description:
-      'Professional KindAuth workflows for patient advocates, care navigators, and clinical teams.',
-    url: 'https://www.oncokind.com/professional',
-    images: [{ url: 'https://www.oncokind.com/og-home.png', width: 1200, height: 630, alt: 'OncoKind Professional' }],
-  },
-};
+    'Advocate workspace for patient advocates and care teams. HIPAA BAA available on request. Partner with us for sponsored Concierge cases.',
+  path: '/professional',
+});
 
 const useCases = [
   'Independent advocates',
@@ -48,39 +41,20 @@ export default function ProfessionalPage() {
           </div>
         </section>
 
-        {/* KindAuth Prior Auth Engine — flagship Professional feature */}
         <section className="rounded-[var(--radius-xl)] bg-[#1C2B2D] p-8 sm:p-10">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#6B8F71]/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#6B8F71]">
-                New. Included in Professional
+                Included in Professional
               </p>
               <h2 className="font-display text-3xl font-semibold text-white">
-                KindAuth Pro
+                Advocate workspace
               </h2>
               <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-300">
-                For care teams: draft prior authorization requests, step-therapy exception letters
-                with state statute citations, and continued-stay appeals in minutes.
+                Support many families at once with multi-patient Cancer Profile and Complete the Picture views, branded PDFs, and case tracking. HIPAA BAA available on request.
               </p>
-              <ul className="mt-4 space-y-1.5 text-sm text-slate-300">
-                {[
-                  'Prior Authorization Request generator',
-                  'Step Therapy Exception: cites your state\'s reform law by statute',
-                  'Continued Stay / Medical Necessity Defense',
-                  'Denial Letter Analyzer: plain-English breakdown + appeal strategy',
-                  'Outcome tracking: approved / denied / on appeal',
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <span className="mt-0.5 text-[#6B8F71]">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
             </div>
             <div className="flex shrink-0 flex-col gap-3">
-              <Button asChild className="bg-[#6B8F71] text-white hover:bg-[#5a7a60]">
-                <Link href="/prior-auth-pro">See Full Details →</Link>
-              </Button>
               <Button asChild className="border border-slate-600 bg-transparent text-white hover:bg-white/10">
                 <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
               </Button>
@@ -93,12 +67,12 @@ export default function ProfessionalPage() {
             {
               title: 'What the Professional tier provides',
               bullets: [
-                'KindAuth Pro: all three document types',
                 'Multi-patient workflow support for advocates and care teams',
-                'Insurance denial defense and structured appeal packets',
+                'Insurance denial defense as an add-on path',
                 'Branded outputs and batch-oriented document review',
                 'Multi-patient Complete the Picture view and branded question PDFs',
                 'Access Agent tracking across patients',
+                'Sponsored Concierge cases for foundations and employers, counts only, no PHI',
                 'Enterprise security review available upon request',
               ],
             },
@@ -142,9 +116,12 @@ export default function ProfessionalPage() {
               </div>
             ))}
           </div>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
               <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/concierge/hardship">Partner with us</Link>
             </Button>
           </div>
         </section>

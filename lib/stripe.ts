@@ -25,6 +25,30 @@ export async function getStripeCustomerPortalUrl(
   return session.url ?? '';
 }
 
+export function createOneTimeCheckoutSession(params: {
+  customerId?: string;
+  customerEmail?: string;
+  successUrl: string;
+  cancelUrl: string;
+  priceId: string;
+  userId?: string;
+  metadata?: Record<string, string>;
+}) {
+  const metadata = {
+    ...(params.userId ? { supabase_user_id: params.userId } : {}),
+    plan_key: 'concierge',
+    ...(params.metadata ?? {}),
+  };
+  return getStripeClient().checkout.sessions.create({
+    mode: 'payment',
+    ...(params.customerId ? { customer: params.customerId } : { customer_email: params.customerEmail }),
+    line_items: [{ price: params.priceId, quantity: 1 }],
+    success_url: params.successUrl,
+    cancel_url: params.cancelUrl,
+    metadata,
+  });
+}
+
 export function createCheckoutSession(params: {
   customerId?: string;
   customerEmail?: string;

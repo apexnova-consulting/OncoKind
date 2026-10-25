@@ -83,7 +83,7 @@ export const PLANS = {
     cadenceYearly: '/year',
     cta: 'Start Professional',
     signupHref: '/signup?plan=professional',
-    badge: 'KindAuth for care teams',
+    badge: 'Advocate workspace for care teams',
   },
   enterprise: {
     id: 'enterprise' as const,
@@ -123,9 +123,9 @@ export const ADVOCATE_FEATURES = [
 
 export const PROFESSIONAL_FEATURES = [
   'Everything in Advocate Plan',
-  'KindAuth prior authorization engine',
-  'Multi-patient dashboard',
-  'Batch document analysis',
+  'Advocate workspace with multi-patient views',
+  'Branded PDFs and case tracking',
+  'Partner path for sponsored Concierge cases',
   'HIPAA BAA available on request',
 ];
 
@@ -271,24 +271,24 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     homepage: {
       href: '/features/insurance-denial-defense',
       desc: 'Decode denial letters and generate a structured appeal packet.',
-      tag: 'Advocate Plan',
+      tag: 'Add-on',
       consumerGrid: true,
       spotlight: true,
     },
     cells: {
       free: 'Not included',
-      caregiver: 'Not included',
+      caregiver: 'Add-on',
       advocate: 'Included',
       professional: 'Included',
     },
   },
   {
     id: 'financial_aid',
-    name: 'Live Financial Aid Tracker',
+    name: 'Travel and lodging assistance tracker',
     homepage: {
       href: '/journey/financial-help',
-      desc: 'Live matching to co-pay programs and foundation grants.',
-      tag: 'Advocate Plan',
+      desc: 'Track trial and treatment travel, lodging, and caregiver cost help. Copay funds: use FundFinder.',
+      tag: 'Add-on',
       consumerGrid: true,
     },
     cells: {
@@ -366,22 +366,6 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     },
   },
   {
-    id: 'voice_call_for_me',
-    name: 'Call for me (beta, invite only)',
-    homepage: {
-      href: '/voice-beta',
-      desc: 'A scoped, user-approved phone tool for process questions. No patient information on calls.',
-      tag: 'Invite only',
-      consumerGrid: true,
-    },
-    cells: {
-      free: 'Not included',
-      caregiver: 'Not included',
-      advocate: 'Metered beta',
-      professional: 'Metered beta',
-    },
-  },
-  {
     id: 'first_72',
     name: 'First 72 Hours checklist',
     homepage: {
@@ -415,13 +399,19 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     },
   },
   {
-    id: 'kindauth',
-    name: 'KindAuth',
+    id: 'concierge',
+    name: 'OncoKind Concierge',
+    homepage: {
+      href: '/concierge',
+      desc: 'We collect records, submit the intake packet to the center you choose, and track it until you are Case Ready.',
+      tag: 'Per case',
+      consumerGrid: true,
+    },
     cells: {
-      free: 'Not included',
-      caregiver: 'Not included',
-      advocate: 'Not included',
-      professional: 'Included',
+      free: 'Per case',
+      caregiver: 'Per case, includes 60 days of Caregiver Pro',
+      advocate: 'Per case',
+      professional: 'Sponsored cases for partners',
     },
   },
   {
@@ -452,34 +442,25 @@ export const CONSUMER_HOMEPAGE_FEATURES = CATALOG_FEATURES.filter(
 
 export const FEATURE_HUB_FEATURES = CATALOG_FEATURES.filter((feature) => feature.homepage);
 
-export const HOMEPAGE_SPOTLIGHT_IDS = [
-  'cancer_profile',
-  'doctor_prep',
-  'complete_the_picture',
-  'access_agent',
-  'first_72',
-  'empathy_filter',
-] as const;
+export const HOMEPAGE_SPOTLIGHT_IDS = FEATURE_HUB_FEATURES.map((feature) => feature.id);
 
-export const HOMEPAGE_SPOTLIGHT_FEATURES = HOMEPAGE_SPOTLIGHT_IDS.map(
-  (id) => CATALOG_FEATURES.find((feature) => feature.id === id)!
-).filter((feature) => feature.homepage?.spotlight);
+export const HOMEPAGE_SPOTLIGHT_FEATURES = FEATURE_HUB_FEATURES;
 
-export const HOMEPAGE_TOOL_COUNT = HOMEPAGE_SPOTLIGHT_FEATURES.length;
+export const HOMEPAGE_TOOL_COUNT = FEATURE_HUB_FEATURES.length;
 
 export const HOMEPAGE_HERO = {
   title: 'You should not have to understand oncology to advocate for someone you love.',
   subtitle:
-    'Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock Doctor Prep Sheet PDFs, full trial matching, insurance appeals, and more.',
+    'Understand and prepare on your own with our tools, or let our team handle the records, forms, and follow-up.',
   cta: 'Upload your first report. It is free.',
   paidUnlock:
-    'Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, and full trial matching. Advocate Plan ($49/mo) adds Insurance Denial Defense and the Live Financial Aid Tracker. KindAuth is on Professional.',
+    'Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, and full trial matching. Advocate Plan ($49/mo) adds Insurance Denial Defense as an add-on path. Concierge is priced per case and includes 60 days of Caregiver Pro.',
 };
 
 export const PRICING_PAGE = {
   title: 'Simple, transparent pricing for the hardest journey.',
   description:
-    'Free, Caregiver Pro at $39/month or $390/year, Advocate Plan at $49/month or $490/year, and Professional at $999/month. Yearly billing is 10 months. No credit card required to start.',
+    'Tools: Free, Caregiver Pro at $39/month or $390/year, Advocate Plan at $49/month or $490/year, and Professional at $999/month. Concierge is priced per case. Yearly billing is 10 months. No credit card required to start Tools.',
 };
 
 export function yearlyAmountCents(monthlyCents: number): number {
