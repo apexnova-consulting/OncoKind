@@ -1301,6 +1301,35 @@ export const LEARN_ARTICLES: LearnArticle[] = [
     ],
   },
   {
+    slug: 'how-to-get-your-records-for-a-second-opinion',
+    title: 'How to get your records for a second opinion',
+    metaDescription:
+      'A calm walkthrough for requesting pathology, imaging, and clinic notes when a family wants a second opinion. Educational support, not medical advice.',
+    category: 'Caregiver Guides',
+    excerpt: 'Who to call, what to ask for, and how OncoKind Concierge can handle the paperwork if you want help.',
+    sections: [
+      {
+        heading: 'Start with a patient copy',
+        paragraphs: [
+          'Ask medical records or the patient portal for a patient copy of the pathology report, recent imaging, and the latest clinic note. A transfer to another office is useful, but a copy you can hold helps every later step.',
+          'You do not need a diagnosis recap to make this request. Names, dates, and the facility are enough to start.',
+        ],
+      },
+      {
+        heading: 'If the process feels heavy',
+        paragraphs: [
+          'OncoKind Concierge can collect records and submit the packet to the center you choose after you authorize it. We do not interpret results. Hospitals set their own timelines.',
+        ],
+      },
+      {
+        heading: 'Review',
+        paragraphs: [
+          'Educational overview. Reviewer: OncoKind content ops. Review date: 2026-10-25.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'biomarker-testing-questions-to-ask',
     title: 'Biomarker testing: questions to ask your care team',
     metaDescription:

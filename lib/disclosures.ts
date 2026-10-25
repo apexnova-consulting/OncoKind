@@ -15,8 +15,6 @@ export const PROFESSIONAL_HIPAA_NOTE =
 export const APPOINTMENT_EXPLANATION_NOTE =
   'Explanation based on established oncology literature. Verify specifics with your care team.';
 
-const DEFAULT_NCCN_VERSION =
-  process.env.NEXT_PUBLIC_NCCN_GUIDELINES_VERSION ?? '2.2026 (reviewed October 2026)';
 const DEFAULT_TRIALS_VERIFIED_AT =
   process.env.NEXT_PUBLIC_CLINICAL_TRIALS_LAST_VERIFIED_AT ?? new Date().toISOString();
 
@@ -45,11 +43,8 @@ export function formatLongDate(value: string | Date) {
   }).format(date);
 }
 
-export function getCancerProfileSources(cancerType?: string) {
-  const label = cancerType?.trim() || 'Relevant cancer type';
-
+export function getCancerProfileSources(_cancerType?: string) {
   return [
-    `NCCN Clinical Practice Guidelines in Oncology. ${label}. Version ${DEFAULT_NCCN_VERSION}`,
     'National Cancer Institute (cancer.gov)',
     `Accessed: ${formatMonthYear(new Date())}`,
     APPOINTMENT_EXPLANATION_NOTE,

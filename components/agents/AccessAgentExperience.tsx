@@ -6,6 +6,7 @@ import { formatCentsRange, type CostEstimate } from '@/lib/agents/access/estimat
 import type { ProgramMatch } from '@/lib/agents/access/match';
 import { APPLICATION_STATUSES, type ApplicationStatus } from '@/lib/agents/access/match';
 import { EDUCATIONAL_DISCLAIMER } from '@/lib/agents/safety';
+import { HandleThisPrompt } from '@/components/concierge/HandleThisPrompt';
 
 export function AccessAgentExperience() {
   const [homeZip, setHomeZip] = useState('');
@@ -155,6 +156,14 @@ export function AccessAgentExperience() {
         </article>
       ))}
       <p className="text-xs text-slate-500">{EDUCATIONAL_DISCLAIMER}</p>
+      <p className="text-sm">
+        Copay help lives on{' '}
+        <a className="font-semibold text-[#0F6E56]" href="https://fundfinder.panfoundation.org/" target="_blank" rel="noreferrer">
+          FundFinder
+        </a>
+        . We do not duplicate that tracker.
+      </p>
+      <HandleThisPrompt entryPoint="access_agent" />
     </div>
   );
 }

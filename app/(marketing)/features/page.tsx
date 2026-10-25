@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, FileText, Shield } from 'lucide-react';
-import { FEATURE_HUB_FEATURES } from '@/lib/pricing-config';
+import { FEATURE_HUB_FEATURES, HOMEPAGE_TOOL_COUNT } from '@/lib/pricing-config';
 import { FEATURE_CATALOG_ICONS } from '@/components/marketing/FeatureCatalogIcons';
 import { Button } from '@/components/ui/button';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'OncoKind Features',
+export const metadata = pageMetadata({
+  title: 'OncoKind Tools',
   description:
     'Explore the full OncoKind toolkit: Cancer Profile, First 72 Hours, Doctor Prep Sheets, trial matching, insurance defense, Family tree, Empathy Filter, and more.',
-};
+  path: '/features',
+});
 
 export default function FeaturesHubPage() {
   return (
@@ -23,8 +24,8 @@ export default function FeaturesHubPage() {
             Every tool, built for the family beside the patient.
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-[var(--color-text-secondary)]">
-            Start with the Cancer Profile, Complete the Picture, and Access Agent. Then use the rest of the
-            toolkit as appointments, trials, insurance, and family conversations come up.
+            Start with the Cancer Profile, Complete the Picture, and Access Agent. This page lists the same{' '}
+            {HOMEPAGE_TOOL_COUNT} tools as the homepage grid.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild>
@@ -73,10 +74,10 @@ export default function FeaturesHubPage() {
                 <Shield className="h-4 w-4" aria-hidden />
                 Professional
               </p>
-              <h2 className="mt-3 font-display text-3xl font-semibold">KindAuth for care teams</h2>
+              <h2 className="mt-3 font-display text-3xl font-semibold">Advocate workspace for care teams</h2>
               <p className="mt-3 text-base leading-relaxed text-white/80">
-                Draft prior authorization requests, step-therapy exceptions, and continued-stay
-                letters. KindAuth is included on the Professional plan.
+                Multi-patient views, branded PDFs, and a partner path for sponsored Concierge cases.
+                HIPAA BAA available on request.
               </p>
             </div>
             <Button asChild className="shrink-0">

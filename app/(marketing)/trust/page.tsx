@@ -76,9 +76,9 @@ const subprocessors = [
     data: 'Origin and destination points only. No names or diagnoses.',
   },
   {
-    service: 'Voice vendor (not production until counsel approves)',
-    purpose: 'Invite-only Call for me process questions',
-    data: 'No patient name, date of birth, or diagnosis. Scripted process questions only.',
+    service: 'Fax, print, and e-sign vendors',
+    purpose: 'Records requests and authorization packets for Concierge, when those vendors are contracted',
+    data: 'Only the minimum needed to send an approved request. BAAs required before production use.',
   },
 ];
 
@@ -219,7 +219,7 @@ export default function TrustPage() {
 
         <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
           <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">
-            How Complete the Picture, Access Agent, and Call for me work
+            How Complete the Picture, Access Agent, and Concierge work
           </h2>
           <div className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
             <p>
@@ -232,16 +232,16 @@ export default function TrustPage() {
             </p>
             <p>
               Nothing is emailed, printed as a sent letter, or called until you review the exact script or letter
-              and approve it. Call for me never speaks a patient name, date of birth, or diagnosis. Recording is off.
-              Raw audio is not retained.
+              and approve it. Coordinators see only assigned Concierge cases. Document opens are logged. You can
+              revoke an authorization, which stops outstanding records requests.
             </p>
             <p>
               No lab, pharma, or program funding may affect what is shown, ranked, or suggested. No referral fees.
               No ads. No data sales.
             </p>
             <p>
-              Draft wording pending counsel review. Production flags stay off until clinical, legal, and security
-              gates in the Agents brief are recorded.
+              Final privacy, authorization, and refund wording is supplied by counsel. This page describes the
+              system as built.
             </p>
           </div>
         </section>

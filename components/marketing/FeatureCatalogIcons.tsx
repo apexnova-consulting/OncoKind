@@ -34,4 +34,5 @@ export const FEATURE_CATALOG_ICONS = {
   complete_the_picture: ScanSearch,
   access_agent: MapPin,
   voice_call_for_me: Phone,
+  concierge: Heart,
 } as const;

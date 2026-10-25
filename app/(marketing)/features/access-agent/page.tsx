@@ -1,18 +1,12 @@
-import type { Metadata } from 'next';
 import { FeatureDetailPage } from '@/components/marketing/FeatureDetailPage';
-import { SITE_ORIGIN } from '@/lib/pricing-config';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Access Agent',
   description: 'Find out what getting to a trial or specialist may really cost, and where to look for help.',
-  alternates: { canonical: `${SITE_ORIGIN}/features/access-agent` },
-  openGraph: {
-    title: 'Access Agent',
-    description: 'Cost ranges, verified assistance programs, and application tracking. Estimate only, not financial advice.',
-    url: `${SITE_ORIGIN}/features/access-agent`,
-    images: [{ url: `${SITE_ORIGIN}/og-home.png`, width: 1200, height: 630, alt: 'OncoKind Access Agent' }],
-  },
-};
+  path: '/features/access-agent',
+  imageAlt: 'OncoKind Access Agent',
+});
 
 export default function AccessAgentFeaturePage() {
   return (
@@ -42,15 +36,15 @@ export default function AccessAgentFeaturePage() {
           ],
         },
         {
-          title: 'Programs we own as an asset',
+          title: 'Programs we show',
           paragraphs: [
-            'The assistance catalog is versioned and re-verified on a 90-day cadence. Seed records ship as unverified until the content team completes review.',
+            'Each program card shows when it was last checked and a plain disclaimer. Matches never promise funds. Families submit applications themselves.',
           ],
         },
         {
-          title: 'Call for me',
+          title: 'Copay help',
           paragraphs: [
-            'Invite-only beta on Advocate Plan and Professional. Process questions only. No patient name, date of birth, or diagnosis is spoken. Production calling stays off until counsel approves a vendor.',
+            'For copay assistance, we link out to FundFinder rather than building a second copay tracker. Our own assistance work stays on travel, lodging, and caregiver costs.',
           ],
         },
       ]}

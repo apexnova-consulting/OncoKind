@@ -50,7 +50,7 @@ const jsonLdFAQ = {
       name: 'Is this medical advice? Can I trust what OncoKind tells me?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'OncoKind is an educational preparation tool. It helps you understand what your loved one\'s report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is sourced from NCCN guidelines and NCI resources. Your oncology team remains your primary guide.',
+        text: 'OncoKind is an educational preparation tool. It helps you understand what your loved one\'s report says and what questions to bring to your oncologist. It is not a substitute for medical advice and never tries to be. Every output is guideline-informed and sourced from public education materials such as NCI resources. Your oncology team remains your primary guide.',
       },
     },
     {

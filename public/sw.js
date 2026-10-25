@@ -1,5 +1,5 @@
 /* OncoKind PWA — only cache immutable Next.js build files. All HTML/RSC/API: network. */
-const CACHE_NAME = 'oncokind-v4-static';
+const CACHE_NAME = 'oncokind-v5-static';
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {

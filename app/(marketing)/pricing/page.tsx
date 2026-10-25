@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Minus } from 'lucide-react';
 import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
@@ -57,8 +58,13 @@ export default async function PricingPage() {
             teams.
           </p>
           <p className="mt-2 text-sm font-medium text-[var(--color-text-muted)]">
-            No surprise billing. Cancel anytime. No contracts.
+            No surprise billing. Cancel Tools anytime. No contracts.
           </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm font-semibold">
+            <a href="#comparison" className="rounded-full bg-white px-4 py-2 shadow-sm">Tools</a>
+            <Link href="/concierge" className="rounded-full bg-white px-4 py-2 shadow-sm">Concierge</Link>
+            <Link href="/professional" className="rounded-full bg-white px-4 py-2 shadow-sm">For organizations</Link>
+          </div>
         </div>
 
         <PricingPlans
@@ -100,7 +106,15 @@ export default async function PricingPage() {
               },
               {
                 q: 'Will anyone contact my providers for me?',
-                a: 'Only if you review and approve it first. Call for me is invite-only and does not speak patient information.',
+                a: 'OncoKind Concierge can, after you authorize it. A person approves every outbound step. We do not interpret results.',
+              },
+              {
+                q: 'What if my records are delayed?',
+                a: 'Hospitals set their own timelines. We follow up and show you where each request stands. We do not display a guaranteed completion date.',
+              },
+              {
+                q: 'How do Concierge refunds work?',
+                a: 'Refund terms are supplied by counsel and shown before purchase. If no records request is sent within the stated window, a full refund path applies.',
               },
             ].map(({ q, a }) => (
               <div key={q} className="rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-6">
