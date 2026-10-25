@@ -74,13 +74,15 @@ export default function FeaturesHubPage() {
                 <Shield className="h-4 w-4" aria-hidden />
                 Professional
               </p>
-              <h2 className="mt-3 font-display text-3xl font-semibold">Advocate workspace for care teams</h2>
+              <h2 className="mt-3 font-display text-3xl font-semibold text-white">
+                Advocate workspace for care teams
+              </h2>
               <p className="mt-3 text-base leading-relaxed text-white/80">
                 Multi-patient views, branded PDFs, and a partner path for sponsored Concierge cases.
                 HIPAA BAA available on request.
               </p>
             </div>
-            <Button asChild className="shrink-0">
+            <Button asChild className="shrink-0 bg-white text-[#0F6E56] hover:bg-white/90 hover:text-[#085041]">
               <Link href="/professional">
                 Explore Professional
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
