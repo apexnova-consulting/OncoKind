@@ -1,11 +1,12 @@
-import type { Metadata } from 'next';
 import { FeatureDetailPage } from '@/components/marketing/FeatureDetailPage';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'First 72 Hours',
   description:
     'A calm, sequenced checklist for the first days after a cancer diagnosis. Core tasks are free on every OncoKind plan.',
-};
+  path: '/features/first-72-hours',
+});
 
 export default function First72HoursFeaturePage() {
   return (

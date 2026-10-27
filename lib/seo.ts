@@ -6,11 +6,13 @@ export function pageMetadata({
   description,
   path,
   imageAlt,
+  noindex,
 }: {
   title: string;
   description: string;
   path: string;
   imageAlt?: string;
+  noindex?: boolean;
 }): Metadata {
   const url = `${SITE_ORIGIN}${path}`;
   const image = {
@@ -22,7 +24,8 @@ export function pageMetadata({
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: noindex ? undefined : { canonical: url },
+    robots: noindex ? { index: false, follow: false } : undefined,
     openGraph: {
       title,
       description,

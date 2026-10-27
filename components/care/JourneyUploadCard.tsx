@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { scrubAndProcessPathology } from '@/app/actions/scrubAndProcessPathology';
 import { motion, AnimatePresence } from 'framer-motion';
 import { track } from '@/lib/analytics';
+import { FREE_REPORTS_IN_WINDOW } from '@/lib/report-limits';
 
 export function JourneyUploadCard({
   reportCount = 0,
@@ -27,7 +28,7 @@ export function JourneyUploadCard({
   }
 
   async function handleUpload(file: File) {
-    if (isFree && reportCount >= 1) {
+    if (isFree && reportCount >= FREE_REPORTS_IN_WINDOW) {
       openLimitModal();
       return;
     }
@@ -58,7 +59,7 @@ export function JourneyUploadCard({
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (isFree && reportCount >= 1) {
+    if (isFree && reportCount >= FREE_REPORTS_IN_WINDOW) {
       openLimitModal();
       return;
     }
@@ -82,7 +83,7 @@ export function JourneyUploadCard({
         </p>
         {isFree ? (
           <p className="mt-2 text-center text-xs text-slate-500">
-            Free includes 1 total scan per account.
+            Free includes up to {FREE_REPORTS_IN_WINDOW} reports in the first 30 days.
           </p>
         ) : null}
         {uploading && (

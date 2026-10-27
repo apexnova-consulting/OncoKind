@@ -2,9 +2,17 @@
  * Single source of truth for OncoKind public pricing, feature copy, and entitlements.
  * Amounts follow the production pricing brief: Free $0, Caregiver Pro $39/mo,
  * Advocate Plan $49/mo, Professional $999/mo. Yearly billing is 10x monthly.
+ * Concierge list price lives in lib/concierge/config.ts and is referenced here.
  */
 
+import {
+  CONCIERGE_CAREGIVER_GRANT_DAYS,
+  CONCIERGE_DEFAULT_PRICE_CENTS,
+  formatUsdFromCents,
+} from '@/lib/concierge/config';
+
 export const SITE_ORIGIN = 'https://www.oncokind.com';
+export const CONCIERGE_LIST_PRICE_LABEL = formatUsdFromCents(CONCIERGE_DEFAULT_PRICE_CENTS);
 export const YEARLY_MONTHS_INCLUDED = 10;
 export const ANNUAL_SAVINGS_PERCENT = Math.round((1 - YEARLY_MONTHS_INCLUDED / 12) * 100);
 
@@ -81,9 +89,9 @@ export const PLANS = {
     yearlyLabel: '$9,990',
     cadenceMonthly: '/month',
     cadenceYearly: '/year',
-    cta: 'Start Professional',
-    signupHref: '/signup?plan=professional',
-    badge: 'Advocate workspace for care teams',
+    cta: 'Book a Demo',
+    signupHref: 'https://calendly.com/oncokind-support',
+    badge: 'Advocate workspace for independent advocates',
   },
   enterprise: {
     id: 'enterprise' as const,
@@ -111,13 +119,13 @@ export const CAREGIVER_FEATURES = [
   'Care Timeline (full)',
   'First 72 Hours calendar, reminders, and PDF export',
   'Genetic Counseling Prep Sheet PDF',
-  'Full community posting',
+  'Insurance Denial Defense',
 ];
 
 export const ADVOCATE_FEATURES = [
   'Everything in Caregiver Pro',
   'Insurance Denial Defense',
-  'Live Financial Aid Tracker',
+  'Travel and lodging tracker',
   'Guideline-Informed Advocate Sheets',
 ];
 
@@ -126,11 +134,11 @@ export const PROFESSIONAL_FEATURES = [
   'Advocate workspace with multi-patient views',
   'Branded PDFs and case tracking',
   'Partner path for sponsored Concierge cases',
-  'HIPAA BAA available on request',
+  'Prior Auth Engine for post-acute teams (see /prior-auth-pro)',
 ];
 
 export const FREE_FEATURES = [
-  '1 lifetime scan and Cancer Profile',
+  'Up to 3 reports in the first 30 days',
   'Basic care map and Care Timeline',
   'Empathy Filter on every output',
   'First 72 Hours core checklist',
@@ -144,7 +152,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     id: 'report_processing',
     name: 'Report processing',
     cells: {
-      free: '1 total scan',
+      free: '3 reports in 30 days',
       caregiver: 'Unlimited',
       advocate: 'Unlimited',
       professional: 'Batch intake',
@@ -270,25 +278,25 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'Insurance Denial Defense',
     homepage: {
       href: '/features/insurance-denial-defense',
-      desc: 'Decode denial letters and generate a structured appeal packet.',
-      tag: 'Add-on',
+      desc: 'Decode denial letters free. Caregiver Pro unlocks the appeal packet.',
+      tag: 'Caregiver Pro',
       consumerGrid: true,
       spotlight: true,
     },
     cells: {
-      free: 'Not included',
-      caregiver: 'Add-on',
+      free: 'Decode letter',
+      caregiver: 'Included',
       advocate: 'Included',
       professional: 'Included',
     },
   },
   {
     id: 'financial_aid',
-    name: 'Travel and lodging assistance tracker',
+    name: 'Travel and lodging tracker',
     homepage: {
       href: '/journey/financial-help',
       desc: 'Track trial and treatment travel, lodging, and caregiver cost help. Copay funds: use FundFinder.',
-      tag: 'Add-on',
+      tag: 'Advocate Plan',
       consumerGrid: true,
     },
     cells: {
@@ -303,15 +311,15 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'Community',
     homepage: {
       href: '/community',
-      desc: 'Read-only on Free, full access on paid plans.',
-      tag: 'Read-only on Free',
+      desc: 'Read-only while posting is paused until a moderator is in place.',
+      tag: 'Read-only',
       consumerGrid: true,
     },
     cells: {
       free: 'Read-only',
-      caregiver: 'Full access',
-      advocate: 'Full access',
-      professional: 'Full access',
+      caregiver: 'Read-only',
+      advocate: 'Read-only',
+      professional: 'Read-only',
     },
   },
   {
@@ -319,7 +327,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'Empathy Filter',
     homepage: {
       href: '/features/empathy-filter',
-      desc: 'Removes survival statistics and fear-based language from every output.',
+      desc: 'Keeps the facts. Never volunteers survival statistics. Routes prognosis questions to your care team.',
       tag: 'All plans',
       consumerGrid: true,
       spotlight: true,
@@ -403,15 +411,25 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'OncoKind Concierge',
     homepage: {
       href: '/concierge',
-      desc: 'We collect records, submit the intake packet to the center you choose, and track it until you are Case Ready.',
-      tag: 'Per case',
+      desc: `We collect records, submit the intake packet to the center you choose, and track it until you are Case Ready. ${CONCIERGE_LIST_PRICE_LABEL} per case, includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
+      tag: `${CONCIERGE_LIST_PRICE_LABEL} per case`,
       consumerGrid: true,
     },
     cells: {
-      free: 'Per case',
-      caregiver: 'Per case, includes 60 days of Caregiver Pro',
-      advocate: 'Per case',
+      free: `${CONCIERGE_LIST_PRICE_LABEL} per case`,
+      caregiver: `${CONCIERGE_LIST_PRICE_LABEL} per case, includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro`,
+      advocate: `${CONCIERGE_LIST_PRICE_LABEL} per case`,
       professional: 'Sponsored cases for partners',
+    },
+  },
+  {
+    id: 'prior_auth',
+    name: 'Prior Auth Engine',
+    cells: {
+      free: 'Not included',
+      caregiver: 'Not included',
+      advocate: 'Not included',
+      professional: 'Included for post-acute teams',
     },
   },
   {
@@ -421,7 +439,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
       free: 'Not included',
       caregiver: 'Not included',
       advocate: 'Not included',
-      professional: 'Available on request',
+      professional: 'Not offered yet',
     },
   },
   {
@@ -454,13 +472,13 @@ export const HOMEPAGE_HERO = {
     'Understand and prepare on your own with our tools, or let our team handle the records, forms, and follow-up.',
   cta: 'Upload your first report. It is free.',
   paidUnlock:
-    'Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, and full trial matching. Advocate Plan ($49/mo) adds Insurance Denial Defense as an add-on path. Concierge is priced per case and includes 60 days of Caregiver Pro.',
+    `Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, full trial matching, and Insurance Denial Defense. Advocate Plan ($49/mo) adds the travel and lodging tracker. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
 };
 
 export const PRICING_PAGE = {
   title: 'Simple, transparent pricing for the hardest journey.',
   description:
-    'Tools: Free, Caregiver Pro at $39/month or $390/year, Advocate Plan at $49/month or $490/year, and Professional at $999/month. Concierge is priced per case. Yearly billing is 10 months. No credit card required to start Tools.',
+    `Tools: Free, Caregiver Pro at $39/month or $390/year, Advocate Plan at $49/month or $490/year. Professional is demo and invoice. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. Yearly billing is 10 months. No credit card required to start Tools.`,
 };
 
 export function yearlyAmountCents(monthlyCents: number): number {
@@ -519,9 +537,13 @@ export function hasCaregiverAccess(tier: SubscriptionTier): boolean {
   return hasMinPlan(tier, 'caregiver');
 }
 
-/** Advocate Plan and above. Insurance Denial Defense and Live Financial Aid Tracker. */
+/** Advocate Plan and above. Travel and lodging tracker. */
 export function hasAdvocateAccess(tier: SubscriptionTier): boolean {
   return hasMinPlan(tier, 'advocate');
+}
+
+export function publicCatalogFeatures() {
+  return CATALOG_FEATURES.filter((feature) => feature.id !== 'hipaa_baa');
 }
 
 export function hasPaidAccess(tier: SubscriptionTier): boolean {

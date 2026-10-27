@@ -9,7 +9,18 @@ export default function robots(): MetadataRoute.Robots {
       // Explicit allow must appear so crawlers that prefix-match
       // `Disallow: /prior-auth` do not block the public KindAuth landing page.
       allow: ['/', '/prior-auth-pro', '/prior-auth-pro/'],
-      disallow: ['/api/', '/dashboard/', '/journey/', '/admin/', '/prior-auth/'],
+      disallow: [
+        '/api/',
+        '/dashboard/',
+        '/journey/',
+        '/admin/',
+        '/prior-auth/',
+        '/login',
+        '/signup',
+        '/forgot-password',
+        '/reset-password',
+        '/mfa',
+      ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,

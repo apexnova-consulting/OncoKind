@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import { ArrowRight, FileText, Shield } from 'lucide-react';
-import { FEATURE_HUB_FEATURES, HOMEPAGE_TOOL_COUNT } from '@/lib/pricing-config';
+import { FEATURE_HUB_FEATURES } from '@/lib/pricing-config';
+import { JOURNEY_POSITIONING } from '@/lib/journey/stages';
+import { isBaaReady } from '@/lib/feature-flags';
 import { FEATURE_CATALOG_ICONS } from '@/components/marketing/FeatureCatalogIcons';
 import { Button } from '@/components/ui/button';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
   title: 'OncoKind Tools',
-  description:
-    'Explore the full OncoKind toolkit: Cancer Profile, First 72 Hours, Doctor Prep Sheets, trial matching, insurance defense, Family tree, Empathy Filter, and more.',
+  description: JOURNEY_POSITIONING,
   path: '/features',
 });
 
@@ -21,11 +22,10 @@ export default function FeaturesHubPage() {
             Product
           </p>
           <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--color-primary-900)] sm:text-5xl">
-            Every tool, built for the family beside the patient.
+            Four stages. The tools stay ready when you need them.
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-[var(--color-text-secondary)]">
-            Start with the Cancer Profile, Complete the Picture, and Access Agent. This page lists the same{' '}
-            {HOMEPAGE_TOOL_COUNT} tools as the homepage grid.
+            {JOURNEY_POSITIONING}
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild>
@@ -79,7 +79,9 @@ export default function FeaturesHubPage() {
               </h2>
               <p className="mt-3 text-base leading-relaxed text-white/80">
                 Multi-patient views, branded PDFs, and a partner path for sponsored Concierge cases.
-                HIPAA BAA available on request.
+                {isBaaReady()
+                  ? ' HIPAA BAA available on request.'
+                  : ' A Business Associate Agreement is not offered on self-serve plans yet.'}
               </p>
             </div>
             <Button asChild className="shrink-0 bg-white text-[#0F6E56] hover:bg-white/90 hover:text-[#085041]">

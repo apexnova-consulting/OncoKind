@@ -10,6 +10,10 @@ export async function POST(request: NextRequest) {
   }
   const { user } = await getProfile();
   if (!user) return NextResponse.json({ error: 'Sign in required.' }, { status: 401 });
+  const body = (await request.json().catch(() => ({}))) as { refundAccepted?: boolean };
+  if (!body.refundAccepted) {
+    return NextResponse.json({ error: 'Please accept the refund terms before payment.' }, { status: 400 });
+  }
   const priceId = process.env.STRIPE_PRICE_ID_CONCIERGE ?? '';
   if (!priceId) return NextResponse.json({ error: 'Concierge price is not configured.' }, { status: 503 });
   const base = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;

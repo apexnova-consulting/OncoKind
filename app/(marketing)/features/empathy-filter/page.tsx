@@ -1,29 +1,19 @@
-import type { Metadata } from 'next';
 import { FeatureDetailPage } from '@/components/marketing/FeatureDetailPage';
 import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
+import { pageMetadata } from '@/lib/seo';
+import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'The Empathy Filter',
-  description:
-    "OncoKind's Empathy Filter transforms clinical language into compassionate, plain-English communication, helping caregivers and patients understand difficult information without losing the facts.",
-  openGraph: {
-    title: 'The Empathy Filter',
-    description:
-      "OncoKind's Empathy Filter transforms clinical language into compassionate, plain-English communication, helping caregivers and patients understand difficult information without losing the facts.",
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'The Empathy Filter',
-    description:
-      "OncoKind's Empathy Filter transforms clinical language into compassionate, plain-English communication, helping caregivers and patients understand difficult information without losing the facts.",
-  },
-};
+  description: EMPATHY_FILTER_POLICY.feature,
+  path: '/features/empathy-filter',
+});
 
 export default function EmpathyFilterFeaturePage() {
   return (
     <FeatureDetailPage
       headline="Hear the facts. Feel heard."
-      intro="Medical reports are written for clinicians. The Empathy Filter translates that clinical language into plain English that doesn't strip out the truth. It just removes the unnecessary coldness, so you understand exactly what's happening without feeling alone in the room when you read it."
+      intro={EMPATHY_FILTER_POLICY.feature}
       primaryCtaLabel="Try the Empathy Filter Free"
       primaryCtaHref="/signup"
       secondaryCtaLabel="See all features"
@@ -35,7 +25,7 @@ export default function EmpathyFilterFeaturePage() {
         bullets: [
           'Clinical terms explained in plain, honest language',
           'Emotional tone calibrated: informative, not alarming',
-          'No information removed or sugar-coated',
+          'Diagnosis, stage, and biomarker facts stay. Survival statistics are never volunteered.',
           'Gives caregivers language to use when talking to family',
         ],
       }}
@@ -44,7 +34,7 @@ export default function EmpathyFilterFeaturePage() {
           title: 'Why language matters in a cancer diagnosis',
           paragraphs: [
             'The moment a family receives a diagnosis, the clinical language in the room can feel like a wall. Terms like "lymphovascular invasion," "poorly differentiated," or "metastatic burden" are precise medical descriptions, but to a caregiver hearing them for the first time, they land without context or compassion.',
-            'The Empathy Filter does not remove that information. It adds a layer of accessible translation so the facts can actually be understood and processed, not just heard and feared.',
+            'The Empathy Filter keeps the clinical facts. It never volunteers survival statistics. If you ask about prognosis, we point you back to your care team instead of guessing a personal number.',
           ],
           bullets: [
             'Preserves clinical accuracy',

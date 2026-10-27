@@ -75,6 +75,10 @@ const PHI_PATTERNS: Array<{ pattern: RegExp; name: string }> = [
     pattern: /\b(?:Mr\.?|Mrs\.?|Ms\.?|Dr\.?)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b/g,
     name: 'name_titled',
   },
+  {
+    pattern: /\b(?:acct|account|member)\s*(?:no|number|#)?\s*:?\s*\d{6,}\b/gi,
+    name: 'account_number',
+  },
 ];
 
 /**

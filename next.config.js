@@ -30,6 +30,11 @@ const nextConfig = {
         destination: '/signup',
         permanent: true,
       },
+      {
+        source: '/empathy-filter',
+        destination: '/features/empathy-filter',
+        permanent: true,
+      },
     ];
   },
   images: {

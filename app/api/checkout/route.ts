@@ -8,6 +8,7 @@ import {
   resolveCheckoutPriceId,
   stripePrices,
 } from '@/lib/stripe-prices';
+import { isFeatureEnabled } from '@/lib/feature-flags';
 
 const defaultPriceId = stripePrices.caregiverMonthly;
 
@@ -34,6 +35,12 @@ async function handleCheckout(
     typeof requestedPlan === 'string' &&
     isCheckoutPlanKey(requestedPlan)
   ) {
+    if (requestedPlan === 'professional' && !isFeatureEnabled('professional_self_serve')) {
+      return NextResponse.json(
+        { error: 'Professional plans are sold by demo and invoice. Book a demo to get started.' },
+        { status: 400 }
+      );
+    }
     const interval =
       requestedPlan === 'professional'
         ? 'monthly'

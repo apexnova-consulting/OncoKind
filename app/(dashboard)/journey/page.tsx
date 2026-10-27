@@ -8,6 +8,8 @@ import { CancerProfileSummaryCard } from '@/components/care/CancerProfileSummary
 import { getPatientReport } from '@/lib/patient-reports';
 import { DiagnosisRecencyPrompt } from '@/components/first-72/DiagnosisRecencyPrompt';
 import { Suspense } from 'react';
+import { nextJourneyStep } from '@/lib/journey/next-step';
+import { freeReportWindowStart } from '@/lib/report-limits';
 
 export default async function JourneyPage() {
   const supabase = await createServerSupabaseClient();
@@ -22,9 +24,29 @@ export default async function JourneyPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .limit(1);
+  const { count: recentReportCount } = await supabase
+    .from('patient_reports')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .gte('created_at', freeReportWindowStart().toISOString());
+  const { count: appointmentCount } = await supabase
+    .from('prep_sheet_appointments')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id);
+  const { count: denialCount } = await supabase
+    .from('insurance_navigation_cases')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id);
 
   const latestReportId = reports?.[0]?.id;
   const report = latestReportId ? await getPatientReport(latestReportId, user.id) : null;
+  const nextStep = nextJourneyStep({
+    hasReport: Boolean(report),
+    hasAppointment: (appointmentCount ?? 0) > 0,
+    hasDenial: (denialCount ?? 0) > 0,
+    trialInterest: false,
+    conciergeCase: false,
+  });
 
   const stages = report
     ? [
@@ -100,9 +122,27 @@ export default async function JourneyPage() {
             ? 'See where you are in your care journey. Expand cards for details and next steps.'
             : 'Upload a medical report to get started. We\'ll help you understand your diagnosis and navigate next steps.'}
         </p>
+        <div className="mt-6 rounded-2xl border border-[#cdd8d5] bg-white p-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">Next step</p>
+          <p className="mt-2 text-lg font-semibold text-[#1e2d2b]">{nextStep.primary.label}</p>
+          <Link href={nextStep.primary.href} className="mt-3 inline-flex text-sm font-semibold text-[#0F6E56]">
+            Continue
+          </Link>
+          {nextStep.secondary.length > 0 ? (
+            <ul className="mt-3 space-y-1 text-sm text-slate-600">
+              {nextStep.secondary.map((action) => (
+                <li key={action.id}>
+                  <Link href={action.href} className="underline-offset-2 hover:underline">
+                    {action.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
         {!report && (
           <div className="mt-8">
-            <JourneyUploadCard reportCount={reports?.length ?? 0} isFree={!isPro} />
+            <JourneyUploadCard reportCount={recentReportCount ?? 0} isFree={!isPro} />
           </div>
         )}
         {report && (

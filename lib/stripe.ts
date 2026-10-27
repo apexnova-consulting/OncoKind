@@ -46,6 +46,11 @@ export function createOneTimeCheckoutSession(params: {
     success_url: params.successUrl,
     cancel_url: params.cancelUrl,
     metadata,
+    custom_text: {
+      submit: {
+        message: 'By paying, you accept the Concierge refund terms shown before checkout.',
+      },
+    },
   });
 }
 

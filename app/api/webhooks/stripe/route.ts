@@ -105,6 +105,16 @@ export async function POST(request: NextRequest) {
         userId = userId ?? (sub.metadata?.supabase_user_id as string | undefined);
         priceId = priceIdFromSubscription(sub);
         await syncProfileFromSubscription(supabase, sub, { userId, customerId, email });
+      } else if (userId && session.metadata?.plan_key === 'concierge') {
+        await supabase
+          .from('profiles')
+          .update({
+            stripe_customer_id: customerId ?? undefined,
+            subscription_status: 'pro',
+            subscription_tier: 'pro',
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', userId);
       } else if (userId) {
         const tier = tierFromPriceId(priceId);
         await supabase
@@ -120,7 +130,7 @@ export async function POST(request: NextRequest) {
 
       const planKey = session.metadata?.plan_key;
       const tier = tierFromPriceId(priceId);
-      if (userId && (planKey === 'professional' || tier === 'professional')) {
+      if (userId && planKey !== 'concierge' && (planKey === 'professional' || tier === 'professional')) {
         if (!email && userId) {
           const { data: profile } = await supabase.from('profiles').select('email').eq('id', userId).maybeSingle();
           email = profile?.email ?? null;

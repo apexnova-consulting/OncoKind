@@ -6,6 +6,7 @@ import { CENTER_SEEDS } from '@/content/concierge/centers/v1';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { track } from '@/lib/analytics';
 import { CONCIERGE_BRAND } from '@/lib/concierge/config';
+import { CONCIERGE_REFUND_CHECKBOX_LABEL, CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 
 export function ConciergeIntake() {
   const [patientFirst, setPatientFirst] = useState('');
@@ -16,6 +17,9 @@ export function ConciergeIntake() {
   const [providers, setProviders] = useState('');
   const [dobKnown, setDobKnown] = useState('not_sure');
   const [message, setMessage] = useState<string | null>(null);
+  const [adultPatient, setAdultPatient] = useState(false);
+  const [usFacility, setUsFacility] = useState(false);
+  const [refundAccepted, setRefundAccepted] = useState(false);
   const purchaseOn = isFeatureEnabled('concierge_purchase');
 
   const selected = useMemo(
@@ -28,6 +32,14 @@ export function ConciergeIntake() {
       className="mt-8 space-y-4"
       onSubmit={async (event) => {
         event.preventDefault();
+        if (!adultPatient || !usFacility) {
+          setMessage('Concierge is for adult patients at US facilities.');
+          return;
+        }
+        if (purchaseOn && !refundAccepted) {
+          setMessage('Please accept the refund terms before continuing.');
+          return;
+        }
         track('intake_started');
         const response = await fetch('/api/concierge/intake', {
           method: 'POST',
@@ -40,6 +52,9 @@ export function ConciergeIntake() {
             customCenter,
             providers,
             dobKnown,
+            adultPatient,
+            usFacility,
+            refundAccepted,
           }),
         });
         const json = await response.json();
@@ -94,6 +109,23 @@ export function ConciergeIntake() {
         <textarea value={providers} onChange={(event) => setProviders(event.target.value)} rows={4} className="mt-2 w-full rounded-xl border p-3" />
       </label>
       <p className="text-sm text-slate-600">{CONCIERGE_BRAND.boundary}</p>
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" checked={adultPatient} onChange={(event) => setAdultPatient(event.target.checked)} className="mt-1" />
+        The patient is 18 or older.
+      </label>
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" checked={usFacility} onChange={(event) => setUsFacility(event.target.checked)} className="mt-1" />
+        The destination facility is in the United States.
+      </label>
+      {purchaseOn ? (
+        <>
+          <p className="text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
+          <label className="flex items-start gap-2 text-sm">
+            <input type="checkbox" checked={refundAccepted} onChange={(event) => setRefundAccepted(event.target.checked)} className="mt-1" />
+            {CONCIERGE_REFUND_CHECKBOX_LABEL}
+          </label>
+        </>
+      ) : null}
       <Button type="submit">{purchaseOn ? 'Save intake and continue' : 'Save intake request'}</Button>
       {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
     </form>

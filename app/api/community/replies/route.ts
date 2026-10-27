@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { buildPublicDisplayName, moderateCommunityText } from '@/lib/community';
-import { hasCareAdvocacyAccess } from '@/lib/entitlements';
+import { COMMUNITY_POSTING_PAUSED_MESSAGE, isCommunityPostingEnabled } from '@/lib/community-policy';
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
@@ -34,10 +34,8 @@ export async function POST(request: NextRequest) {
       .maybeSingle(),
   ]);
 
-  const canPost = hasCareAdvocacyAccess(profile?.subscription_tier);
-
-  if (!canPost) {
-    return NextResponse.json({ error: 'Posting requires a paid plan.' }, { status: 402 });
+  if (!isCommunityPostingEnabled()) {
+    return NextResponse.json({ error: COMMUNITY_POSTING_PAUSED_MESSAGE }, { status: 403 });
   }
   if (!thread) {
     return NextResponse.json({ error: 'That thread could not be found.' }, { status: 404 });

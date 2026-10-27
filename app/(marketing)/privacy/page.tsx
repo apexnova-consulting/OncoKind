@@ -40,7 +40,7 @@ const sections = [
     title: '6. Cookies and Similar Technologies',
     body: [
       'We use cookies and similar technologies that are necessary to operate the Services, including maintaining authenticated sessions, storing security-related state, and supporting core site functionality.',
-      'We may also use limited operational logging and service monitoring to keep the platform secure and reliable. If we introduce optional analytics, advertising, or non-essential tracking technologies in the future, we will update this Privacy Policy and any required consent mechanisms accordingly.',
+      'We may also use limited operational logging and service monitoring to keep the platform secure and reliable. Optional analytics scripts run only after you choose Accept All or explicitly allow analytics from the cookie preferences banner.',
     ],
   },
   {
@@ -101,7 +101,7 @@ const sections = [
   {
     title: '15. HIPAA and Covered-Entity Status',
     body: [
-      "OncoKind is built with privacy at its core. No raw report data retained. Educational tool, not a covered entity. Unless we have explicitly entered into a separate written agreement stating otherwise, this Privacy Policy does not create a Business Associate Agreement.",
+      "OncoKind is built with privacy at its core. Tools: raw report text is deleted after processing. Educational tool, not a covered entity. Unless we have explicitly entered into a separate written agreement stating otherwise, this Privacy Policy does not create a Business Associate Agreement.",
     ],
   },
   {

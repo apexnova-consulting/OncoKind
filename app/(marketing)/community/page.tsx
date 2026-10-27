@@ -5,6 +5,7 @@ import { COMMUNITY_CATEGORIES } from '@/lib/community';
 import { getProfile } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { formatRelativeTime } from '@/lib/time';
+import { COMMUNITY_POSTING_PAUSED_MESSAGE, isCommunityPostingEnabled } from '@/lib/community-policy';
 
 export const metadata: Metadata = {
   title: 'Community',
@@ -49,17 +50,18 @@ export default async function CommunityLandingPage() {
             experiences, ask questions, and support each other. All conversations are moderated
             to keep this space safe and kind.
           </p>
+          <p className="mt-4 max-w-3xl text-sm text-[var(--color-text-secondary)]">
+            {COMMUNITY_POSTING_PAUSED_MESSAGE}
+          </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            {user && isPro ? (
+            {user && isPro && isCommunityPostingEnabled() ? (
               <Button asChild>
                 <Link href="/community/new-post" role="button">New Post</Link>
               </Button>
             ) : user ? (
-              <>
-                <Button asChild variant="outline">
-                  <Link href="/pricing?plan=advocate">Upgrade to Post</Link>
-                </Button>
-              </>
+              <Button asChild variant="outline">
+                <Link href="/support">Ask about posting</Link>
+              </Button>
             ) : (
               <Button asChild>
                 <Link href="/signup">Get Started Free</Link>
