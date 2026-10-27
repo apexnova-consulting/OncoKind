@@ -10,7 +10,8 @@ import {
   getAnthropicMaintenanceMessage,
   isAnthropicRateLimit,
 } from '@/lib/anthropic';
-import { hasCareAdvocacyAccess } from '@/lib/entitlements';
+import { verifyNoPHIRemaining } from '@/lib/pii-scrubber';
+import { freeReportWindowStart, hasReachedFreeReportLimit, freeReportLimitMessage } from '@/lib/report-limits';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -35,7 +36,7 @@ async function createAnthropicSummary(scrubbedText: string) {
     messages: [
       {
         role: 'user',
-        content: `De-identified pathology report text:\n\n${scrubbedText.slice(0, 50000)}`,
+        content: `Redacted pathology report text, not used for training:\n\n${scrubbedText.slice(0, 50000)}`,
       },
     ],
   });
@@ -58,11 +59,12 @@ export async function POST(request: NextRequest) {
     const { count: reportCount } = await supabase
       .from('patient_reports')
       .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id);
-    if (!hasCareAdvocacyAccess(profile?.subscription_tier) && (reportCount ?? 0) >= 1) {
+      .eq('user_id', user.id)
+      .gte('created_at', freeReportWindowStart().toISOString());
+    if (hasReachedFreeReportLimit(profile?.subscription_tier, reportCount ?? 0)) {
       return NextResponse.json(
         {
-          error: 'Trial limit reached. Upgrade to Caregiver Pro to unlock unlimited report analyses.',
+          error: freeReportLimitMessage(),
           code: 'TRIAL_LIMIT_REACHED',
         },
         { status: 402 }
@@ -112,6 +114,12 @@ export async function POST(request: NextRequest) {
     }
 
     const scrubbedText = scrubPII(rawText);
+    if (!verifyNoPHIRemaining(scrubbedText)) {
+      return NextResponse.json(
+        { error: 'We could not safely prepare that report for analysis. Please try a copy with identifiers removed, or contact support.' },
+        { status: 422 }
+      );
+    }
     let message;
     try {
       message = await createAnthropicSummary(scrubbedText);

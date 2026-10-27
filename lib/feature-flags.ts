@@ -10,6 +10,11 @@ export const FEATURE_FLAGS = {
   facility_database: 'facility_database',
   voice_internal_tool: 'voice_internal_tool',
   cp_reduced_mode: 'cp_reduced_mode',
+  baa_ready: 'baa_ready',
+  community_posting: 'community_posting',
+  professional_self_serve: 'professional_self_serve',
+  rare_womens_cancers_framing: 'rare_womens_cancers_framing',
+  time_bound_pass: 'time_bound_pass',
 } as const;
 
 export type FeatureFlagName = keyof typeof FEATURE_FLAGS;
@@ -71,6 +76,17 @@ export function isFeatureEnabled(flag: FeatureFlagName): boolean {
     facility_database: ['FEATURE_FACILITY_DATABASE', 'NEXT_PUBLIC_FEATURE_FACILITY_DATABASE'],
     voice_internal_tool: ['FEATURE_VOICE_INTERNAL_TOOL', 'NEXT_PUBLIC_FEATURE_VOICE_INTERNAL_TOOL'],
     cp_reduced_mode: ['FEATURE_CTP_REDUCED_MODE', 'NEXT_PUBLIC_FEATURE_CTP_REDUCED_MODE'],
+    baa_ready: ['FEATURE_BAA_READY', 'NEXT_PUBLIC_FEATURE_BAA_READY'],
+    community_posting: ['FEATURE_COMMUNITY_POSTING', 'NEXT_PUBLIC_FEATURE_COMMUNITY_POSTING'],
+    professional_self_serve: [
+      'FEATURE_PROFESSIONAL_SELF_SERVE',
+      'NEXT_PUBLIC_FEATURE_PROFESSIONAL_SELF_SERVE',
+    ],
+    rare_womens_cancers_framing: [
+      'FEATURE_RARE_WOMENS_CANCERS',
+      'NEXT_PUBLIC_FEATURE_RARE_WOMENS_CANCERS',
+    ],
+    time_bound_pass: ['FEATURE_TIME_BOUND_PASS', 'NEXT_PUBLIC_FEATURE_TIME_BOUND_PASS'],
   };
 
   if (flag === 'cp_reduced_mode') {
@@ -97,4 +113,8 @@ export function isVoiceProductionCallingEnabled(): boolean {
 
 export function isCtpReducedMode(): boolean {
   return isFeatureEnabled('cp_reduced_mode');
+}
+
+export function isBaaReady(): boolean {
+  return isFeatureEnabled('baa_ready');
 }

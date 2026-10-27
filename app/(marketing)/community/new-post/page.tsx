@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getProfile } from '@/lib/auth';
 import { COMMUNITY_CATEGORIES, getCommunityCategory } from '@/lib/community';
 import { CommunityNewThreadForm } from '@/components/community/CommunityNewThreadForm';
+import { isCommunityPostingEnabled } from '@/lib/community-policy';
 
 export const metadata: Metadata = {
   title: 'New Community Post',
@@ -19,6 +20,9 @@ export default async function CommunityNewPostPage({
 
   if (!user) {
     redirect('/login');
+  }
+  if (!isCommunityPostingEnabled()) {
+    redirect('/community');
   }
 
   const selected = getCommunityCategory(category ?? '') ?? COMMUNITY_CATEGORIES[0];

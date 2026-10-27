@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Minus } from 'lucide-react';
-import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
+import { PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote } from '@/lib/disclosures';
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 import { hasAdvocatePrices, hasProPrices, hasProfessionalPrice } from '@/lib/stripe-prices';
-import { CATALOG_FEATURES, PLANS, PRICING_PAGE, SITE_ORIGIN } from '@/lib/pricing-config';
+import { PLANS, PRICING_PAGE, SITE_ORIGIN, publicCatalogFeatures } from '@/lib/pricing-config';
+import { CONCIERGE_REFUND_TERMS, TOOLS_CANCEL_COPY } from '@/lib/legal/refunds';
+import { TOOLS_RETENTION_CLAIM, CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -82,7 +84,7 @@ export default async function PricingPage() {
             {[
               {
                 q: "Is my loved one's medical report stored on OncoKind's servers?",
-                a: 'No. OncoKind processes your report to generate the Cancer Profile, but we do not retain raw report data after processing.',
+                a: `${TOOLS_RETENTION_CLAIM} ${CONCIERGE_RETENTION_CLAIM}`,
               },
               {
                 q: 'Is OncoKind giving medical advice?',
@@ -94,11 +96,11 @@ export default async function PricingPage() {
               },
               {
                 q: 'Can I cancel anytime?',
-                a: 'Yes. No contracts, no cancellation fees. Cancel from your account settings at any time.',
+                a: TOOLS_CANCEL_COPY,
               },
               {
                 q: 'Is there a discount for financial hardship?',
-                a: "We never want cost to prevent a family from getting help. Email us at support@oncokind.com and we'll work with you.",
+                a: 'Use the hardship form at /concierge/hardship. A person reviews every request. Approved families can receive a 90-day Caregiver Pro code.',
               },
               {
                 q: 'Does OncoKind tell me which tests or treatments I need?',
@@ -114,7 +116,7 @@ export default async function PricingPage() {
               },
               {
                 q: 'How do Concierge refunds work?',
-                a: 'Refund terms are supplied by counsel and shown before purchase. If no records request is sent within the stated window, a full refund path applies.',
+                a: CONCIERGE_REFUND_TERMS,
               },
             ].map(({ q, a }) => (
               <div key={q} className="rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-6">
@@ -146,7 +148,7 @@ export default async function PricingPage() {
                 </tr>
               </thead>
               <tbody>
-                {CATALOG_FEATURES.map((feature, row) => (
+                {publicCatalogFeatures().map((feature, row) => (
                   <tr
                     key={feature.id}
                     className={cn(
@@ -175,7 +177,7 @@ export default async function PricingPage() {
             </table>
           </div>
           <p className="mt-4 text-center text-xs text-[var(--color-text-muted)]">
-            {PATH_B_PRIVACY_LANGUAGE} {PROFESSIONAL_HIPAA_NOTE}
+            {PATH_B_PRIVACY_LANGUAGE} {professionalHipaaNote()}
           </p>
         </section>
       </div>

@@ -37,9 +37,11 @@ import { cn } from '@/lib/utils';
 import {
   HOMEPAGE_HERO,
   HOMEPAGE_SPOTLIGHT_FEATURES,
-  numberToToolHeadline,
 } from '@/lib/pricing-config';
 import { isFeatureEnabled } from '@/lib/feature-flags';
+import { JOURNEY_POSITIONING, JOURNEY_STAGE_HEADLINE, JOURNEY_STAGES } from '@/lib/journey/stages';
+import { SCOPED_RETENTION_BADGE } from '@/lib/legal/retention';
+import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
 
 /* ─────────────────────────────────────────────────────────────
    DATA
@@ -363,7 +365,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-[#5a6b68]">
                 <span className="flex items-center gap-1.5">
                   <Lock className="h-3.5 w-3.5" aria-hidden />
-                  No raw data retained
+                  {SCOPED_RETENTION_BADGE}
                 </span>
                 <span aria-hidden>·</span>
                 <span className="flex items-center gap-1.5">
@@ -466,8 +468,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               OncoKind doesn&apos;t work that way.
             </h2>
             <p className="mt-5 text-[1rem] leading-[1.75] text-[#5a6b68]">
-              Every word OncoKind generates passes through our Empathy Filter, removing survival
-              rates, mortality framing, and fear-based language before it reaches you.
+              {EMPATHY_FILTER_POLICY.homepage}
             </p>
           </Reveal>
 
@@ -574,7 +575,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               The First 72 Hours checklist is a calm, sequenced plan. No countdown clocks. Core tasks are
               free on every plan.
             </p>
-            <Link href="/first-72-hours" className="mt-4 inline-flex font-semibold text-[#0F6E56]">
+            <Link href="/features/first-72-hours" className="mt-4 inline-flex font-semibold text-[#0F6E56]">
               Open First 72 Hours
             </Link>
           </div>
@@ -590,11 +591,26 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
           <Reveal className="text-center">
             <p className="eyebrow">What OncoKind builds for you</p>
             <h2 className="mt-4 text-3xl font-bold text-[#1e2d2b] sm:text-4xl">
-              {numberToToolHeadline(HOMEPAGE_SPOTLIGHT_FEATURES.length)}
+              {JOURNEY_STAGE_HEADLINE}
             </h2>
-            <p className="mx-auto mt-3 max-w-lg text-[1rem] text-[#5a6b68]">
-              Every live tool, from the same catalog as the Tools page. Nothing is dropped from this grid by accident.
+            <p className="mx-auto mt-3 max-w-2xl text-[1rem] text-[#5a6b68]">
+              {JOURNEY_POSITIONING}
             </p>
+          </Reveal>
+          <RevealStagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" stagger={0.06}>
+            {JOURNEY_STAGES.map((stage) => (
+              <Link
+                key={stage.id}
+                href={stage.href}
+                className="rounded-2xl border border-[#cdd8d5] bg-[#f7faf9] p-5 text-left shadow-sm"
+              >
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">{stage.name}</p>
+                <p className="mt-2 text-sm text-[#5a6b68]">{stage.summary}</p>
+              </Link>
+            ))}
+          </RevealStagger>
+          <Reveal className="mt-12 text-center">
+            <p className="text-sm font-semibold text-[#5a6b68]">Tools behind those stages</p>
           </Reveal>
 
           <RevealStagger
@@ -771,7 +787,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-medium text-white/75">
                 <span className="flex items-center gap-1.5">
                   <Lock className="h-3.5 w-3.5" aria-hidden />
-                  No raw data retained
+                  {SCOPED_RETENTION_BADGE}
                 </span>
                 <span aria-hidden>·</span>
                 <span>No credit card</span>

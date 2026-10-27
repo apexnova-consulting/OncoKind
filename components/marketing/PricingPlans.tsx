@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
+import { PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote } from '@/lib/disclosures';
 import {
   ADVOCATE_FEATURES,
   ANNUAL_SAVINGS_PERCENT,
@@ -53,7 +53,6 @@ export function PricingPlans({
   isSignedIn,
   caregiverConfigured,
   advocateConfigured,
-  professionalConfigured,
 }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('yearly');
   const yearlySavingsLabel = useMemo(() => `Save ~${ANNUAL_SAVINGS_PERCENT}%`, []);
@@ -208,13 +207,11 @@ export function PricingPlans({
             ))}
           </ul>
           <div className="mt-8 space-y-3">
-            {isSignedIn && professionalConfigured ? (
-              <CheckoutForm plan="professional" billingInterval="monthly" cta={PLANS.professional.cta} />
-            ) : (
-              <Button asChild className="w-full">
-                <Link href={PLANS.professional.signupHref}>{PLANS.professional.cta}</Link>
-              </Button>
-            )}
+            <Button asChild className="w-full">
+              <a href={PLANS.professional.signupHref} target="_blank" rel="noreferrer">
+                {PLANS.professional.cta}
+              </a>
+            </Button>
             <Button asChild variant="outline" className="w-full">
               <a
                 href="https://calendly.com/oncokind-support"
@@ -226,7 +223,7 @@ export function PricingPlans({
               </a>
             </Button>
           </div>
-          <p className="mt-4 text-xs leading-relaxed text-[var(--color-text-muted)]">{PROFESSIONAL_HIPAA_NOTE}</p>
+          <p className="mt-4 text-xs leading-relaxed text-[var(--color-text-muted)]">{professionalHipaaNote()}</p>
           <p className="mt-2 text-xs leading-relaxed text-[var(--color-text-muted)]">{PATH_B_PRIVACY_LANGUAGE}</p>
         </div>
       </div>
@@ -239,8 +236,7 @@ export function PricingPlans({
           <div className="max-w-2xl">
             <h2 className="font-display text-2xl font-semibold">Custom Enterprise Pricing</h2>
             <p className="mt-2 text-sm leading-relaxed text-white/75">
-              Streamline prior authorization appeals, custom workflows, and EHR integration (Epic/Cerner) at
-              scale.
+              Streamline prior authorization appeals and custom workflows. EHR integration is available on request.
             </p>
           </div>
           <Button asChild className="shrink-0 bg-[var(--brand-gold)] text-[var(--color-primary-900)] hover:opacity-90">

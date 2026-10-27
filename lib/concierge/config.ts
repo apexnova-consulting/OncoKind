@@ -29,7 +29,7 @@ export const CONCIERGE_FIRST_ACTION_BUSINESS_DAYS = 1;
 export const CONCIERGE_SUBMISSION_READY_TARGET_BUSINESS_DAYS = 10;
 export const CONCIERGE_FAMILY_CONFIRMATION_BUSINESS_DAYS = 3;
 export const CONCIERGE_FOLLOWUP_DAYS = [3, 7, 10] as const;
-export const FUNDFINDER_URL = 'https://www.cancer.gov/about-cancer/treatment/cam/hp/financial-resources-pdq';
+export const FUNDFINDER_URL = 'https://fundfinder.panfoundation.org/';
 
 export function conciergePriceLockCents(): number | null {
   const raw = process.env.CONCIERGE_PRICE_LOCK_CENTS;
@@ -41,9 +41,12 @@ export function conciergePriceLockCents(): number | null {
 export function weeklyCohortPriceCents(now = new Date()): number {
   const locked = conciergePriceLockCents();
   if (locked) return locked;
-  const utc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  const week = Math.floor(utc / (7 * 24 * 60 * 60 * 1000));
-  return CONCIERGE_PRICE_TEST_CENTS[week % CONCIERGE_PRICE_TEST_CENTS.length];
+  if (process.env.FEATURE_CONCIERGE_PRICE_TEST === '1' || process.env.FEATURE_CONCIERGE_PRICE_TEST === 'true') {
+    const utc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+    const week = Math.floor(utc / (7 * 24 * 60 * 60 * 1000));
+    return CONCIERGE_PRICE_TEST_CENTS[week % CONCIERGE_PRICE_TEST_CENTS.length];
+  }
+  return CONCIERGE_DEFAULT_PRICE_CENTS;
 }
 
 export function formatUsdFromCents(cents: number): string {

@@ -111,11 +111,12 @@ export const routes = {
 // waitlist). "Prior Auth Engine" is no longer in the public nav anywhere —
 // including /professional — as of Aug 2026.
 export const newTemplateNavLabels = [
-  'Features',
+  'Tools',
+  'Concierge',
+  'For organizations',
   'Pricing',
-  'Professionals',
-  'Community',
-  'Resources',
+  'Learn',
+  'Trust',
   'Log In',
   'Get Started Free',
 ] as const;
@@ -170,7 +171,7 @@ export const pricingTiers = {
   },
 } as const;
 
-export const pricingComparisonRowCount = 20;
+export const pricingComparisonRowCount = 19;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.

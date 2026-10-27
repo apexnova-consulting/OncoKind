@@ -31,6 +31,10 @@ const RULES: Array<{ name: string; pattern: RegExp }> = [
     pattern:
       /(?:patient|name|pt\.?)\s*:?\s*[A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){0,3}/gi,
   },
+  {
+    name: 'ACCOUNT',
+    pattern: /\b(?:acct|account|member)\s*(?:no|number|#)?\s*:?\s*\d{6,}\b/gi,
+  },
 ];
 
 export function redactDocument(text: string): RedactionResult {

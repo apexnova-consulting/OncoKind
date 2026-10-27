@@ -1,10 +1,13 @@
 import Link from 'next/link';
-import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
-import { MEDICAL_DISCLAIMER_TEXT, PATH_B_PRIVACY_LANGUAGE, PROFESSIONAL_HIPAA_NOTE } from '@/lib/disclosures';
+import { MEDICAL_DISCLAIMER_TEXT, PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote } from '@/lib/disclosures';
 import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
+import { pageMetadata } from '@/lib/seo';
+import { subprocessorsForTrustPage } from '@/lib/legal/subprocessors';
+import { CONCIERGE_RETENTION_CLAIM, TOOLS_RETENTION_CLAIM } from '@/lib/legal/retention';
+import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 
-const lastReviewed = 'October 6, 2026';
+const lastReviewed = 'October 27, 2026';
 
 const collectedData = [
   {
@@ -19,8 +22,8 @@ const collectedData = [
   },
   {
     type: 'Usage data',
-    what: 'Pages visited and features used',
-    why: 'To improve product performance, reliability, and usability',
+    what: 'Pages visited and features used, only after you allow analytics cookies',
+    why: 'To improve product performance. Essential cookies run without that consent.',
   },
   {
     type: 'Appointment dates',
@@ -33,9 +36,9 @@ const collectedData = [
     why: 'Only to check assistance program eligibility. Field-encrypted. Not sent to analytics. Deletable.',
   },
   {
-    type: 'Call records (beta)',
-    what: 'Structured summaries of approved Call for me process calls',
-    why: 'To show you what was asked and answered. Raw audio is not retained in v1.',
+    type: 'Concierge case records',
+    what: 'Authorizations, records packets, and intake details you provide for a Concierge case',
+    why: 'To collect records and submit the packet to the center you chose',
   },
   {
     type: 'Family graph',
@@ -44,56 +47,24 @@ const collectedData = [
   },
 ];
 
-const subprocessors = [
+const changeLog = [
   {
-    service: 'Anthropic',
-    purpose: 'Report analysis and plain-English generation',
-    data: 'De-identified report text during processing',
+    date: 'October 27, 2026',
+    note: 'Split Tools and Concierge retention, listed current subprocessors including Calendly and the status page, aligned analytics copy with the cookie banner, and published Concierge refund terms.',
   },
   {
-    service: 'Vercel',
-    purpose: 'Application hosting and server runtime',
-    data: 'Encrypted application and request data needed to operate the service',
-  },
-  {
-    service: 'Supabase',
-    purpose: 'Database, authentication, and secure storage',
-    data: 'Encrypted user records, generated summaries, and account data',
-  },
-  {
-    service: 'Resend',
-    purpose: 'Transactional email delivery',
-    data: 'Email address and account-related messaging content',
-  },
-  {
-    service: 'Stripe',
-    purpose: 'Subscription billing and payment processing',
-    data: 'Payment information handled within Stripe checkout flows',
-  },
-  {
-    service: 'Maps distance (optional, when configured)',
-    purpose: 'Travel time and distance for Access Agent estimates',
-    data: 'Origin and destination points only. No names or diagnoses.',
-  },
-  {
-    service: 'Fax, print, and e-sign vendors',
-    purpose: 'Records requests and authorization packets for Concierge, when those vendors are contracted',
-    data: 'Only the minimum needed to send an approved request. BAAs required before production use.',
+    date: 'October 6, 2026',
+    note: 'Described Complete the Picture, Access Agent, and Concierge workflows.',
   },
 ];
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Trust and privacy',
   description:
-    'How OncoKind handles report uploads, protects your data, limits retention, and supports privacy requests. HIPAA BAA available on request for Professional organizations.',
-  alternates: { canonical: 'https://www.oncokind.com/trust' },
-  openGraph: {
-    title: 'Trust and privacy',
-    description: 'How OncoKind handles report uploads, protects your data, and limits retention.',
-    url: 'https://www.oncokind.com/trust',
-    images: [{ url: 'https://www.oncokind.com/og-home.png', width: 1200, height: 630, alt: 'OncoKind Trust Center' }],
-  },
-};
+    'How OncoKind handles report uploads, Concierge records, subprocessors, analytics consent, and privacy requests.',
+  path: '/trust',
+  imageAlt: 'OncoKind Trust Center',
+});
 
 export default function TrustPage() {
   return (
@@ -144,10 +115,11 @@ export default function TrustPage() {
           </h2>
           <ul className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
             <li>We do not sell your data to any third party, ever.</li>
-            <li>✗ We do not share your report content with advertisers.</li>
-            <li>✗ We do not store raw report text after your summary is generated.</li>
-            <li>✗ We do not use your personal health information to train AI models.</li>
-            <li>✗ OncoKind.com is ad-free. No advertiser has ever paid to influence what you see here.</li>
+            <li>We do not share your report content with advertisers.</li>
+            <li>{TOOLS_RETENTION_CLAIM}</li>
+            <li>{CONCIERGE_RETENTION_CLAIM}</li>
+            <li>We do not use your personal health information to train AI models.</li>
+            <li>OncoKind.com is ad-free. No advertiser has ever paid to influence what you see here.</li>
           </ul>
         </section>
 
@@ -171,11 +143,11 @@ export default function TrustPage() {
               },
               {
                 title: 'Data retention',
-                body: 'Raw report content is processed to generate your summary and is not retained after processing. Your generated summaries and prep sheets are stored securely and can be deleted by you at any time from your account settings.',
+                body: `${TOOLS_RETENTION_CLAIM} ${CONCIERGE_RETENTION_CLAIM} Generated summaries and prep sheets can be deleted from account settings.`,
               },
               {
                 title: 'Breach notification',
-                body: 'In the event of a data breach, affected users will be notified within 72 hours.',
+                body: 'In the event of a data breach, affected users will be notified within 72 hours. The incident runbook that makes that clock real is in the operations docs.',
               },
             ].map((item) => (
               <div
@@ -205,7 +177,7 @@ export default function TrustPage() {
                 </tr>
               </thead>
               <tbody>
-                {subprocessors.map((row) => (
+                {subprocessorsForTrustPage().map((row) => (
                   <tr key={row.service} className="border-b border-[var(--color-border-subtle)]">
                     <td className="px-4 py-4 font-medium text-[var(--color-primary-900)]">{row.service}</td>
                     <td className="px-4 py-4 text-[var(--color-text-secondary)]">{row.purpose}</td>
@@ -227,8 +199,9 @@ export default function TrustPage() {
               for extraction and rewording. A person approves every outbound step. They do not diagnose or choose treatment.
             </p>
             <p>
-              We remove names and other identifying details before analysis. The token map stays in your account
-              storage, encrypted, and is used only to put names back in your own view and in letters you generate.
+              We redact names, medical record numbers, dates of birth, addresses, phone numbers, and account numbers
+              before analysis. The token map stays in your account storage, encrypted, and is used only to put names
+              back in your own view and in letters you generate.
             </p>
             <p>
               Nothing is emailed, printed as a sent letter, or called until you review the exact script or letter
@@ -239,10 +212,7 @@ export default function TrustPage() {
               No lab, pharma, or program funding may affect what is shown, ranked, or suggested. No referral fees.
               No ads. No data sales.
             </p>
-            <p>
-              Final privacy, authorization, and refund wording is supplied by counsel. This page describes the
-              system as built.
-            </p>
+            <p>{CONCIERGE_REFUND_TERMS}</p>
           </div>
         </section>
 
@@ -251,8 +221,8 @@ export default function TrustPage() {
             5. Your Rights
           </h2>
           <ul className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
-            <li><strong>Access:</strong> You can request a copy of all data OncoKind holds about you at any time.</li>
-            <li><strong>Deletion:</strong> You can request permanent deletion of your account and associated data.</li>
+            <li><strong>Access:</strong> You can request a copy of all data OncoKind holds about you at any time from settings, or email support@oncokind.com.</li>
+            <li><strong>Deletion:</strong> You can request permanent deletion of your account and associated data. We complete deletion requests within 30 days.</li>
             <li><strong>Portability:</strong> You can request your data in a portable format.</li>
             <li><strong>Contact:</strong> For privacy or data requests, email <a className="underline" href="mailto:support@oncokind.com">support@oncokind.com</a>.</li>
           </ul>
@@ -262,7 +232,7 @@ export default function TrustPage() {
           <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">6. HIPAA</h2>
           <div className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
             <p>{PATH_B_PRIVACY_LANGUAGE}</p>
-            <p>{PROFESSIONAL_HIPAA_NOTE}</p>
+            <p>{professionalHipaaNote()}</p>
             <p>
               Using OncoKind does not create a Business Associate Agreement by default. If your
               organization needs a formal compliance review, contact us before onboarding.
@@ -274,25 +244,16 @@ export default function TrustPage() {
 
         <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
           <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">
-            7. Last Updated
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
-            This page was last reviewed on {lastReviewed}.
-          </p>
-        </section>
-
-        <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
-          <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">
             Cookies and Consent
           </h2>
           <div className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
             <p>
               OncoKind uses essential cookies for authentication, session security, and language
-              preferences. These cookies are required for the site to function properly.
+              preferences. These cookies are required for the site to function.
             </p>
             <p>
-              If analytics is enabled in the future, those scripts will only run after you choose
-              Accept All or explicitly allow analytics from the cookie preferences banner.
+              Optional analytics scripts run only after you choose Accept All or explicitly allow analytics
+              from the cookie preferences banner. If you choose Essential Only, analytics requests do not fire.
             </p>
             <ul className="list-disc space-y-2 pl-5">
               <li><strong>Essential:</strong> session, authentication, language preference</li>
@@ -300,6 +261,22 @@ export default function TrustPage() {
               <li><strong>Opt out:</strong> choose Essential Only or update your preferences when the banner appears</li>
             </ul>
           </div>
+        </section>
+
+        <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
+          <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">
+            Change log
+          </h2>
+          <ul className="mt-4 space-y-3 text-base leading-relaxed text-[var(--color-text-secondary)]">
+            {changeLog.map((entry) => (
+              <li key={entry.date}>
+                <strong>{entry.date}:</strong> {entry.note}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
+            This page was last reviewed on {lastReviewed}.
+          </p>
         </section>
 
         <section className="rounded-[var(--radius-xl)] bg-[var(--color-primary-900)] p-8 text-white shadow-[var(--shadow-md)]">

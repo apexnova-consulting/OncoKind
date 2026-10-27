@@ -12,7 +12,7 @@ const footerColumns = [
       { href: '/pricing', label: 'Pricing' },
       { href: '/learn', label: 'Learn' },
       { href: '/trust', label: 'Trust' },
-      { href: 'mailto:support@oncokind.com', label: 'Contact', external: true },
+      { href: '/support', label: 'Contact' },
       { href: 'https://calendly.com/oncokind-support', label: 'Book a Demo', external: true },
     ],
   },
@@ -32,7 +32,7 @@ const footerColumns = [
       { href: '/about', label: 'About' },
       { href: '/about#founder-section', label: 'Founder Story' },
       { href: '/support', label: 'Support' },
-      { href: 'mailto:support@oncokind.com', label: 'Contact', external: true },
+      { href: '/support', label: 'Contact' },
     ],
   },
   {
@@ -103,7 +103,7 @@ export async function TrustFooter() {
                 </p>
                 <ul className="mt-4 space-y-3 text-sm">
                   {col.links.map((l) => (
-                    <li key={l.href}>
+                    <li key={`${col.heading}-${l.label}`}>
                       {l.external ? (
                         <a
                           href={l.href}

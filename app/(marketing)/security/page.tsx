@@ -34,11 +34,9 @@ export default function SecurityPage() {
               When you upload a pathology report, we extract text and immediately
               scrub all personally identifiable information (names, dates of
               birth, medical record numbers, phone numbers, emails, addresses).
-              Only de-identified, structured data is sent to our AI. The raw
-              extracted text is never stored, not in our database, logs,
-              storage, or error reporting tools. We retain only the structured
-              insights (biomarkers, stage, histology) that help you understand
-              your report.
+              Redacted report text is sent to our AI and is not used for training.
+              For Tools, raw extracted text is deleted after processing. For Concierge,
+              authorized case records are stored encrypted and deleted 90 days after Case Ready.
             </p>
           </section>
 

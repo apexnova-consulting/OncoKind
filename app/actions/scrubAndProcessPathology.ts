@@ -19,7 +19,7 @@ import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
 import { getPatientReport } from '@/lib/patient-reports';
-import { hasCareAdvocacyAccess } from '@/lib/entitlements';
+import { freeReportLimitMessage, freeReportWindowStart, hasReachedFreeReportLimit } from '@/lib/report-limits';
 import {
   ANTHROPIC_MODELS,
   asAnthropicRequest,
@@ -131,12 +131,12 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
     const { count: reportCount } = await supabase
       .from('patient_reports')
       .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id);
-    if (!hasCareAdvocacyAccess(profile?.subscription_tier) && (reportCount ?? 0) >= 1) {
+      .eq('user_id', user.id)
+      .gte('created_at', freeReportWindowStart().toISOString());
+    if (hasReachedFreeReportLimit(profile?.subscription_tier, reportCount ?? 0)) {
       return {
         success: false,
-        error:
-          'TRIAL_LIMIT_REACHED: Upgrade to Caregiver Pro to unlock unlimited report analyses.',
+        error: `TRIAL_LIMIT_REACHED: ${freeReportLimitMessage()}`,
       };
     }
 

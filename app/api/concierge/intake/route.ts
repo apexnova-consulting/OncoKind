@@ -13,12 +13,18 @@ export async function POST(request: NextRequest) {
   const { user } = await getProfile();
   if (!user) return NextResponse.json({ error: 'Sign in required.' }, { status: 401 });
 
-  const body = (await request.json()) as Record<string, string>;
+  const body = (await request.json()) as Record<string, unknown>;
   const blob = JSON.stringify(body);
   if (containsCrisisLanguage(blob)) {
     return NextResponse.json({
       error: 'If you are in crisis, call or text 988. Cancer Support Community: 1-888-793-9355.',
     }, { status: 400 });
+  }
+  if (body.adultPatient !== true) {
+    return NextResponse.json({ error: 'Concierge is for adult patients.' }, { status: 400 });
+  }
+  if (body.usFacility !== true) {
+    return NextResponse.json({ error: 'Concierge is for US facilities.' }, { status: 400 });
   }
   if (/\b(under 18|age 17|pediatric|child patient)\b/i.test(blob)) {
     return NextResponse.json({

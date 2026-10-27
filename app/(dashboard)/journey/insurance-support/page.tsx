@@ -5,7 +5,7 @@ import { InsuranceSupportWorkbench } from '@/components/insurance/InsuranceSuppo
 import { Button } from '@/components/ui/button';
 
 export default async function InsuranceSupportPage() {
-  const { user, hasAdvocateAccess } = await getProfile();
+  const { user, isPro, hasAdvocateAccess } = await getProfile();
   if (!user) return null;
 
   return (
@@ -22,20 +22,20 @@ export default async function InsuranceSupportPage() {
           </p>
         </div>
 
-        {!hasAdvocateAccess ? (
+        {!isPro ? (
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-5">
             <p className="text-sm font-medium text-amber-900">
-              Insurance Denial Defense is an Advocate Plan feature.
+              Insurance Denial Defense is included with Caregiver Pro.
             </p>
             <p className="mt-1 text-sm text-amber-700">
-              Structured appeal packet generation, denial letter analysis, and financial aid tracking are available on the Advocate Plan.
+              Decode a denial letter on Free. The structured appeal packet is included from Caregiver Pro.
             </p>
             <Button asChild className="mt-4">
-              <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
+              <Link href="/pricing?plan=pro">Upgrade to Caregiver Pro</Link>
             </Button>
           </div>
         ) : (
-          <InsuranceSupportWorkbench hasAdvocateAccess={hasAdvocateAccess} />
+          <InsuranceSupportWorkbench hasAdvocateAccess={hasAdvocateAccess || isPro} />
         )}
       </div>
     </div>

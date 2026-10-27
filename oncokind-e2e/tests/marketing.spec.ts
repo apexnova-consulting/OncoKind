@@ -215,13 +215,13 @@ test.describe('Pricing (/pricing)', () => {
     await expect(table.locator('tbody tr')).toHaveCount(pricingComparisonRowCount);
   });
 
-  test('feature comparison table includes KindAuth on Professional only', async ({
+  test('feature comparison table includes Prior Auth Engine on Professional only', async ({
     page,
   }) => {
     await page.goto(routes.pricing);
-    const kindAuthRow = page.locator('tr', { hasText: 'KindAuth' }).first();
-    await expect(kindAuthRow).toBeVisible();
-    await expect(kindAuthRow.getByText('Not included')).toHaveCount(3);
+    const row = page.locator('tr', { hasText: 'Prior Auth Engine' }).first();
+    await expect(row).toBeVisible();
+    await expect(row.getByText('Not included')).toHaveCount(3);
   });
 
   test('pricing FAQ shows all 5 questions', async ({ page }) => {
@@ -233,12 +233,16 @@ test.describe('Pricing (/pricing)', () => {
 });
 
 test.describe('For Professionals (/professional)', () => {
-  test('KindAuth Pro section visible with "See Full Details" link', async ({ page }) => {
+  test('Professional page names independent advocates and links Prior Auth Engine', async ({ page }) => {
     await page.goto(routes.forProfessionals);
-    await expect(page.getByRole('heading', { name: /kindauth pro/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /see full details/i })).toHaveAttribute(
+    await expect(page.getByRole('heading', { name: /independent oncology advocates/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /prior auth engine/i })).toHaveAttribute(
       'href',
       new RegExp(routes.priorAuthPro)
+    );
+    await expect(page.getByRole('link', { name: /partner with us/i })).toHaveAttribute(
+      'href',
+      /\/professional\/partner/
     );
   });
 
@@ -296,7 +300,7 @@ test.describe('Prior Auth Pro (/prior-auth-pro)', () => {
 test.describe('Site template consistency', () => {
   // Finding #1 is fixed as of Aug 2026: /about, /resources, and /community
   // now render the same nav + footer as the rest of the marketing site.
-  const formerlyOldTemplatePages = [routes.about, routes.resources, routes.community];
+  const formerlyOldTemplatePages = [routes.about, routes.resources, routes.community, routes.trust];
 
   for (const route of formerlyOldTemplatePages) {
     test(`${route} uses the same nav as the rest of the site`, async ({ page }) => {
@@ -420,6 +424,14 @@ test.describe('Navigation & SEO', () => {
   test('footer does not include a Join Waitlist link', async ({ page }) => {
     await page.goto(routes.home);
     await expect(siteFooter(page).getByRole('link', { name: /join waitlist/i })).toHaveCount(0);
+  });
+
+  test('footer Contact links to support', async ({ page }) => {
+    await page.goto(routes.home);
+    await expect(siteFooter(page).getByRole('link', { name: /^Contact$/ }).first()).toHaveAttribute(
+      'href',
+      /\/support/
+    );
   });
 
   test('Cancer Support Community helpline is visible in the footer', async ({ page }) => {

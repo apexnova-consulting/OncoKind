@@ -1,3 +1,5 @@
+import { isBaaReady } from '@/lib/feature-flags';
+
 export const MEDICAL_DISCLAIMER_TEXT =
   'For educational support only. Not medical advice. Always consult your oncology team before making any treatment decisions.';
 
@@ -5,12 +7,19 @@ export const GLOBAL_SITE_DISCLAIMER_TEXT =
   'OncoKind is an educational support tool. Nothing on this site constitutes medical advice. Always consult your oncologist or care team before making any treatment decisions. OncoKind is not a substitute for professional medical guidance.';
 
 export const PATH_B_PRIVACY_LANGUAGE =
-  'Family plans are an educational tool. OncoKind is not a covered entity. No raw report data retained.';
+  'Family plans are an educational tool. OncoKind is not a covered entity. Tools: raw report text is deleted after processing.';
 
 export const PROFESSIONAL_SECURITY_REVIEW_TEXT = 'Enterprise security review available upon request';
 
-export const PROFESSIONAL_HIPAA_NOTE =
+export const PROFESSIONAL_HIPAA_NOTE_WHEN_READY =
   'HIPAA BAA available on request for qualified Professional organizations.';
+
+export const PROFESSIONAL_HIPAA_NOTE =
+  'A Business Associate Agreement is not offered on self-serve plans yet. Organizations can request a demo and a security review.';
+
+export function professionalHipaaNote(): string {
+  return isBaaReady() ? PROFESSIONAL_HIPAA_NOTE_WHEN_READY : PROFESSIONAL_HIPAA_NOTE;
+}
 
 export const APPOINTMENT_EXPLANATION_NOTE =
   'Explanation based on established oncology literature. Verify specifics with your care team.';

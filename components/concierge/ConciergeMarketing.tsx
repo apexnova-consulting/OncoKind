@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { CONCIERGE_BRAND, formatUsdFromCents, weeklyCohortPriceCents } from '@/lib/concierge/config';
+import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
+import { CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 
 const STEPS = [
@@ -87,9 +89,8 @@ export function ConciergeMarketing() {
               Can&apos;t afford this?
             </Link>
           </p>
-          <p className="mt-3 text-xs text-slate-500">
-            Refund terms are supplied by counsel and shown before purchase. If we cannot send a records request within the stated window, a full refund path applies.
-          </p>
+          <p className="mt-3 text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
+          <p className="mt-2 text-xs text-slate-500">{CONCIERGE_RETENTION_CLAIM}</p>
         </section>
 
         <section id="interest" className="rounded-2xl border border-[#cdd8d5] bg-white p-8">

@@ -5,17 +5,17 @@ import { TrackedCalendlyLink } from '@/components/analytics/TrackedCalendlyLink'
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
-  title: 'OncoKind for organizations',
+  title: 'OncoKind for independent advocates',
   description:
-    'Advocate workspace for patient advocates and care teams. HIPAA BAA available on request. Partner with us for sponsored Concierge cases.',
+    'Advocate workspace for independent oncology advocates and navigators. Partner with us for sponsored Concierge cases. Prior Auth Engine lives on a separate track for post-acute teams.',
   path: '/professional',
 });
 
 const useCases = [
-  'Independent advocates',
-  'Concierge clinics',
+  'Independent oncology advocates',
+  'Patient navigators',
   'Care navigation organizations',
-  'Support programs and oncology-adjacent teams',
+  'Foundations sponsoring Concierge cases',
 ];
 
 export default function ProfessionalPage() {
@@ -28,11 +28,11 @@ export default function ProfessionalPage() {
             Professional
           </p>
           <h1 className="mt-3 font-display text-4xl font-semibold text-[var(--color-primary-900)] sm:text-5xl">
-            OncoKind for Care Navigators &amp; Patient Advocates
+            OncoKind for independent oncology advocates
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-relaxed text-[var(--color-text-secondary)]">
-            OncoKind Professional is built for teams who support many patients at once and need a
-            more organized way to prepare families, decode complexity, and keep advocacy work moving.
+            Professional is built for independent advocates and navigators who hold many families at once.
+            Skilled nursing and post-acute prior authorization lives on a separate page.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
@@ -51,7 +51,7 @@ export default function ProfessionalPage() {
                 Advocate workspace
               </h2>
               <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-300">
-                Support many families at once with multi-patient Cancer Profile and Complete the Picture views, branded PDFs, and case tracking. HIPAA BAA available on request.
+                Support many families at once with multi-patient Cancer Profile and Complete the Picture views, branded PDFs, case tracking, and the Prior Auth Engine for teams that also handle coverage paperwork.
               </p>
             </div>
             <div className="flex shrink-0 flex-col gap-3">
@@ -68,7 +68,7 @@ export default function ProfessionalPage() {
               title: 'What the Professional tier provides',
               bullets: [
                 'Multi-patient workflow support for advocates and care teams',
-                'Insurance denial defense as an add-on path',
+                'Insurance Denial Defense included',
                 'Branded outputs and batch-oriented document review',
                 'Multi-patient Complete the Picture view and branded question PDFs',
                 'Access Agent tracking across patients',
@@ -79,8 +79,8 @@ export default function ProfessionalPage() {
             {
               title: 'Who it is for',
               bullets: [
-                'Directors of Nursing and Care Coordinators at SNFs and group homes',
                 'Independent patient advocates supporting multiple clients',
+                'Navigators preparing families for oncology visits',
                 'Concierge and navigation teams preparing families for oncology visits',
                 'Organizations that need a guided, caregiver-facing education layer',
               ],
@@ -121,7 +121,10 @@ export default function ProfessionalPage() {
               <TrackedCalendlyLink>Book a Demo</TrackedCalendlyLink>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/concierge/hardship">Partner with us</Link>
+              <Link href="/professional/partner">Partner with us</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/prior-auth-pro">Prior Auth Engine for post-acute teams</Link>
             </Button>
           </div>
         </section>

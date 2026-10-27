@@ -31,8 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/features/first-72-hours',
     '/features/oncokind-family',
     '/concierge',
-    '/signup',
-    '/login',
+    '/concierge/hardship',
+    '/professional/partner',
     '/prior-auth-pro',
   ];
 

@@ -20,7 +20,6 @@ export {
 
 import {
   hasCaregiverAccess,
-  hasAdvocateAccess as hasAdvocatePlanAccess,
   hasKindAuthAccess,
 } from '@/lib/pricing-config';
 
@@ -43,5 +42,5 @@ export function isPaidTier(tier: SubscriptionTier): boolean {
 }
 
 export function hasInsuranceAdvocacyAccess(tier: SubscriptionTier): boolean {
-  return hasAdvocatePlanAccess(tier);
+  return hasCaregiverAccess(tier);
 }
