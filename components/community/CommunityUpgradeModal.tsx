@@ -19,7 +19,7 @@ export function CommunityUpgradeModal({
           Community posting
         </p>
         <h3 className="mt-3 font-display text-2xl font-semibold text-[var(--color-primary-900)]">
-          Posting in the community is available on the Advocate Plan.
+          Community posting is paused until a moderator is in place.
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-text-secondary)]">
           Free members can browse every conversation. Upgrade when you&apos;re ready to ask
@@ -27,7 +27,7 @@ export function CommunityUpgradeModal({
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Button asChild className="sm:flex-1">
-            <Link href="/pricing?plan=advocate">$49/month Advocate Plan</Link>
+            <Link href="/pricing">See plans</Link>
           </Button>
           <Button type="button" variant="outline" className="sm:flex-1" onClick={onClose}>
             Read More Posts

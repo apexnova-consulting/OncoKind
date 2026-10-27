@@ -40,12 +40,19 @@ export default async function JourneyPage() {
 
   const latestReportId = reports?.[0]?.id;
   const report = latestReportId ? await getPatientReport(latestReportId, user.id) : null;
+  const { count: conciergeCount } = await supabase
+    .from('concierge_cases')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id);
+
   const nextStep = nextJourneyStep({
     hasReport: Boolean(report),
     hasAppointment: (appointmentCount ?? 0) > 0,
     hasDenial: (denialCount ?? 0) > 0,
     trialInterest: false,
-    conciergeCase: false,
+    secondOpinionGoal: false,
+    recordDelays: false,
+    conciergeCase: (conciergeCount ?? 0) > 0,
   });
 
   const stages = report

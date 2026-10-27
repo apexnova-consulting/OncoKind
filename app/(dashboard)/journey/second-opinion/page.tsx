@@ -88,10 +88,10 @@ export default async function SecondOpinionPage() {
         {!isPro && (
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
             <p className="text-sm text-slate-700">
-              Second Opinion packet export is part of the Advocate Plan. Unlock complete packet generation with an Advocate Plan.
+              Second Opinion packet export is part of Caregiver Pro. Unlock complete packet generation with Caregiver Pro.
             </p>
             <Button asChild className="mt-3">
-              <Link href="/pricing?plan=advocate">Upgrade to Advocate Plan</Link>
+              <Link href="/pricing?plan=pro">Upgrade to Caregiver Pro</Link>
             </Button>
           </div>
         )}

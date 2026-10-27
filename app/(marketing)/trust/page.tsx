@@ -50,7 +50,7 @@ const collectedData = [
 const changeLog = [
   {
     date: 'October 27, 2026',
-    note: 'Split Tools and Concierge retention, listed current subprocessors including Calendly and the status page, aligned analytics copy with the cookie banner, and published Concierge refund terms.',
+    note: 'Listed the Call for me voice vendor as a future subprocessor, kept scoped Concierge retention, and aligned family plan names with Caregiver Plus until a merge is confirmed.',
   },
   {
     date: 'October 6, 2026',

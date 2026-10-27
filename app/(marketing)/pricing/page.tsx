@@ -5,7 +5,9 @@ import { PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote } from '@/lib/disclosure
 import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 import { hasAdvocatePrices, hasProPrices, hasProfessionalPrice } from '@/lib/stripe-prices';
-import { PLANS, PRICING_PAGE, SITE_ORIGIN, publicCatalogFeatures } from '@/lib/pricing-config';
+import { CONCIERGE_CAREGIVER_GRANT_DAYS } from '@/lib/concierge/config';
+import { isFamilyTierMerged } from '@/lib/board-run2';
+import { PRICING_PAGE, SITE_ORIGIN, publicCatalogFeatures, publicPricingHeaders } from '@/lib/pricing-config';
 import { CONCIERGE_REFUND_TERMS, TOOLS_CANCEL_COPY } from '@/lib/legal/refunds';
 import { TOOLS_RETENTION_CLAIM, CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
 import type { Metadata } from 'next';
@@ -39,7 +41,7 @@ function ComparisonCell({ value }: { value: string }) {
   return <>{value}</>;
 }
 
-const TIER_HEADERS = [PLANS.free.name, PLANS.caregiver.name, PLANS.advocate.name, PLANS.professional.name];
+const TIER_HEADERS = publicPricingHeaders();
 
 export default async function PricingPage() {
   const supabase = await createServerSupabaseClient();
@@ -100,7 +102,7 @@ export default async function PricingPage() {
               },
               {
                 q: 'Is there a discount for financial hardship?',
-                a: 'Use the hardship form at /concierge/hardship. A person reviews every request. Approved families can receive a 90-day Caregiver Pro code.',
+                a: `Use the hardship form at /concierge/hardship. A person reviews every request. Approved families can receive a ${CONCIERGE_CAREGIVER_GRANT_DAYS}-day Caregiver Pro code.`,
               },
               {
                 q: 'Does OncoKind tell me which tests or treatments I need?',
@@ -165,9 +167,11 @@ export default async function PricingPage() {
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={feature.cells.caregiver} />
                     </td>
+                    {isFamilyTierMerged() ? null : (
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={feature.cells.advocate} />
                     </td>
+                    )}
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={feature.cells.professional} />
                     </td>

@@ -69,7 +69,7 @@ export default async function CommunityLandingPage() {
             )}
             {!isPro && (
               <Button asChild variant="outline">
-                <Link href="/pricing?plan=advocate">See Advocate Plan</Link>
+                <Link href="/pricing">See plans</Link>
               </Button>
             )}
           </div>

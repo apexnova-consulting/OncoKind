@@ -40,12 +40,12 @@ export default async function FinancialHelpPage() {
         <div className="mx-auto max-w-5xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">Financial Help</h1>
           <p className="mt-3 text-sm text-slate-600">
-            Live Financial Aid Tracker is an Advocate Plan feature. Unlock access to track
+            The travel and lodging tracker is included with Caregiver Plus. Unlock access to track
             diagnosis-aware grants, PAF programs, and HealthWell funds in real time.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link href="/pricing?plan=advocate" className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
-              Upgrade to Advocate Plan
+              Upgrade to Caregiver Plus
             </Link>
           </div>
         </div>

@@ -22,6 +22,10 @@
     {
       "path": "/api/cron/concierge-purge",
       "schedule": "15 8 * * *"
+    },
+    {
+      "path": "/api/cron/concierge-followup",
+      "schedule": "0 14 * * 1-5"
     }
   ]
 }

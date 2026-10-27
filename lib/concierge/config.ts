@@ -19,6 +19,7 @@ export const CONCIERGE_BRAND = {
 } as const;
 
 export const CONCIERGE_PRICE_TEST_CENTS = [14900, 29900, 49900] as const;
+export const CONCIERGE_PRICE_VARIANTS_CENTS = [29900, 39900, 49900, 59900] as const;
 export const CONCIERGE_DEFAULT_PRICE_CENTS = 29900;
 export const CONCIERGE_CAPACITY_CAP = 15;
 export const CONCIERGE_CAREGIVER_GRANT_DAYS = 60;
@@ -38,6 +39,21 @@ export function conciergePriceLockCents(): number | null {
   return Number.isFinite(value) && value > 0 ? value : null;
 }
 
+export function conciergeListPriceCents(): number {
+  const variantOn =
+    process.env.FEATURE_CONCIERGE_PRICE_VARIANT === '1' ||
+    process.env.FEATURE_CONCIERGE_PRICE_VARIANT === 'true' ||
+    process.env.FEATURE_CONCIERGE_PRICE_VARIANT === 'on' ||
+    process.env.NEXT_PUBLIC_FEATURE_CONCIERGE_PRICE_VARIANT === '1' ||
+    process.env.NEXT_PUBLIC_FEATURE_CONCIERGE_PRICE_VARIANT === 'true';
+  if (!variantOn) return CONCIERGE_DEFAULT_PRICE_CENTS;
+  const raw = process.env.CONCIERGE_PRICE_VARIANT_CENTS;
+  const value = raw ? Number(raw) : CONCIERGE_DEFAULT_PRICE_CENTS;
+  return CONCIERGE_PRICE_VARIANTS_CENTS.includes(value as (typeof CONCIERGE_PRICE_VARIANTS_CENTS)[number])
+    ? value
+    : CONCIERGE_DEFAULT_PRICE_CENTS;
+}
+
 export function weeklyCohortPriceCents(now = new Date()): number {
   const locked = conciergePriceLockCents();
   if (locked) return locked;
@@ -46,7 +62,7 @@ export function weeklyCohortPriceCents(now = new Date()): number {
     const week = Math.floor(utc / (7 * 24 * 60 * 60 * 1000));
     return CONCIERGE_PRICE_TEST_CENTS[week % CONCIERGE_PRICE_TEST_CENTS.length];
   }
-  return CONCIERGE_DEFAULT_PRICE_CENTS;
+  return conciergeListPriceCents();
 }
 
 export function formatUsdFromCents(cents: number): string {

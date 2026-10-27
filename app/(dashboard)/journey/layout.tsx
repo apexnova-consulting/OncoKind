@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { ProgressStrip } from '@/components/care/ProgressStrip';
 import { JourneySidebar } from '@/components/care/JourneySidebar';
-import { hasCareAdvocacyAccess } from '@/lib/entitlements';
+import { hasAdvocateAccess, hasCaregiverAccess } from '@/lib/entitlements';
 
 export default async function JourneyLayout({
   children,
@@ -18,7 +18,8 @@ export default async function JourneyLayout({
   const { data: profile } = user
     ? await supabase.from('profiles').select('subscription_tier').eq('id', user.id).maybeSingle()
     : { data: null };
-  const hasAdvocateAccess = hasCareAdvocacyAccess(profile?.subscription_tier);
+  const caregiverAccess = hasCaregiverAccess(profile?.subscription_tier);
+  const plusAccess = hasAdvocateAccess(profile?.subscription_tier);
 
   const currentStage = hasReport ? 'treatment-planning' : 'diagnosis';
   const completedStages: ('diagnosis' | 'treatment-planning' | 'active-treatment' | 'monitoring')[] = hasReport ? ['diagnosis'] : [];
@@ -27,7 +28,7 @@ export default async function JourneyLayout({
     <div className="flex min-h-screen flex-col">
       <ProgressStrip currentStage={currentStage} completedStages={completedStages} />
       <div className="flex flex-1">
-        <JourneySidebar hasAdvocateAccess={hasAdvocateAccess} />
+        <JourneySidebar hasCaregiverAccess={caregiverAccess} hasAdvocateAccess={plusAccess} />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>

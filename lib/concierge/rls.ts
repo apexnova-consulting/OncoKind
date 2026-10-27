@@ -13,3 +13,18 @@ export function canCoordinatorOpenCase(input: {
 export function canFamilyReadCase(ownerUserId: string, actorUserId: string): boolean {
   return ownerUserId === actorUserId;
 }
+
+export function canPartnerReadPhi(): false {
+  return false;
+}
+
+export function canAdvocateReadClient(input: {
+  advocateId: string;
+  clientAdvocateId: string;
+}): boolean {
+  return input.advocateId === input.clientAdvocateId;
+}
+
+export function canOrgReadOtherOrg(input: { orgId: string; recordOrgId: string }): boolean {
+  return input.orgId === input.recordOrgId;
+}

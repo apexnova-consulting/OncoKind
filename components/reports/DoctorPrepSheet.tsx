@@ -99,10 +99,10 @@ export function DoctorPrepSheet({
       <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
         <p className="font-medium text-slate-800">Download Doctor Prep Sheet</p>
         <p className="text-sm text-slate-600 mt-1">
-          Upgrade to the Advocate Plan to download a one-page prep sheet for your oncologist visit.
+          Upgrade to Caregiver Pro to download a one-page prep sheet for your oncologist visit.
         </p>
         <Button className="mt-3" asChild>
-          <a href="/dashboard/billing">Upgrade to Advocate Plan</a>
+          <a href="/dashboard/billing">Upgrade to Caregiver Pro</a>
         </Button>
       </div>
     );

@@ -3,6 +3,8 @@ import { getProfile } from '@/lib/auth';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { createOneTimeCheckoutSession } from '@/lib/stripe';
 import { weeklyCohortPriceCents } from '@/lib/concierge/config';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { conciergeWaitlistMessage, isConciergeAtWeeklyCap, weekStartUtc } from '@/lib/concierge/capacity';
 
 export async function POST(request: NextRequest) {
   if (!isFeatureEnabled('concierge_purchase')) {
@@ -13,6 +15,15 @@ export async function POST(request: NextRequest) {
   const body = (await request.json().catch(() => ({}))) as { refundAccepted?: boolean };
   if (!body.refundAccepted) {
     return NextResponse.json({ error: 'Please accept the refund terms before payment.' }, { status: 400 });
+  }
+  const admin = createServiceRoleSupabaseClient();
+  const { count } = await admin
+    .from('concierge_cases')
+    .select('id', { count: 'exact', head: true })
+    .gte('created_at', weekStartUtc().toISOString())
+    .not('state', 'in', '(cancelled,refunded)');
+  if (isConciergeAtWeeklyCap(count ?? 0)) {
+    return NextResponse.json({ error: conciergeWaitlistMessage(), waitlist: true }, { status: 409 });
   }
   const priceId = process.env.STRIPE_PRICE_ID_CONCIERGE ?? '';
   if (!priceId) return NextResponse.json({ error: 'Concierge price is not configured.' }, { status: 503 });

@@ -127,14 +127,14 @@ export default async function CommunityThreadPage({ params }: PageProps) {
         ) : (
           <div className="rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-white p-5 shadow-[var(--shadow-sm)]">
             <p className="text-sm text-[var(--color-text-secondary)]">
-              Sign in to reply to this thread, or upgrade to Advocate to post and send support.
+              Sign in to reply to this thread. Posting is paused until a moderator is in place.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Button asChild>
                 <Link href="/login">Log In</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/pricing?plan=advocate">See Advocate Plan</Link>
+                <Link href="/pricing">See plans</Link>
               </Button>
             </div>
           </div>

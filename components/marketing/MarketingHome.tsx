@@ -5,27 +5,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   ArrowRight,
-  BookHeart,
-  Calendar,
   Check,
   ChevronDown,
-  ClipboardList,
-  Clock,
   FileCheck,
-  FileText,
-  FlaskConical,
   GitBranch,
-  HandCoins,
   Heart,
   Lock,
-  MessageCircle,
   ScanSearch,
   Shield,
-  ShieldCheck,
   Sparkles,
   Upload,
-  Users,
-  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SampleReportDemo } from '@/components/marketing/SampleReportDemo';
@@ -34,12 +23,10 @@ import { Reveal, RevealStagger } from '@/components/motion/Reveal';
 import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 import { cn } from '@/lib/utils';
-import {
-  HOMEPAGE_HERO,
-  HOMEPAGE_SPOTLIGHT_FEATURES,
-} from '@/lib/pricing-config';
+import { HOMEPAGE_HERO } from '@/lib/pricing-config';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { JOURNEY_POSITIONING, JOURNEY_STAGE_HEADLINE, JOURNEY_STAGES } from '@/lib/journey/stages';
+import { isRareWomensFramingOn } from '@/lib/cancers/landings';
 import { SCOPED_RETENTION_BADGE } from '@/lib/legal/retention';
 import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
 
@@ -127,25 +114,6 @@ const steps = [
     devNote: false,
   },
 ];
-
-const FEATURE_ICONS = {
-  cancer_profile: Sparkles,
-  doctor_prep: Calendar,
-  second_opinion: FileText,
-  check_in: ClipboardList,
-  timeline: GitBranch,
-  trials: FlaskConical,
-  goals_of_care: BookHeart,
-  insurance: ShieldCheck,
-  financial_aid: HandCoins,
-  community: MessageCircle,
-  empathy_filter: Heart,
-  first_72: Clock,
-  family: Users,
-  complete_the_picture: ScanSearch,
-  access_agent: MapPin,
-  concierge: Heart,
-} as const;
 
 const faqs = [
   {
@@ -321,6 +289,14 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               <p className="mt-5 max-w-[30rem] text-[1.05rem] leading-[1.75] text-[#5a6b68] hero-nudge-up hero-nudge-up-delay-2">
                 {HOMEPAGE_HERO.subtitle}
               </p>
+              {isRareWomensFramingOn() ? (
+                <p className="mt-3 max-w-[30rem] text-sm leading-relaxed text-[#0F6E56]">
+                  Built first for families facing rare women cancers, then useful for every diagnosis.{' '}
+                  <Link href="/cancers" className="font-semibold underline-offset-2 hover:underline">
+                    See diagnosis pages
+                  </Link>
+                </p>
+              ) : null}
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap hero-nudge-up hero-nudge-up-delay-2">
                 {signedIn ? (
@@ -614,45 +590,6 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               ))}
             </ol>
           </div>
-          <Reveal className="mt-12 text-center">
-            <p className="text-sm font-semibold text-[#5a6b68]">Tools behind those stages</p>
-          </Reveal>
-
-          <RevealStagger
-            className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
-            stagger={0.06}
-          >
-            {HOMEPAGE_SPOTLIGHT_FEATURES.map((f) => {
-              const Icon = FEATURE_ICONS[f.id as keyof typeof FEATURE_ICONS] ?? FileText;
-              return (
-              <div
-                key={f.id}
-                className="hover-lift-card flex flex-col rounded-2xl border border-[#cdd8d5] bg-white p-6 shadow-sm"
-              >
-                <Icon
-                  className="h-8 w-8 text-[#0F6E56]"
-                  strokeWidth={1.5}
-                  aria-hidden
-                />
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <h3 className="text-base font-semibold text-[#1e2d2b]">{f.name}</h3>
-                  <span className="rounded-full bg-[#E1F5EE] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-[#0F6E56]">
-                    {f.homepage?.tag}
-                  </span>
-                </div>
-                <p className="mt-2 flex-1 text-sm leading-[1.75] text-[#5a6b68]">{f.homepage?.desc}</p>
-                <Link
-                  href={f.homepage?.href ?? '/pricing'}
-                  className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#0F6E56] hover:text-[#085041]"
-                >
-                  Learn more
-                  <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                </Link>
-              </div>
-            );
-            })}
-          </RevealStagger>
-
           <Reveal className="mt-10 text-center">
             <Link
               href="/features"
