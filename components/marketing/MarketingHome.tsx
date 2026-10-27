@@ -597,18 +597,23 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               {JOURNEY_POSITIONING}
             </p>
           </Reveal>
-          <RevealStagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" stagger={0.06}>
-            {JOURNEY_STAGES.map((stage) => (
-              <Link
-                key={stage.id}
-                href={stage.href}
-                className="rounded-2xl border border-[#cdd8d5] bg-[#f7faf9] p-5 text-left shadow-sm"
-              >
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">{stage.name}</p>
-                <p className="mt-2 text-sm text-[#5a6b68]">{stage.summary}</p>
-              </Link>
-            ))}
-          </RevealStagger>
+          <div className="mt-10 overflow-visible rounded-3xl border border-[#cdd8d5] bg-[#f7faf9] p-5 sm:p-8">
+            <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+              {JOURNEY_STAGES.map((stage, index) => (
+                <li key={stage.id} className="min-w-0">
+                  <Link href={stage.href} className="group block h-full text-left">
+                    <p className="text-xs font-semibold tabular-nums text-[#0F6E56]">
+                      {String(index + 1).padStart(2, '0')}
+                    </p>
+                    <p className="mt-3 font-display text-xl font-semibold text-[#1e2d2b] group-hover:text-[#0F6E56]">
+                      {stage.name}
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-[#5a6b68]">{stage.summary}</p>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </div>
           <Reveal className="mt-12 text-center">
             <p className="text-sm font-semibold text-[#5a6b68]">Tools behind those stages</p>
           </Reveal>

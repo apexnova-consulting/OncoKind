@@ -1,5 +1,5 @@
 export const ROSEMARIE_SAMPLE = {
-  patientName: 'Jordan Hale',
+  patientName: 'Rosemarie N.',
   cancerType: 'Vulvar Squamous Cell Carcinoma (VSCC)',
   cancerTypeShort: 'Vulvar squamous cell carcinoma',
   stage: 'Stage IV',
