@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
-import { CONCIERGE_RECORD_RETENTION_DAYS } from '@/lib/legal/retention';
+import { CONCIERGE_RETENTION_DAYS } from '@/lib/legal/retention';
 
 function isAuthorized(request: NextRequest) {
   const expected = process.env.CHECK_IN_CRON_SECRET ?? process.env.CRON_SECRET;
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   }
 
   const cutoff = new Date();
-  cutoff.setUTCDate(cutoff.getUTCDate() - CONCIERGE_RECORD_RETENTION_DAYS);
+  cutoff.setUTCDate(cutoff.getUTCDate() - CONCIERGE_RETENTION_DAYS);
   const supabase = createServiceRoleSupabaseClient();
   const { data, error } = await supabase
     .from('concierge_cases')
@@ -36,6 +36,6 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({
     purged: data?.length ?? 0,
-    retentionDays: CONCIERGE_RECORD_RETENTION_DAYS,
+    retentionDays: CONCIERGE_RETENTION_DAYS,
   });
 }

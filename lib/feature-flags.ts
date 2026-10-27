@@ -15,6 +15,10 @@ export const FEATURE_FLAGS = {
   professional_self_serve: 'professional_self_serve',
   rare_womens_cancers_framing: 'rare_womens_cancers_framing',
   time_bound_pass: 'time_bound_pass',
+  family_tier_merge: 'family_tier_merge',
+  concierge_price_variant: 'concierge_price_variant',
+  individual_advocate_plan: 'individual_advocate_plan',
+  tool_freeze: 'tool_freeze',
 } as const;
 
 export type FeatureFlagName = keyof typeof FEATURE_FLAGS;
@@ -87,12 +91,25 @@ export function isFeatureEnabled(flag: FeatureFlagName): boolean {
       'NEXT_PUBLIC_FEATURE_RARE_WOMENS_CANCERS',
     ],
     time_bound_pass: ['FEATURE_TIME_BOUND_PASS', 'NEXT_PUBLIC_FEATURE_TIME_BOUND_PASS'],
+    family_tier_merge: ['FEATURE_FAMILY_TIER_MERGE', 'NEXT_PUBLIC_FEATURE_FAMILY_TIER_MERGE'],
+    concierge_price_variant: [
+      'FEATURE_CONCIERGE_PRICE_VARIANT',
+      'NEXT_PUBLIC_FEATURE_CONCIERGE_PRICE_VARIANT',
+    ],
+    individual_advocate_plan: [
+      'FEATURE_INDIVIDUAL_ADVOCATE_PLAN',
+      'NEXT_PUBLIC_FEATURE_INDIVIDUAL_ADVOCATE_PLAN',
+    ],
+    tool_freeze: ['FEATURE_TOOL_FREEZE', 'NEXT_PUBLIC_FEATURE_TOOL_FREEZE'],
   };
 
   if (flag === 'cp_reduced_mode') {
     return envOnByDefault(pairs[flag]);
   }
   if (flag === 'concierge_public_pages') {
+    return envOnByDefault(pairs[flag]);
+  }
+  if (flag === 'tool_freeze') {
     return envOnByDefault(pairs[flag]);
   }
 

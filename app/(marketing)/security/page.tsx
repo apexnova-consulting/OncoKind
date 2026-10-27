@@ -7,6 +7,7 @@ import {
   FileCheck,
 } from 'lucide-react';
 import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
+import { CONCIERGE_RETENTION_CLAIM, TOOLS_RETENTION_CLAIM } from '@/lib/legal/retention';
 
 export const metadata = {
   title: 'Security | OncoKind',
@@ -35,8 +36,7 @@ export default function SecurityPage() {
               scrub all personally identifiable information (names, dates of
               birth, medical record numbers, phone numbers, emails, addresses).
               Redacted report text is sent to our AI and is not used for training.
-              For Tools, raw extracted text is deleted after processing. For Concierge,
-              authorized case records are stored encrypted and deleted 90 days after Case Ready.
+              {TOOLS_RETENTION_CLAIM} {CONCIERGE_RETENTION_CLAIM}
             </p>
           </section>
 

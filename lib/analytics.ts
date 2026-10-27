@@ -1,3 +1,5 @@
+import { CONSENT_COOKIE_NAME, decodeConsent } from '@/lib/consent';
+
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
 const UTM_COOKIE = 'ok_utm';
 const UTM_MAX_AGE_SECONDS = 60 * 60 * 24 * 90;
@@ -28,7 +30,11 @@ export type FunnelEvent =
   | 'survey_completed'
   | 'handle_this_prompt_viewed'
   | 'handle_this_prompt_clicked'
-  | 'pmf_survey_shown';
+  | 'pmf_survey_shown'
+  | 'stage_1_complete'
+  | 'first_paid_action'
+  | 'plan_purchased'
+  | 'concierge_started';
 
 type Attribution = Partial<Record<(typeof UTM_KEYS)[number], string>>;
 
@@ -105,8 +111,15 @@ export function identifyAnalyticsUser(userId: string | null | undefined) {
 
 const pendingEvents: Array<{ event: FunnelEvent; payload: Record<string, string | number | boolean> }> = [];
 
+export function hasAnalyticsConsent(): boolean {
+  if (!isBrowser()) return false;
+  const raw = readCookie(CONSENT_COOKIE_NAME);
+  return Boolean(decodeConsent(raw)?.analytics);
+}
+
 export function track(event: FunnelEvent, props?: Record<string, string | number | boolean | undefined>) {
   if (!isBrowser()) return;
+  if (!hasAnalyticsConsent()) return;
   const payload = {
     ...getStoredUtms(),
     ...sanitizeProps(props),

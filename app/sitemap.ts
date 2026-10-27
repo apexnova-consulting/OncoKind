@@ -34,6 +34,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/concierge/hardship',
     '/professional/partner',
     '/prior-auth-pro',
+    '/cancers',
+    '/cancers/vulvar-cancer',
+    '/cancers/rare-ovarian',
+    '/cancers/uterine-sarcoma',
+    '/cancers/gestational-trophoblastic-disease',
   ];
 
   const resourceRoutes = RESOURCE_ARTICLES.map((article) => `/resources/${article.slug}`);

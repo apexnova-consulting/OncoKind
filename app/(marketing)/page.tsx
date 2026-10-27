@@ -82,7 +82,7 @@ const jsonLdFAQ = {
       name: "What does 'free' actually include?",
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'One pathology scan total per account and a Cancer Profile. Trial matching on Free is a preview of the top 3 matches. Doctor Prep Sheet PDFs and full matching are on Caregiver Pro. Insurance tools are on Advocate Plan.',
+        text: 'Up to 3 reports in the first 30 days and a Cancer Profile. Trial matching on Free is a preview of the top 3 matches. Doctor Prep Sheet PDFs, full matching, and Insurance Denial Defense are on Caregiver Pro. Travel and lodging tracking is on Caregiver Plus.',
       },
     },
   ],

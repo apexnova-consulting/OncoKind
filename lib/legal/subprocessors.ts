@@ -1,3 +1,5 @@
+import { CONCIERGE_RETENTION_DAYS } from '@/lib/legal/retention';
+
 export type Subprocessor = {
   service: string;
   purpose: string;
@@ -59,6 +61,12 @@ export const SUBPROCESSORS: Subprocessor[] = [
     purpose: 'Travel time and distance for Access Agent estimates',
     data: 'Origin and destination points only. No names or diagnoses.',
     envKeys: ['GOOGLE_MAPS_API_KEY', 'MAPBOX_ACCESS_TOKEN'],
+  },
+  {
+    service: 'Call for me voice vendor',
+    purpose: 'Invite-only process calls, only after a signed authorization and a human-approved script',
+    data: `Call purpose, approved script, and a recording if all-party consent is given. Same ${CONCIERGE_RETENTION_DAYS}-day Concierge retention. No production vendor is live yet.`,
+    envKeys: ['FEATURE_VOICE_PRODUCTION_CALLS'],
   },
   {
     service: 'Fax, print, and e-sign vendors',

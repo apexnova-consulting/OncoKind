@@ -1,7 +1,7 @@
 /**
  * Single source of truth for OncoKind public pricing, feature copy, and entitlements.
  * Amounts follow the production pricing brief: Free $0, Caregiver Pro $39/mo,
- * Advocate Plan $49/mo, Professional $999/mo. Yearly billing is 10x monthly.
+ * Caregiver Plus $49/mo, Professional $999/mo. Yearly billing is 10x monthly.
  * Concierge list price lives in lib/concierge/config.ts and is referenced here.
  */
 
@@ -10,6 +10,13 @@ import {
   CONCIERGE_DEFAULT_PRICE_CENTS,
   formatUsdFromCents,
 } from '@/lib/concierge/config';
+import {
+  FAMILY_GUIDELINE_SHEET_NAME,
+  FAMILY_PLUS_PLAN_NAME,
+  isFamilyTierMerged,
+  isIndividualAdvocatePlanPublic,
+  INDIVIDUAL_ADVOCATE_PLAN,
+} from '@/lib/board-run2';
 
 export const SITE_ORIGIN = 'https://www.oncokind.com';
 export const CONCIERGE_LIST_PRICE_LABEL = formatUsdFromCents(CONCIERGE_DEFAULT_PRICE_CENTS);
@@ -68,16 +75,16 @@ export const PLANS = {
   advocate: {
     id: 'advocate' as const,
     checkoutKey: 'advocate' as const,
-    name: 'Advocate Plan',
+    name: FAMILY_PLUS_PLAN_NAME,
     monthlyCents: 4900,
     yearlyCents: 49000,
     monthlyLabel: '$49',
     yearlyLabel: '$490',
     cadenceMonthly: '/month',
     cadenceYearly: '/year',
-    cta: 'Start Advocate Plan',
+    cta: 'Start Caregiver Plus',
     signupHref: '/signup?plan=advocate',
-    badge: 'Insurance & financial navigation',
+    badge: 'Travel and lodging help',
   },
   professional: {
     id: 'professional' as const,
@@ -124,18 +131,32 @@ export const CAREGIVER_FEATURES = [
 
 export const ADVOCATE_FEATURES = [
   'Everything in Caregiver Pro',
-  'Insurance Denial Defense',
   'Travel and lodging tracker',
-  'Guideline-Informed Advocate Sheets',
+  'Guideline-informed family sheets',
 ];
 
 export const PROFESSIONAL_FEATURES = [
-  'Everything in Advocate Plan',
+  'Everything in Caregiver Pro',
   'Advocate workspace with multi-patient views',
   'Branded PDFs and case tracking',
   'Partner path for sponsored Concierge cases',
   'Prior Auth Engine for post-acute teams (see /prior-auth-pro)',
 ];
+
+export function caregiverFeatureList(): string[] {
+  if (!isFamilyTierMerged()) return CAREGIVER_FEATURES;
+  return [...CAREGIVER_FEATURES, 'Travel and lodging tracker', FAMILY_GUIDELINE_SHEET_NAME];
+}
+
+export function advocateFeatureList(): string[] {
+  return ADVOCATE_FEATURES;
+}
+
+export function professionalFeatureList(): string[] {
+  return isFamilyTierMerged()
+    ? PROFESSIONAL_FEATURES
+    : ['Everything in Caregiver Plus', ...PROFESSIONAL_FEATURES.slice(1)];
+}
 
 export const FREE_FEATURES = [
   'Up to 3 reports in the first 30 days',
@@ -296,7 +317,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     homepage: {
       href: '/journey/financial-help',
       desc: 'Track trial and treatment travel, lodging, and caregiver cost help. Copay funds: use FundFinder.',
-      tag: 'Advocate Plan',
+      tag: FAMILY_PLUS_PLAN_NAME,
       consumerGrid: true,
     },
     cells: {
@@ -472,13 +493,13 @@ export const HOMEPAGE_HERO = {
     'Understand and prepare on your own with our tools, or let our team handle the records, forms, and follow-up.',
   cta: 'Upload your first report. It is free.',
   paidUnlock:
-    `Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, full trial matching, and Insurance Denial Defense. Advocate Plan ($49/mo) adds the travel and lodging tracker. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
+    `Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, full trial matching, and Insurance Denial Defense. ${FAMILY_PLUS_PLAN_NAME} ($49/mo) adds the travel and lodging tracker. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
 };
 
 export const PRICING_PAGE = {
   title: 'Simple, transparent pricing for the hardest journey.',
   description:
-    `Tools: Free, Caregiver Pro at $39/month or $390/year, Advocate Plan at $49/month or $490/year. Professional is demo and invoice. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. Yearly billing is 10 months. No credit card required to start Tools.`,
+    `Tools: Free, Caregiver Pro at $39/month or $390/year, ${FAMILY_PLUS_PLAN_NAME} at $49/month or $490/year. Professional is demo and invoice. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. Yearly billing is 10 months. No credit card required to start Tools.`,
 };
 
 export function yearlyAmountCents(monthlyCents: number): number {
@@ -537,14 +558,41 @@ export function hasCaregiverAccess(tier: SubscriptionTier): boolean {
   return hasMinPlan(tier, 'caregiver');
 }
 
-/** Advocate Plan and above. Travel and lodging tracker. */
+/** Travel and lodging tracker. Merge mode folds this into Caregiver Pro. */
 export function hasAdvocateAccess(tier: SubscriptionTier): boolean {
-  return hasMinPlan(tier, 'advocate');
+  if (isFamilyTierMerged()) return hasCaregiverAccess(tier);
+  return hasMinPlan(tier, 'advocate') || hasMinPlan(tier, 'professional');
 }
 
 export function publicCatalogFeatures() {
-  return CATALOG_FEATURES.filter((feature) => feature.id !== 'hipaa_baa');
+  const features = CATALOG_FEATURES.filter((feature) => feature.id !== 'hipaa_baa');
+  if (!isFamilyTierMerged()) return features;
+  return features.map((feature) => {
+    if (feature.id !== 'financial_aid') return feature;
+    return {
+      ...feature,
+      homepage: feature.homepage ? { ...feature.homepage, tag: 'Caregiver Pro' } : undefined,
+      cells: { ...feature.cells, caregiver: 'Included' },
+    };
+  });
 }
+
+export function publicPricingHeaders(): string[] {
+  if (isFamilyTierMerged()) {
+    return [PLANS.free.name, PLANS.caregiver.name, PLANS.professional.name];
+  }
+  return [PLANS.free.name, PLANS.caregiver.name, PLANS.advocate.name, PLANS.professional.name];
+}
+
+export function showFamilyPlusPlan(): boolean {
+  return !isFamilyTierMerged();
+}
+
+export function showIndividualAdvocatePlan(): boolean {
+  return isIndividualAdvocatePlanPublic();
+}
+
+export { INDIVIDUAL_ADVOCATE_PLAN };
 
 export function hasPaidAccess(tier: SubscriptionTier): boolean {
   return hasCaregiverAccess(tier);
@@ -572,5 +620,6 @@ export function isBillingInterval(value: string | null): value is BillingInterva
 
 export function canonicalCheckoutPlan(plan: CheckoutPlanKey): 'pro' | 'advocate' | 'professional' {
   if (plan === 'caregiver' || plan === 'pro') return 'pro';
+  if (plan === 'advocate' && isFamilyTierMerged()) return 'pro';
   return plan;
 }

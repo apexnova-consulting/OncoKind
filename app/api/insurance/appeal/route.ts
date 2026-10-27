@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
     if (!hasAdvocateAccess) {
       return NextResponse.json(
         {
-          error: 'Advocate Plan required',
-          redirectTo: '/pricing?plan=advocate',
+          error: 'Caregiver Pro required',
+          redirectTo: '/pricing?plan=pro',
         },
         { status: 402 }
       );

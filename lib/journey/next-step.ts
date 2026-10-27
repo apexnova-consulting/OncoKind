@@ -3,6 +3,8 @@ export type JourneySignals = {
   hasAppointment: boolean;
   hasDenial: boolean;
   trialInterest: boolean;
+  secondOpinionGoal?: boolean;
+  recordDelays?: boolean;
   conciergeCase: boolean;
 };
 
@@ -23,24 +25,49 @@ const ACTIONS = {
   first72: { id: 'first72', label: 'Open the First 72 Hours checklist', href: '/features/first-72-hours' },
   profile: { id: 'profile', label: 'Review your Cancer Profile', href: '/journey' },
   appointment: { id: 'appointment', label: 'Add your next appointment', href: '/journey/timeline' },
-  prep: { id: 'prep', label: 'Open your Doctor Prep Sheet', href: '/features/doctor-prep-sheet' },
+  prep: { id: 'prep', label: 'Open your Doctor Prep Sheet', href: '/journey' },
   denial: { id: 'denial', label: 'Decode a denial letter', href: '/journey/insurance-support' },
   trials: { id: 'trials', label: 'Review trial matches', href: '/journey/trials' },
+  secondOpinion: { id: 'secondOpinion', label: 'Open Second Opinion Mode', href: '/journey/second-opinion' },
   concierge: { id: 'concierge', label: 'See Concierge case status', href: '/journey/concierge' },
   conciergeStart: { id: 'conciergeStart', label: 'Ask Concierge to handle the paperwork', href: '/concierge' },
 } as const;
+
+function withSecondary(primary: JourneyAction, extras: JourneyAction[]): JourneyAction[] {
+  return extras.filter((item) => item.id !== primary.id).slice(0, 2);
+}
 
 export function nextJourneyStep(signals: JourneySignals): NextStepResult {
   if (!signals.hasReport) {
     return { stageId: 'understand', primary: ACTIONS.upload, secondary: [ACTIONS.first72] };
   }
-  if (signals.hasDenial) {
+
+  const wantsConciergeHelp =
+    signals.hasDenial || signals.trialInterest || signals.secondOpinionGoal || signals.recordDelays;
+
+  if (signals.conciergeCase) {
     return {
-      stageId: 'fight',
-      primary: ACTIONS.denial,
-      secondary: [ACTIONS.appointment, ACTIONS.conciergeStart].slice(0, 2),
+      stageId: 'plan',
+      primary: ACTIONS.concierge,
+      secondary: withSecondary(ACTIONS.concierge, [ACTIONS.prep, ACTIONS.trials]),
     };
   }
+
+  if (wantsConciergeHelp) {
+    const secondary = signals.hasDenial
+      ? [ACTIONS.denial, ACTIONS.prep]
+      : signals.trialInterest
+        ? [ACTIONS.trials, ACTIONS.prep]
+        : signals.secondOpinionGoal
+          ? [ACTIONS.secondOpinion, ACTIONS.prep]
+          : [ACTIONS.profile, ACTIONS.prep];
+    return {
+      stageId: signals.hasDenial ? 'fight' : 'plan',
+      primary: ACTIONS.conciergeStart,
+      secondary: withSecondary(ACTIONS.conciergeStart, secondary),
+    };
+  }
+
   if (!signals.hasAppointment) {
     return {
       stageId: 'prepare',
@@ -48,23 +75,10 @@ export function nextJourneyStep(signals: JourneySignals): NextStepResult {
       secondary: [ACTIONS.prep, ACTIONS.profile],
     };
   }
-  if (signals.trialInterest) {
-    return {
-      stageId: 'plan',
-      primary: ACTIONS.trials,
-      secondary: [ACTIONS.conciergeStart, ACTIONS.prep],
-    };
-  }
-  if (signals.conciergeCase) {
-    return {
-      stageId: 'plan',
-      primary: ACTIONS.concierge,
-      secondary: [ACTIONS.prep, ACTIONS.trials],
-    };
-  }
+
   return {
     stageId: 'prepare',
     primary: ACTIONS.prep,
-    secondary: [ACTIONS.trials, ACTIONS.conciergeStart],
+    secondary: [ACTIONS.trials, ACTIONS.first72],
   };
 }

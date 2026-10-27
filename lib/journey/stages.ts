@@ -1,5 +1,6 @@
-export const JOURNEY_POSITIONING =
-  'OncoKind tells your family what to do next after a cancer diagnosis, and handles the paperwork when you want it handled.';
+import { HOMEPAGE_PITCH } from '@/lib/board-run2';
+
+export const JOURNEY_POSITIONING = HOMEPAGE_PITCH;
 
 export const JOURNEY_STAGES = [
   {

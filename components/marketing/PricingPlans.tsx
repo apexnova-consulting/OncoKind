@@ -6,12 +6,15 @@ import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote } from '@/lib/disclosures';
 import {
-  ADVOCATE_FEATURES,
   ANNUAL_SAVINGS_PERCENT,
-  CAREGIVER_FEATURES,
   FREE_FEATURES,
+  INDIVIDUAL_ADVOCATE_PLAN,
   PLANS,
-  PROFESSIONAL_FEATURES,
+  advocateFeatureList,
+  caregiverFeatureList,
+  professionalFeatureList,
+  showFamilyPlusPlan,
+  showIndividualAdvocatePlan,
 } from '@/lib/pricing-config';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
@@ -131,7 +134,7 @@ export function PricingPlans({
           <p className="mt-5 font-display text-4xl font-semibold text-white">{caregiverPrice.amount}</p>
           <p className="text-sm text-white/60">{caregiverPrice.cadence}</p>
           <ul className="mt-7 flex-1 space-y-3">
-            {CAREGIVER_FEATURES.map((feature) => (
+            {caregiverFeatureList().map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-white/80">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-gold)]" aria-hidden />
                 {feature}
@@ -154,6 +157,7 @@ export function PricingPlans({
           )}
         </div>
 
+        {showFamilyPlusPlan() ? (
         <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
           <span className="inline-flex w-fit rounded-full bg-[#FAEEDA] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-[#8b5e2a]">
             {PLANS.advocate.badge}
@@ -166,7 +170,7 @@ export function PricingPlans({
           </p>
           <p className="text-sm text-[var(--color-text-muted)]">{advocatePrice.cadence}</p>
           <ul className="mt-7 flex-1 space-y-3">
-            {ADVOCATE_FEATURES.map((feature) => (
+            {advocateFeatureList().map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
                 {feature}
@@ -183,6 +187,32 @@ export function PricingPlans({
             </Button>
           )}
         </div>
+        ) : null}
+        {showIndividualAdvocatePlan() ? (
+        <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
+          <span className="inline-flex w-fit rounded-full bg-[#E1F5EE] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-[#0F6E56]">
+            Independent advocates
+          </span>
+          <h2 className="mt-3 font-display text-xl font-semibold text-[var(--color-text-primary)]">
+            {INDIVIDUAL_ADVOCATE_PLAN.name}
+          </h2>
+          <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">
+            {INDIVIDUAL_ADVOCATE_PLAN.monthlyLabel}
+          </p>
+          <p className="text-sm text-[var(--color-text-muted)]">{INDIVIDUAL_ADVOCATE_PLAN.cadenceMonthly}</p>
+          <ul className="mt-7 flex-1 space-y-3">
+            {['Workspace for one advocate and multiple client families', 'Buy Concierge on a client family behalf after they sign authorization', 'No PHI in partner reporting'].map((feature) => (
+              <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
+                {feature}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-8 text-sm text-[var(--color-text-muted)]">
+            Self-serve checkout stays off until the founder confirms the price and Stripe product.
+          </p>
+        </div>
+        ) : null}
 
         <div
           id="enterprise"
@@ -199,7 +229,7 @@ export function PricingPlans({
           </p>
           <p className="text-sm text-[var(--color-text-muted)]">{PLANS.professional.cadenceMonthly}</p>
           <ul className="mt-7 flex-1 space-y-3">
-            {PROFESSIONAL_FEATURES.map((feature) => (
+            {professionalFeatureList().map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
                 {feature}
@@ -208,18 +238,13 @@ export function PricingPlans({
           </ul>
           <div className="mt-8 space-y-3">
             <Button asChild className="w-full">
-              <a href={PLANS.professional.signupHref} target="_blank" rel="noreferrer">
-                {PLANS.professional.cta}
-              </a>
-            </Button>
-            <Button asChild variant="outline" className="w-full">
               <a
-                href="https://calendly.com/oncokind-support"
+                href={PLANS.professional.signupHref}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => track('demo_booked_click', { plan: 'professional' })}
               >
-                Book a Demo
+                {PLANS.professional.cta}
               </a>
             </Button>
           </div>

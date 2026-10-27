@@ -133,13 +133,11 @@ export const newTemplateFooterColumnLabels = [
 export const newTemplateFooterColumnCount = newTemplateFooterColumnLabels.length;
 
 // Homepage spotlight: six high-value cards, plus a See all features link.
-export const homepageFeatureCards = [
-  { name: 'AI Cancer Profile & Care Map', href: '/#sample-demo' },
-  { name: 'Doctor Prep Sheet PDF', href: '/features/doctor-prep-sheet' },
-  { name: 'Complete the Picture', href: '/features/complete-the-picture' },
-  { name: 'Access Agent', href: '/features/access-agent' },
-  { name: 'First 72 Hours checklist', href: '/features/first-72-hours' },
-  { name: 'Empathy Filter', href: '/features/empathy-filter' },
+export const homepageJourneyStages = [
+  { name: 'Understand' },
+  { name: 'Prepare' },
+  { name: 'Fight' },
+  { name: 'Plan ahead' },
 ] as const;
 
 // Pricing (confirmed live). Advocate deliberately has no `plan` param below —
@@ -156,12 +154,12 @@ export const pricingTiers = {
     badge: 'Most Popular for Families',
   },
   advocate: {
-    name: 'Advocate Plan',
+    name: 'Caregiver Plus',
     price: '$490',
     monthlyPrice: '$49',
-    cta: 'Start Advocate Plan',
+    cta: 'Start Caregiver Plus',
     href: '/signup?plan=advocate',
-    badge: 'Insurance & financial navigation',
+    badge: 'Travel and lodging help',
   },
   professional: {
     name: 'Professional',

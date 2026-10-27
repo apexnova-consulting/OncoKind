@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import {
   routes,
-  homepageFeatureCards,
+  homepageJourneyStages,
   pricingTiers,
   pricingComparisonRowCount,
   pricingFaqQuestions,
@@ -19,7 +19,7 @@ import {
  * asserted as passing behavior:
  *   1. /features/empathy-filter is a real feature page.
  *   2. robots.txt explicitly allows /prior-auth-pro.
- *   3. "Start Advocate Plan" links to /signup?plan=advocate.
+ *   3. "Start Caregiver Plus" links to /signup?plan=advocate.
  */
 
 /** Site logo accessible name is "O ncoKind" (split accent span), not "OncoKind". */
@@ -98,23 +98,13 @@ test.describe('Homepage (/)', () => {
     ).toHaveAttribute('href', /\/pricing/);
   });
 
-  test(`feature grid shows ${homepageFeatureCards.length} cards with working "Learn more" links`, async ({
-    page,
-  }) => {
+  test('homepage shows four stages instead of a tool grid', async ({ page }) => {
     await page.goto(routes.home);
-    // Exact name avoids the separate "Learn more about the Empathy Filter" link.
-    const learnMoreLinks = page.getByRole('link', { name: 'Learn more', exact: true });
-    await expect(learnMoreLinks).toHaveCount(homepageFeatureCards.length);
-  });
-
-  test('feature grid card hrefs match the expected feature pages', async ({ page }) => {
-    await page.goto(routes.home);
-    for (const card of homepageFeatureCards) {
-      const heading = page.getByRole('heading', { name: card.name, exact: true });
-      await expect(heading).toBeVisible();
-      const cardLink = heading.locator('xpath=following::a[normalize-space()="Learn more"][1]');
-      await expect(cardLink).toHaveAttribute('href', new RegExp(card.href.replace(/\//g, '\\/')));
+    for (const stage of homepageJourneyStages) {
+      await expect(page.getByText(stage.name, { exact: true }).first()).toBeVisible();
     }
+    await expect(page.getByRole('link', { name: 'Learn more', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /see all features/i })).toBeVisible();
   });
 
   test(
@@ -450,7 +440,7 @@ test.describe('Navigation & SEO', () => {
     await expect(page).toHaveTitle(/OncoKind/);
   });
 
-  test('pricing metadata matches Caregiver Pro at $39/$390 and Advocate Plan at $49/$490', async ({ page }) => {
+  test('pricing metadata matches Caregiver Pro at $39/$390 and Caregiver Plus at $49/$490', async ({ page }) => {
     await page.goto(routes.pricing);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
     const ogDescription = await page.locator('meta[property="og:description"]').getAttribute('content');

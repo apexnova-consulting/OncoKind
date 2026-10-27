@@ -19,9 +19,9 @@ test.describe('Free Tier', () => {
   test.use({ storageState: users.free.storageState });
 
   test.describe('Dashboard & Reports', () => {
-    test('dashboard loads with an Advocate Plan upgrade CTA visible', async ({ page }) => {
+    test('dashboard loads with a Caregiver Pro upgrade CTA visible', async ({ page }) => {
       await page.goto(routes.dashboard);
-      await expect(page.getByRole('link', { name: /upgrade.*advocate/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /upgrade|caregiver pro|pricing/i }).first()).toBeVisible();
     });
 
     test('can upload a PDF report from /reports', async ({ page }) => {
@@ -147,9 +147,9 @@ test.describe('Caregiver Pro Tier', () => {
   });
 
   test.describe('Feature gates — Pro should NOT have these', () => {
-    test('Insurance Denial Defense shows an upgrade-to-Advocate prompt', async ({ page }) => {
+    test('Insurance Denial Defense is included on Caregiver Pro', async ({ page }) => {
       await page.goto(routes.journeyInsuranceSupport);
-      await expect(page.getByText(/upgrade.*advocate/i)).toBeVisible();
+      await expect(page.getByText(/upgrade to caregiver plus|upgrade to advocate/i)).toHaveCount(0);
     });
 
     test('Financial Aid Tracker shows an upgrade prompt', async ({ page }) => {

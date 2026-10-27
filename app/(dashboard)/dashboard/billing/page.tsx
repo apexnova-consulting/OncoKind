@@ -44,7 +44,7 @@ export default async function BillingPage() {
           <CardHeader>
             <CardTitle>Legacy Pro</CardTitle>
             <CardDescription>
-              You are on the earlier Pro plan. Advocate Plan now includes insurance support and financial navigation.
+              You are on the earlier Pro plan. Caregiver Pro includes Insurance Denial Defense. Caregiver Plus adds travel and lodging tracking.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -62,7 +62,7 @@ export default async function BillingPage() {
         <CardHeader>
           <CardTitle>Paid plans</CardTitle>
           <CardDescription>
-            Caregiver Pro is $39/month or $390/year. Advocate Plan is $49/month or $490/year and adds insurance and financial tools.
+            Caregiver Pro is $39/month or $390/year. Caregiver Plus is $49/month or $490/year and adds the travel and lodging tracker.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

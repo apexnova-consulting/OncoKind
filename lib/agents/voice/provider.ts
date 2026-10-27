@@ -13,7 +13,7 @@ export const VOICE_SCRIPTS: Record<VoiceCallType, VoiceScript> = {
   assistance_program: {
     callType: 'assistance_program',
     disclosure:
-      'Hello, I am an AI assistant calling on behalf of a family member of a patient. I cannot share the patient name or any medical details.',
+      'This is OncoKind calling on behalf of the family. We are not the patient and we do not give medical opinions.',
     opener: 'I am calling with process questions only. I do not need to identify a patient.',
     questions: [
       'How does a family apply?',
@@ -28,7 +28,7 @@ export const VOICE_SCRIPTS: Record<VoiceCallType, VoiceScript> = {
   medical_records: {
     callType: 'medical_records',
     disclosure:
-      'Hello, I am an AI assistant calling on behalf of a family member of a patient. I cannot share the patient name or any medical details.',
+      'This is OncoKind calling on behalf of the family. We are not the patient and we do not give medical opinions.',
     opener: 'I am calling with process questions about how a family submits a records request. I cannot verify identity on this call.',
     questions: [
       'Where should a records request be sent?',

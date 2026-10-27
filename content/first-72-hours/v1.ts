@@ -156,7 +156,7 @@ export const FIRST_72_TASKS: First72Task[] = [
     why: 'Aid programs exist, but they need a simple picture of the costs you are facing.',
     how: [
       'Write down known copays, parking, and missed work so far.',
-      'Advocate Plan users can open the Live Financial Aid Tracker.',
+      'Caregiver Plus users can open the travel and lodging tracker.',
     ],
     minutes: 15,
     deepLink: '/journey/access-agent',
