@@ -2,11 +2,14 @@ import { pageMetadata } from '@/lib/seo';
 import { ConciergeMarketing } from '@/components/concierge/ConciergeMarketing';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { notFound } from 'next/navigation';
+import { CONCIERGE_BRAND } from '@/lib/concierge/config';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata = pageMetadata({
   title: 'OncoKind Concierge',
-  description:
-    'We handle the records, forms, and phone calls, so your family can focus on what matters. Educational support, not medical advice.',
+  description: `${CONCIERGE_BRAND.headline} Educational support, not medical advice.`,
   path: '/concierge',
   imageAlt: 'OncoKind Concierge',
 });

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, FileText, Shield } from 'lucide-react';
 import { FEATURE_HUB_FEATURES } from '@/lib/pricing-config';
 import { JOURNEY_POSITIONING } from '@/lib/journey/stages';
-import { isBaaReady } from '@/lib/feature-flags';
+import { professionalHipaaNote } from '@/lib/disclosures';
 import { FEATURE_CATALOG_ICONS } from '@/components/marketing/FeatureCatalogIcons';
 import { Button } from '@/components/ui/button';
 import { pageMetadata } from '@/lib/seo';
@@ -78,10 +78,8 @@ export default function FeaturesHubPage() {
                 Advocate workspace for care teams
               </h2>
               <p className="mt-3 text-base leading-relaxed text-white/80">
-                Multi-patient views, branded PDFs, and a partner path for sponsored Concierge cases.
-                {isBaaReady()
-                  ? ' HIPAA BAA available on request.'
-                  : ' A Business Associate Agreement is not offered on self-serve plans yet.'}
+                Multi-patient views, branded PDFs, and a partner path for sponsored Concierge cases.{' '}
+                {professionalHipaaNote()}
               </p>
             </div>
             <Button asChild className="shrink-0 bg-white text-[#0F6E56] hover:bg-white/90 hover:text-[#085041]">

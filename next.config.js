@@ -21,6 +21,22 @@ const nextConfig = {
           },
         ],
       },
+      {
+        source: '/pricing',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+      {
+        source: '/professional',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+      {
+        source: '/trust',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
+      {
+        source: '/prior-auth-pro',
+        headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
+      },
     ];
   },
   async redirects() {
@@ -34,6 +50,18 @@ const nextConfig = {
         source: '/empathy-filter',
         destination: '/features/empathy-filter',
         permanent: true,
+      },
+      {
+        source: '/signup',
+        has: [{ type: 'query', key: 'plan', value: 'advocate' }],
+        destination: '/signup?plan=plus',
+        permanent: true,
+      },
+      {
+        source: '/signup',
+        has: [{ type: 'query', key: 'plan', value: 'professional' }],
+        destination: 'https://calendly.com/oncokind-support',
+        permanent: false,
       },
     ];
   },

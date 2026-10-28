@@ -128,10 +128,10 @@ function buildMockNccnContext(report: PatientReportData | null) {
   const biomarkers = formatBiomarkerProfile(report);
 
   if (cancerType.includes('lung')) {
-    return `Mock NCCN 2026 context: for lung cancer with stage ${stage}, treatment planning should consider biomarker-driven therapy, systemic treatment sequencing, and documented pathology findings including ${biomarkers}.`;
+    return `Guideline-informed context: for lung cancer with stage ${stage}, treatment planning should consider biomarker-driven therapy, systemic treatment sequencing, and documented pathology findings including ${biomarkers}.`;
   }
 
-  return `Mock NCCN 2026 context: use the member's oncology pathology, current stage ${stage}, and biomarker profile (${biomarkers}) to justify medically necessary treatment access.`;
+  return `Guideline-informed context: use the member's oncology pathology, current stage ${stage}, and biomarker profile (${biomarkers}) to justify medically necessary treatment access.`;
 }
 
 async function generateWithAnthropic({
@@ -160,7 +160,7 @@ Requirements:
 - Use this insurance name: ${parsedSignals.insuranceName}
 - Use this member services phone: ${parsedSignals.memberServicesPhone}
 - Use this appeal deadline text: ${parsedSignals.appealDeadlineText}
-- Use this mock NCCN 2026 guidance: ${buildMockNccnContext(report)}
+- Use this guideline-informed context: ${buildMockNccnContext(report)}
 - Use these pathology facts when relevant: cancer type=${report?.biomarkers?.cancer_type_inferred ?? 'unknown'}, stage=${report?.biomarkers?.tnm_stage ?? 'unknown'}, histology=${report?.biomarkers?.histology ?? 'unknown'}, biomarkers=${formatBiomarkerProfile(report)}
 - In both the plainEnglishBullets and letterOfMedicalNecessity, explicitly mention the patient's biomarker-driven oncology context when biomarker data exists.
 - Do not write generic appeals. Tie medical necessity to the specific cancer type, stage, histology, and biomarker profile.
@@ -214,7 +214,7 @@ function buildFallbackPayload(
       `The denial may not reflect the full oncology context, including ${cancerType}, ${stage}, and the pathology findings already documented in your report.`,
       `A focused appeal should connect the requested treatment to your cancer biology, current treatment plan, and guideline-based medical necessity.`,
     ],
-    letterOfMedicalNecessity: `Re: Request for coverage reconsideration\n\nTo ${parsedSignals.insuranceName} Appeals Department,\n\nI am writing to support medical necessity for this patient's oncology treatment after a denial labeled "${parsedSignals.denialReasonCode}". The patient has ${cancerType} with ${stage}. Available pathology findings document ${biomarkers}. Based on mock NCCN 2026 guidance for this diagnosis, the requested therapy is clinically appropriate, guideline-aligned, and necessary to avoid treatment delay.\n\nPlease reconsider this denial promptly and authorize coverage without further delay.\n\nSincerely,\n\nTreating Oncologist, MD\n${'Physician Signature: ____________________    Date: ____________________'}`,
+    letterOfMedicalNecessity: `Re: Request for coverage reconsideration\n\nTo ${parsedSignals.insuranceName} Appeals Department,\n\nI am writing to support medical necessity for this patient's oncology treatment after a denial labeled "${parsedSignals.denialReasonCode}". The patient has ${cancerType} with ${stage}. Available pathology findings document ${biomarkers}. Based on guideline-informed medical necessity for this diagnosis, the requested therapy is clinically appropriate and necessary to avoid treatment delay.\n\nPlease reconsider this denial promptly and authorize coverage without further delay.\n\nSincerely,\n\nTreating Oncologist, MD\n${'Physician Signature: ____________________    Date: ____________________'}`,
     nextStepChecklist: [
       `Step 1: Call ${parsedSignals.insuranceName} at ${parsedSignals.memberServicesPhone} and ask for the formal appeal submission channel.`,
       `Step 2: Share this denial code (${parsedSignals.denialReasonCode}) with your oncologist's office and request a signed Letter of Medical Necessity.`,

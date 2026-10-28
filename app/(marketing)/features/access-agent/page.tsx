@@ -24,7 +24,7 @@ export default function AccessAgentFeaturePage() {
         bullets: [
           'Estimate only, not financial advice',
           'Deterministic likely, maybe, or not eligible bands',
-          'Writes into the Live Financial Aid Tracker when that plan is on',
+          'Writes into the Access Agent tracker when that plan is on',
           'No sponsor influence, referral fees, or ads',
         ],
       }}
@@ -44,7 +44,7 @@ export default function AccessAgentFeaturePage() {
         {
           title: 'Copay help',
           paragraphs: [
-            'For copay assistance, we link out to FundFinder rather than building a second copay tracker. Our own assistance work stays on travel, lodging, and caregiver costs.',
+            'For copay and cost help, see Access Agent. Matches cover travel, lodging, caregiver costs, and copay programs when they apply. We never promise funds.',
           ],
         },
       ]}

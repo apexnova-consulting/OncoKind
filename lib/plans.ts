@@ -20,7 +20,7 @@ export type SignupPlanKey = keyof typeof SIGNUP_PLANS;
 
 export function parseSignupPlan(value: string | null | undefined): SignupPlanKey | null {
   if (value === 'pro' || value === 'caregiver') return 'pro';
-  if (value === 'advocate') return isFamilyTierMerged() ? 'pro' : 'advocate';
-  if (value === 'professional') return value;
+  if (value === 'plus' || value === 'advocate') return isFamilyTierMerged() ? 'pro' : 'advocate';
+  if (value === 'professional') return null;
   return null;
 }

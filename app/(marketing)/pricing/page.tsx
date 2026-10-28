@@ -12,8 +12,11 @@ import { CONCIERGE_REFUND_TERMS, TOOLS_CANCEL_COPY } from '@/lib/legal/refunds';
 import { TOOLS_RETENTION_CLAIM, CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
-  title: 'Pricing',
+  title: { absolute: 'Pricing | OncoKind' },
   description: PRICING_PAGE.description,
   alternates: { canonical: `${SITE_ORIGIN}/pricing` },
   openGraph: {
@@ -102,7 +105,15 @@ export default async function PricingPage() {
               },
               {
                 q: 'Is there a discount for financial hardship?',
-                a: `Use the hardship form at /concierge/hardship. A person reviews every request. Approved families can receive a ${CONCIERGE_CAREGIVER_GRANT_DAYS}-day Caregiver Pro code.`,
+                a: (
+                  <>
+                    Use the hardship form at{' '}
+                    <Link href="/concierge/hardship" className="font-semibold text-[#0F6E56] underline-offset-2 hover:underline">
+                      /concierge/hardship
+                    </Link>
+                    . A person reviews every request. Approved families can receive a {CONCIERGE_CAREGIVER_GRANT_DAYS}-day Caregiver Pro code.
+                  </>
+                ),
               },
               {
                 q: 'Does OncoKind tell me which tests or treatments I need?',
@@ -181,7 +192,7 @@ export default async function PricingPage() {
             </table>
           </div>
           <p className="mt-4 text-center text-xs text-[var(--color-text-muted)]">
-            {PATH_B_PRIVACY_LANGUAGE} {professionalHipaaNote()}
+            Sales tax is added at checkout where required. {PATH_B_PRIVACY_LANGUAGE} {professionalHipaaNote()}
           </p>
         </section>
       </div>

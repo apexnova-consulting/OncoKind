@@ -15,20 +15,20 @@ export const ROSEMARIE_SAMPLE = {
   pdl1: {
     label: 'PD-L1 (CPS): ≥10, Positive',
     value: '≥10, Positive',
-    heroNote: 'Discuss immunotherapy options with care team',
+    heroNote: 'Ask the care team what this result means',
     description:
-      'PD-L1 results help the care team decide whether immunotherapy is an option worth discussing. Ask your oncologist whether it applies here.',
+      'Ask the care team what this PD-L1 result means for the plan.',
   },
   brca: {
     label: 'BRCA1/2: Negative',
     description:
-      'No hereditary BRCA mutation detected. This affects some targeted therapy options, and your oncologist may recommend additional molecular testing.',
+      'Ask your oncologist what this result means for the plan and whether any other testing would help.',
   },
   whatThisMeans:
     'Stage IV means the cancer has spread beyond the vulva. The care team will review imaging and other findings to determine the treatment plan. Many options remain on the table and your oncologist will walk through each one.',
   recommendedNextSteps: [
     'Meet with oncologist',
-    'Discuss immunotherapy options with care team',
+    'Ask the care team what this result means',
     'Review clinical trials',
   ],
   prepDiagnosis:

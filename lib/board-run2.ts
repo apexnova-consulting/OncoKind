@@ -6,7 +6,7 @@ import {
 
 export type FamilyTierMode = 'merge' | 'distinct';
 
-export const FAMILY_GUIDELINE_SHEET_NAME = 'Guideline-informed family sheets';
+export const FAMILY_GUIDELINE_SHEET_NAME = 'Care Plan Question Sheets';
 export const FAMILY_PLUS_PLAN_NAME = 'Caregiver Plus';
 
 export const HOMEPAGE_PITCH =

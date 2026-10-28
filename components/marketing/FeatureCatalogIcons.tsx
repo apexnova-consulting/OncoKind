@@ -35,4 +35,7 @@ export const FEATURE_CATALOG_ICONS = {
   access_agent: MapPin,
   voice_call_for_me: Phone,
   concierge: Heart,
+  care_plan_sheets: FileText,
+  genetic_counseling: Users,
+  prior_auth: ShieldCheck,
 } as const;
