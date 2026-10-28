@@ -19,7 +19,7 @@ import {
  * asserted as passing behavior:
  *   1. /features/empathy-filter is a real feature page.
  *   2. robots.txt explicitly allows /prior-auth-pro.
- *   3. "Start Caregiver Plus" links to /signup?plan=advocate.
+ *   3. "Start Caregiver Plus" links to /signup?plan=plus.
  */
 
 /** Site logo accessible name is "O ncoKind" (split accent span), not "OncoKind". */
@@ -169,6 +169,14 @@ test.describe('Pricing (/pricing)', () => {
     await expect(page.getByText('$39').first()).toBeVisible();
   });
 
+  test('"Start Caregiver Plus" links to /signup?plan=plus', async ({ page }) => {
+    await page.goto(routes.pricing);
+    await expect(page.getByRole('link', { name: /start caregiver plus/i }).first()).toHaveAttribute(
+      'href',
+      /\/signup\?plan=plus/
+    );
+  });
+
   test('"Start Caregiver Pro" links to /signup?plan=pro', async ({ page }) => {
     await page.goto(routes.pricing);
     await expect(page.getByRole('link', { name: /start caregiver pro/i }).first()).toHaveAttribute(
@@ -195,7 +203,8 @@ test.describe('Pricing (/pricing)', () => {
 
   test('enterprise network banner is visible below the pricing grid', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByRole('heading', { name: /custom enterprise pricing/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /custom pricing/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /concierge/i }).first()).toBeVisible();
   });
 
   test(`feature comparison table renders with ${pricingComparisonRowCount} rows`, async ({ page }) => {
@@ -205,11 +214,11 @@ test.describe('Pricing (/pricing)', () => {
     await expect(table.locator('tbody tr')).toHaveCount(pricingComparisonRowCount);
   });
 
-  test('feature comparison table includes Prior Auth Engine on Professional only', async ({
+  test('feature comparison table includes KindAuth on Professional only', async ({
     page,
   }) => {
     await page.goto(routes.pricing);
-    const row = page.locator('tr', { hasText: 'Prior Auth Engine' }).first();
+    const row = page.locator('tr', { hasText: 'KindAuth' }).first();
     await expect(row).toBeVisible();
     await expect(row.getByText('Not included')).toHaveCount(3);
   });
@@ -223,10 +232,10 @@ test.describe('Pricing (/pricing)', () => {
 });
 
 test.describe('For Professionals (/professional)', () => {
-  test('Professional page names independent advocates and links Prior Auth Engine', async ({ page }) => {
+  test('Professional page names independent advocates and links KindAuth', async ({ page }) => {
     await page.goto(routes.forProfessionals);
     await expect(page.getByRole('heading', { name: /independent oncology advocates/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /prior auth engine/i })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /see kindauth/i }).first()).toHaveAttribute(
       'href',
       new RegExp(routes.priorAuthPro)
     );
@@ -280,10 +289,13 @@ test.describe('Prior Auth Pro (/prior-auth-pro)', () => {
     }
   });
 
-  test('"Start Free — Professional Plan" navigates to signup with the professional plan', async ({ page }) => {
+  test('KindAuth landing is demo-only, with no self-serve Professional signup', async ({ page }) => {
     await page.goto(routes.priorAuthPro);
-    await page.getByRole('link', { name: /start free.*professional plan/i }).click();
-    await expect(page).toHaveURL(/\/signup\?plan=professional/);
+    await expect(page.getByRole('link', { name: /start free.*professional plan/i })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /book a demo/i }).first()).toHaveAttribute(
+      'href',
+      /calendly\.com/
+    );
   });
 });
 

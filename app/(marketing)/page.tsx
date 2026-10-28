@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { MarketingHome } from '@/components/marketing/MarketingHome';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: 'Clarity for families navigating cancer',
   description:

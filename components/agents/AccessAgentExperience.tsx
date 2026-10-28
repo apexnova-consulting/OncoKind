@@ -157,11 +157,7 @@ export function AccessAgentExperience() {
       ))}
       <p className="text-xs text-slate-500">{EDUCATIONAL_DISCLAIMER}</p>
       <p className="text-sm">
-        Copay help lives on{' '}
-        <a className="font-semibold text-[#0F6E56]" href="https://fundfinder.panfoundation.org/" target="_blank" rel="noreferrer">
-          FundFinder
-        </a>
-        . We do not duplicate that tracker.
+        For copay and cost help, Access Agent lists programs that may apply. We never promise funds. Families submit applications themselves.
       </p>
       <HandleThisPrompt entryPoint="access_agent" />
     </div>

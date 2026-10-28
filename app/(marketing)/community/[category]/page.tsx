@@ -56,7 +56,7 @@ export default async function CommunityCategoryPage({ params }: PageProps) {
                   user
                     ? hasAdvocateAccess
                       ? `/community/new-post?category=${current.slug}`
-                      : '/pricing?plan=advocate'
+                      : '/pricing'
                     : '/login'
                 }
               >

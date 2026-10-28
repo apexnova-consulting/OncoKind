@@ -36,7 +36,7 @@ export function ConciergeIntake() {
           setMessage('Concierge is for adult patients at US facilities.');
           return;
         }
-        if (purchaseOn && !refundAccepted) {
+        if (!refundAccepted) {
           setMessage('Please accept the refund terms before continuing.');
           return;
         }
@@ -63,6 +63,22 @@ export function ConciergeIntake() {
           return;
         }
         track('intake_completed');
+        if (purchaseOn && !json.waitlist) {
+          const checkout = await fetch('/api/concierge/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refundAccepted: true }),
+          });
+          const paid = await checkout.json();
+          if (checkout.ok && paid.url) {
+            window.location.href = paid.url;
+            return;
+          }
+          if (paid.waitlist) {
+            setMessage(paid.error || 'New cases are full this week. Join the list and we will email you when a spot opens.');
+            return;
+          }
+        }
         setMessage(json.message);
       }}
     >
@@ -117,16 +133,12 @@ export function ConciergeIntake() {
         <input type="checkbox" checked={usFacility} onChange={(event) => setUsFacility(event.target.checked)} className="mt-1" />
         The destination facility is in the United States.
       </label>
-      {purchaseOn ? (
-        <>
-          <p className="text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
-          <label className="flex items-start gap-2 text-sm">
-            <input type="checkbox" checked={refundAccepted} onChange={(event) => setRefundAccepted(event.target.checked)} className="mt-1" />
-            {CONCIERGE_REFUND_CHECKBOX_LABEL}
-          </label>
-        </>
-      ) : null}
-      <Button type="submit">{purchaseOn ? 'Save intake and continue' : 'Save intake request'}</Button>
+      <p className="text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" checked={refundAccepted} onChange={(event) => setRefundAccepted(event.target.checked)} className="mt-1" />
+        {CONCIERGE_REFUND_CHECKBOX_LABEL}
+      </label>
+      <Button type="submit">{purchaseOn ? 'Continue to payment' : 'Save intake and request a case'}</Button>
       {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
     </form>
   );

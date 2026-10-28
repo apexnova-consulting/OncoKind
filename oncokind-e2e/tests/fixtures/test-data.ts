@@ -151,14 +151,14 @@ export const pricingTiers = {
     monthlyPrice: '$39',
     cta: 'Start Caregiver Pro',
     href: '/signup?plan=pro',
-    badge: 'Most Popular for Families',
+    badge: 'Most popular for families',
   },
   advocate: {
     name: 'Caregiver Plus',
     price: '$490',
     monthlyPrice: '$49',
     cta: 'Start Caregiver Plus',
-    href: '/signup?plan=advocate',
+    href: '/signup?plan=plus',
     badge: 'Travel and lodging help',
   },
   professional: {
@@ -169,7 +169,7 @@ export const pricingTiers = {
   },
 } as const;
 
-export const pricingComparisonRowCount = 19;
+export const pricingComparisonRowCount = 21;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.
@@ -181,6 +181,7 @@ export const pricingFaqQuestions = [
   'Is there a discount for financial hardship?',
   'Does OncoKind tell me which tests or treatments I need?',
   'Will anyone contact my providers for me?',
+  'How do Concierge refunds work?',
 ] as const;
 
 // Homepage FAQ — a SEPARATE 5-question FAQ from the pricing page's FAQ.

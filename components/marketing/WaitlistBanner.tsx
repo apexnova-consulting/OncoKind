@@ -125,7 +125,7 @@ export function WaitlistBanner() {
                   {status === 'loading' ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
                   ) : null}
-                  {status === 'loading' ? 'Joining…' : 'Join Waitlist'}
+                  {status === 'loading' ? 'Joining…' : 'Join the list'}
                 </button>
                 <Link
                   href="/waitlist"

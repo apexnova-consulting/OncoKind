@@ -3,6 +3,7 @@ import { getBrandTheme } from '@/lib/branding';
 import { SiteHeaderClient } from '@/components/layout/SiteHeaderClient';
 import { getDictionaryFromCookies } from '@/lib/i18n-server';
 import { isFeatureEnabled } from '@/lib/feature-flags';
+import { PUBLIC_NAV_LINKS } from '@/lib/public-nav';
 
 export async function SiteHeader() {
   const supabase = await createServerSupabaseClient();
@@ -13,14 +14,9 @@ export async function SiteHeader() {
   } = await supabase.auth.getSession();
   const user = session?.user ?? null;
 
-  const navLinks = [
-    { href: '/features', label: 'Tools' },
-    ...(isFeatureEnabled('concierge_public_pages') ? [{ href: '/concierge', label: 'Concierge' }] : []),
-    { href: '/professional', label: 'For organizations' },
-    { href: '/pricing', label: 'Pricing' },
-    { href: '/learn', label: 'Learn' },
-    { href: '/trust', label: 'Trust' },
-  ];
+  const navLinks = PUBLIC_NAV_LINKS.filter(
+    (link) => link.href !== '/concierge' || isFeatureEnabled('concierge_public_pages')
+  );
 
   return (
     <SiteHeaderClient

@@ -7,12 +7,14 @@ export function pageMetadata({
   path,
   imageAlt,
   noindex,
+  absoluteTitle,
 }: {
   title: string;
   description: string;
   path: string;
   imageAlt?: string;
   noindex?: boolean;
+  absoluteTitle?: string;
 }): Metadata {
   const url = `${SITE_ORIGIN}${path}`;
   const image = {
@@ -22,7 +24,7 @@ export function pageMetadata({
     alt: imageAlt ?? title,
   };
   return {
-    title,
+    title: absoluteTitle ? { absolute: absoluteTitle } : title,
     description,
     alternates: noindex ? undefined : { canonical: url },
     robots: noindex ? { index: false, follow: false } : undefined,

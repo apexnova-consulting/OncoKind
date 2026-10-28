@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FunnelPageView } from '@/components/analytics/FunnelPageView';
-import { CONCIERGE_BRAND, formatUsdFromCents, weeklyCohortPriceCents } from '@/lib/concierge/config';
+import { CONCIERGE_BRAND, CONCIERGE_CAREGIVER_GRANT_DAYS, formatUsdFromCents, weeklyCohortPriceCents } from '@/lib/concierge/config';
 import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 import { CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
-import { isFeatureEnabled } from '@/lib/feature-flags';
+import { conciergeWaitlistMessage } from '@/lib/concierge/capacity';
 
 const STEPS = [
   { title: 'Choose your center', body: 'Pick from our center list or enter the one your family chose. We do not rank or recommend centers.' },
@@ -18,9 +18,18 @@ const STEPS = [
 
 export function ConciergeMarketing() {
   const price = weeklyCohortPriceCents();
-  const purchaseOn = isFeatureEnabled('concierge_purchase');
+  const [atCap, setAtCap] = useState(false);
   const [email, setEmail] = useState('');
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/concierge/capacity')
+      .then((res) => res.json())
+      .then((json) => setAtCap(Boolean(json.atCap)))
+      .catch(() => setAtCap(false));
+  }, []);
+
+  const startLabel = `Start a case, ${formatUsdFromCents(price)}`;
 
   return (
     <main className="bg-[var(--color-bg-page)] px-4 py-16 sm:py-24">
@@ -32,13 +41,9 @@ export function ConciergeMarketing() {
           <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">{CONCIERGE_BRAND.subhead}</p>
           <p className="mt-4 text-sm text-slate-500">{CONCIERGE_BRAND.delayHonesty}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            {purchaseOn ? (
+            {atCap ? null : (
               <Button asChild>
-                <Link href="/concierge/start">Start a case</Link>
-              </Button>
-            ) : (
-              <Button asChild>
-                <a href="#interest">Request a case</a>
+                <Link href="/concierge/start">{startLabel}</Link>
               </Button>
             )}
             <Button asChild variant="outline">
@@ -82,7 +87,7 @@ export function ConciergeMarketing() {
           <h2 className="font-display text-2xl font-semibold">Pricing</h2>
           <p className="mt-3 text-3xl font-semibold text-[#0F6E56]">{formatUsdFromCents(price)} per case</p>
           <p className="mt-2 text-sm text-slate-600">
-            Includes 60 days of Caregiver Pro. Price shown this week is recorded with each purchase. Adult patients and US facilities only.
+            Includes {CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro. Price shown this week is recorded with each purchase. Adult patients and US facilities only.
           </p>
           <p className="mt-3 text-sm">
             <Link href="/concierge/hardship" className="font-semibold text-[#0F6E56]">
@@ -94,40 +99,56 @@ export function ConciergeMarketing() {
         </section>
 
         <section id="interest" className="rounded-2xl border border-[#cdd8d5] bg-white p-8">
-          <h2 className="font-display text-2xl font-semibold">Request a case</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Tell us how to reach you. Do not include diagnosis or other medical details in this form.
-          </p>
-          {done ? (
-            <p className="mt-4 text-sm text-emerald-700">Request received. We will reply when a slot can open.</p>
+          {atCap ? (
+            <>
+              <h2 className="font-display text-2xl font-semibold">New cases are full this week</h2>
+              <p className="mt-2 text-sm text-slate-600">
+                {conciergeWaitlistMessage()} Join the list and we will email you when a spot opens.
+              </p>
+            </>
           ) : (
-            <form
-              className="mt-4 flex flex-col gap-3 sm:flex-row"
-              onSubmit={async (event) => {
-                event.preventDefault();
-                await fetch('/api/concierge/interest', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ email, surface: 'concierge_page' }),
-                });
-                setDone(true);
-              }}
-            >
-              <label className="block flex-1 text-sm font-medium">
-                Email
-                <input
-                  required
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  className="mt-2 w-full rounded-xl border p-3"
-                />
-              </label>
-              <Button className="self-end" type="submit">
-                Send
+            <>
+              <h2 className="font-display text-2xl font-semibold">{startLabel}</h2>
+              <p className="mt-2 text-sm text-slate-600">
+                Eligibility check, refund terms, payment, then authorization. Do not include diagnosis details here.
+              </p>
+              <Button asChild className="mt-4">
+                <Link href="/concierge/start">{startLabel}</Link>
               </Button>
-            </form>
+            </>
           )}
+          {atCap ? (
+            done ? (
+              <p className="mt-4 text-sm text-emerald-700">You are on the list. We will email you when a spot opens.</p>
+            ) : (
+              <form
+                className="mt-4 flex flex-col gap-3 sm:flex-row"
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  await fetch('/api/concierge/interest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, surface: 'concierge_waitlist' }),
+                  });
+                  setDone(true);
+                }}
+              >
+                <label className="block flex-1 text-sm font-medium">
+                  Email
+                  <input
+                    required
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="mt-2 w-full rounded-xl border p-3"
+                  />
+                </label>
+                <Button className="self-end" type="submit">
+                  Join the list
+                </Button>
+              </form>
+            )
+          ) : null}
         </section>
       </div>
     </main>

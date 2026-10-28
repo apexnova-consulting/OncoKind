@@ -7,7 +7,10 @@ import { subprocessorsForTrustPage } from '@/lib/legal/subprocessors';
 import { CONCIERGE_RETENTION_CLAIM, TOOLS_RETENTION_CLAIM } from '@/lib/legal/retention';
 import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 
-const lastReviewed = 'October 27, 2026';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const lastReviewed = 'October 28, 2026';
 
 const collectedData = [
   {
@@ -21,9 +24,9 @@ const collectedData = [
     why: 'To save your reports and send account-related communications',
   },
   {
-    type: 'Usage data',
-    what: 'Pages visited and features used, only after you allow analytics cookies',
-    why: 'To improve product performance. Essential cookies run without that consent.',
+    type: 'Service logs',
+    what: 'Errors and performance data needed to keep the service running. No page-level tracking before you accept analytics.',
+    why: 'To keep the service running. Product analytics is not switched on today.',
   },
   {
     type: 'Appointment dates',
@@ -36,9 +39,19 @@ const collectedData = [
     why: 'Only to check assistance program eligibility. Field-encrypted. Not sent to analytics. Deletable.',
   },
   {
-    type: 'Concierge case records',
-    what: 'Authorizations, records packets, and intake details you provide for a Concierge case',
-    why: 'To collect records and submit the packet to the center you chose',
+    type: 'Concierge records',
+    what: 'Medical records, patient authorization, and personal representative documents you send us',
+    why: 'Used only to complete your Concierge case',
+  },
+  {
+    type: 'Payment details',
+    what: 'Handled by Stripe; we do not see your full card number',
+    why: 'To take payment for paid plans and Concierge cases',
+  },
+  {
+    type: 'Demo booking',
+    what: 'Name and email you give when booking a demo',
+    why: 'To schedule a conversation with our team',
   },
   {
     type: 'Family graph',
@@ -48,6 +61,10 @@ const collectedData = [
 ];
 
 const changeLog = [
+  {
+    date: 'October 28, 2026',
+    note: 'Aligned collection, retention, and Business Associate Agreement copy with Tools versus Concierge, and matched cookie language to product analytics being off.',
+  },
   {
     date: 'October 27, 2026',
     note: 'Listed the Call for me voice vendor as a future subprocessor, kept scoped Concierge retention, and aligned family plan names with Caregiver Plus until a merge is confirmed.',
@@ -60,8 +77,7 @@ const changeLog = [
 
 export const metadata = pageMetadata({
   title: 'Trust and privacy',
-  description:
-    'How OncoKind handles report uploads, Concierge records, subprocessors, analytics consent, and privacy requests.',
+  description: 'How OncoKind handles report uploads, Concierge records, retention, and privacy requests.',
   path: '/trust',
   imageAlt: 'OncoKind Trust Center',
 });
@@ -114,12 +130,11 @@ export default function TrustPage() {
             2. What We Do Not Do
           </h2>
           <ul className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
-            <li>We do not sell your data to any third party, ever.</li>
-            <li>We do not share your report content with advertisers.</li>
-            <li>{TOOLS_RETENTION_CLAIM}</li>
-            <li>{CONCIERGE_RETENTION_CLAIM}</li>
-            <li>We do not use your personal health information to train AI models.</li>
-            <li>OncoKind.com is ad-free. No advertiser has ever paid to influence what you see here.</li>
+            <li>✗ We do not sell your data to any third party, ever.</li>
+            <li>✗ We do not share your report content with advertisers.</li>
+            <li>✗ Tools: we do not store raw report text after your summary is generated. Concierge: authorized records are stored encrypted and deleted 90 days after Case Ready.</li>
+            <li>✗ We do not use your personal health information to train AI models.</li>
+            <li>✗ OncoKind.com is ad-free. No advertiser has ever paid to influence what you see here.</li>
           </ul>
         </section>
 
@@ -143,11 +158,11 @@ export default function TrustPage() {
               },
               {
                 title: 'Data retention',
-                body: `${TOOLS_RETENTION_CLAIM} ${CONCIERGE_RETENTION_CLAIM} Generated summaries and prep sheets can be deleted from account settings.`,
+                body: `${TOOLS_RETENTION_CLAIM} ${CONCIERGE_RETENTION_CLAIM} You can ask us to delete them sooner. Generated summaries and prep sheets can be deleted from account settings.`,
               },
               {
                 title: 'Breach notification',
-                body: 'In the event of a data breach, affected users will be notified within 72 hours. The incident runbook that makes that clock real is in the operations docs.',
+                body: 'In the event of a data breach, affected users will be notified without unreasonable delay.',
               },
             ].map((item) => (
               <div
@@ -252,8 +267,9 @@ export default function TrustPage() {
               preferences. These cookies are required for the site to function.
             </p>
             <p>
-              Optional analytics scripts run only after you choose Accept All or explicitly allow analytics
-              from the cookie preferences banner. If you choose Essential Only, analytics requests do not fire.
+              Product analytics is not switched on. The cookie banner still lists optional analytics in case that
+              changes. If analytics is enabled later, it will run only after you choose Accept All or allow
+              analytics in cookie preferences.
             </p>
             <ul className="list-disc space-y-2 pl-5">
               <li><strong>Essential:</strong> session, authentication, language preference</li>

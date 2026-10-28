@@ -46,7 +46,7 @@ const stages: Array<{ name: string; items: NavItem[] }> = [
     name: 'Fight',
     items: [
       { href: '/journey/insurance-support', upgradeHref: '/pricing?plan=pro', label: 'Insurance Support', icon: ShieldCheck, paidOnly: 'caregiver' },
-      { href: '/journey/financial-help', upgradeHref: '/pricing?plan=advocate', label: 'Financial Help', icon: HandCoins, paidOnly: 'plus' },
+      { href: '/journey/financial-help', upgradeHref: '/pricing?plan=plus', label: 'Financial Help', icon: HandCoins, paidOnly: 'plus' },
       { href: '/journey/access-agent', label: 'Access Agent', icon: MapPin, agent: 'feature_access_agent' },
     ],
   },

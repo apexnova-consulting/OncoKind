@@ -100,14 +100,14 @@ export default async function DashboardPage() {
         {!isPro && (
           <Card className="border-amber-300 bg-amber-50/40">
             <CardHeader>
-              <CardTitle>Upgrade to Care &amp; Advocacy Pro</CardTitle>
+              <CardTitle>Upgrade to Caregiver Pro</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-slate-700">
                 Unlock Second Opinion packet export, expanded trial matching, and advanced prep tools.
               </p>
               <Button asChild className="mt-4">
-                <Link href="/pricing?plan=advocate">Upgrade to Care &amp; Advocacy Pro</Link>
+                <Link href="/pricing?plan=pro">Upgrade to Caregiver Pro</Link>
               </Button>
             </CardContent>
           </Card>

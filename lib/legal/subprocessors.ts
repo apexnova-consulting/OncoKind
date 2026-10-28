@@ -11,7 +11,7 @@ export const SUBPROCESSORS: Subprocessor[] = [
   {
     service: 'Anthropic',
     purpose: 'Report analysis and plain-English generation',
-    data: 'Redacted report text during processing. Not used to train models.',
+    data: 'Report text during processing. Not used to train AI models.',
     envKeys: ['ANTHROPIC_API_KEY'],
   },
   {

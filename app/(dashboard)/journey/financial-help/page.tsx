@@ -44,7 +44,7 @@ export default async function FinancialHelpPage() {
             diagnosis-aware grants, PAF programs, and HealthWell funds in real time.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link href="/pricing?plan=advocate" className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
+            <Link href="/pricing?plan=plus" className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
               Upgrade to Caregiver Plus
             </Link>
           </div>

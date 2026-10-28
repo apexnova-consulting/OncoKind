@@ -221,7 +221,7 @@ export function GoalsOfCarePrepSheet({ userId: _userId, generatedQuestions }: Pr
             ))}
           </div>
           <p className="text-xs text-[#5a6b68]/80 italic">
-            Sources: National Consensus Project for Quality Palliative Care · NCCN Clinical
+            Sources: National Consensus Project for Quality Palliative Care · guideline-informed clinical
             Practice Guidelines · American Cancer Society
           </p>
         </div>
