@@ -11,7 +11,7 @@ import {
   isAnthropicRateLimit,
 } from '@/lib/anthropic';
 import { verifyNoPHIRemaining } from '@/lib/pii-scrubber';
-import { freeReportWindowStart, hasReachedFreeReportLimit, freeReportLimitMessage } from '@/lib/report-limits';
+import { reportWindowStart, hasReachedFreeReportLimit, freeReportLimitMessage } from '@/lib/report-limits';
 
 export const runtime = 'nodejs';
 export const maxDuration = 300;
@@ -60,11 +60,11 @@ export async function POST(request: NextRequest) {
       .from('patient_reports')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
-      .gte('created_at', freeReportWindowStart().toISOString());
+      .gte('created_at', reportWindowStart(profile?.subscription_tier).toISOString());
     if (hasReachedFreeReportLimit(profile?.subscription_tier, reportCount ?? 0)) {
       return NextResponse.json(
         {
-          error: freeReportLimitMessage(),
+          error: freeReportLimitMessage(profile?.subscription_tier),
           code: 'TRIAL_LIMIT_REACHED',
         },
         { status: 402 }

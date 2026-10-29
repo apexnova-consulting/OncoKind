@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { CONCIERGE_BRAND, CONCIERGE_CAREGIVER_GRANT_DAYS, formatUsdFromCents, weeklyCohortPriceCents } from '@/lib/concierge/config';
 import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
-import { CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
+import { conciergeRetentionClaim } from '@/lib/legal/retention';
+import { CONCIERGE_KEEP_ROLLOVER_NOTE, isAfter90FlagOn } from '@/lib/after-90/config';
 import { conciergeWaitlistMessage } from '@/lib/concierge/capacity';
 
 const STEPS = [
@@ -88,6 +89,7 @@ export function ConciergeMarketing() {
           <p className="mt-3 text-3xl font-semibold text-[#0F6E56]">{formatUsdFromCents(price)} per case</p>
           <p className="mt-2 text-sm text-slate-600">
             Includes {CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro. Price shown this week is recorded with each purchase. Any cancer diagnosis. Adult patients and US facilities only.
+            {isAfter90FlagOn('conciergeKeepRollover') ? ` ${CONCIERGE_KEEP_ROLLOVER_NOTE}` : ''}
           </p>
           <p className="mt-3 text-sm">
             <Link href="/concierge/hardship" className="font-semibold text-[#0F6E56]">
@@ -98,10 +100,10 @@ export function ConciergeMarketing() {
             Full refund any time before we send the first records request, or if we do not send one within 10 business days of a complete authorization and intake.
           </p>
           <p className="mt-3 rounded-xl border border-[#cdd8d5] px-4 py-3 text-sm text-slate-700">
-            Records stored with AES-256 encryption and automatically purged 90 days after Case Ready.
+            {conciergeRetentionClaim()}
           </p>
           <p className="mt-3 text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
-          <p className="mt-2 text-xs text-slate-500">{CONCIERGE_RETENTION_CLAIM}</p>
+          <p className="mt-2 text-xs text-slate-500">{conciergeRetentionClaim()}</p>
         </section>
 
         <section id="interest" className="rounded-2xl border border-[#cdd8d5] bg-white p-8">

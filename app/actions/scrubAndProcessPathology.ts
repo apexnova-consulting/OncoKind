@@ -19,7 +19,7 @@ import { scrubPHI, verifyNoPHIRemaining } from '@/lib/pii-scrubber';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { trackTemporaryArtifact } from '@/lib/privacy/zero-retention-monitor';
 import { getPatientReport } from '@/lib/patient-reports';
-import { freeReportLimitMessage, freeReportWindowStart, hasReachedFreeReportLimit } from '@/lib/report-limits';
+import { freeReportLimitMessage, reportWindowStart, hasReachedFreeReportLimit } from '@/lib/report-limits';
 import {
   ANTHROPIC_MODELS,
   asAnthropicRequest,
@@ -132,11 +132,11 @@ export async function scrubAndProcessPathology(formData: FormData): Promise<Path
       .from('patient_reports')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
-      .gte('created_at', freeReportWindowStart().toISOString());
+      .gte('created_at', reportWindowStart(profile?.subscription_tier).toISOString());
     if (hasReachedFreeReportLimit(profile?.subscription_tier, reportCount ?? 0)) {
       return {
         success: false,
-        error: `TRIAL_LIMIT_REACHED: ${freeReportLimitMessage()}`,
+        error: `TRIAL_LIMIT_REACHED: ${freeReportLimitMessage(profile?.subscription_tier)}`,
       };
     }
 

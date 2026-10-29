@@ -19,6 +19,13 @@ export const FEATURE_FLAGS = {
   concierge_price_variant: 'concierge_price_variant',
   individual_advocate_plan: 'individual_advocate_plan',
   tool_freeze: 'tool_freeze',
+  saveFlow: 'saveFlow',
+  keepPlan: 'keepPlan',
+  keepEligibility: 'keepEligibility',
+  recordsVault: 'recordsVault',
+  after90Phase: 'after90Phase',
+  orgSponsorship: 'orgSponsorship',
+  conciergeKeepRollover: 'conciergeKeepRollover',
 } as const;
 
 export type FeatureFlagName = keyof typeof FEATURE_FLAGS;
@@ -101,6 +108,16 @@ export function isFeatureEnabled(flag: FeatureFlagName): boolean {
       'NEXT_PUBLIC_FEATURE_INDIVIDUAL_ADVOCATE_PLAN',
     ],
     tool_freeze: ['FEATURE_TOOL_FREEZE', 'NEXT_PUBLIC_FEATURE_TOOL_FREEZE'],
+    saveFlow: ['FEATURE_SAVE_FLOW', 'NEXT_PUBLIC_FEATURE_SAVE_FLOW'],
+    keepPlan: ['FEATURE_KEEP_PLAN', 'NEXT_PUBLIC_FEATURE_KEEP_PLAN'],
+    keepEligibility: ['FEATURE_KEEP_ELIGIBILITY', 'NEXT_PUBLIC_FEATURE_KEEP_ELIGIBILITY'],
+    recordsVault: ['FEATURE_RECORDS_VAULT', 'NEXT_PUBLIC_FEATURE_RECORDS_VAULT'],
+    after90Phase: ['FEATURE_AFTER_90_PHASE', 'NEXT_PUBLIC_FEATURE_AFTER_90_PHASE'],
+    orgSponsorship: ['FEATURE_ORG_SPONSORSHIP', 'NEXT_PUBLIC_FEATURE_ORG_SPONSORSHIP'],
+    conciergeKeepRollover: [
+      'FEATURE_CONCIERGE_KEEP_ROLLOVER',
+      'NEXT_PUBLIC_FEATURE_CONCIERGE_KEEP_ROLLOVER',
+    ],
   };
 
   if (flag === 'cp_reduced_mode') {

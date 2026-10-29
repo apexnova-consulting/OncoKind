@@ -4,6 +4,7 @@ import { Heart, Shield, Scale, Eye } from 'lucide-react';
 import { PATH_B_PRIVACY_LANGUAGE } from '@/lib/disclosures';
 import { Button } from '@/components/ui/button';
 import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
+import { isAfter90FlagOn } from '@/lib/after-90/config';
 
 export const metadata = {
   title: 'About OncoKind: Built by a Caregiver, for Caregivers',
@@ -307,6 +308,11 @@ export default function AboutPage() {
             <Button asChild variant="outline" size="lg">
               <Link href="/trust">How we protect your data →</Link>
             </Button>
+            {isAfter90FlagOn('orgSponsorship') ? (
+              <Button asChild variant="outline" size="lg">
+                <Link href="/partners">Sponsor families</Link>
+              </Button>
+            ) : null}
           </div>
         </div>
       </section>

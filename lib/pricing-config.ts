@@ -17,15 +17,27 @@ import {
   isIndividualAdvocatePlanPublic,
   INDIVIDUAL_ADVOCATE_PLAN,
 } from '@/lib/board-run2';
+import {
+  KEEP_CARD_BODY,
+  KEEP_FEATURES,
+  KEEP_MONTHLY_CENTS,
+  KEEP_MONTHLY_LABEL,
+  KEEP_PLAN_LABEL,
+  KEEP_PLAN_NAME,
+  KEEP_PRICING_CTA_LOCKED,
+  KEEP_YEARLY_CENTS,
+  KEEP_YEARLY_LABEL,
+  isAfter90FlagOn,
+} from '@/lib/after-90/config';
 
 export const SITE_ORIGIN = 'https://www.oncokind.com';
 export const CONCIERGE_LIST_PRICE_LABEL = formatUsdFromCents(CONCIERGE_DEFAULT_PRICE_CENTS);
 export const YEARLY_MONTHS_INCLUDED = 10;
 export const ANNUAL_SAVINGS_PERCENT = Math.round((1 - YEARLY_MONTHS_INCLUDED / 12) * 100);
 
-export type PlanId = 'free' | 'caregiver' | 'advocate' | 'professional' | 'enterprise';
+export type PlanId = 'free' | 'keep' | 'caregiver' | 'advocate' | 'professional' | 'enterprise';
 export type BillingInterval = 'monthly' | 'yearly';
-export type CheckoutPlanKey = 'pro' | 'caregiver' | 'advocate' | 'plus' | 'professional';
+export type CheckoutPlanKey = 'pro' | 'caregiver' | 'advocate' | 'plus' | 'professional' | 'keep';
 export type FeatureMinPlan = PlanId | 'paid';
 
 export type EntitlementCell = string;
@@ -57,6 +69,20 @@ export const PLANS = {
     cta: 'Start free',
     signupHref: '/signup',
     badge: null as string | null,
+  },
+  keep: {
+    id: 'keep' as const,
+    checkoutKey: 'keep' as const,
+    name: KEEP_PLAN_NAME,
+    monthlyCents: KEEP_MONTHLY_CENTS,
+    yearlyCents: KEEP_YEARLY_CENTS,
+    monthlyLabel: KEEP_MONTHLY_LABEL,
+    yearlyLabel: KEEP_YEARLY_LABEL,
+    cadenceMonthly: '/month',
+    cadenceYearly: '/year',
+    cta: KEEP_PRICING_CTA_LOCKED,
+    signupHref: '/pricing#keep',
+    badge: KEEP_PLAN_LABEL,
   },
   caregiver: {
     id: 'caregiver' as const,
@@ -560,12 +586,14 @@ export function planIdFromTier(tier: SubscriptionTier): PlanId {
   if (value === 'professional') return 'professional';
   if (value === 'enterprise') return 'enterprise';
   if (value === 'advocate') return 'advocate';
+  if (value === 'keep') return 'keep';
   if (value === 'pro' || value === 'caregiver') return 'caregiver';
   return 'free';
 }
 
 const PLAN_RANK: Record<PlanId, number> = {
   free: 0,
+  keep: 0,
   caregiver: 1,
   advocate: 2,
   professional: 3,
@@ -576,9 +604,29 @@ export function hasMinPlan(tier: SubscriptionTier, min: PlanId): boolean {
   return PLAN_RANK[planIdFromTier(tier)] >= PLAN_RANK[min];
 }
 
-/** Caregiver Pro and every higher paid tier. Legacy `pro` maps here. */
+/** Caregiver Pro and every higher paid tier. Legacy `pro` maps here. Keep is not Pro. */
 export function hasCaregiverAccess(tier: SubscriptionTier): boolean {
   return hasMinPlan(tier, 'caregiver');
+}
+
+export function hasKeepAccess(tier: SubscriptionTier): boolean {
+  return planIdFromTier(tier) === 'keep';
+}
+
+export function hasVaultAccess(tier: SubscriptionTier): boolean {
+  return hasCaregiverAccess(tier) || hasKeepAccess(tier);
+}
+
+export function keepFeatureList(): readonly string[] {
+  return KEEP_FEATURES;
+}
+
+export function keepCardBody(): string {
+  return KEEP_CARD_BODY;
+}
+
+export function showKeepPlan(): boolean {
+  return isAfter90FlagOn('keepPlan');
 }
 
 /** Travel and lodging tracker. Merge mode folds this into Caregiver Pro. */
@@ -601,7 +649,53 @@ export function publicCatalogFeatures() {
 }
 
 export function publicPricingHeaders(): string[] {
+  if (showKeepPlan()) return [PLANS.free.name, PLANS.caregiver.name, PLANS.keep.name];
   return [PLANS.free.name, PLANS.caregiver.name];
+}
+
+export function keepCatalogCell(featureId: string, fallback: string): string {
+  switch (featureId) {
+    case 'report_processing':
+      return '3 per month';
+    case 'cancer_profile':
+      return 'Full';
+    case 'doctor_prep':
+      return 'PDF for follow-up visits';
+    case 'second_opinion':
+      return 'Not included';
+    case 'check_in':
+      return 'Follow-up visits';
+    case 'timeline':
+      return 'Full';
+    case 'trials':
+      return 'Top 3 preview';
+    case 'goals_of_care':
+      return 'Not included';
+    case 'insurance':
+      return 'Decode letter';
+    case 'community':
+      return 'Read-only';
+    case 'empathy_filter':
+      return 'Included';
+    case 'complete_the_picture':
+      return 'Summary plus top 2 questions';
+    case 'access_agent':
+      return 'Estimate plus top 3 programs';
+    case 'first_72':
+      return 'Core checklist';
+    case 'family':
+      return 'Family risk tools';
+    case 'concierge':
+      return fallback;
+    case 'genetic_counseling':
+      return 'PDF export';
+    case 'care_plan_sheets':
+      return 'Not included';
+    case 'support':
+      return 'Email';
+    default:
+      return fallback || 'Not included';
+  }
 }
 
 export function showFamilyPlusPlan(): boolean {
@@ -615,7 +709,7 @@ export function showIndividualAdvocatePlan(): boolean {
 export { INDIVIDUAL_ADVOCATE_PLAN };
 
 export function hasPaidAccess(tier: SubscriptionTier): boolean {
-  return hasCaregiverAccess(tier);
+  return hasCaregiverAccess(tier) || hasKeepAccess(tier);
 }
 
 export function hasKindAuthAccess(tier: SubscriptionTier): boolean {
@@ -631,14 +725,24 @@ export function displayPlanName(tier: SubscriptionTier): string {
 }
 
 export function isCheckoutPlanKey(value: string | null): value is CheckoutPlanKey {
-  return value === 'pro' || value === 'caregiver' || value === 'advocate' || value === 'plus' || value === 'professional';
+  return (
+    value === 'pro' ||
+    value === 'caregiver' ||
+    value === 'advocate' ||
+    value === 'plus' ||
+    value === 'professional' ||
+    value === 'keep'
+  );
 }
 
 export function isBillingInterval(value: string | null): value is BillingInterval {
   return value === 'monthly' || value === 'yearly';
 }
 
-export function canonicalCheckoutPlan(plan: CheckoutPlanKey): 'pro' | 'advocate' | 'professional' {
+export function canonicalCheckoutPlan(
+  plan: CheckoutPlanKey
+): 'pro' | 'advocate' | 'professional' | 'keep' {
+  if (plan === 'keep') return 'keep';
   if (plan === 'caregiver' || plan === 'pro') return 'pro';
   if ((plan === 'advocate' || plan === 'plus') && isFamilyTierMerged()) return 'pro';
   if (plan === 'plus' || plan === 'advocate') return 'advocate';

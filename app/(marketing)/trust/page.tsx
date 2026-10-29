@@ -4,7 +4,13 @@ import { MEDICAL_DISCLAIMER_TEXT, PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote
 import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSection';
 import { pageMetadata } from '@/lib/seo';
 import { subprocessorsForTrustPage } from '@/lib/legal/subprocessors';
-import { CONCIERGE_RETENTION_CLAIM, TOOLS_RETENTION_CLAIM } from '@/lib/legal/retention';
+import { CONCIERGE_RETENTION_CLAIM, TOOLS_RETENTION_CLAIM, conciergeRetentionClaim } from '@/lib/legal/retention';
+import {
+  FAMILY_RISK_TRUST_SUMMARY,
+  ORG_DASHBOARD_TRUST_SUMMARY,
+  VAULT_TRUST_SUMMARY,
+  isAfter90FlagOn,
+} from '@/lib/after-90/config';
 import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 
 export const dynamic = 'force-dynamic';
@@ -61,6 +67,10 @@ const collectedData = [
 ];
 
 const changeLog = [
+  {
+    date: 'October 29, 2026',
+    note: 'Added Records vault, Family risk, and organization dashboard sections behind flags. Counsel reviews before those flags turn on.',
+  },
   {
     date: 'October 29, 2026',
     note: 'Clarified Concierge refund wording, Explorer versus Caregiver Pro names, and rare women cancer diagnosis pages.',
@@ -136,7 +146,12 @@ export default function TrustPage() {
           <ul className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
             <li>✗ We do not sell your data to any third party, ever.</li>
             <li>✗ We do not share your report content with advertisers.</li>
-            <li>✗ Tools: we do not store raw report text after your summary is generated. Concierge: authorized records are stored encrypted and deleted 90 days after Case Ready.</li>
+            <li>
+              ✗{' '}
+              {isAfter90FlagOn('recordsVault')
+                ? `Tools: we do not store raw report text after your summary is generated, unless you consent to the Records vault. ${conciergeRetentionClaim()}`
+                : 'Tools: we do not store raw report text after your summary is generated. Concierge: authorized records are stored encrypted and deleted 90 days after Case Ready.'}
+            </li>
             <li>✗ We do not use your personal health information to train AI models.</li>
             <li>✗ OncoKind.com is ad-free. No advertiser has ever paid to influence what you see here.</li>
           </ul>
@@ -162,7 +177,7 @@ export default function TrustPage() {
               },
               {
                 title: 'Data retention',
-                body: `${TOOLS_RETENTION_CLAIM} ${CONCIERGE_RETENTION_CLAIM} You can ask us to delete them sooner. Generated summaries and prep sheets can be deleted from account settings.`,
+                body: `${TOOLS_RETENTION_CLAIM} ${conciergeRetentionClaim()} You can ask us to delete them sooner. Generated summaries and prep sheets can be deleted from account settings.`,
               },
               {
                 title: 'Breach notification',
@@ -258,6 +273,19 @@ export default function TrustPage() {
             </p>
           </div>
         </section>
+
+        {isAfter90FlagOn('recordsVault') || isAfter90FlagOn('keepPlan') || isAfter90FlagOn('orgSponsorship') ? (
+          <section className="rounded-[var(--radius-xl)] bg-white p-8 shadow-[var(--shadow-sm)]">
+            <h2 className="font-display text-3xl font-semibold text-[var(--color-primary-900)]">
+              Records vault, Family risk, and organizations
+            </h2>
+            <div className="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
+              {isAfter90FlagOn('recordsVault') ? <p>{VAULT_TRUST_SUMMARY}</p> : null}
+              {isAfter90FlagOn('keepPlan') ? <p>{FAMILY_RISK_TRUST_SUMMARY}</p> : null}
+              {isAfter90FlagOn('orgSponsorship') ? <p>{ORG_DASHBOARD_TRUST_SUMMARY}</p> : null}
+            </div>
+          </section>
+        ) : null}
 
         <ClinicalAdvisorSection />
 

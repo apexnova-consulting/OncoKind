@@ -34,7 +34,12 @@ export type FunnelEvent =
   | 'stage_1_complete'
   | 'first_paid_action'
   | 'plan_purchased'
-  | 'concierge_started';
+  | 'concierge_started'
+  | 'after90_phase_shown'
+  | 'vault_consent_given'
+  | 'keep_chosen'
+  | 'pause_chosen'
+  | 'cancel_completed';
 
 type Attribution = Partial<Record<(typeof UTM_KEYS)[number], string>>;
 

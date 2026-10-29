@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getBrandTheme } from '@/lib/branding';
 import { GLOBAL_SITE_DISCLAIMER_TEXT } from '@/lib/disclosures';
+import { isAfter90FlagOn } from '@/lib/after-90/config';
 
 const footerColumns = [
   {
@@ -33,6 +34,7 @@ const footerColumns = [
       { href: '/about#founder-section', label: 'Founder Story' },
       { href: '/support', label: 'Support' },
       { href: '/support', label: 'Contact' },
+      ...(isAfter90FlagOn('orgSponsorship') ? [{ href: '/partners', label: 'Sponsor families' }] : []),
     ],
   },
   {

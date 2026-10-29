@@ -9,7 +9,9 @@ import { getPatientReport } from '@/lib/patient-reports';
 import { DiagnosisRecencyPrompt } from '@/components/first-72/DiagnosisRecencyPrompt';
 import { Suspense } from 'react';
 import { nextJourneyStep } from '@/lib/journey/next-step';
-import { freeReportWindowStart } from '@/lib/report-limits';
+import { reportWindowStart } from '@/lib/report-limits';
+import { isAfter90FlagOn } from '@/lib/after-90/config';
+import { shouldShowAfter90Phase } from '@/lib/after-90/eligibility';
 
 export default async function JourneyPage() {
   const supabase = await createServerSupabaseClient();
@@ -17,7 +19,7 @@ export default async function JourneyPage() {
   const user = session?.user ?? null;
   if (!user) return null;
 
-  const { isPro } = await getProfile();
+  const { isPro, profile } = await getProfile();
   const { data: reports } = await supabase
     .from('patient_reports')
     .select('id, created_at')
@@ -28,7 +30,7 @@ export default async function JourneyPage() {
     .from('patient_reports')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', user.id)
-    .gte('created_at', freeReportWindowStart().toISOString());
+    .gte('created_at', reportWindowStart(undefined).toISOString());
   const { count: appointmentCount } = await supabase
     .from('prep_sheet_appointments')
     .select('id', { count: 'exact', head: true })
@@ -44,6 +46,13 @@ export default async function JourneyPage() {
     .from('concierge_cases')
     .select('id', { count: 'exact', head: true })
     .eq('user_id', user.id);
+  const { data: caseReady } = await supabase
+    .from('concierge_cases')
+    .select('case_ready_at')
+    .eq('user_id', user.id)
+    .not('case_ready_at', 'is', null)
+    .limit(1)
+    .maybeSingle();
 
   const nextStep = nextJourneyStep({
     hasReport: Boolean(report),
@@ -53,6 +62,13 @@ export default async function JourneyPage() {
     secondOpinionGoal: false,
     recordDelays: false,
     conciergeCase: (conciergeCount ?? 0) > 0,
+    after90Eligible:
+      isAfter90FlagOn('after90Phase') &&
+      shouldShowAfter90Phase({
+        accountCreatedAt: profile?.created_at ?? user.created_at ?? null,
+        treatmentFinishedAt: profile?.treatment_finished_at ?? null,
+        conciergeCaseReadyAt: caseReady?.case_ready_at ?? null,
+      }),
   });
 
   const stages = report

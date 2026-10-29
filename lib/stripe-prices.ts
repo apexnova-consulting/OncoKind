@@ -33,6 +33,8 @@ export const stripePrices = {
     process.env.STRIPE_PRICE_ID_CAREGIVER_YEARLY ?? process.env.STRIPE_PRICE_ID_PRO_YEARLY ?? '',
   enterpriseUnlimited: process.env.STRIPE_PRICE_ID_ENTERPRISE_UNLIMITED ?? '',
   enterprisePerSeat: process.env.STRIPE_PRICE_ID_ENTERPRISE_PER_SEAT ?? '',
+  keepMonthly: process.env.STRIPE_PRICE_ID_KEEP_MONTHLY ?? '',
+  keepYearly: process.env.STRIPE_PRICE_ID_KEEP_YEARLY ?? '',
 } as const;
 
 export const hasProPrices = !!stripePrices.caregiverMonthly;
@@ -52,6 +54,9 @@ export function isCheckoutPlanKey(value: string | null): value is CheckoutPlanKe
 
 export function resolveCheckoutPriceId(plan: CheckoutPlanKey, interval: BillingInterval): string {
   const canonical = canonicalCheckoutPlan(plan);
+  if (canonical === 'keep') {
+    return interval === 'yearly' ? stripePrices.keepYearly : stripePrices.keepMonthly;
+  }
   if (canonical === 'professional') return stripePrices.professionalMonthly;
   if (canonical === 'advocate') {
     return interval === 'yearly' ? stripePrices.advocateYearly : stripePrices.advocateMonthly;
@@ -66,8 +71,9 @@ export function isKnownStripePriceId(priceId: string | null): boolean {
 
 export function tierFromPriceId(
   priceId: string | undefined
-): 'pro' | 'advocate' | 'professional' | 'enterprise' {
+): 'pro' | 'advocate' | 'professional' | 'enterprise' | 'keep' {
   if (!priceId) return 'pro';
+  if (priceId === stripePrices.keepMonthly || priceId === stripePrices.keepYearly) return 'keep';
   if (priceId === stripePrices.professionalMonthly) return 'professional';
   if (priceId === stripePrices.enterpriseUnlimited || priceId === stripePrices.enterprisePerSeat) {
     return 'enterprise';

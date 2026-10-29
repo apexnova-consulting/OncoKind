@@ -6,6 +6,7 @@ import { FEATURE_CATALOG_ICONS } from '@/components/marketing/FeatureCatalogIcon
 import { Button } from '@/components/ui/button';
 import { pageMetadata } from '@/lib/seo';
 import { isFeatureEnabled } from '@/lib/feature-flags';
+import { FEATURES_STAGE4_LINE, isAfter90FlagOn } from '@/lib/after-90/config';
 
 const STAGE_FEATURE_IDS: Record<(typeof JOURNEY_STAGES)[number]['id'], string[]> = {
   understand: ['cancer_profile', 'complete_the_picture', 'first_72', 'empathy_filter'],
@@ -57,6 +58,9 @@ export default function FeaturesHubPage() {
                 {stage.name}
               </h2>
               <p className="mt-2 max-w-2xl text-sm text-[var(--color-text-secondary)]">{stage.summary}</p>
+              {stage.id === 'plan' && isAfter90FlagOn('after90Phase') ? (
+                <p className="mt-3 max-w-2xl text-sm font-medium text-[#0F6E56]">{FEATURES_STAGE4_LINE}</p>
+              ) : null}
               <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {features.map((feature) => {
                   const Icon = FEATURE_CATALOG_ICONS[feature.id as keyof typeof FEATURE_CATALOG_ICONS] ?? FileText;

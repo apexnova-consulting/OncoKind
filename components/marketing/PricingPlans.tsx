@@ -10,9 +10,17 @@ import {
   FREE_FEATURES,
   PLANS,
   caregiverFeatureList,
+  keepFeatureList,
+  showKeepPlan,
 } from '@/lib/pricing-config';
 import { CONCIERGE_CAREGIVER_GRANT_DAYS } from '@/lib/concierge/config';
 import { CAREGIVER_PRO_TRIAL_NOTE } from '@/lib/product-v34';
+import {
+  CONCIERGE_KEEP_ROLLOVER_NOTE,
+  KEEP_CARD_BODY,
+  KEEP_PRICING_CTA_LOCKED,
+  isAfter90FlagOn,
+} from '@/lib/after-90/config';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
@@ -23,6 +31,8 @@ type Props = {
   caregiverConfigured: boolean;
   advocateConfigured: boolean;
   professionalConfigured: boolean;
+  keepEligible?: boolean;
+  keepConfigured?: boolean;
 };
 
 function CheckoutForm({
@@ -52,6 +62,8 @@ function CheckoutForm({
 export function PricingPlans({
   isSignedIn,
   caregiverConfigured,
+  keepEligible = false,
+  keepConfigured = false,
 }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly');
   const yearlySavingsLabel = useMemo(() => `Save ~${ANNUAL_SAVINGS_PERCENT}%`, []);
@@ -98,7 +110,7 @@ export function PricingPlans({
         Yearly billing equals 10 months. {yearlySavingsLabel} versus paying monthly.
       </p>
 
-      <div className="mt-16 grid items-stretch gap-6 md:grid-cols-3">
+      <div className={`mt-16 grid items-stretch gap-6 ${showKeepPlan() ? 'md:grid-cols-2 xl:grid-cols-4' : 'md:grid-cols-3'}`}>
         <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
           <h2 className="mt-1 font-display text-xl font-semibold text-[var(--color-text-primary)]">
             {PLANS.free.name}
@@ -161,6 +173,7 @@ export function PricingPlans({
               'Done-for-you records collection and intake submission to Case Ready',
               `Includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro`,
               'Full refund before we send the first records request',
+              ...(isAfter90FlagOn('conciergeKeepRollover') ? [CONCIERGE_KEEP_ROLLOVER_NOTE] : []),
             ].map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
@@ -172,6 +185,39 @@ export function PricingPlans({
             <Link href="/concierge">Start Case</Link>
           </Button>
         </div>
+
+        {showKeepPlan() ? (
+          <div id="keep" className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">{PLANS.keep.badge}</p>
+            <h2 className="mt-1 font-display text-xl font-semibold text-[var(--color-text-primary)]">
+              {PLANS.keep.name}
+            </h2>
+            <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">
+              {billingInterval === 'yearly' ? PLANS.keep.yearlyLabel : PLANS.keep.monthlyLabel}
+            </p>
+            <p className="text-sm text-[var(--color-text-muted)]">
+              {billingInterval === 'yearly' ? PLANS.keep.cadenceYearly : PLANS.keep.cadenceMonthly}
+            </p>
+            <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{KEEP_CARD_BODY}</p>
+            <ul className="mt-7 flex-1 space-y-3">
+              {keepFeatureList().map((feature) => (
+                <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            {keepEligible && isSignedIn && keepConfigured ? (
+              <Button asChild className="mt-8 w-full">
+                <a href={`/api/checkout?plan=keep&billingInterval=${billingInterval}`}>Start {PLANS.keep.name}</a>
+              </Button>
+            ) : (
+              <Button asChild variant="outline" className="mt-8 w-full">
+                <Link href="/pricing#keep">{KEEP_PRICING_CTA_LOCKED}</Link>
+              </Button>
+            )}
+          </div>
+        ) : null}
       </div>
     </>
   );

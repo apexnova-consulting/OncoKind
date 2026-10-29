@@ -29,6 +29,12 @@ import { JOURNEY_POSITIONING, JOURNEY_STAGE_HEADLINE, JOURNEY_STAGES } from '@/l
 import { RARE_WOMENS_HERO_LINE } from '@/lib/cancers/landings';
 import { SCOPED_RETENTION_BADGE } from '@/lib/legal/retention';
 import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
+import {
+  AFTER_TREATMENT_FAQ_ANSWER,
+  AFTER_TREATMENT_FAQ_QUESTION,
+  CONCIERGE_VAULT_RETENTION_CLAIM,
+  isAfter90FlagOn,
+} from '@/lib/after-90/config';
 
 /* ─────────────────────────────────────────────────────────────
    DATA
@@ -130,7 +136,9 @@ const faqs = [
   },
   {
     q: "What happens to my loved one's medical records after I upload them?",
-    a: "Your raw file is not retained after processing. We extract what is needed to build your Cancer Profile, then the document is removed. Storage is encrypted. We have never retained raw PHI and our architecture is designed so that we cannot.",
+    a: isAfter90FlagOn('recordsVault')
+      ? `Tools delete raw report text after processing unless you consent to the Records vault. ${CONCIERGE_VAULT_RETENTION_CLAIM}`
+      : "Your raw file is not retained after processing. We extract what is needed to build your Cancer Profile, then the document is removed. Storage is encrypted. We have never retained raw PHI and our architecture is designed so that we cannot.",
   },
   {
     q: "I'm not very tech-savvy. Is this hard to use?",
@@ -144,6 +152,9 @@ const faqs = [
     q: "What does 'free' actually include?",
     a: HOMEPAGE_HERO.paidUnlock,
   },
+  ...(isAfter90FlagOn('keepPlan')
+    ? [{ q: AFTER_TREATMENT_FAQ_QUESTION, a: AFTER_TREATMENT_FAQ_ANSWER }]
+    : []),
 ];
 
 /* ─────────────────────────────────────────────────────────────

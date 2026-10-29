@@ -7,6 +7,8 @@ import { containsCrisisLanguage } from '@/lib/agents/safety';
 import { weeklyCohortPriceCents, conciergeCapacityCap } from '@/lib/concierge/config';
 import { normalizeSponsorCode } from '@/lib/concierge/sponsored';
 import { sendConciergeIntakeAlert } from '@/lib/internal-email';
+import { isAfter90FlagOn, keepRolloverCheckboxLabel } from '@/lib/after-90/config';
+import { randomBytes } from 'crypto';
 
 export async function POST(request: NextRequest) {
   if (!isFeatureEnabled('concierge_public_pages')) {
@@ -58,6 +60,18 @@ export async function POST(request: NextRequest) {
     });
     if (sponsorCode) {
       await supabase.from('profiles').update({ sponsor_code: sponsorCode }).eq('id', user.id);
+    }
+    if (isAfter90FlagOn('conciergeKeepRollover') && body.keepRollover === true) {
+      const textShown =
+        typeof body.keepRolloverText === 'string' && body.keepRolloverText
+          ? body.keepRolloverText
+          : keepRolloverCheckboxLabel();
+      await supabase.from('keep_rollover_consents').insert({
+        user_id: user.id,
+        ticked: true,
+        text_shown: textShown,
+        opt_out_token: randomBytes(24).toString('hex'),
+      });
     }
   } catch {
     // Tables may not be applied yet. Founder email still goes out.

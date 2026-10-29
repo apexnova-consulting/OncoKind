@@ -2,8 +2,10 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import {
   hasAdvocateAccess as tierHasAdvocateAccess,
   hasCaregiverAccess,
+  hasKeepAccess,
   hasKindAuthAccess as tierHasKindAuthAccess,
   hasMultiPatientAccess,
+  hasVaultAccess,
 } from '@/lib/pricing-config';
 
 const GRACE_PERIOD_MS = 3 * 24 * 60 * 60 * 1000;
@@ -16,6 +18,8 @@ export async function getProfile() {
     user: null,
     profile: null,
     isPro: false,
+    hasKeepAccess: false,
+    hasVaultAccess: false,
     hasAdvocateAccess: false,
     hasKindAuthAccess: false,
     isProfessional: false,
@@ -23,7 +27,7 @@ export async function getProfile() {
   };
   const { data: profile } = await supabase
     .from('profiles')
-    .select('subscription_status, subscription_tier, stripe_customer_id, is_admin, email, updated_at')
+    .select('subscription_status, subscription_tier, stripe_customer_id, stripe_subscription_id, is_admin, email, updated_at, created_at, vault_consent_at, treatment_finished_at')
     .eq('id', user.id)
     .single();
 
@@ -48,6 +52,8 @@ export async function getProfile() {
     (profileEmail ? allowedAdminEmails.includes(profileEmail) : false);
 
   const isPro = isAdmin || hasCaregiverAccess(effectiveTier);
+  const keepAccess = isAdmin || hasKeepAccess(effectiveTier);
+  const vaultAccess = isAdmin || hasVaultAccess(effectiveTier);
   const hasAdvocateAccess = isAdmin || tierHasAdvocateAccess(effectiveTier);
   const hasKindAuthAccess = isAdmin || tierHasKindAuthAccess(effectiveTier);
   const isProfessional = isAdmin || hasMultiPatientAccess(effectiveTier);
@@ -56,6 +62,8 @@ export async function getProfile() {
     user,
     profile,
     isPro,
+    hasKeepAccess: keepAccess,
+    hasVaultAccess: vaultAccess,
     hasAdvocateAccess,
     hasKindAuthAccess,
     isProfessional,
