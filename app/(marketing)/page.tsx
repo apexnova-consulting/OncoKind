@@ -5,17 +5,21 @@ import { MarketingHome } from '@/components/marketing/MarketingHome';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+const HOME_SHARE_TITLE = "AI Cancer Navigation for Families, Built First for Rare Women's Cancers";
+const HOME_SHARE_DESCRIPTION =
+  "Guiding families through the first 72 hours, record gathering, and second opinion intake for any cancer diagnosis. Built first for rare women's cancers.";
+
 export const metadata: Metadata = {
-  title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
-  description:
-    'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
+  title: {
+    absolute: "AI Cancer Navigation for Families | Built First for Rare Women's Cancers | OncoKind",
+  },
+  description: HOME_SHARE_DESCRIPTION,
   alternates: {
     canonical: 'https://www.oncokind.com/',
   },
   openGraph: {
-    title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
-    description:
-      'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
+    title: HOME_SHARE_TITLE,
+    description: HOME_SHARE_DESCRIPTION,
     url: 'https://www.oncokind.com/',
     type: 'website',
     images: [
@@ -29,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
-    description: 'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
+    title: HOME_SHARE_TITLE,
+    description: HOME_SHARE_DESCRIPTION,
   },
   keywords: [
     'how to read a pathology report',

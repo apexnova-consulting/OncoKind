@@ -29,25 +29,26 @@ const dmSans = DM_Sans({
 });
 
 const SITE_DESCRIPTION =
-  'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.';
+  "Guiding families through the first 72 hours, record gathering, and second opinion intake for any cancer diagnosis. Built first for rare women's cancers.";
+const SITE_SHARE_TITLE = "AI Cancer Navigation for Families, Built First for Rare Women's Cancers";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com'),
   title: {
-    default: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
+    default: "AI Cancer Navigation for Families | Built First for Rare Women's Cancers | OncoKind",
     template: '%s | OncoKind',
   },
   description: SITE_DESCRIPTION,
   openGraph: {
     type: 'website',
-    title: 'Clarity for families navigating cancer',
+    title: SITE_SHARE_TITLE,
     description: SITE_DESCRIPTION,
     siteName: 'OncoKind',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Clarity for families navigating cancer',
+    title: SITE_SHARE_TITLE,
     description: SITE_DESCRIPTION,
   },
   manifest: '/manifest.json',

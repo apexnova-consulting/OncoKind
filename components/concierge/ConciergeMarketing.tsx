@@ -87,7 +87,7 @@ export function ConciergeMarketing() {
           <h2 className="font-display text-2xl font-semibold">Pricing</h2>
           <p className="mt-3 text-3xl font-semibold text-[#0F6E56]">{formatUsdFromCents(price)} per case</p>
           <p className="mt-2 text-sm text-slate-600">
-            Includes {CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro. Price shown this week is recorded with each purchase. Adult patients and US facilities only.
+            Includes {CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro. Price shown this week is recorded with each purchase. Any cancer diagnosis. Adult patients and US facilities only.
           </p>
           <p className="mt-3 text-sm">
             <Link href="/concierge/hardship" className="font-semibold text-[#0F6E56]">
