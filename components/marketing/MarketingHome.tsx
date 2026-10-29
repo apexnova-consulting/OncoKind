@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 import { HOMEPAGE_HERO } from '@/lib/pricing-config';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { JOURNEY_POSITIONING, JOURNEY_STAGE_HEADLINE, JOURNEY_STAGES } from '@/lib/journey/stages';
-import { RARE_WOMENS_HERO_LINE, isRareWomensFramingOn } from '@/lib/cancers/landings';
+import { RARE_WOMENS_HERO_LINE } from '@/lib/cancers/landings';
 import { SCOPED_RETENTION_BADGE } from '@/lib/legal/retention';
 import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
 
@@ -289,14 +289,12 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               <p className="mt-5 max-w-[30rem] text-[1.05rem] leading-[1.75] text-[#5a6b68] hero-nudge-up hero-nudge-up-delay-2">
                 {HOMEPAGE_HERO.subtitle}
               </p>
-              {isRareWomensFramingOn() ? (
-                <p className="mt-3 max-w-[30rem] text-sm leading-relaxed text-[#0F6E56]">
-                  {RARE_WOMENS_HERO_LINE}{' '}
-                  <Link href="/cancers" className="font-semibold underline-offset-2 hover:underline">
-                    See diagnosis pages
-                  </Link>
-                </p>
-              ) : null}
+              <p className="mt-3 max-w-[30rem] text-sm leading-relaxed text-[#0F6E56]">
+                {RARE_WOMENS_HERO_LINE}{' '}
+                <Link href="/cancers" className="font-semibold underline-offset-2 hover:underline">
+                  See diagnosis pages
+                </Link>
+              </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap hero-nudge-up hero-nudge-up-delay-2">
                 {signedIn ? (
