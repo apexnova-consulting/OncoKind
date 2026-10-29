@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 import { HOMEPAGE_HERO } from '@/lib/pricing-config';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { JOURNEY_POSITIONING, JOURNEY_STAGE_HEADLINE, JOURNEY_STAGES } from '@/lib/journey/stages';
-import { isRareWomensFramingOn } from '@/lib/cancers/landings';
+import { RARE_WOMENS_HERO_LINE, isRareWomensFramingOn } from '@/lib/cancers/landings';
 import { SCOPED_RETENTION_BADGE } from '@/lib/legal/retention';
 import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
 
@@ -291,7 +291,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               </p>
               {isRareWomensFramingOn() ? (
                 <p className="mt-3 max-w-[30rem] text-sm leading-relaxed text-[#0F6E56]">
-                  Built first for families facing rare women cancers, then useful for every diagnosis.{' '}
+                  {RARE_WOMENS_HERO_LINE}{' '}
                   <Link href="/cancers" className="font-semibold underline-offset-2 hover:underline">
                     See diagnosis pages
                   </Link>
@@ -335,7 +335,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">Concierge</p>
                   <p className="mt-1 font-semibold text-[#1e2d2b]">Have It Done For You</p>
                   <p className="mt-1 text-sm text-[#5a6b68]">
-                    Complete records gathering, intake packet prep, and submission to top cancer centers until Case Ready.
+                    Records gathering, intake packet prep, and submission to the center you choose, until Case Ready.
                   </p>
                 </Link>
               </div>
@@ -722,7 +722,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   data-analytics="final_cta_click"
                 >
                   <Link href="/signup">
-                    Start Free Trial
+                    Start free
                   </Link>
                 </Button>
               </div>

@@ -14,13 +14,16 @@ export const TWO_DOOR_TOOLS_BODY =
   'Get through the first 72 hours, decode reports, organize records, and prepare for doctor visits.';
 export const TWO_DOOR_CONCIERGE_TITLE = 'Have It Done For You';
 export const TWO_DOOR_CONCIERGE_BODY =
-  'Complete records gathering, intake packet prep, and submission to top cancer centers until Case Ready.';
+  'Records gathering, intake packet prep, and submission to the center you choose, until Case Ready.';
 
 export const CONCIERGE_PUBLIC_HEADLINE =
-  'Done-for-you records gathering and second opinion intake for rare cancer patients.';
+  'Done-for-you records gathering and second opinion intake, built first for rare cancers.';
 
 export const CONCIERGE_PROMINENT_REFUND =
-  '100% full refund if no records request is submitted within 10 business days.';
+  'Full refund any time before we send the first records request, or if we do not send one within 10 business days of a complete authorization and intake.';
+
+export const CAREGIVER_PRO_TRIAL_NOTE =
+  'A card is required to start. Free for 14 days. Stripe reminds you before the trial ends. Cancel anytime before then and you will not be charged.';
 
 export const CONCIERGE_PRIVACY_BADGE =
   'Records stored with AES-256 encryption and automatically purged 90 days after Case Ready.';

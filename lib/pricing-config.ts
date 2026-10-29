@@ -54,7 +54,7 @@ export const PLANS = {
     yearlyLabel: '$0',
     cadenceMonthly: 'forever',
     cadenceYearly: 'forever',
-    cta: 'Start Free',
+    cta: 'Start free',
     signupHref: '/signup',
     badge: null as string | null,
   },
@@ -117,11 +117,13 @@ export const PLANS = {
 } as const;
 
 export const CAREGIVER_FEATURES = [
-  'Unlimited report decodes',
-  'Access Agent tracking',
-  'Care Timeline',
-  'Insurance Denial Defense included',
-  '14-day trial',
+  'Everything in Explorer',
+  'Unlimited reports',
+  'Doctor Prep Sheet PDF export',
+  'Second Opinion Mode',
+  'Full trial matching (up to 50 miles)',
+  'Insurance Denial Defense appeal packet',
+  'Access Agent tracker and travel costs',
 ];
 
 export const ADVOCATE_FEATURES = [
@@ -159,7 +161,7 @@ export function professionalFeatureList(): string[] {
 export const FREE_FEATURES = [
   '3 reports in first 30 days',
   'First 72 Hours guide',
-  'Doctor Prep Sheet',
+  'Doctor Prep Sheet (in-app)',
   'Denial letter decode free',
 ];
 
@@ -308,13 +310,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
   },
   {
     id: 'financial_aid',
-    name: 'Financial Aid / Travel Tracker',
-    homepage: {
-      href: '/journey/financial-help',
-      desc: 'Track trial and treatment travel, lodging, and caregiver cost help. For copay and cost help, see Access Agent.',
-      tag: 'Caregiver Pro',
-      consumerGrid: true,
-    },
+    name: 'Access Agent (aid and travel tracker)',
     cells: {
       free: 'Not included',
       caregiver: 'Not included',
@@ -374,7 +370,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
   },
   {
     id: 'access_agent',
-    name: 'Access Agent',
+    name: 'Access Agent (aid and travel tracker)',
     homepage: {
       href: '/features/access-agent',
       desc: 'Find out what getting to a trial or specialist may really cost, and where to look for help.',
@@ -520,7 +516,7 @@ export const HOMEPAGE_HERO = {
     'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
   cta: 'Start First 72 Hours (Free)',
   paidUnlock:
-    `Explorer includes 3 reports in the first 30 days, the First 72 Hours guide, a Doctor Prep Sheet, and denial letter decode. Caregiver Pro ($39/mo or $390/yr) adds unlimited report decodes, Access Agent tracking, Care Timeline, and Insurance Denial Defense, with a 14-day trial. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
+    `Explorer: up to 3 reports in the first 30 days, the First 72 Hours guide, the Doctor Prep Sheet in the app, and free denial letter decoding. Caregiver Pro ($39/mo or $390/yr) adds unlimited reports, PDF export, Second Opinion Mode, full trial matching, Insurance Denial Defense, and Access Agent tracker and travel costs, with a 14-day trial. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
 };
 
 export const PRICING_PAGE = {
@@ -592,7 +588,7 @@ export function hasAdvocateAccess(tier: SubscriptionTier): boolean {
 }
 
 export function publicCatalogFeatures() {
-  const hidden = new Set(['hipaa_baa', 'prior_auth']);
+  const hidden = new Set(['hipaa_baa', 'prior_auth', 'financial_aid']);
   const features = CATALOG_FEATURES.filter((feature) => !hidden.has(feature.id));
   return features.map((feature) => {
     if (feature.id !== 'financial_aid' && feature.id !== 'care_plan_sheets') return feature;

@@ -12,6 +12,7 @@ import {
   caregiverFeatureList,
 } from '@/lib/pricing-config';
 import { CONCIERGE_CAREGIVER_GRANT_DAYS } from '@/lib/concierge/config';
+import { CAREGIVER_PRO_TRIAL_NOTE } from '@/lib/product-v34';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
@@ -52,7 +53,7 @@ export function PricingPlans({
   isSignedIn,
   caregiverConfigured,
 }: Props) {
-  const [billingInterval, setBillingInterval] = useState<BillingInterval>('yearly');
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly');
   const yearlySavingsLabel = useMemo(() => `Save ~${ANNUAL_SAVINGS_PERCENT}%`, []);
 
   const caregiverPrice =
@@ -146,6 +147,7 @@ export function PricingPlans({
               <Link href={PLANS.caregiver.signupHref}>{PLANS.caregiver.cta}</Link>
             </Button>
           )}
+          <p className="mt-3 text-xs leading-relaxed text-white/70">{CAREGIVER_PRO_TRIAL_NOTE}</p>
         </div>
 
         <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
@@ -158,7 +160,7 @@ export function PricingPlans({
             {[
               'Done-for-you records collection and intake submission to Case Ready',
               `Includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro`,
-              '100% money-back guarantee',
+              'Full refund before we send the first records request',
             ].map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />

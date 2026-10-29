@@ -10,7 +10,7 @@ import { isFeatureEnabled } from '@/lib/feature-flags';
 const STAGE_FEATURE_IDS: Record<(typeof JOURNEY_STAGES)[number]['id'], string[]> = {
   understand: ['cancer_profile', 'complete_the_picture', 'first_72', 'empathy_filter'],
   prepare: ['doctor_prep', 'check_in', 'timeline', 'genetic_counseling'],
-  fight: ['insurance', 'financial_aid', 'access_agent'],
+  fight: ['insurance', 'access_agent'],
   plan: ['trials', 'second_opinion', 'family', 'concierge', 'goals_of_care', 'care_plan_sheets', 'community'],
 };
 
@@ -36,7 +36,7 @@ export default function FeaturesHubPage() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild>
-              <Link href="/signup">Start Free Trial</Link>
+              <Link href="/signup">Start free</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/pricing">Compare plans</Link>

@@ -6,7 +6,7 @@
 export const CONCIERGE_BRAND = {
   name: 'OncoKind Concierge',
   tagline: 'Get Me There',
-  headline: 'Done-for-you records gathering and second opinion intake for rare cancer patients.',
+  headline: 'Done-for-you records gathering and second opinion intake, built first for rare cancers.',
   subhead:
     'OncoKind Concierge collects your records, prepares and submits your intake packet to the center you choose, and tracks it until you are Case Ready.',
   boundary:
