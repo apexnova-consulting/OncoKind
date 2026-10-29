@@ -12,7 +12,7 @@ export const PATH_B_PRIVACY_LANGUAGE =
 export const PROFESSIONAL_SECURITY_REVIEW_TEXT = 'Enterprise security review available upon request';
 
 export const PROFESSIONAL_HIPAA_NOTE_WHEN_READY =
-  'HIPAA BAA available on request for qualified Professional organizations.';
+  'A Business Associate Agreement can be requested for qualified organizations after a security review.';
 
 export const PROFESSIONAL_HIPAA_NOTE =
   'A Business Associate Agreement is not offered on self-serve plans yet. Organizations can request a demo and a security review.';

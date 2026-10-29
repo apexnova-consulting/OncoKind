@@ -271,6 +271,26 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section id="niche" className="scroll-mt-24 px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-[var(--max-width-wide)] rounded-2xl border border-[#cdd8d5] bg-white p-8 sm:p-10">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#0F6E56]">Niche focus</p>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-[var(--color-primary-900)]">
+            Built first for rare women&apos;s and gynecological cancers
+          </h2>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--color-text-secondary)]">
+            OncoKind starts with families facing rare women&apos;s and gynecological cancers, then stays useful for every diagnosis. Use the First 72 Hours tools on your own, or start a Concierge case when you want records and intake handled.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button asChild>
+              <Link href="/cancers">See diagnosis pages</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/signup">Start Free Trial</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="px-4 py-16 sm:py-20">
         <div className="mx-auto max-w-[var(--max-width-content)] text-center">

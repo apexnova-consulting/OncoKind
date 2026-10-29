@@ -227,7 +227,7 @@ test.describe('New Case — Step Therapy Exception', () => {
 });
 
 test.describe('New Case — Continued Stay Defense', () => {
-  test('generates a document using InterQual-adjacent language', async ({ page }) => {
+  test('generates a document using medical necessity language', async ({ page }) => {
     await page.goto(routes.priorAuthHub);
     await page.getByRole('button', { name: /new continued stay/i }).click();
 

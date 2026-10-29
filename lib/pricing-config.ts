@@ -47,14 +47,14 @@ export const PLANS = {
   free: {
     id: 'free' as const,
     checkoutKey: null,
-    name: 'Free',
+    name: 'Explorer',
     monthlyCents: 0,
     yearlyCents: 0,
     monthlyLabel: '$0',
     yearlyLabel: '$0',
     cadenceMonthly: 'forever',
     cadenceYearly: 'forever',
-    cta: 'Get Started Free',
+    cta: 'Start Free',
     signupHref: '/signup',
     badge: null as string | null,
   },
@@ -68,9 +68,9 @@ export const PLANS = {
     yearlyLabel: '$390',
     cadenceMonthly: '/month',
     cadenceYearly: '/year',
-    cta: 'Start Caregiver Pro',
+    cta: 'Start Free Trial',
     signupHref: '/signup?plan=pro',
-    badge: 'Most popular for families',
+    badge: '14-day trial',
   },
   advocate: {
     id: 'advocate' as const,
@@ -117,17 +117,11 @@ export const PLANS = {
 } as const;
 
 export const CAREGIVER_FEATURES = [
-  'Everything in Free',
-  'Unlimited reports',
-  'Doctor Prep Sheet PDF export',
-  'Second Opinion Mode',
-  'Appointment Check-In',
-  'Full trial matching (up to 50 miles)',
-  'Goals of Care Prep Sheet',
-  'Care Timeline (full)',
-  'First 72 Hours reminders and PDF',
-  'Genetic Counseling Prep Sheet PDF',
-  'Insurance Denial Defense appeal packet',
+  'Unlimited report decodes',
+  'Access Agent tracking',
+  'Care Timeline',
+  'Insurance Denial Defense included',
+  '14-day trial',
 ];
 
 export const ADVOCATE_FEATURES = [
@@ -148,8 +142,7 @@ export const PROFESSIONAL_FEATURES = [
 ];
 
 export function caregiverFeatureList(): string[] {
-  if (!isFamilyTierMerged()) return CAREGIVER_FEATURES;
-  return [...CAREGIVER_FEATURES, 'Travel and lodging tracker', FAMILY_GUIDELINE_SHEET_NAME];
+  return CAREGIVER_FEATURES;
 }
 
 export function advocateFeatureList(): string[] {
@@ -164,14 +157,10 @@ export function professionalFeatureList(): string[] {
 }
 
 export const FREE_FEATURES = [
-  'Up to 3 reports in the first 30 days',
-  'Basic care map and Care Timeline',
-  'Empathy Filter on every output',
-  'First 72 Hours core checklist',
-  'Family tree and invites',
-  'Trial matching preview (top 3)',
-  'Decode insurance denial letters',
-  'Read-only community access',
+  '3 reports in first 30 days',
+  'First 72 Hours guide',
+  'Doctor Prep Sheet',
+  'Denial letter decode free',
 ];
 
 export const CATALOG_FEATURES: CatalogFeature[] = [
@@ -319,11 +308,11 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
   },
   {
     id: 'financial_aid',
-    name: 'Travel and lodging tracker',
+    name: 'Financial Aid / Travel Tracker',
     homepage: {
       href: '/journey/financial-help',
       desc: 'Track trial and treatment travel, lodging, and caregiver cost help. For copay and cost help, see Access Agent.',
-      tag: FAMILY_PLUS_PLAN_NAME,
+      tag: 'Caregiver Pro',
       consumerGrid: true,
     },
     cells: {
@@ -338,7 +327,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'Community',
     homepage: {
       href: '/community',
-      desc: 'Read-only while posting is paused until a moderator is in place.',
+      desc: 'Read-Only Patient & Caregiver Forum Access',
       tag: 'Read-only',
       consumerGrid: true,
     },
@@ -465,7 +454,7 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     homepage: {
       href: '/features/doctor-prep-sheet',
       desc: 'Questions that help a family prepare for care-plan conversations. Not a substitute for licensed guidelines.',
-      tag: FAMILY_PLUS_PLAN_NAME,
+      tag: 'Caregiver Pro',
       consumerGrid: true,
     },
     cells: {
@@ -526,18 +515,18 @@ export const HOMEPAGE_SPOTLIGHT_FEATURES = FEATURE_HUB_FEATURES;
 export const HOMEPAGE_TOOL_COUNT = FEATURE_HUB_FEATURES.length;
 
 export const HOMEPAGE_HERO = {
-  title: 'You should not have to understand oncology to advocate for someone you love.',
+  title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers.",
   subtitle:
-    'Understand and prepare on your own with our tools, or let our team handle the records, forms, and follow-up.',
-  cta: 'Upload your first report. It is free.',
+    'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
+  cta: 'Start First 72 Hours (Free)',
   paidUnlock:
-    `Free includes up to 3 reports in the first 30 days. Caregiver Pro ($39/mo) unlocks PDF exports, Second Opinion Mode, Appointment Check-In, full trial matching, and Insurance Denial Defense. ${FAMILY_PLUS_PLAN_NAME} ($49/mo) adds the travel and lodging tracker. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
+    `Explorer includes 3 reports in the first 30 days, the First 72 Hours guide, a Doctor Prep Sheet, and denial letter decode. Caregiver Pro ($39/mo or $390/yr) adds unlimited report decodes, Access Agent tracking, Care Timeline, and Insurance Denial Defense, with a 14-day trial. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
 };
 
 export const PRICING_PAGE = {
   title: 'Simple, transparent pricing for the hardest journey.',
   description:
-    `Tools: Free, Caregiver Pro at $39/month or $390/year, ${FAMILY_PLUS_PLAN_NAME} at $49/month or $490/year. Professional is demo and invoice. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. No credit card required to start Tools.`,
+    `Tools: Explorer at $0, Caregiver Pro at $39/month or $390/year. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. No credit card required to start Tools.`,
 };
 
 export function yearlyAmountCents(monthlyCents: number): number {
@@ -603,10 +592,10 @@ export function hasAdvocateAccess(tier: SubscriptionTier): boolean {
 }
 
 export function publicCatalogFeatures() {
-  const features = CATALOG_FEATURES.filter((feature) => feature.id !== 'hipaa_baa');
-  if (!isFamilyTierMerged()) return features;
+  const hidden = new Set(['hipaa_baa', 'prior_auth']);
+  const features = CATALOG_FEATURES.filter((feature) => !hidden.has(feature.id));
   return features.map((feature) => {
-    if (feature.id !== 'financial_aid') return feature;
+    if (feature.id !== 'financial_aid' && feature.id !== 'care_plan_sheets') return feature;
     return {
       ...feature,
       homepage: feature.homepage ? { ...feature.homepage, tag: 'Caregiver Pro' } : undefined,
@@ -616,14 +605,11 @@ export function publicCatalogFeatures() {
 }
 
 export function publicPricingHeaders(): string[] {
-  if (isFamilyTierMerged()) {
-    return [PLANS.free.name, PLANS.caregiver.name, PLANS.professional.name];
-  }
-  return [PLANS.free.name, PLANS.caregiver.name, PLANS.advocate.name, PLANS.professional.name];
+  return [PLANS.free.name, PLANS.caregiver.name];
 }
 
 export function showFamilyPlusPlan(): boolean {
-  return !isFamilyTierMerged();
+  return false;
 }
 
 export function showIndividualAdvocatePlan(): boolean {

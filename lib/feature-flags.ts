@@ -112,6 +112,9 @@ export function isFeatureEnabled(flag: FeatureFlagName): boolean {
   if (flag === 'tool_freeze') {
     return envOnByDefault(pairs[flag]);
   }
+  if (flag === 'rare_womens_cancers_framing') {
+    return envOnByDefault(pairs[flag]);
+  }
 
   return pairs[flag].some((key) => envEnabled(process.env[key]));
 }

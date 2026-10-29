@@ -5,6 +5,10 @@ export type SponsoredCode = {
   active: boolean;
 };
 
+export function normalizeSponsorCode(raw: string | null | undefined): string {
+  return (raw ?? '').trim().toUpperCase().replace(/_/g, '-');
+}
+
 export function canCoverConciergeFee(code: SponsoredCode | null): boolean {
   return Boolean(code && code.active && code.remaining > 0);
 }

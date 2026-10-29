@@ -6,14 +6,13 @@ const footerColumns = [
   {
     heading: 'Product',
     links: [
-      { href: '/features', label: 'Tools' },
-      { href: '/concierge', label: 'Concierge' },
-      { href: '/professional', label: 'For organizations' },
+      { href: '/#how-it-works', label: 'How It Works (4-Stage)' },
+      { href: '/features', label: 'Tools ($0-$39)' },
+      { href: '/concierge', label: 'Concierge ($299)' },
       { href: '/pricing', label: 'Pricing' },
-      { href: '/learn', label: 'Learn' },
+      { href: '/about#niche', label: 'About & Niche Focus' },
       { href: '/trust', label: 'Trust' },
       { href: '/support', label: 'Contact' },
-      { href: 'https://calendly.com/oncokind-support', label: 'Book a Demo', external: true },
     ],
   },
   {
@@ -33,13 +32,6 @@ const footerColumns = [
       { href: '/about#founder-section', label: 'Founder Story' },
       { href: '/support', label: 'Support' },
       { href: '/support', label: 'Contact' },
-    ],
-  },
-  {
-    heading: 'For Professionals',
-    links: [
-      { href: '/professional', label: 'Professional Overview' },
-      { href: 'https://calendly.com/oncokind-support', label: 'Book a Demo', external: true },
     ],
   },
   {

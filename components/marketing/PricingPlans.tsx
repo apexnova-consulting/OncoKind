@@ -4,18 +4,12 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PATH_B_PRIVACY_LANGUAGE, professionalHipaaNote } from '@/lib/disclosures';
 import {
   ANNUAL_SAVINGS_PERCENT,
   CONCIERGE_LIST_PRICE_LABEL,
   FREE_FEATURES,
-  INDIVIDUAL_ADVOCATE_PLAN,
   PLANS,
-  advocateFeatureList,
   caregiverFeatureList,
-  professionalFeatureList,
-  showFamilyPlusPlan,
-  showIndividualAdvocatePlan,
 } from '@/lib/pricing-config';
 import { CONCIERGE_CAREGIVER_GRANT_DAYS } from '@/lib/concierge/config';
 import { track } from '@/lib/analytics';
@@ -57,7 +51,6 @@ function CheckoutForm({
 export function PricingPlans({
   isSignedIn,
   caregiverConfigured,
-  advocateConfigured,
 }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('yearly');
   const yearlySavingsLabel = useMemo(() => `Save ~${ANNUAL_SAVINGS_PERCENT}%`, []);
@@ -66,10 +59,6 @@ export function PricingPlans({
     billingInterval === 'yearly'
       ? { amount: PLANS.caregiver.yearlyLabel, cadence: PLANS.caregiver.cadenceYearly }
       : { amount: PLANS.caregiver.monthlyLabel, cadence: PLANS.caregiver.cadenceMonthly };
-  const advocatePrice =
-    billingInterval === 'yearly'
-      ? { amount: PLANS.advocate.yearlyLabel, cadence: PLANS.advocate.cadenceYearly }
-      : { amount: PLANS.advocate.monthlyLabel, cadence: PLANS.advocate.cadenceMonthly };
 
   return (
     <>
@@ -108,7 +97,7 @@ export function PricingPlans({
         Yearly billing equals 10 months. {yearlySavingsLabel} versus paying monthly.
       </p>
 
-      <div className="mt-16 grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-16 grid items-stretch gap-6 md:grid-cols-3">
         <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
           <h2 className="mt-1 font-display text-xl font-semibold text-[var(--color-text-primary)]">
             {PLANS.free.name}
@@ -159,143 +148,29 @@ export function PricingPlans({
           )}
         </div>
 
-        {showFamilyPlusPlan() ? (
         <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
-          <span className="inline-flex w-fit rounded-full bg-[#FAEEDA] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-[#8b5e2a]">
-            {PLANS.advocate.badge}
-          </span>
-          <h2 className="mt-3 font-display text-xl font-semibold text-[var(--color-text-primary)]">
-            {PLANS.advocate.name}
-          </h2>
+          <h2 className="mt-1 font-display text-xl font-semibold text-[var(--color-text-primary)]">Concierge</h2>
           <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">
-            {advocatePrice.amount}
+            {CONCIERGE_LIST_PRICE_LABEL}
           </p>
-          <p className="text-sm text-[var(--color-text-muted)]">{advocatePrice.cadence}</p>
+          <p className="text-sm text-[var(--color-text-muted)]">per case</p>
           <ul className="mt-7 flex-1 space-y-3">
-            {advocateFeatureList().map((feature) => (
+            {[
+              'Done-for-you records collection and intake submission to Case Ready',
+              `Includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro`,
+              '100% money-back guarantee',
+            ].map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
                 {feature}
               </li>
             ))}
           </ul>
-          {isSignedIn && advocateConfigured ? (
-            <div className="mt-8">
-              <CheckoutForm plan="advocate" billingInterval={billingInterval} cta={PLANS.advocate.cta} />
-            </div>
-          ) : (
-            <Button asChild className="mt-8 w-full">
-              <Link href={PLANS.advocate.signupHref}>{PLANS.advocate.cta}</Link>
-            </Button>
-          )}
-        </div>
-        ) : null}
-        {showIndividualAdvocatePlan() ? (
-        <div className="hover-lift-card flex h-full flex-col rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-7 shadow-[var(--shadow-md)]">
-          <span className="inline-flex w-fit rounded-full bg-[#E1F5EE] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-[#0F6E56]">
-            Independent advocates
-          </span>
-          <h2 className="mt-3 font-display text-xl font-semibold text-[var(--color-text-primary)]">
-            {INDIVIDUAL_ADVOCATE_PLAN.name}
-          </h2>
-          <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">
-            {INDIVIDUAL_ADVOCATE_PLAN.monthlyLabel}
-          </p>
-          <p className="text-sm text-[var(--color-text-muted)]">{INDIVIDUAL_ADVOCATE_PLAN.cadenceMonthly}</p>
-          <ul className="mt-7 flex-1 space-y-3">
-            {['Workspace for one advocate and multiple client families', 'Buy Concierge on a client family behalf after they sign authorization', 'No PHI in partner reporting'].map((feature) => (
-              <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-8 text-sm text-[var(--color-text-muted)]">
-            Self-serve checkout stays off until the founder confirms the price and Stripe product.
-          </p>
-        </div>
-        ) : null}
-
-        <div
-          id="enterprise"
-          className="hover-lift-card flex h-full scroll-mt-24 flex-col rounded-[var(--radius-xl)] border-2 border-[var(--color-primary-800)] bg-white p-7 shadow-[var(--shadow-md)]"
-        >
-          <span className="inline-flex w-fit rounded-full bg-[var(--color-primary-900)] px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-widest text-white">
-            Care Teams
-          </span>
-          <h2 className="mt-3 font-display text-xl font-semibold text-[var(--color-text-primary)]">
-            {PLANS.professional.name}
-          </h2>
-          <p className="mt-5 font-display text-4xl font-semibold text-[var(--color-text-primary)]">
-            {PLANS.professional.monthlyLabel}
-          </p>
-          <p className="text-sm text-[var(--color-text-muted)]">{PLANS.professional.cadenceMonthly}</p>
-          <ul className="mt-7 flex-1 space-y-3">
-            {professionalFeatureList().map((feature) => (
-              <li key={feature} className="flex items-start gap-2.5 text-sm text-[var(--color-text-secondary)]">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand-primary)]" aria-hidden />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 space-y-3">
-            <Button asChild className="w-full">
-              <a
-                href={PLANS.professional.signupHref}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => track('demo_booked_click', { plan: 'professional' })}
-              >
-                {PLANS.professional.cta}
-              </a>
-            </Button>
-          </div>
-          <p className="mt-4 text-xs leading-relaxed text-[var(--color-text-muted)]">
-            <Link href="/prior-auth-pro" className="font-semibold text-[#0F6E56] underline-offset-2 hover:underline">
-              See KindAuth
-            </Link>
-          </p>
-          <p className="mt-4 text-xs leading-relaxed text-[var(--color-text-muted)]">{professionalHipaaNote()}</p>
-          <p className="mt-2 text-xs leading-relaxed text-[var(--color-text-muted)]">{PATH_B_PRIVACY_LANGUAGE}</p>
-        </div>
-      </div>
-
-      <section className="mt-10 rounded-[var(--radius-xl)] border border-[#cdd8d5] bg-white p-8 shadow-[var(--shadow-md)]">
-        <h2 className="font-display text-2xl font-semibold text-[var(--color-text-primary)]">
-          Concierge, {CONCIERGE_LIST_PRICE_LABEL} per case
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-text-secondary)]">
-          We collect records, submit the intake packet to the center you choose, and track it until you are Case Ready.
-          Includes {CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.
-        </p>
-        <Button asChild className="mt-6">
-          <Link href="/concierge">See Concierge</Link>
-        </Button>
-      </section>
-
-      <section className="mt-10 rounded-[var(--radius-xl)] border border-[var(--color-primary-800)] bg-[var(--color-primary-900)] p-8 text-white shadow-[var(--shadow-md)]">
-        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[var(--brand-gold)]">
-          Health systems and oncology networks
-        </p>
-        <div className="mt-3 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="font-display text-2xl font-semibold">Custom pricing</h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/75">
-              Custom pricing. EHR integration is available on request.
-            </p>
-          </div>
-          <Button asChild className="shrink-0 bg-[var(--brand-gold)] text-[var(--color-primary-900)] hover:opacity-90">
-            <a
-              href="https://calendly.com/oncokind-support"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => track('demo_booked_click', { plan: 'enterprise' })}
-            >
-              Talk to sales
-            </a>
+          <Button asChild className="mt-8 w-full">
+            <Link href="/concierge">Start Case</Link>
           </Button>
         </div>
-      </section>
+      </div>
     </>
   );
 }

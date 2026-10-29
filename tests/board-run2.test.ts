@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { ADVOCATE_FEATURES, PLANS, hasAdvocateAccess, hasCaregiverAccess, publicCatalogFeatures } from '../lib/pricing-config';
-import { FAMILY_PLUS_PLAN_NAME, FROZEN_TOOL_ROUTES, HOMEPAGE_PITCH, PUBLIC_RESULTS_MIN_N, isFamilyTierMerged, isToolFreezeOn } from '../lib/board-run2';
+import { FROZEN_TOOL_ROUTES, HOMEPAGE_PITCH, PUBLIC_RESULTS_MIN_N, isFamilyTierMerged, isToolFreezeOn } from '../lib/board-run2';
 import { nextJourneyStep } from '../lib/journey/next-step';
 import { canStartCallForMe, CALL_FOR_ME_IDENTITY } from '../lib/voice/call-gates';
 import { canPublishPublicStat } from '../lib/outcomes/public-results';
@@ -20,11 +20,10 @@ import { grandfatherAdvocateEntitlements } from '../lib/billing/grandfather-advo
 import { canCoverConciergeFee } from '../lib/concierge/sponsored';
 import { isFeatureEnabled } from '../lib/feature-flags';
 
-test('Family Advocate Plan is renamed Caregiver Plus while merge stays off', () => {
-  assert.equal(isFamilyTierMerged(), false);
-  assert.equal(PLANS.advocate.name, FAMILY_PLUS_PLAN_NAME);
+test('Public family plans merge Plus into Caregiver Pro', () => {
+  assert.equal(isFamilyTierMerged(), true);
   assert.equal(ADVOCATE_FEATURES.includes('Insurance Denial Defense'), false);
-  assert.equal(hasAdvocateAccess('pro'), false);
+  assert.equal(hasAdvocateAccess('pro'), true);
   assert.equal(hasCaregiverAccess('advocate'), true);
 });
 
@@ -153,11 +152,10 @@ test('Diagnosis landings exist and stay question-shaped', () => {
   assert.ok(CANCER_LANDINGS.every((landing) => landing.questions.length >= 3));
 });
 
-test('Founder-decision flags stay off except tool freeze', () => {
-  assert.equal(isFeatureEnabled('family_tier_merge'), false);
+test('Founder-decision flags stay off except tool freeze and rare-cancer framing', () => {
   assert.equal(isFeatureEnabled('concierge_price_variant'), false);
   assert.equal(isFeatureEnabled('individual_advocate_plan'), false);
-  assert.equal(isFeatureEnabled('rare_womens_cancers_framing'), false);
+  assert.equal(isFeatureEnabled('rare_womens_cancers_framing'), true);
 });
 
 test('Catalog still includes Denial Defense from Caregiver Pro', () => {

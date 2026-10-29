@@ -20,6 +20,7 @@ export function ConciergeIntake() {
   const [adultPatient, setAdultPatient] = useState(false);
   const [usFacility, setUsFacility] = useState(false);
   const [refundAccepted, setRefundAccepted] = useState(false);
+  const [sponsorCode, setSponsorCode] = useState('');
   const purchaseOn = isFeatureEnabled('concierge_purchase');
 
   const selected = useMemo(
@@ -55,6 +56,7 @@ export function ConciergeIntake() {
             adultPatient,
             usFacility,
             refundAccepted,
+            sponsorCode,
           }),
         });
         const json = await response.json();
@@ -67,7 +69,7 @@ export function ConciergeIntake() {
           const checkout = await fetch('/api/concierge/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refundAccepted: true }),
+            body: JSON.stringify({ refundAccepted: true, sponsorCode }),
           });
           const paid = await checkout.json();
           if (checkout.ok && paid.url) {
@@ -134,6 +136,18 @@ export function ConciergeIntake() {
         The destination facility is in the United States.
       </label>
       <p className="text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
+      <label className="block text-sm font-medium">
+        Have a foundation sponsor code? (e.g., STAAR-2026)
+        <input
+          value={sponsorCode}
+          onChange={(event) => setSponsorCode(event.target.value)}
+          className="mt-2 w-full rounded-xl border p-3"
+          autoComplete="off"
+        />
+      </label>
+      <p className="rounded-xl bg-[#E1F5EE] px-4 py-3 text-sm font-semibold text-[#0F6E56]">
+        100% full refund if no records request is submitted within 10 business days.
+      </p>
       <label className="flex items-start gap-2 text-sm">
         <input type="checkbox" checked={refundAccepted} onChange={(event) => setRefundAccepted(event.target.checked)} className="mt-1" />
         {CONCIERGE_REFUND_CHECKBOX_LABEL}

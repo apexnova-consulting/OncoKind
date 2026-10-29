@@ -1,8 +1,17 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { readAalFromAccessToken } from '@/lib/auth-security';
+import { PARKED_PUBLIC_PATHS } from '@/lib/product-v34';
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  if (PARKED_PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/';
+    url.search = '';
+    return NextResponse.redirect(url, 301);
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -29,7 +38,6 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-  const pathname = request.nextUrl.pathname;
   const {
     data: { session },
   } = await supabase.auth.getSession();

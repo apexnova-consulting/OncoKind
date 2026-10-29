@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-build.js && next build",
+    "check-build": "node scripts/check-build.js",
     "start": "next start",
     "lint": "next lint",
     "test": "npx tsx --test tests/*.test.ts",

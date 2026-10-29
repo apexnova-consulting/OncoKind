@@ -59,23 +59,16 @@ test.describe('Homepage (/)', () => {
   test('hero headline and primary CTA render correctly', async ({ page }) => {
     await page.goto(routes.home);
     await expect(
-      page.getByRole('heading', { name: /you shouldn't have to understand oncology/i })
+      page.getByRole('heading', { name: /rare women's/i })
     ).toBeVisible();
-    // Hero + final CTA both say "Upload your first report" — scope to the first (hero).
-    await expect(page.getByRole('link', { name: /upload your first report/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /start first 72 hours/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /start concierge case/i }).first()).toBeVisible();
   });
 
-  test('"Upload your first report" CTA navigates to /signup', async ({ page }) => {
+  test('"Start First 72 Hours" CTA navigates to /signup', async ({ page }) => {
     await page.goto(routes.home);
-    await page.getByRole('link', { name: /upload your first report/i }).first().click();
+    await page.getByRole('link', { name: /start first 72 hours/i }).first().click();
     await expect(page).toHaveURL(new RegExp(routes.signup));
-  });
-
-  test('"Try a sample report first" scrolls to the interactive demo', async ({ page }) => {
-    await page.goto(routes.home);
-    await page.getByRole('link', { name: /try a sample report first/i }).click();
-    await expect(page).toHaveURL(/#sample-demo/);
-    await expect(page.getByText(/interactive sample demo/i)).toBeInViewport();
   });
 
   test('founder story section is present with a link to the full story', async ({ page }) => {
@@ -157,7 +150,7 @@ test.describe('Pricing (/pricing)', () => {
       }
     }
     await expect(page.getByText(pricingTiers.caregiver.badge)).toBeVisible();
-    await expect(page.getByText(/most popular for families/i)).toBeVisible();
+    await expect(page.getByText(/14-day trial/i).first()).toBeVisible();
   });
 
   test('annual is the default billing interval and monthly toggle updates the price', async ({ page }) => {
@@ -169,17 +162,18 @@ test.describe('Pricing (/pricing)', () => {
     await expect(page.getByText('$39').first()).toBeVisible();
   });
 
-  test('"Start Caregiver Plus" links to /signup?plan=plus', async ({ page }) => {
+  test('Explorer, Caregiver Pro, and Concierge cards are the public pricing doors', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByRole('link', { name: /start caregiver plus/i }).first()).toHaveAttribute(
-      'href',
-      /\/signup\?plan=plus/
-    );
+    await expect(page.getByRole('heading', { name: /explorer/i }).first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: /caregiver pro/i }).first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: /^concierge$/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /start caregiver plus/i })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /book a demo/i })).toHaveCount(0);
   });
 
-  test('"Start Caregiver Pro" links to /signup?plan=pro', async ({ page }) => {
+  test('"Start Free Trial" links to /signup?plan=pro', async ({ page }) => {
     await page.goto(routes.pricing);
-    await expect(page.getByRole('link', { name: /start caregiver pro/i }).first()).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /start free trial/i }).first()).toHaveAttribute(
       'href',
       /\/signup\?plan=pro/
     );
@@ -187,24 +181,10 @@ test.describe('Pricing (/pricing)', () => {
 
   test('signup from Caregiver Pro pre-selects the plan', async ({ page }) => {
     await page.goto(routes.pricing);
-    await page.getByRole('link', { name: /start caregiver pro/i }).first().click();
+    await page.getByRole('link', { name: /start free trial/i }).first().click();
     await expect(page).toHaveURL(/\/signup\?plan=pro/);
     await expect(page.getByText(/selected plan/i)).toBeVisible();
     await expect(page.getByText(/caregiver pro/i).first()).toBeVisible();
-  });
-
-  test('"Book a Demo" on Professional tier links to Calendly', async ({ page }) => {
-    await page.goto(routes.pricing);
-    await expect(page.getByRole('link', { name: /book a demo/i }).first()).toHaveAttribute(
-      'href',
-      /calendly\.com\/oncokind-support/
-    );
-  });
-
-  test('enterprise network banner is visible below the pricing grid', async ({ page }) => {
-    await page.goto(routes.pricing);
-    await expect(page.getByRole('heading', { name: /custom pricing/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /concierge/i }).first()).toBeVisible();
   });
 
   test(`feature comparison table renders with ${pricingComparisonRowCount} rows`, async ({ page }) => {
@@ -214,13 +194,11 @@ test.describe('Pricing (/pricing)', () => {
     await expect(table.locator('tbody tr')).toHaveCount(pricingComparisonRowCount);
   });
 
-  test('feature comparison table includes KindAuth on Professional only', async ({
+  test('feature comparison table does not sell KindAuth on public pricing', async ({
     page,
   }) => {
     await page.goto(routes.pricing);
-    const row = page.locator('tr', { hasText: 'KindAuth' }).first();
-    await expect(row).toBeVisible();
-    await expect(row.getByText('Not included')).toHaveCount(3);
+    await expect(page.locator('tr', { hasText: 'KindAuth' })).toHaveCount(0);
   });
 
   test('pricing FAQ shows all 5 questions', async ({ page }) => {
@@ -231,71 +209,17 @@ test.describe('Pricing (/pricing)', () => {
   });
 });
 
-test.describe('For Professionals (/professional)', () => {
-  test('Professional page names independent advocates and links KindAuth', async ({ page }) => {
-    await page.goto(routes.forProfessionals);
-    await expect(page.getByRole('heading', { name: /independent oncology advocates/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /see kindauth/i }).first()).toHaveAttribute(
-      'href',
-      new RegExp(routes.priorAuthPro)
-    );
-    await expect(page.getByRole('link', { name: /partner with us/i })).toHaveAttribute(
-      'href',
-      /\/professional\/partner/
-    );
+test.describe('Parked B2B routes', () => {
+  test('/professional redirects home', async ({ page }) => {
+    const response = await page.goto(routes.forProfessionals);
+    expect(response?.status()).toBeLessThan(400);
+    await expect(page).toHaveURL(/\/$/);
   });
 
-  test('"Book a Demo" links to Calendly', async ({ page }) => {
-    await page.goto(routes.forProfessionals);
-    const demoLinks = page.getByRole('link', { name: /book a demo/i });
-    await expect(demoLinks.first()).toHaveAttribute('href', /calendly\.com\/oncokind-support/);
-  });
-
-  // As of Aug 2026, "Prior Auth Engine" is no longer injected into the public
-  // nav on this page (or anywhere else). The section heading above is the
-  // discovery path; keep this assertion so a regression that re-adds a
-  // page-only nav item is noticed.
-  test('public nav does not include a page-only "Prior Auth Engine" link', async ({ page }) => {
-    await page.goto(routes.forProfessionals);
-    await expect(
-      page
-        .getByRole('navigation', { name: /main/i, includeHidden: true })
-        .getByRole('link', { name: 'Prior Auth Engine', includeHidden: true })
-    ).toHaveCount(0);
-  });
-});
-
-test.describe('Prior Auth Pro (/prior-auth-pro)', () => {
-  // Playwright's browser context does NOT consult robots.txt (that's a
-  // crawler-etiquette signal, not a browser-enforced rule), so these
-  // functional checks still run even though the page is likely mis-blocked
-  // from search engines — see the dedicated robots.txt test below.
-  test('loads publicly with no login required', async ({ page }) => {
+  test('/prior-auth-pro redirects home', async ({ page }) => {
     const response = await page.goto(routes.priorAuthPro);
-    expect(response?.ok()).toBeTruthy();
-    await expect(page).not.toHaveURL(new RegExp(routes.login));
-    const robotsMeta = await page.locator('meta[name="robots"]').getAttribute('content');
-    if (robotsMeta) {
-      expect(robotsMeta.toLowerCase()).not.toContain('noindex');
-    }
-  });
-
-  test('three workflow cards render: Prior Authorization, Step Therapy Exception, Continued Stay', async ({
-    page,
-  }) => {
-    await page.goto(routes.priorAuthPro);
-    for (const label of ['Prior Authorization', 'Step Therapy Exception', 'Continued Stay']) {
-      await expect(page.getByText(label, { exact: false }).first()).toBeVisible();
-    }
-  });
-
-  test('KindAuth landing is demo-only, with no self-serve Professional signup', async ({ page }) => {
-    await page.goto(routes.priorAuthPro);
-    await expect(page.getByRole('link', { name: /start free.*professional plan/i })).toHaveCount(0);
-    await expect(page.getByRole('link', { name: /book a demo/i }).first()).toHaveAttribute(
-      'href',
-      /calendly\.com/
-    );
+    expect(response?.status()).toBeLessThan(400);
+    await expect(page).toHaveURL(/\/$/);
   });
 });
 

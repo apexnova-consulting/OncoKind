@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { BANNED_PUBLIC_NAV_LABELS, PUBLIC_NAV_LINKS } from '../lib/public-nav';
-import { FAMILY_GUIDELINE_SHEET_NAME, FAMILY_PLUS_PLAN_NAME } from '../lib/board-run2';
+import { FAMILY_GUIDELINE_SHEET_NAME } from '../lib/board-run2';
 import { FREE_FEATURES, PLANS, publicCatalogFeatures } from '../lib/pricing-config';
 import { professionalHipaaNote } from '../lib/disclosures';
 
@@ -24,7 +24,7 @@ function walk(dir: string, files: string[] = []): string[] {
 test('Public nav is the homepage menu', () => {
   assert.deepEqual(
     PUBLIC_NAV_LINKS.map((link) => link.label),
-    ['Tools', 'Concierge', 'For organizations', 'Pricing', 'Learn', 'Trust']
+    ['How It Works (4-Stage)', 'Tools ($0-$39)', 'Concierge ($299)', 'About & Niche Focus']
   );
 });
 
@@ -43,16 +43,15 @@ test('Public marketing copy has no NCCN and no family Advocate Plan', () => {
 });
 
 test('Free card copy matches the 3-report window', () => {
-  assert.equal(FREE_FEATURES[0], 'Up to 3 reports in the first 30 days');
-  assert.ok(FREE_FEATURES.includes('Decode insurance denial letters'));
+  assert.equal(FREE_FEATURES[0], '3 reports in first 30 days');
+  assert.ok(FREE_FEATURES.includes('Denial letter decode free'));
 });
 
-test('Caregiver Plus and Care Plan Question Sheets come from config', () => {
-  assert.equal(PLANS.advocate.name, FAMILY_PLUS_PLAN_NAME);
-  assert.equal(PLANS.advocate.signupHref, '/signup?plan=plus');
-  assert.equal(FAMILY_GUIDELINE_SHEET_NAME, 'Care Plan Question Sheets');
+test('Public catalog uses Explorer, Advocate Sheets, and no KindAuth row', () => {
+  assert.equal(PLANS.free.name, 'Explorer');
+  assert.equal(FAMILY_GUIDELINE_SHEET_NAME, 'Advocate Sheets');
   assert.ok(publicCatalogFeatures().some((feature) => feature.name === FAMILY_GUIDELINE_SHEET_NAME));
-  assert.ok(publicCatalogFeatures().some((feature) => feature.name === 'KindAuth'));
+  assert.equal(publicCatalogFeatures().some((feature) => feature.name === 'KindAuth'), false);
 });
 
 test('BAA note is the withdrawn offer', () => {
