@@ -6,6 +6,7 @@ import { CENTER_SEEDS } from '@/content/concierge/centers/v1';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { track } from '@/lib/analytics';
 import { CONCIERGE_BRAND } from '@/lib/concierge/config';
+import { isAfter90FlagOn, keepRolloverCheckboxLabel } from '@/lib/after-90/config';
 import { CONCIERGE_REFUND_CHECKBOX_LABEL, CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 
 export function ConciergeIntake() {
@@ -20,6 +21,9 @@ export function ConciergeIntake() {
   const [adultPatient, setAdultPatient] = useState(false);
   const [usFacility, setUsFacility] = useState(false);
   const [refundAccepted, setRefundAccepted] = useState(false);
+  const [keepRollover, setKeepRollover] = useState(false);
+  const rolloverOn = isAfter90FlagOn('conciergeKeepRollover') && isAfter90FlagOn('keepPlan');
+  const rolloverLabel = keepRolloverCheckboxLabel();
   const [sponsorCode, setSponsorCode] = useState('');
   const purchaseOn = isFeatureEnabled('concierge_purchase');
 
@@ -57,6 +61,8 @@ export function ConciergeIntake() {
             usFacility,
             refundAccepted,
             sponsorCode,
+            keepRollover: rolloverOn && keepRollover,
+            keepRolloverText: rolloverOn ? rolloverLabel : '',
           }),
         });
         const json = await response.json();
@@ -148,6 +154,12 @@ export function ConciergeIntake() {
       <p className="rounded-xl bg-[#E1F5EE] px-4 py-3 text-sm font-semibold text-[#0F6E56]">
         Full refund any time before we send the first records request, or if we do not send one within 10 business days of a complete authorization and intake.
       </p>
+      {rolloverOn ? (
+        <label className="flex items-start gap-2 text-sm">
+          <input type="checkbox" checked={keepRollover} onChange={(event) => setKeepRollover(event.target.checked)} className="mt-1" />
+          {rolloverLabel}
+        </label>
+      ) : null}
       <label className="flex items-start gap-2 text-sm">
         <input type="checkbox" checked={refundAccepted} onChange={(event) => setRefundAccepted(event.target.checked)} className="mt-1" />
         {CONCIERGE_REFUND_CHECKBOX_LABEL}

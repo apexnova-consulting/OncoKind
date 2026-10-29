@@ -6,7 +6,10 @@ import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 import { hasAdvocatePrices, hasProPrices, hasProfessionalPrice } from '@/lib/stripe-prices';
 import { CONCIERGE_CAREGIVER_GRANT_DAYS } from '@/lib/concierge/config';
-import { PRICING_PAGE, SITE_ORIGIN, publicCatalogFeatures, publicPricingHeaders } from '@/lib/pricing-config';
+import { PRICING_PAGE, SITE_ORIGIN, keepCatalogCell, publicCatalogFeatures, publicPricingHeaders, showKeepPlan } from '@/lib/pricing-config';
+import { KEEP_FAQ_ANSWER, KEEP_FAQ_QUESTION, isAfter90FlagOn } from '@/lib/after-90/config';
+import { isKeepEligible } from '@/lib/after-90/eligibility';
+import { stripePrices } from '@/lib/stripe-prices';
 import { CONCIERGE_REFUND_TERMS, TOOLS_CANCEL_COPY } from '@/lib/legal/refunds';
 import { TOOLS_RETENTION_CLAIM, CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
 import type { Metadata } from 'next';
@@ -50,6 +53,26 @@ export default async function PricingPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  let keepEligible = false;
+  if (user && showKeepPlan()) {
+    const { data: profileRow } = await supabase
+      .from('profiles')
+      .select('created_at, treatment_finished_at')
+      .eq('id', user.id)
+      .maybeSingle();
+    const { data: caseReady } = await supabase
+      .from('concierge_cases')
+      .select('case_ready_at')
+      .eq('user_id', user.id)
+      .not('case_ready_at', 'is', null)
+      .limit(1)
+      .maybeSingle();
+    keepEligible = isKeepEligible({
+      accountCreatedAt: profileRow?.created_at ?? user.created_at ?? null,
+      treatmentFinishedAt: profileRow?.treatment_finished_at ?? null,
+      conciergeCaseReadyAt: caseReady?.case_ready_at ?? null,
+    }).eligible;
+  }
 
   return (
     <main className="bg-[var(--bg-base)] px-4 py-16 sm:py-24">
@@ -76,6 +99,8 @@ export default async function PricingPage() {
           caregiverConfigured={hasProPrices}
           advocateConfigured={hasAdvocatePrices}
           professionalConfigured={hasProfessionalPrice}
+          keepEligible={keepEligible}
+          keepConfigured={Boolean(stripePrices.keepMonthly || stripePrices.keepYearly)}
         />
 
         <section className="mx-auto mt-20 max-w-3xl" aria-labelledby="faq-heading">
@@ -132,6 +157,9 @@ export default async function PricingPage() {
                 q: 'How do Concierge refunds work?',
                 a: CONCIERGE_REFUND_TERMS,
               },
+              ...(isAfter90FlagOn('keepPlan')
+                ? [{ q: KEEP_FAQ_QUESTION, a: KEEP_FAQ_ANSWER }]
+                : []),
             ].map(({ q, a }) => (
               <div key={q} className="rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-6">
                 <h3 className="font-semibold">{q}</h3>
@@ -179,6 +207,11 @@ export default async function PricingPage() {
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={feature.cells.caregiver} />
                     </td>
+                    {showKeepPlan() ? (
+                      <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
+                        <ComparisonCell value={keepCatalogCell(feature.id, feature.cells.free)} />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>

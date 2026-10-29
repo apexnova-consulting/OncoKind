@@ -4,15 +4,17 @@ import { getStripeClient } from '@/lib/stripe';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import { isAfter90FlagOn } from '@/lib/after-90/config';
+import { PLANS } from '@/lib/pricing-config';
 
 export default async function BillingPage() {
-  const { user, profile, isPro } = await getProfile();
+  const { user, profile, isPro, hasKeepAccess } = await getProfile();
   if (!user) redirect('/login');
 
   const isLegacyPro = false;
 
   let portalUrl = '';
-  if (profile?.stripe_customer_id && isPro) {
+  if (profile?.stripe_customer_id && (isPro || hasKeepAccess)) {
     const base = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
     portalUrl = await getStripeClient().billingPortal.sessions
       .create({
@@ -66,14 +68,26 @@ export default async function BillingPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {isPro ? (
+          {isPro || hasKeepAccess ? (
             <>
-              <p className="text-sm text-slate-600">You have a paid OncoKind plan.</p>
-              {portalUrl && (
+              <p className="text-sm text-slate-600">
+                You have a paid OncoKind plan{hasKeepAccess ? ` (${PLANS.keep.name})` : ''}.
+              </p>
+              {isAfter90FlagOn('saveFlow') ? (
+                <Button asChild variant="outline">
+                  <Link href="/dashboard/billing/save">Cancel or pause</Link>
+                </Button>
+              ) : null}
+              {portalUrl && !isAfter90FlagOn('saveFlow') ? (
                 <Button asChild>
                   <a href={portalUrl}>Manage subscription</a>
                 </Button>
-              )}
+              ) : null}
+              {portalUrl && isAfter90FlagOn('saveFlow') ? (
+                <Button asChild variant="outline">
+                  <a href={portalUrl}>Update payment method</a>
+                </Button>
+              ) : null}
             </>
           ) : (
             <Button asChild>

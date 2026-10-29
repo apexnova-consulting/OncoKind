@@ -6,6 +6,7 @@ export type JourneySignals = {
   secondOpinionGoal?: boolean;
   recordDelays?: boolean;
   conciergeCase: boolean;
+  after90Eligible?: boolean;
 };
 
 export type JourneyAction = {
@@ -31,6 +32,7 @@ const ACTIONS = {
   secondOpinion: { id: 'secondOpinion', label: 'Open Second Opinion Mode', href: '/journey/second-opinion' },
   concierge: { id: 'concierge', label: 'See Concierge case status', href: '/journey/concierge' },
   conciergeStart: { id: 'conciergeStart', label: 'Ask Concierge to handle the paperwork', href: '/concierge' },
+  after90: { id: 'after90', label: 'Open After the first 90 days', href: '/journey/after-90' },
 } as const;
 
 function withSecondary(primary: JourneyAction, extras: JourneyAction[]): JourneyAction[] {
@@ -38,6 +40,13 @@ function withSecondary(primary: JourneyAction, extras: JourneyAction[]): Journey
 }
 
 export function nextJourneyStep(signals: JourneySignals): NextStepResult {
+  if (signals.after90Eligible) {
+    return {
+      stageId: 'plan',
+      primary: ACTIONS.after90,
+      secondary: [ACTIONS.prep, ACTIONS.concierge],
+    };
+  }
   if (!signals.hasReport) {
     return { stageId: 'understand', primary: ACTIONS.upload, secondary: [ACTIONS.first72] };
   }

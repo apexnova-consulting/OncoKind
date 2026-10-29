@@ -156,6 +156,12 @@ test('Founder-decision flags stay off except tool freeze and rare-cancer framing
   assert.equal(isFeatureEnabled('concierge_price_variant'), false);
   assert.equal(isFeatureEnabled('individual_advocate_plan'), false);
   assert.equal(isFeatureEnabled('rare_womens_cancers_framing'), true);
+  assert.equal(isFeatureEnabled('keepPlan'), false);
+  assert.equal(isFeatureEnabled('saveFlow'), false);
+  assert.equal(isFeatureEnabled('recordsVault'), false);
+  assert.equal(isFeatureEnabled('after90Phase'), false);
+  assert.equal(isFeatureEnabled('orgSponsorship'), false);
+  assert.equal(isFeatureEnabled('conciergeKeepRollover'), false);
 });
 
 test('Catalog still includes Denial Defense from Caregiver Pro', () => {

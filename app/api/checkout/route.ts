@@ -9,6 +9,7 @@ import {
   stripePrices,
 } from '@/lib/stripe-prices';
 import { isFeatureEnabled } from '@/lib/feature-flags';
+import { isKeepEligible } from '@/lib/after-90/eligibility';
 
 const defaultPriceId = stripePrices.caregiverMonthly;
 
@@ -41,6 +42,36 @@ async function handleCheckout(
         { status: 400 }
       );
     }
+    if (requestedPlan === 'keep') {
+      if (!isFeatureEnabled('keepPlan')) {
+        return NextResponse.json({ error: 'Keep is not available yet.' }, { status: 404 });
+      }
+      const { data: profileRow } = await supabase
+        .from('profiles')
+        .select('created_at, treatment_finished_at')
+        .eq('id', user.id)
+        .maybeSingle();
+      const { data: caseReady } = await supabase
+        .from('concierge_cases')
+        .select('case_ready_at')
+        .eq('user_id', user.id)
+        .not('case_ready_at', 'is', null)
+        .limit(1)
+        .maybeSingle();
+      const fromSaveFlow = request.nextUrl.searchParams.get('from') === 'save_flow';
+      const eligibility = isKeepEligible({
+        accountCreatedAt: profileRow?.created_at ?? user.created_at ?? null,
+        treatmentFinishedAt: profileRow?.treatment_finished_at ?? null,
+        conciergeCaseReadyAt: caseReady?.case_ready_at ?? null,
+        fromSaveFlow,
+      });
+      if (!eligibility.eligible) {
+        return NextResponse.json(
+          { error: 'Keep is available after your first 90 days, after treatment finishes, or from the save flow.' },
+          { status: 403 }
+        );
+      }
+    }
     const interval =
       requestedPlan === 'professional'
         ? 'monthly'
@@ -61,7 +92,13 @@ async function handleCheckout(
   }
   const base = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
   const successPlan =
-    planKey === 'professional' ? 'professional' : planKey === 'advocate' ? 'advocate' : 'caregiver_pro';
+    planKey === 'keep'
+      ? 'keep'
+      : planKey === 'professional'
+        ? 'professional'
+        : planKey === 'advocate'
+          ? 'advocate'
+          : 'caregiver_pro';
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -77,7 +114,7 @@ async function handleCheckout(
     priceId,
     userId: user.id,
     planKey,
-    trialPeriodDays: planKey === 'professional' || planKey === 'advocate' ? undefined : 14,
+    trialPeriodDays: planKey === 'professional' || planKey === 'advocate' || planKey === 'keep' ? undefined : 14,
   });
 
   if (session.url) {

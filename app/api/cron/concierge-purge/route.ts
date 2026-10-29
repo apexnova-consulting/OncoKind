@@ -19,7 +19,13 @@ export async function GET(request: NextRequest) {
   const cutoff = new Date();
   cutoff.setUTCDate(cutoff.getUTCDate() - CONCIERGE_RETENTION_DAYS);
   const supabase = createServiceRoleSupabaseClient();
-  const { data, error } = await supabase
+  const { data: vaultUsers } = await supabase
+    .from('profiles')
+    .select('id')
+    .not('vault_consent_at', 'is', null)
+    .in('subscription_tier', ['pro', 'caregiver', 'keep', 'advocate']);
+  const skipIds = (vaultUsers ?? []).map((row) => row.id);
+  let query = supabase
     .from('concierge_cases')
     .update({
       intake_encrypted: null,
@@ -27,8 +33,11 @@ export async function GET(request: NextRequest) {
     })
     .eq('state', 'case_ready')
     .is('purged_at', null)
-    .lt('case_ready_at', cutoff.toISOString())
-    .select('id');
+    .lt('case_ready_at', cutoff.toISOString());
+  if (skipIds.length) {
+    query = query.not('user_id', 'in', `(${skipIds.join(',')})`);
+  }
+  const { data, error } = await query.select('id');
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
