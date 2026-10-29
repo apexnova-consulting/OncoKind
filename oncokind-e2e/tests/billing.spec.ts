@@ -90,10 +90,9 @@ test.describe('Stripe Billing', () => {
     await expect(page.getByText(/active/i)).toBeVisible();
   });
 
-  test('Professional still offers a Calendly demo CTA', async ({ page }) => {
+  test('Professional self-serve is not offered on /pricing', async ({ page }) => {
     await page.goto(routes.pricing);
-    const professionalCta = page.getByRole('link', { name: new RegExp(pricingTiers.professional.cta, 'i') });
-    await expect(professionalCta.first()).toHaveAttribute('href', /calendly\.com\/oncokind-support/);
-    await expect(page.getByRole('link', { name: /start professional/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /book a demo/i })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /start professional/i })).toHaveCount(0);
   });
 });

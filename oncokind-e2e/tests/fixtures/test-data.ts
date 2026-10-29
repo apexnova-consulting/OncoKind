@@ -111,12 +111,14 @@ export const routes = {
 // waitlist). "Prior Auth Engine" is no longer in the public nav anywhere —
 // including /professional — as of Aug 2026.
 export const newTemplateNavLabels = [
-  'How It Works (4-Stage)',
-  'Tools ($0-$39)',
-  'Concierge ($299)',
-  'About & Niche Focus',
+  'How it works',
+  'Tools',
+  'Concierge',
+  'Rare cancers',
+  'Pricing',
+  'About',
   'Sign In',
-  'Start Free Trial',
+  'Start free',
 ] as const;
 
 // Site footer column labels (rendered as <p>, not headings).
@@ -141,32 +143,25 @@ export const homepageJourneyStages = [
 // that's the live behavior (finding #5), not a typo. The test asserts the
 // INTENDED param and will fail until fixed.
 export const pricingTiers = {
-  free: { name: 'Explorer', price: '$0', cta: 'Start Free', href: routes.signup },
+  free: { name: 'Explorer', price: '$0', cta: 'Start free', href: routes.signup },
   caregiver: {
     name: 'Caregiver Pro',
-    price: '$390',
+    price: '$39',
     monthlyPrice: '$39',
+    yearlyPrice: '$390',
     cta: 'Start Free Trial',
     href: '/signup?plan=pro',
     badge: '14-day trial',
   },
-  advocate: {
-    name: 'Caregiver Plus',
-    price: '$490',
-    monthlyPrice: '$49',
-    cta: 'Start Caregiver Plus',
-    href: '/signup?plan=plus',
-    badge: 'Travel and lodging help',
-  },
-  professional: {
-    name: 'Professional',
-    price: '$999',
-    cta: 'Book a Demo',
-    href: 'https://calendly.com/oncokind-support',
+  concierge: {
+    name: 'Concierge',
+    price: '$299',
+    cta: 'Start Case',
+    href: '/concierge',
   },
 } as const;
 
-export const pricingComparisonRowCount = 19;
+export const pricingComparisonRowCount = 18;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.
@@ -178,6 +173,7 @@ export const pricingFaqQuestions = [
   'Is there a discount for financial hardship?',
   'Does OncoKind tell me which tests or treatments I need?',
   'Will anyone contact my providers for me?',
+  'How does the Caregiver Pro trial work?',
   'How do Concierge refunds work?',
 ] as const;
 

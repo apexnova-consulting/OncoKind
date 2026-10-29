@@ -146,7 +146,7 @@ export function ConciergeIntake() {
         />
       </label>
       <p className="rounded-xl bg-[#E1F5EE] px-4 py-3 text-sm font-semibold text-[#0F6E56]">
-        100% full refund if no records request is submitted within 10 business days.
+        Full refund any time before we send the first records request, or if we do not send one within 10 business days of a complete authorization and intake.
       </p>
       <label className="flex items-start gap-2 text-sm">
         <input type="checkbox" checked={refundAccepted} onChange={(event) => setRefundAccepted(event.target.checked)} className="mt-1" />

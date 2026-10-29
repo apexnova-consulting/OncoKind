@@ -1,8 +1,10 @@
 export const PUBLIC_NAV_LINKS = [
-  { href: '/#how-it-works', label: 'How It Works (4-Stage)' },
-  { href: '/features', label: 'Tools ($0-$39)' },
-  { href: '/concierge', label: 'Concierge ($299)' },
-  { href: '/about#niche', label: 'About & Niche Focus' },
+  { href: '/#how-it-works', label: 'How it works' },
+  { href: '/features', label: 'Tools' },
+  { href: '/concierge', label: 'Concierge' },
+  { href: '/cancers', label: 'Rare cancers' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/about', label: 'About' },
 ] as const;
 
 export const BANNED_PUBLIC_NAV_LABELS = [
@@ -13,4 +15,7 @@ export const BANNED_PUBLIC_NAV_LABELS = [
   'Professional',
   'Join Waitlist',
   'Schedule a Demo',
+  'How It Works (4-Stage)',
+  'Tools ($0-$39)',
+  'About & Niche Focus',
 ] as const;

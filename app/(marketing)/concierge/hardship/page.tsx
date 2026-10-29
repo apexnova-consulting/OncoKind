@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 
 export const metadata = pageMetadata({
   title: 'Concierge hardship request',
-  description: 'Request a reduced price or sponsored OncoKind Concierge case. Do not include medical details.',
+  description: 'Request a reduced or sponsored Concierge case, or a 60-day Caregiver Pro code. Do not include medical details.',
   path: '/concierge/hardship',
 });
 

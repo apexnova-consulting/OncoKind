@@ -10,7 +10,7 @@ import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const lastReviewed = 'October 28, 2026';
+const lastReviewed = 'October 29, 2026';
 
 const collectedData = [
   {
@@ -61,6 +61,10 @@ const collectedData = [
 ];
 
 const changeLog = [
+  {
+    date: 'October 29, 2026',
+    note: 'Clarified Concierge refund wording, Explorer versus Caregiver Pro names, and rare women cancer diagnosis pages.',
+  },
   {
     date: 'October 28, 2026',
     note: 'Aligned collection, retention, and Business Associate Agreement copy with Tools versus Concierge, and matched cookie language to product analytics being off.',

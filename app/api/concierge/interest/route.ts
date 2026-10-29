@@ -3,7 +3,12 @@ import { sendInternalEmail } from '@/lib/internal-email';
 import { containsCrisisLanguage } from '@/lib/agents/safety';
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as { email?: string; details?: string; surface?: string };
+  const body = (await request.json()) as {
+    email?: string;
+    details?: string;
+    surface?: string;
+    requestType?: string;
+  };
   const email = (body.email ?? '').trim();
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'A valid email is required.' }, { status: 400 });
@@ -17,8 +22,8 @@ export async function POST(request: NextRequest) {
   }
   await sendInternalEmail({
     subject: body.surface === 'hardship' ? 'Concierge hardship request' : 'Concierge interest',
-    text: `Email: ${email}\nSurface: ${body.surface ?? ''}\nDetails: ${body.details ?? ''}`,
-    html: `<p>Email: ${email}</p><p>Surface: ${body.surface ?? ''}</p>`,
+    text: `Email: ${email}\nSurface: ${body.surface ?? ''}\nRequest: ${body.requestType ?? ''}\nDetails: ${body.details ?? ''}`,
+    html: `<p>Email: ${email}</p><p>Surface: ${body.surface ?? ''}</p><p>Request: ${body.requestType ?? ''}</p>`,
   });
   return NextResponse.json({ ok: true });
 }

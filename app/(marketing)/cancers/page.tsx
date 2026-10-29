@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { CANCER_LANDINGS, CANCER_LANDINGS_PITCH } from '@/lib/cancers/landings';
+import { CANCER_LANDINGS, CANCER_LANDINGS_DESCRIPTION } from '@/lib/cancers/landings';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
-  title: 'Rare women cancers',
-  description: CANCER_LANDINGS_PITCH,
+  title: "Rare women's cancers",
+  absoluteTitle: "Rare women's cancers | OncoKind",
+  description: CANCER_LANDINGS_DESCRIPTION,
   path: '/cancers',
 });
 
@@ -13,9 +14,9 @@ export default function CancersIndexPage() {
     <main className="bg-[var(--color-bg-page)] px-4 py-16 sm:py-24">
       <div className="mx-auto max-w-3xl">
         <h1 className="font-display text-4xl font-semibold text-[var(--color-primary-900)]">
-          Diagnosis pages for families
+          Rare women&apos;s cancers
         </h1>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)]">{CANCER_LANDINGS_PITCH}</p>
+        <p className="mt-4 text-lg text-[var(--color-text-secondary)]">{CANCER_LANDINGS_DESCRIPTION}</p>
         <ul className="mt-10 space-y-4">
           {CANCER_LANDINGS.map((landing) => (
             <li key={landing.slug}>

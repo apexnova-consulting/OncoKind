@@ -6,11 +6,12 @@ const footerColumns = [
   {
     heading: 'Product',
     links: [
-      { href: '/#how-it-works', label: 'How It Works (4-Stage)' },
-      { href: '/features', label: 'Tools ($0-$39)' },
-      { href: '/concierge', label: 'Concierge ($299)' },
+      { href: '/#how-it-works', label: 'How it works' },
+      { href: '/features', label: 'Tools' },
+      { href: '/concierge', label: 'Concierge' },
+      { href: '/cancers', label: 'Rare cancers' },
       { href: '/pricing', label: 'Pricing' },
-      { href: '/about#niche', label: 'About & Niche Focus' },
+      { href: '/about', label: 'About' },
       { href: '/trust', label: 'Trust' },
       { href: '/support', label: 'Contact' },
     ],

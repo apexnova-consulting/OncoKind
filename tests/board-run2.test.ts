@@ -149,7 +149,7 @@ test('Sponsored codes cannot cover a fee when empty', () => {
 
 test('Diagnosis landings exist and stay question-shaped', () => {
   assert.equal(CANCER_LANDINGS.length, 4);
-  assert.ok(CANCER_LANDINGS.every((landing) => landing.questions.length >= 3));
+  assert.ok(CANCER_LANDINGS.every((landing) => landing.questions.length >= 6));
 });
 
 test('Founder-decision flags stay off except tool freeze and rare-cancer framing', () => {

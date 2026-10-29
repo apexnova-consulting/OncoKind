@@ -60,8 +60,7 @@ export default async function PricingPage() {
             {PRICING_PAGE.title}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)]">
-            Clear, compassionate support for families, plus enterprise-grade advocacy tools for oncology care
-            teams.
+            Clear, compassionate support for families, from the first report to Case Ready.
           </p>
           <p className="mt-2 text-sm font-medium text-[var(--color-text-muted)]">
             No surprise billing. Cancel Tools anytime. No contracts.
@@ -109,7 +108,7 @@ export default async function PricingPage() {
                     <Link href="/concierge/hardship" className="font-semibold text-[#0F6E56] underline-offset-2 hover:underline">
                       /concierge/hardship
                     </Link>
-                    . A person reviews every request. Approved families can receive a {CONCIERGE_CAREGIVER_GRANT_DAYS}-day Caregiver Pro code.
+                    . A person reviews every request. Approved families can receive a reduced or sponsored Concierge case, or a {CONCIERGE_CAREGIVER_GRANT_DAYS}-day Caregiver Pro code.
                   </>
                 ),
               },
@@ -124,6 +123,10 @@ export default async function PricingPage() {
               {
                 q: 'What if my records are delayed?',
                 a: 'Hospitals set their own timelines. We follow up and show you where each request stands. We do not display a guaranteed completion date.',
+              },
+              {
+                q: 'How does the Caregiver Pro trial work?',
+                a: 'A card is required to start. Caregiver Pro is free for 14 days. Stripe reminds you before the trial ends. Cancel anytime before then and you will not be charged. After day 14, billing continues at the price you chose unless you cancel.',
               },
               {
                 q: 'How do Concierge refunds work?',

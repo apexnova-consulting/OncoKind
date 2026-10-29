@@ -16,5 +16,5 @@ export function hasReachedFreeReportLimit(
 }
 
 export function freeReportLimitMessage() {
-  return `Free includes up to ${FREE_REPORTS_IN_WINDOW} reports in the first ${FREE_REPORT_WINDOW_DAYS} days. Upgrade to Caregiver Pro for unlimited report analyses.`;
+  return `Explorer includes up to ${FREE_REPORTS_IN_WINDOW} reports in the first ${FREE_REPORT_WINDOW_DAYS} days. Start a Caregiver Pro trial for unlimited report analyses.`;
 }

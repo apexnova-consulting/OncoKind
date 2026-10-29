@@ -285,7 +285,7 @@ export default function AboutPage() {
               <Link href="/cancers">See diagnosis pages</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/signup">Start Free Trial</Link>
+              <Link href="/signup">Start free</Link>
             </Button>
           </div>
         </div>
@@ -317,36 +317,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Partners placeholder ──────────────────────────────── */}
-      <section className="px-4 pb-16">
-        <div className="mx-auto max-w-[var(--max-width-wide)] rounded-[var(--radius-xl)] border border-[var(--color-border-subtle)] bg-white p-8 shadow-[var(--shadow-sm)]">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[var(--brand-primary)]">
-            Partner Spotlights
-          </p>
-          <h2 className="mt-3 font-display text-2xl font-semibold text-[var(--color-text-primary)]">
-            Future nonprofit and community partners
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-text-secondary)]">
-            As OncoKind builds relationships with advocacy organizations, caregiver communities, and
-            trusted nonprofit partners, approved logos and resource links will appear here.
-          </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              'Caregiver resource partners',
-              'Patient advocacy organizations',
-              'Navigation partners',
-              'Community collaborations',
-            ].map((label) => (
-              <div
-                key={label}
-                className="rounded-[var(--radius-lg)] border border-dashed border-[var(--color-border)] bg-[var(--bg-subtle)] px-5 py-8 text-center text-sm font-medium text-[var(--color-text-muted)]"
-              >
-                {label}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

@@ -24,7 +24,7 @@ function walk(dir: string, files: string[] = []): string[] {
 test('Public nav is the homepage menu', () => {
   assert.deepEqual(
     PUBLIC_NAV_LINKS.map((link) => link.label),
-    ['How It Works (4-Stage)', 'Tools ($0-$39)', 'Concierge ($299)', 'About & Niche Focus']
+    ['How it works', 'Tools', 'Concierge', 'Rare cancers', 'Pricing', 'About']
   );
 });
 
@@ -47,9 +47,9 @@ test('Free card copy matches the 3-report window', () => {
   assert.ok(FREE_FEATURES.includes('Denial letter decode free'));
 });
 
-test('Public catalog uses Explorer, Advocate Sheets, and no KindAuth row', () => {
+test('Public catalog uses Explorer, Care Plan Question Sheets, and no KindAuth row', () => {
   assert.equal(PLANS.free.name, 'Explorer');
-  assert.equal(FAMILY_GUIDELINE_SHEET_NAME, 'Advocate Sheets');
+  assert.equal(FAMILY_GUIDELINE_SHEET_NAME, 'Care Plan Question Sheets');
   assert.ok(publicCatalogFeatures().some((feature) => feature.name === FAMILY_GUIDELINE_SHEET_NAME));
   assert.equal(publicCatalogFeatures().some((feature) => feature.name === 'KindAuth'), false);
 });

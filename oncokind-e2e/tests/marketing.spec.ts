@@ -153,13 +153,13 @@ test.describe('Pricing (/pricing)', () => {
     await expect(page.getByText(/14-day trial/i).first()).toBeVisible();
   });
 
-  test('annual is the default billing interval and monthly toggle updates the price', async ({ page }) => {
+  test('monthly is the default billing interval and yearly toggle updates the price', async ({ page }) => {
     await page.goto(routes.pricing);
     await expect(page.getByText(/save ~/i).first()).toBeVisible();
-    await expect(page.getByText('$390').first()).toBeVisible();
-
-    await page.getByRole('button', { name: /monthly billing/i }).click();
     await expect(page.getByText('$39').first()).toBeVisible();
+
+    await page.getByRole('button', { name: /annual billing/i }).click();
+    await expect(page.getByText('$390').first()).toBeVisible();
   });
 
   test('Explorer, Caregiver Pro, and Concierge cards are the public pricing doors', async ({ page }) => {
