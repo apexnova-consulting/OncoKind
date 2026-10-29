@@ -54,15 +54,28 @@ const nextConfig = {
       {
         source: '/signup',
         has: [{ type: 'query', key: 'plan', value: 'advocate' }],
-        destination: '/signup?plan=plus',
+        destination: '/signup?plan=pro',
+        permanent: true,
+      },
+      {
+        source: '/signup',
+        has: [{ type: 'query', key: 'plan', value: 'plus' }],
+        destination: '/signup?plan=pro',
         permanent: true,
       },
       {
         source: '/signup',
         has: [{ type: 'query', key: 'plan', value: 'professional' }],
-        destination: 'https://calendly.com/oncokind-support',
-        permanent: false,
+        destination: '/',
+        permanent: true,
       },
+      { source: '/professional', destination: '/', permanent: true },
+      { source: '/professional/:path*', destination: '/', permanent: true },
+      { source: '/prior-auth-pro', destination: '/', permanent: true },
+      { source: '/kindauth', destination: '/', permanent: true },
+      { source: '/kindauth/:path*', destination: '/', permanent: true },
+      { source: '/snf', destination: '/', permanent: true },
+      { source: '/snf/:path*', destination: '/', permanent: true },
     ];
   },
   images: {

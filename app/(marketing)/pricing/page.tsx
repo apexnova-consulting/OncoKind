@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import { PricingPlans } from '@/components/marketing/PricingPlans';
 import { hasAdvocatePrices, hasProPrices, hasProfessionalPrice } from '@/lib/stripe-prices';
 import { CONCIERGE_CAREGIVER_GRANT_DAYS } from '@/lib/concierge/config';
-import { isFamilyTierMerged } from '@/lib/board-run2';
 import { PRICING_PAGE, SITE_ORIGIN, publicCatalogFeatures, publicPricingHeaders } from '@/lib/pricing-config';
 import { CONCIERGE_REFUND_TERMS, TOOLS_CANCEL_COPY } from '@/lib/legal/refunds';
 import { TOOLS_RETENTION_CLAIM, CONCIERGE_RETENTION_CLAIM } from '@/lib/legal/retention';
@@ -70,7 +69,6 @@ export default async function PricingPage() {
           <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm font-semibold">
             <a href="#comparison" className="rounded-full bg-white px-4 py-2 shadow-sm">Tools</a>
             <Link href="/concierge" className="rounded-full bg-white px-4 py-2 shadow-sm">Concierge</Link>
-            <Link href="/professional" className="rounded-full bg-white px-4 py-2 shadow-sm">For organizations</Link>
           </div>
         </div>
 
@@ -177,14 +175,6 @@ export default async function PricingPage() {
                     </td>
                     <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
                       <ComparisonCell value={feature.cells.caregiver} />
-                    </td>
-                    {isFamilyTierMerged() ? null : (
-                    <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
-                      <ComparisonCell value={feature.cells.advocate} />
-                    </td>
-                    )}
-                    <td className="px-5 py-3.5 text-center text-[var(--color-text-secondary)]">
-                      <ComparisonCell value={feature.cells.professional} />
                     </td>
                   </tr>
                 ))}

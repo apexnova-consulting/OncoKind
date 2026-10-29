@@ -77,6 +77,7 @@ async function handleCheckout(
     priceId,
     userId: user.id,
     planKey,
+    trialPeriodDays: planKey === 'professional' || planKey === 'advocate' ? undefined : 14,
   });
 
   if (session.url) {

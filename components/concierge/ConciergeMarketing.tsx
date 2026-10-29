@@ -94,6 +94,12 @@ export function ConciergeMarketing() {
               Can&apos;t afford this?
             </Link>
           </p>
+          <p className="mt-4 rounded-xl bg-[#E1F5EE] px-4 py-3 text-sm font-semibold text-[#0F6E56]">
+            100% full refund if no records request is submitted within 10 business days.
+          </p>
+          <p className="mt-3 rounded-xl border border-[#cdd8d5] px-4 py-3 text-sm text-slate-700">
+            Records stored with AES-256 encryption and automatically purged 90 days after Case Ready.
+          </p>
           <p className="mt-3 text-xs text-slate-500">{CONCIERGE_REFUND_TERMS}</p>
           <p className="mt-2 text-xs text-slate-500">{CONCIERGE_RETENTION_CLAIM}</p>
         </section>

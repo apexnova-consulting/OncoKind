@@ -35,6 +35,27 @@ export async function sendInternalEmail(options: {
   return true;
 }
 
+export async function sendConciergeIntakeAlert(params: {
+  userId: string;
+  email?: string | null;
+  contactName?: string;
+  sponsorCode?: string;
+}) {
+  return sendInternalEmail({
+    subject: 'Concierge intake ready for founder review',
+    text: `A family submitted Concierge intake.\nUser ID: ${params.userId}\nEmail: ${params.email ?? 'unknown'}\nContact: ${params.contactName ?? 'unknown'}\nSponsor code: ${params.sponsorCode || 'none'}`,
+    html: `
+      <p>A family submitted Concierge intake for review.</p>
+      <ul>
+        <li><strong>User ID:</strong> ${params.userId}</li>
+        <li><strong>Email:</strong> ${params.email ?? 'unknown'}</li>
+        <li><strong>Contact:</strong> ${params.contactName ?? 'unknown'}</li>
+        <li><strong>Sponsor code:</strong> ${params.sponsorCode || 'none'}</li>
+      </ul>
+    `,
+  });
+}
+
 export async function queueProfessionalBaaEmail(params: {
   userId: string;
   email?: string | null;

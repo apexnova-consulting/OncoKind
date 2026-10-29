@@ -6,16 +6,16 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: 'Clarity for families navigating cancer',
+  title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
   description:
-    'Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock Doctor Prep Sheet PDFs, full trial matching, and insurance advocacy.',
+    'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
   alternates: {
     canonical: 'https://www.oncokind.com/',
   },
   openGraph: {
-    title: 'Clarity for families navigating cancer',
+    title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
     description:
-      'Upload your first report free and get your Cancer Profile in minutes.',
+      'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
     url: 'https://www.oncokind.com/',
     type: 'website',
     images: [
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Clarity for families navigating cancer',
-    description: 'Upload your first report free and get your Cancer Profile in minutes.',
+    title: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
+    description: 'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
   },
   keywords: [
     'how to read a pathology report',

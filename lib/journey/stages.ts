@@ -23,7 +23,7 @@ export const JOURNEY_STAGES = [
   },
   {
     id: 'plan',
-    name: 'Plan ahead',
+    name: 'Plan Ahead',
     summary: 'Trials, family history, second opinions, or Concierge when you want it handled.',
     href: '/concierge',
   },

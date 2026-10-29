@@ -284,7 +284,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                 Built by a caregiver, for caregivers
               </span>
               <h1 className="mt-4 text-[clamp(2.1rem,5vw,3rem)] font-bold leading-[1.1] tracking-tight text-[#1e2d2b] hero-nudge-up hero-nudge-up-delay-1">
-                You shouldn&apos;t have to understand oncology to advocate for someone you love.
+                {HOMEPAGE_HERO.title}
               </h1>
               <p className="mt-5 max-w-[30rem] text-[1.05rem] leading-[1.75] text-[#5a6b68] hero-nudge-up hero-nudge-up-delay-2">
                 {HOMEPAGE_HERO.subtitle}
@@ -311,13 +311,12 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                         className="flex items-center gap-2"
                         data-analytics="hero_cta_click"
                       >
-                        <Upload className="h-4 w-4" aria-hidden />
-                        Upload your first report. It is free
+                        Start First 72 Hours (Free)
                       </Link>
                     </Button>
-                    <Button asChild variant="ghost" size="lg" className="text-[#0F6E56] hover:bg-[#E1F5EE]">
-                      <Link href="#sample-demo" data-analytics="hero_demo_click">
-                        Try a sample report first →
+                    <Button asChild variant="outline" size="lg">
+                      <Link href="/concierge" data-analytics="hero_concierge_click">
+                        Start Concierge Case ($299)
                       </Link>
                     </Button>
                   </>
@@ -327,13 +326,17 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Link href="/features" className="rounded-2xl border border-[#cdd8d5] bg-white p-4 shadow-sm">
                   <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">Tools</p>
-                  <p className="mt-1 font-semibold text-[#1e2d2b]">Understand and prepare on your own</p>
-                  <p className="mt-1 text-sm text-[#5a6b68]">Self-serve software. Free to start.</p>
+                  <p className="mt-1 font-semibold text-[#1e2d2b]">Do It Yourself</p>
+                  <p className="mt-1 text-sm text-[#5a6b68]">
+                    Get through the first 72 hours, decode reports, organize records, and prepare for doctor visits.
+                  </p>
                 </Link>
                 <Link href="/concierge" className="rounded-2xl border border-[#cdd8d5] bg-white p-4 shadow-sm">
                   <p className="text-xs font-semibold uppercase tracking-widest text-[#0F6E56]">Concierge</p>
-                  <p className="mt-1 font-semibold text-[#1e2d2b]">Let our team handle it</p>
-                  <p className="mt-1 text-sm text-[#5a6b68]">Records, forms, and follow-up until Case Ready.</p>
+                  <p className="mt-1 font-semibold text-[#1e2d2b]">Have It Done For You</p>
+                  <p className="mt-1 text-sm text-[#5a6b68]">
+                    Complete records gathering, intake packet prep, and submission to top cancer centers until Case Ready.
+                  </p>
                 </Link>
               </div>
 
@@ -499,7 +502,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
 
       {/* ── 4. How It Works ──────────────────────────────────── */}
       <section
-        id="how-it-works"
+        id="first-steps"
         className="scroll-mt-20 bg-[#f7faf9] px-4 py-[var(--section-padding-y)]"
       >
         <div className="mx-auto max-w-[var(--max-width-full)]">
@@ -560,7 +563,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
 
       {/* ── 5. Features Grid ─────────────────────────────────── */}
       <section
-        id="features"
+        id="how-it-works"
         className="scroll-mt-20 bg-white px-4 py-[var(--section-padding-y)]"
       >
         <div className="mx-auto max-w-[var(--max-width-full)]">
@@ -705,8 +708,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
               Let us handle the complexity.
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-white/85 text-[1.05rem] leading-[1.75]">
-              Upload your first report free and get your Cancer Profile in minutes. Or start Concierge
-              and let our team handle the records, forms, and follow-up.
+              Start First 72 Hours free, or start a Concierge case and let our team handle records and intake.
             </p>
           </Reveal>
 
@@ -720,7 +722,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   data-analytics="final_cta_click"
                 >
                   <Link href="/signup">
-                    Upload your first report. It is free
+                    Start Free Trial
                   </Link>
                 </Button>
               </div>

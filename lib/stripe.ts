@@ -62,6 +62,7 @@ export function createCheckoutSession(params: {
   priceId: string;
   userId?: string;
   planKey?: string;
+  trialPeriodDays?: number;
 }) {
   const metadata = {
     ...(params.userId ? { supabase_user_id: params.userId } : {}),
@@ -75,6 +76,7 @@ export function createCheckoutSession(params: {
     cancel_url: params.cancelUrl,
     subscription_data: {
       metadata: Object.keys(metadata).length ? metadata : undefined,
+      ...(params.trialPeriodDays ? { trial_period_days: params.trialPeriodDays } : {}),
     },
     metadata: Object.keys(metadata).length ? metadata : undefined,
   });

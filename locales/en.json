@@ -1,8 +1,8 @@
 {
   "nav.howItWorks": "How It Works",
   "nav.caregiverTools": "Caregiver Tools",
-  "nav.login": "Log In",
-  "nav.signup": "Get Started Free",
+  "nav.login": "Sign In",
+  "nav.signup": "Start Free Trial",
   "nav.goToJourney": "Go to Journey",
   "nav.first72": "First 72 Hours",
   "footer.about": "About",
@@ -24,5 +24,5 @@
   "family.tab": "Family",
   "family.consent": "I consent to adding or editing my own relative health notes.",
   "pricing.caregiver": "Caregiver Pro",
-  "pricing.advocate": "Advocate Plan"
+  "pricing.advocate": "Legacy family plan"
 }

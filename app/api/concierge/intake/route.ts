@@ -5,6 +5,8 @@ import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { encryptJson, toSupabaseBytea } from '@/lib/encryption';
 import { containsCrisisLanguage } from '@/lib/agents/safety';
 import { weeklyCohortPriceCents, conciergeCapacityCap } from '@/lib/concierge/config';
+import { normalizeSponsorCode } from '@/lib/concierge/sponsored';
+import { sendConciergeIntakeAlert } from '@/lib/internal-email';
 
 export async function POST(request: NextRequest) {
   if (!isFeatureEnabled('concierge_public_pages')) {
@@ -33,30 +35,40 @@ export async function POST(request: NextRequest) {
   }
 
   const priceShown = weeklyCohortPriceCents();
-  if (isFeatureEnabled('concierge_purchase')) {
-    try {
-      const supabase = await createServerSupabaseClient();
-      const { count } = await supabase
-        .from('concierge_cases')
-        .select('id', { count: 'exact', head: true })
-        .in('state', ['purchased', 'intake_incomplete', 'authorization_pending', 'authorized', 'in_progress']);
-      if ((count ?? 0) >= conciergeCapacityCap()) {
-        return NextResponse.json({
-          message: 'We are at capacity. You are on the waitlist and we will email when a slot opens.',
-          waitlist: true,
-          priceShown,
-        });
-      }
-      await supabase.from('concierge_cases').insert({
-        user_id: user.id,
-        state: 'intake_incomplete',
-        price_shown_cents: priceShown,
-        intake_encrypted: toSupabaseBytea(encryptJson(body)),
+  const sponsorCode = normalizeSponsorCode(typeof body.sponsorCode === 'string' ? body.sponsorCode : '');
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { count } = await supabase
+      .from('concierge_cases')
+      .select('id', { count: 'exact', head: true })
+      .in('state', ['purchased', 'intake_incomplete', 'authorization_pending', 'authorized', 'in_progress']);
+    if ((count ?? 0) >= conciergeCapacityCap()) {
+      return NextResponse.json({
+        message: 'We are at capacity. You are on the waitlist and we will email when a slot opens.',
+        waitlist: true,
+        priceShown,
       });
-    } catch {
-      // Tables may not be applied yet.
     }
+    await supabase.from('concierge_cases').insert({
+      user_id: user.id,
+      state: 'intake_incomplete',
+      price_shown_cents: priceShown,
+      sponsor_code: sponsorCode || null,
+      intake_encrypted: toSupabaseBytea(encryptJson(body)),
+    });
+    if (sponsorCode) {
+      await supabase.from('profiles').update({ sponsor_code: sponsorCode }).eq('id', user.id);
+    }
+  } catch {
+    // Tables may not be applied yet. Founder email still goes out.
   }
+
+  await sendConciergeIntakeAlert({
+    userId: user.id,
+    email: user.email,
+    contactName: typeof body.contactName === 'string' ? body.contactName : undefined,
+    sponsorCode,
+  });
 
   return NextResponse.json({
     ok: true,
@@ -64,6 +76,6 @@ export async function POST(request: NextRequest) {
     purchaseEnabled: isFeatureEnabled('concierge_purchase'),
     message: isFeatureEnabled('concierge_purchase')
       ? 'Intake saved. Continue to authorization when you are ready.'
-      : 'Intake request saved. Purchase stays off until counsel, security, and staffing gates pass. We will contact you when a case can start.',
+      : 'Intake request saved. We will contact you when a case can start.',
   });
 }

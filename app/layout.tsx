@@ -29,12 +29,12 @@ const dmSans = DM_Sans({
 });
 
 const SITE_DESCRIPTION =
-  'Upload your first report free and get your Cancer Profile in minutes. Paid plans unlock Doctor Prep Sheet PDFs, full trial matching, and insurance advocacy.';
+  'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.oncokind.com'),
   title: {
-    default: 'Clarity for families navigating cancer',
+    default: "AI Cancer Navigation for Rare Women's & Gynecological Cancers",
     template: '%s | OncoKind',
   },
   description: SITE_DESCRIPTION,

@@ -111,14 +111,12 @@ export const routes = {
 // waitlist). "Prior Auth Engine" is no longer in the public nav anywhere —
 // including /professional — as of Aug 2026.
 export const newTemplateNavLabels = [
-  'Tools',
-  'Concierge',
-  'For organizations',
-  'Pricing',
-  'Learn',
-  'Trust',
-  'Log In',
-  'Get Started Free',
+  'How It Works (4-Stage)',
+  'Tools ($0-$39)',
+  'Concierge ($299)',
+  'About & Niche Focus',
+  'Sign In',
+  'Start Free Trial',
 ] as const;
 
 // Site footer column labels (rendered as <p>, not headings).
@@ -126,7 +124,6 @@ export const newTemplateFooterColumnLabels = [
   'Product',
   'Platform',
   'Company',
-  'For Professionals',
   'Legal',
 ] as const;
 
@@ -137,21 +134,21 @@ export const homepageJourneyStages = [
   { name: 'Understand' },
   { name: 'Prepare' },
   { name: 'Fight' },
-  { name: 'Plan ahead' },
+  { name: 'Plan Ahead' },
 ] as const;
 
 // Pricing (confirmed live). Advocate deliberately has no `plan` param below —
 // that's the live behavior (finding #5), not a typo. The test asserts the
 // INTENDED param and will fail until fixed.
 export const pricingTiers = {
-  free: { name: 'Free', price: '$0', cta: 'Get Started Free', href: routes.signup },
+  free: { name: 'Explorer', price: '$0', cta: 'Start Free', href: routes.signup },
   caregiver: {
     name: 'Caregiver Pro',
     price: '$390',
     monthlyPrice: '$39',
-    cta: 'Start Caregiver Pro',
+    cta: 'Start Free Trial',
     href: '/signup?plan=pro',
-    badge: 'Most popular for families',
+    badge: '14-day trial',
   },
   advocate: {
     name: 'Caregiver Plus',
@@ -169,7 +166,7 @@ export const pricingTiers = {
   },
 } as const;
 
-export const pricingComparisonRowCount = 21;
+export const pricingComparisonRowCount = 19;
 
 // Pricing page FAQ (5 questions, confirmed live). Site uses straight
 // apostrophes — curly quotes will not match getByText.

@@ -181,7 +181,7 @@ Generate a complete continued stay / medical necessity letter with:
 CRITICAL RULES:
 - Frame entirely around functional capability and care goals, not prognosis or survival
 - REQUIRED: Use the exact phrase "meets criteria for skilled care" in the medical necessity section
-- Use InterQual/MCG-adjacent language ("requires 24-hour nursing supervision")
+- Use medical necessity language ("requires 24-hour nursing supervision")
 - Reference CMS Conditions of Participation for SNFs where applicable (42 CFR Part 483)
 - Do not include mortality statistics or fear-based framing
 - Keep tone clinical, objective, and professional`;
@@ -228,7 +228,7 @@ export async function POST(request: NextRequest) {
       .map((block) => block.text)
       .join('\n');
 
-    // For continued stay, guarantee the required InterQual phrase is present
+    // For continued stay, guarantee the required skilled-care phrase is present
     if (
       case_type === 'continued_stay' &&
       !generatedDocument.toLowerCase().includes('meets criteria for skilled care')
