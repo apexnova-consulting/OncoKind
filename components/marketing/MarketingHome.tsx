@@ -24,6 +24,7 @@ import { FunnelPageView } from '@/components/analytics/FunnelPageView';
 import { ROSEMARIE_SAMPLE } from '@/lib/sample-rosemarie';
 import { cn } from '@/lib/utils';
 import { HOMEPAGE_HERO } from '@/lib/pricing-config';
+import { PUBLIC_HERO_SECONDARY_CTA } from '@/lib/product-v34';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { JOURNEY_POSITIONING, JOURNEY_STAGE_HEADLINE, JOURNEY_STAGES } from '@/lib/journey/stages';
 import { RARE_WOMENS_HERO_LINE } from '@/lib/cancers/landings';
@@ -325,7 +326,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                     </Button>
                     <Button asChild variant="outline" size="lg">
                       <Link href="/concierge" data-analytics="hero_concierge_click">
-                        Start Concierge Case ($299)
+                        {PUBLIC_HERO_SECONDARY_CTA}
                       </Link>
                     </Button>
                   </>

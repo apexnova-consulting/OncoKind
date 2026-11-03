@@ -16,7 +16,7 @@ import { CONCIERGE_REFUND_TERMS } from '@/lib/legal/refunds';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const lastReviewed = 'October 29, 2026';
+const lastReviewed = 'November 3, 2026';
 
 const collectedData = [
   {
@@ -81,7 +81,7 @@ const changeLog = [
   },
   {
     date: 'October 27, 2026',
-    note: 'Listed the Call for me voice vendor as a future subprocessor, kept scoped Concierge retention, and aligned family plan names with Caregiver Plus until a merge is confirmed.',
+    note: 'Listed a scoped voice vendor as a future subprocessor and kept Concierge retention limited to the case.',
   },
   {
     date: 'October 6, 2026',

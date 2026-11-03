@@ -77,12 +77,9 @@ test.describe('Free Tier', () => {
     // ../../SITE_REVIEW_FINDINGS.md, finding #1) and shows 4 category cards
     // with 0 seeded posts each ("No posts yet"). Adjusted to match what's
     // actually there rather than assuming a post feed exists.
-    test('/community shows category cards, read-only for Free tier', async ({ page }) => {
+    test('/community redirects to support while Community is off', async ({ page }) => {
       await page.goto(routes.community);
-      for (const category of ['Just Diagnosed', 'Treatment & Side Effects', 'Insurance & Financial Help', 'Caregiver Support']) {
-        await expect(page.getByText(category)).toBeVisible();
-      }
-      await expect(page.getByRole('button', { name: /new post|create post/i })).toHaveCount(0);
+      await expect(page).toHaveURL(/\/support/);
     });
 
     test('/quiet-room loads and is accessible', async ({ page }) => {
@@ -136,13 +133,9 @@ test.describe('Caregiver Pro Tier', () => {
       expect(response?.ok()).toBeTruthy();
     });
 
-    test('Community allows both reading and posting (full access)', async ({ page }) => {
+    test('Community stays off for Pro until the flag is on', async ({ page }) => {
       await page.goto(routes.community);
-      // Pro tier should be able to enter a category and post, rather than
-      // just seeing the "Sign In to Join" / "See Advocate Plan" CTAs shown
-      // to logged-out visitors.
-      await expect(page.getByRole('link', { name: /sign in to join/i })).toHaveCount(0);
-      await expect(page.getByRole('button', { name: /new post|create post/i })).toBeVisible();
+      await expect(page).toHaveURL(/\/support/);
     });
   });
 

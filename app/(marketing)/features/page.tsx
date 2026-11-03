@@ -1,18 +1,19 @@
 import Link from 'next/link';
-import { ArrowRight, FileText } from 'lucide-react';
+import { ArrowRight, FileText, HeartHandshake } from 'lucide-react';
 import { FEATURE_HUB_FEATURES } from '@/lib/pricing-config';
 import { JOURNEY_POSITIONING, JOURNEY_STAGES } from '@/lib/journey/stages';
 import { FEATURE_CATALOG_ICONS } from '@/components/marketing/FeatureCatalogIcons';
 import { Button } from '@/components/ui/button';
 import { pageMetadata } from '@/lib/seo';
-import { isFeatureEnabled } from '@/lib/feature-flags';
 import { FEATURES_STAGE4_LINE, isAfter90FlagOn } from '@/lib/after-90/config';
+import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
+import { caseReadyPriceLabel } from '@/lib/ok01';
 
 const STAGE_FEATURE_IDS: Record<(typeof JOURNEY_STAGES)[number]['id'], string[]> = {
-  understand: ['cancer_profile', 'complete_the_picture', 'first_72', 'empathy_filter'],
-  prepare: ['doctor_prep', 'check_in', 'timeline', 'genetic_counseling'],
+  understand: ['cancer_profile', 'complete_the_picture', 'first_72'],
+  prepare: ['doctor_prep', 'prep_sheets', 'check_in', 'timeline'],
   fight: ['insurance', 'access_agent'],
-  plan: ['trials', 'second_opinion', 'family', 'concierge', 'goals_of_care', 'care_plan_sheets', 'community'],
+  plan: ['second_opinion', 'trials', 'family'],
 };
 
 export const metadata = pageMetadata({
@@ -35,9 +36,10 @@ export default function FeaturesHubPage() {
           <p className="mt-5 text-lg leading-relaxed text-[var(--color-text-secondary)]">
             {JOURNEY_POSITIONING}
           </p>
+          <p className="mt-4 text-sm font-medium text-[#0F6E56]">{EMPATHY_FILTER_POLICY.summary}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild>
-              <Link href="/signup">Start free</Link>
+              <Link href="/signup">Start with Explorer</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/pricing">Compare plans</Link>
@@ -46,10 +48,8 @@ export default function FeaturesHubPage() {
         </section>
 
         {JOURNEY_STAGES.map((stage) => {
-          const features = FEATURE_HUB_FEATURES.filter(
-            (feature) =>
-              STAGE_FEATURE_IDS[stage.id].includes(feature.id) &&
-              (feature.id !== 'voice_call_for_me' || isFeatureEnabled('feature_voice_call_for_me'))
+          const features = FEATURE_HUB_FEATURES.filter((feature) =>
+            STAGE_FEATURE_IDS[stage.id].includes(feature.id)
           );
           if (!features.length) return null;
           return (
@@ -93,6 +93,20 @@ export default function FeaturesHubPage() {
             </section>
           );
         })}
+
+        <section className="mt-16 rounded-3xl bg-[#1C2B2D] p-8 text-white sm:p-10">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#d4af37]">Have it done for you</p>
+          <h2 className="mt-3 font-display text-3xl font-semibold">Concierge</h2>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-200">
+            Have it done for you. {caseReadyPriceLabel()} per case. Records gathering, intake packet, and tracking until Case Ready.
+          </p>
+          <Button asChild className="mt-6 bg-[#d4af37] text-[#1C2B2D] hover:opacity-90">
+            <Link href="/concierge">
+              <HeartHandshake className="mr-2 h-4 w-4" aria-hidden />
+              Start Concierge
+            </Link>
+          </Button>
+        </section>
       </div>
     </main>
   );

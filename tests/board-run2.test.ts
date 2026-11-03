@@ -133,7 +133,7 @@ test('Tool freeze is on and no extra marketing feature routes exist', () => {
 test('Crawler helpers know current public prices and banned copy', () => {
   const prices = expectedPublicPrices();
   assert.equal(prices.caregiverMonthly, '$39');
-  assert.equal(prices.concierge, '$299');
+  assert.equal(prices.concierge, '$499');
   assert.deepEqual(findBannedPlaceholders('hello TBD world'), []);
   assert.ok(findBannedPlaceholders('supplied by counsel').length > 0);
 });

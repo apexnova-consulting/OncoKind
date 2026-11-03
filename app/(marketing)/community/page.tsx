@@ -6,14 +6,18 @@ import { getProfile } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { formatRelativeTime } from '@/lib/time';
 import { COMMUNITY_POSTING_PAUSED_MESSAGE, isCommunityPostingEnabled } from '@/lib/community-policy';
+import { isCommunityEnabled } from '@/lib/feature-flags';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Community',
   description:
     'A moderated OncoKind community for caregivers and patients to ask questions, share experience, and support one another.',
+  robots: { index: false, follow: false },
 };
 
 export default async function CommunityLandingPage() {
+  if (!isCommunityEnabled()) redirect('/support');
   const supabase = await createServerSupabaseClient();
   const { data: approvedThreads } = await supabase
     .from('community_threads')

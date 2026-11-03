@@ -8,6 +8,7 @@ import { BRING_CHECKLIST, coverageQuestionScript, recordsRequestLetter } from '@
 import { CTP_FICTIONAL_SAMPLES } from '@/lib/agents/ctp/samples';
 import { QUESTION_STATUSES, type QuestionStatus } from '@/lib/agents/ctp/evaluate';
 import { REDACTION_USER_NOTE, EDUCATIONAL_DISCLAIMER } from '@/lib/agents/safety';
+import { HaveUsDoThis } from '@/components/concierge/HaveUsDoThis';
 
 export function CompleteThePictureExperience({
   persist = false,
@@ -204,6 +205,7 @@ export function CompleteThePictureExperience({
             </p>
           )}
 
+          <HaveUsDoThis source="complete_the_picture" />
           <p className="text-xs text-slate-500">{EDUCATIONAL_DISCLAIMER}</p>
           <div className="flex flex-wrap gap-3">
             <Button type="button" variant="outline" onClick={() => setProblem(true)}>

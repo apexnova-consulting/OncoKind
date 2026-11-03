@@ -37,5 +37,6 @@ export const FEATURE_CATALOG_ICONS = {
   concierge: Heart,
   care_plan_sheets: FileText,
   genetic_counseling: Users,
+  prep_sheets: BookHeart,
   prior_auth: ShieldCheck,
 } as const;

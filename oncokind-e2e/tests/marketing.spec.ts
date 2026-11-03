@@ -210,23 +210,25 @@ test.describe('Pricing (/pricing)', () => {
 });
 
 test.describe('Parked B2B routes', () => {
-  test('/professional redirects home', async ({ page }) => {
+  test('/professional is reachable book-a-call only', async ({ page }) => {
     const response = await page.goto(routes.forProfessionals);
     expect(response?.status()).toBeLessThan(400);
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/professional/);
+    await expect(page.getByRole('link', { name: /book a call/i })).toBeVisible();
   });
 
-  test('/prior-auth-pro redirects home', async ({ page }) => {
+  test('/prior-auth-pro is reachable book-a-call only', async ({ page }) => {
     const response = await page.goto(routes.priorAuthPro);
     expect(response?.status()).toBeLessThan(400);
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/prior-auth-pro/);
+    await expect(page.getByRole('link', { name: /book a call/i })).toBeVisible();
   });
 });
 
 test.describe('Site template consistency', () => {
   // Finding #1 is fixed as of Aug 2026: /about, /resources, and /community
   // now render the same nav + footer as the rest of the marketing site.
-  const formerlyOldTemplatePages = [routes.about, routes.resources, routes.community, routes.trust];
+  const formerlyOldTemplatePages = [routes.about, routes.resources, routes.support, routes.trust];
 
   for (const route of formerlyOldTemplatePages) {
     test(`${route} uses the same nav as the rest of the site`, async ({ page }) => {
@@ -314,11 +316,9 @@ test.describe('Other marketing pages', () => {
     expect(await articleLinks.count()).toBeGreaterThanOrEqual(2);
   });
 
-  test('/community hub loads with 4 categories visible', async ({ page }) => {
+  test('/community redirects to /support while Community is off', async ({ page }) => {
     await page.goto(routes.community);
-    for (const category of ['Just Diagnosed', 'Treatment & Side Effects', 'Insurance & Financial Help', 'Caregiver Support']) {
-      await expect(page.getByText(category)).toBeVisible();
-    }
+    await expect(page).toHaveURL(/\/support/);
   });
 
   test('/waitlist redirects to /signup', async ({ page }) => {
@@ -415,11 +415,13 @@ test.describe('Navigation & SEO', () => {
     expect(body).toMatch(/Disallow:\s*\/prior-auth/);
   });
 
-  test('sitemap.xml is reachable and includes /prior-auth-pro', async ({ request, baseURL }) => {
+  test('sitemap.xml is reachable and excludes parked org pages', async ({ request, baseURL }) => {
     const response = await request.get(`${baseURL}/sitemap.xml`);
     expect(response.ok()).toBeTruthy();
     const body = await response.text();
-    expect(body).toContain('/prior-auth-pro');
+    expect(body).toContain('/partners');
+    expect(body).not.toContain('/prior-auth-pro');
+    expect(body).not.toContain('/community');
   });
 
   test('unknown URL shows a custom 404 page, not a blank/default page', async ({ page }) => {

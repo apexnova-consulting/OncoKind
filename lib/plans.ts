@@ -1,10 +1,11 @@
 import { isFamilyTierMerged } from '@/lib/board-run2';
 import { FAMILY_PLUS_PLAN_NAME } from '@/lib/board-run2';
+import { PLANS as OK01_PLANS, caregiverProName } from '@/lib/ok01';
 
 export const SIGNUP_PLANS = {
   pro: {
-    name: 'Caregiver Pro',
-    priceLabel: '$39/month or $390/year',
+    name: caregiverProName(),
+    priceLabel: `$${OK01_PLANS.caregiver_pro.monthly}/month or $${OK01_PLANS.caregiver_pro.yearly}/year`,
   },
   advocate: {
     name: FAMILY_PLUS_PLAN_NAME,

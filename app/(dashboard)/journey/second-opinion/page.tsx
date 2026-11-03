@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { SecondOpinionPacket } from '@/components/care/SecondOpinionPacket';
 import { getProfile } from '@/lib/auth';
 import { HandleThisPrompt } from '@/components/concierge/HandleThisPrompt';
+import { HaveUsDoThis } from '@/components/concierge/HaveUsDoThis';
 
 type TimelineItem = {
   title: string;
@@ -76,7 +77,8 @@ export default async function SecondOpinionPage() {
                 Plan how to get there
               </Link>
             </p>
-            <div className="mt-4 max-w-xl">
+            <div className="mt-4 max-w-xl space-y-3">
+              <HaveUsDoThis source="second_opinion" />
               <HandleThisPrompt entryPoint="second_opinion" />
             </div>
           </div>

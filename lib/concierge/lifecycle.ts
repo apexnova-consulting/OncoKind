@@ -40,7 +40,8 @@ const ALLOWED: Record<CaseState, CaseState[]> = {
   escalated: ['in_progress', 'paused', 'cancelled'],
 };
 
-export function canTransitionCase(from: CaseState, to: CaseState): boolean {
+export function canTransitionCase(from: CaseState, to: CaseState, opts?: { hasTimeEntry?: boolean }): boolean {
+  if (to === 'case_ready' && opts && opts.hasTimeEntry === false) return false;
   return ALLOWED[from]?.includes(to) ?? false;
 }
 

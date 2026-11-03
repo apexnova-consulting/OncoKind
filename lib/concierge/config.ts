@@ -3,6 +3,8 @@
  * entitlements. No hardcoded dollar amounts in UI.
  */
 
+import { CONCIERGE as OK01_CONCIERGE, REFUNDS, caseReadyPriceCents } from '@/lib/ok01';
+
 export const CONCIERGE_BRAND = {
   name: 'OncoKind Concierge',
   tagline: 'Get Me There',
@@ -19,15 +21,15 @@ export const CONCIERGE_BRAND = {
 } as const;
 
 export const CONCIERGE_PRICE_TEST_CENTS = [14900, 29900, 49900] as const;
-export const CONCIERGE_PRICE_VARIANTS_CENTS = [29900, 39900, 49900, 59900] as const;
-export const CONCIERGE_DEFAULT_PRICE_CENTS = 29900;
+export const CONCIERGE_PRICE_VARIANTS_CENTS = [49900, 64900] as const;
+export const CONCIERGE_DEFAULT_PRICE_CENTS = OK01_CONCIERGE.case_ready.price_variants.A.amountCents;
 export const CONCIERGE_CAPACITY_CAP = 15;
-export const CONCIERGE_CAREGIVER_GRANT_DAYS = 60;
+export const CONCIERGE_CAREGIVER_GRANT_DAYS = OK01_CONCIERGE.concierge_included_pro_days;
 export const CONCIERGE_LOADED_HOURLY_CENTS = 3400;
 export const CONCIERGE_QA_SAMPLE_RATE = 0.2;
 export const CONCIERGE_FEE_APPROVAL_THRESHOLD_CENTS = 7500;
 export const CONCIERGE_FIRST_ACTION_BUSINESS_DAYS = 1;
-export const CONCIERGE_SUBMISSION_READY_TARGET_BUSINESS_DAYS = 10;
+export const CONCIERGE_SUBMISSION_READY_TARGET_BUSINESS_DAYS = REFUNDS.business_days_rule;
 export const CONCIERGE_FAMILY_CONFIRMATION_BUSINESS_DAYS = 3;
 export const CONCIERGE_FOLLOWUP_DAYS = [3, 7, 10] as const;
 export const FUNDFINDER_URL = 'https://fundfinder.panfoundation.org/';
@@ -40,29 +42,11 @@ export function conciergePriceLockCents(): number | null {
 }
 
 export function conciergeListPriceCents(): number {
-  const variantOn =
-    process.env.FEATURE_CONCIERGE_PRICE_VARIANT === '1' ||
-    process.env.FEATURE_CONCIERGE_PRICE_VARIANT === 'true' ||
-    process.env.FEATURE_CONCIERGE_PRICE_VARIANT === 'on' ||
-    process.env.NEXT_PUBLIC_FEATURE_CONCIERGE_PRICE_VARIANT === '1' ||
-    process.env.NEXT_PUBLIC_FEATURE_CONCIERGE_PRICE_VARIANT === 'true';
-  if (!variantOn) return CONCIERGE_DEFAULT_PRICE_CENTS;
-  const raw = process.env.CONCIERGE_PRICE_VARIANT_CENTS;
-  const value = raw ? Number(raw) : CONCIERGE_DEFAULT_PRICE_CENTS;
-  return CONCIERGE_PRICE_VARIANTS_CENTS.includes(value as (typeof CONCIERGE_PRICE_VARIANTS_CENTS)[number])
-    ? value
-    : CONCIERGE_DEFAULT_PRICE_CENTS;
+  return caseReadyPriceCents();
 }
 
-export function weeklyCohortPriceCents(now = new Date()): number {
-  const locked = conciergePriceLockCents();
-  if (locked) return locked;
-  if (process.env.FEATURE_CONCIERGE_PRICE_TEST === '1' || process.env.FEATURE_CONCIERGE_PRICE_TEST === 'true') {
-    const utc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-    const week = Math.floor(utc / (7 * 24 * 60 * 60 * 1000));
-    return CONCIERGE_PRICE_TEST_CENTS[week % CONCIERGE_PRICE_TEST_CENTS.length];
-  }
-  return conciergeListPriceCents();
+export function weeklyCohortPriceCents(_now = new Date()): number {
+  return caseReadyPriceCents();
 }
 
 export function formatUsdFromCents(cents: number): string {

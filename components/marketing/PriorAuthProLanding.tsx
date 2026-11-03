@@ -89,7 +89,7 @@ export function PriorAuthProLanding() {
               {
                 step: '4',
                 title: 'Review, sign, and submit',
-                body: 'Fill in any bracketed placeholders, have the prescribing physician sign the attestation, and submit. Track the outcome in the platform.',
+                body: 'Fill in any bracketed blanks, have the prescribing physician sign the attestation, and submit. Track the outcome in the platform.',
               },
             ].map((item) => (
               <li key={item.step} className="flex gap-4">
@@ -152,7 +152,7 @@ export function PriorAuthProLanding() {
             </Button>
           </div>
           <p className="mt-6 text-xs text-white/70">
-            KindAuth is an AI-assisted document drafting tool. All generated documents must be reviewed by a licensed healthcare professional prior to submission.{' '}
+            KindAuth is an AI-assisted document drafting tool. A licensed healthcare professional must check every generated document before submission.{' '}
             <a href="mailto:support@oncokind.com" className="underline">
               support@oncokind.com
             </a>

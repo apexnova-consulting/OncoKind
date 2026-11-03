@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { HaveUsDoThis } from '@/components/concierge/HaveUsDoThis';
 import type { First72Task } from '@/content/first-72-hours/v1';
 import type { TaskStatus } from '@/lib/first-72-hours';
 import { FIRST_72_INTAKE_FIELDS } from '@/content/first-72-hours/v1';
@@ -55,6 +56,7 @@ export function First72Checklist({
 
   return (
     <div className="space-y-8">
+      <HaveUsDoThis source="first_72" />
       <section className="rounded-2xl border border-[var(--color-border-subtle)] bg-white p-6">
         <h2 className="font-semibold text-[var(--color-text-primary)]">Quick intake</h2>
         <p className="mt-1 text-sm text-[var(--color-text-muted)]">
@@ -128,10 +130,7 @@ export function First72Checklist({
           </p>
         )}
       </section>
-      <p className="text-xs text-[var(--color-text-muted)]">
-        Content version {contentMeta.version}. Reviewer: {contentMeta.clinicalReviewer}. Review date:{' '}
-        {contentMeta.reviewDate}.
-      </p>
+      <p className="text-xs text-[var(--color-text-muted)]">Content version {contentMeta.version}.</p>
     </div>
   );
 }

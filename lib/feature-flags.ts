@@ -26,6 +26,11 @@ export const FEATURE_FLAGS = {
   after90Phase: 'after90Phase',
   orgSponsorship: 'orgSponsorship',
   conciergeKeepRollover: 'conciergeKeepRollover',
+  community_enabled: 'community_enabled',
+  case_model_v2: 'case_model_v2',
+  have_us_do_this: 'have_us_do_this',
+  staff_back_office: 'staff_back_office',
+  revenue_dashboard: 'revenue_dashboard',
 } as const;
 
 export type FeatureFlagName = keyof typeof FEATURE_FLAGS;
@@ -118,6 +123,11 @@ export function isFeatureEnabled(flag: FeatureFlagName): boolean {
       'FEATURE_CONCIERGE_KEEP_ROLLOVER',
       'NEXT_PUBLIC_FEATURE_CONCIERGE_KEEP_ROLLOVER',
     ],
+    community_enabled: ['FEATURE_COMMUNITY_ENABLED', 'NEXT_PUBLIC_FEATURE_COMMUNITY_ENABLED'],
+    case_model_v2: ['FEATURE_CASE_MODEL_V2', 'NEXT_PUBLIC_FEATURE_CASE_MODEL_V2'],
+    have_us_do_this: ['FEATURE_HAVE_US_DO_THIS', 'NEXT_PUBLIC_FEATURE_HAVE_US_DO_THIS'],
+    staff_back_office: ['FEATURE_STAFF_BACK_OFFICE', 'NEXT_PUBLIC_FEATURE_STAFF_BACK_OFFICE'],
+    revenue_dashboard: ['FEATURE_REVENUE_DASHBOARD', 'NEXT_PUBLIC_FEATURE_REVENUE_DASHBOARD'],
   };
 
   if (flag === 'cp_reduced_mode') {
@@ -154,4 +164,8 @@ export function isCtpReducedMode(): boolean {
 
 export function isBaaReady(): boolean {
   return isFeatureEnabled('baa_ready');
+}
+
+export function isCommunityEnabled(): boolean {
+  return isFeatureEnabled('community_enabled');
 }

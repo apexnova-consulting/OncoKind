@@ -9,6 +9,7 @@ import { IdentifyAnalyticsUser } from '@/components/analytics/FunnelPageView';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { getBrandTheme } from '@/lib/branding';
 import { getLanguageFromCookies } from '@/lib/i18n-server';
+import { PLANS as OK01_PLANS, caregiverProName, caseReadyName, caseReadyPriceUsd, explorerName } from '@/lib/ok01';
 
 const lora = Lora({
   subsets: ['latin'],
@@ -75,12 +76,27 @@ const jsonLd = {
     'AI-powered cancer navigation platform for family caregivers. Translates pathology reports, generates Doctor Prep Sheets, matches clinical trials, and supports insurance appeals.',
   url: 'https://www.oncokind.com',
   offers: [
-    { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
-    { '@type': 'Offer', name: 'Caregiver Pro', price: '39', priceCurrency: 'USD', billingIncrement: 'P1M' },
-    { '@type': 'Offer', name: 'Caregiver Pro (annual)', price: '390', priceCurrency: 'USD', billingIncrement: 'P1Y' },
-    { '@type': 'Offer', name: 'Caregiver Plus', price: '49', priceCurrency: 'USD', billingIncrement: 'P1M' },
-    { '@type': 'Offer', name: 'Caregiver Plus (annual)', price: '490', priceCurrency: 'USD', billingIncrement: 'P1Y' },
-    { '@type': 'Offer', name: 'Professional', price: '999', priceCurrency: 'USD', billingIncrement: 'P1M' },
+    { '@type': 'Offer', name: explorerName(), price: '0', priceCurrency: 'USD' },
+    {
+      '@type': 'Offer',
+      name: caregiverProName(),
+      price: String(OK01_PLANS.caregiver_pro.monthly),
+      priceCurrency: 'USD',
+      billingIncrement: 'P1M',
+    },
+    {
+      '@type': 'Offer',
+      name: `${caregiverProName()} (annual)`,
+      price: String(OK01_PLANS.caregiver_pro.yearly),
+      priceCurrency: 'USD',
+      billingIncrement: 'P1Y',
+    },
+    {
+      '@type': 'Offer',
+      name: caseReadyName(),
+      price: String(caseReadyPriceUsd()),
+      priceCurrency: 'USD',
+    },
   ],
   operatingSystem: 'Web, iOS (PWA), Android (PWA)',
   author: { '@type': 'Person', name: 'Mike Nielson' },
