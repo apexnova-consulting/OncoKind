@@ -147,7 +147,7 @@ export default async function PricingPage() {
               },
               {
                 q: 'What if my records are delayed?',
-                a: 'Hospitals set their own timelines. We follow up and show you where each request stands. We do not display a guaranteed completion date.',
+                a: 'Hospitals set their own timelines. We follow up and show you where each request stands. We do not show a completion date the hospital did not give.',
               },
               {
                 q: 'How does the Caregiver Pro trial work?',

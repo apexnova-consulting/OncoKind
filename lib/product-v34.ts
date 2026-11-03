@@ -1,5 +1,7 @@
 /** Production v3.4 public product: two family doors, B2B parked. */
 
+import { caseReadyPriceLabel } from '@/lib/ok01';
+
 export const PUBLIC_HERO_HEADLINE =
   "AI Cancer Navigation for Rare Women's & Gynecological Cancers.";
 
@@ -7,7 +9,7 @@ export const PUBLIC_HERO_SUBHEAD =
   'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.';
 
 export const PUBLIC_HERO_PRIMARY_CTA = 'Start First 72 Hours (Free)';
-export const PUBLIC_HERO_SECONDARY_CTA = 'Start Concierge Case ($299)';
+export const PUBLIC_HERO_SECONDARY_CTA = `Start Concierge Case (${caseReadyPriceLabel()})`;
 
 export const TWO_DOOR_TOOLS_TITLE = 'Do It Yourself';
 export const TWO_DOOR_TOOLS_BODY =
@@ -34,4 +36,4 @@ export const COMMUNITY_CARD_LABEL = 'Read-Only Patient & Caregiver Forum Access'
 
 export const CAREGIVER_PRO_TRIAL_DAYS = 14;
 
-export const PARKED_PUBLIC_PATHS = ['/professional', '/prior-auth-pro', '/kindauth', '/snf'] as const;
+export const PARKED_PUBLIC_PATHS = ['/kindauth', '/snf'] as const;

@@ -7,9 +7,15 @@
 
 import {
   CONCIERGE_CAREGIVER_GRANT_DAYS,
-  CONCIERGE_DEFAULT_PRICE_CENTS,
   formatUsdFromCents,
 } from '@/lib/concierge/config';
+import {
+  PLANS as OK01_PLANS,
+  caregiverProName,
+  caseReadyPriceLabel,
+  explorerName,
+  includedProDays,
+} from '@/lib/ok01';
 import {
   FAMILY_GUIDELINE_SHEET_NAME,
   FAMILY_PLUS_PLAN_NAME,
@@ -31,7 +37,7 @@ import {
 } from '@/lib/after-90/config';
 
 export const SITE_ORIGIN = 'https://www.oncokind.com';
-export const CONCIERGE_LIST_PRICE_LABEL = formatUsdFromCents(CONCIERGE_DEFAULT_PRICE_CENTS);
+export const CONCIERGE_LIST_PRICE_LABEL = caseReadyPriceLabel();
 export const YEARLY_MONTHS_INCLUDED = 10;
 export const ANNUAL_SAVINGS_PERCENT = Math.round((1 - YEARLY_MONTHS_INCLUDED / 12) * 100);
 
@@ -59,7 +65,7 @@ export const PLANS = {
   free: {
     id: 'free' as const,
     checkoutKey: null,
-    name: 'Explorer',
+    name: explorerName(),
     monthlyCents: 0,
     yearlyCents: 0,
     monthlyLabel: '$0',
@@ -87,11 +93,11 @@ export const PLANS = {
   caregiver: {
     id: 'caregiver' as const,
     checkoutKey: 'pro' as const,
-    name: 'Caregiver Pro',
-    monthlyCents: 3900,
-    yearlyCents: 39000,
-    monthlyLabel: '$39',
-    yearlyLabel: '$390',
+    name: caregiverProName(),
+    monthlyCents: OK01_PLANS.caregiver_pro.monthlyCents,
+    yearlyCents: OK01_PLANS.caregiver_pro.yearlyCents,
+    monthlyLabel: `$${OK01_PLANS.caregiver_pro.monthly}`,
+    yearlyLabel: `$${OK01_PLANS.caregiver_pro.yearly}`,
     cadenceMonthly: '/month',
     cadenceYearly: '/year',
     cta: 'Start Free Trial',
@@ -237,6 +243,22 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     },
   },
   {
+    id: 'prep_sheets',
+    name: 'Prep Sheet library',
+    homepage: {
+      href: '/features/prep-sheets',
+      desc: 'Goals of Care, Genetic Counseling, and Care Plan Questions in one library. Not clinical guidelines.',
+      tag: 'Caregiver Pro PDF',
+      consumerGrid: true,
+    },
+    cells: {
+      free: 'In-app preview',
+      caregiver: 'PDF export',
+      advocate: 'PDF export',
+      professional: 'PDF export',
+    },
+  },
+  {
     id: 'second_opinion',
     name: 'Second Opinion Mode',
     homepage: {
@@ -273,8 +295,8 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'Care Timeline',
     homepage: {
       href: '/journey/timeline',
-      desc: 'A living record of diagnoses, appointments, and milestones. Basic on Free, full on Caregiver Pro.',
-      tag: 'Basic on Free',
+      desc: 'A living record of diagnoses, appointments, and milestones. Basic on Explorer, full on Caregiver Pro.',
+      tag: 'Basic on Explorer',
       consumerGrid: true,
     },
     cells: {
@@ -289,16 +311,16 @@ export const CATALOG_FEATURES: CatalogFeature[] = [
     name: 'Clinical Trial Matching',
     homepage: {
       href: '/features/clinical-trial-matching',
-      desc: 'Free shows a preview of the top 3 matches. Caregiver Pro unlocks full details within 50 miles.',
-      tag: 'Limited on Free',
+      desc: 'Trial lists on diagnosis pages: free for everyone. Matching to your case: top 3 preview (Explorer), full with saved searches and alerts (Caregiver Pro).',
+      tag: 'Lists on diagnosis pages',
       consumerGrid: true,
       spotlight: true,
     },
     cells: {
-      free: 'Top 3 preview',
-      caregiver: 'Full, 50 miles',
-      advocate: 'Full, 50 miles',
-      professional: 'Custom',
+      free: 'Trial lists on diagnosis pages: free for everyone. Matching to your case: top 3 preview (Explorer)',
+      caregiver: 'Trial lists on diagnosis pages: free for everyone. Matching to your case: full with saved searches and alerts (Caregiver Pro)',
+      advocate: 'Trial lists on diagnosis pages: free for everyone. Matching to your case: full with saved searches and alerts (Caregiver Pro)',
+      professional: 'Trial lists on diagnosis pages: free for everyone. Matching to your case: full with saved searches and alerts (Caregiver Pro)',
     },
   },
   {
@@ -528,7 +550,18 @@ export const CONSUMER_HOMEPAGE_FEATURES = CATALOG_FEATURES.filter(
   (feature) => feature.homepage?.consumerGrid
 );
 
-export const FEATURE_HUB_FEATURES = CATALOG_FEATURES.filter((feature) => feature.homepage);
+const HUB_HIDDEN = new Set([
+  'community',
+  'concierge',
+  'empathy_filter',
+  'goals_of_care',
+  'genetic_counseling',
+  'care_plan_sheets',
+]);
+
+export const FEATURE_HUB_FEATURES = CATALOG_FEATURES.filter(
+  (feature) => feature.homepage && !HUB_HIDDEN.has(feature.id)
+);
 
 export const HOMEPAGE_SPOTLIGHT_IDS = FEATURE_HUB_FEATURES.map((feature) => feature.id);
 
@@ -542,13 +575,13 @@ export const HOMEPAGE_HERO = {
     'Guiding frightened families through the first 72 hours, record gathering, and second opinion intake.',
   cta: 'Start First 72 Hours (Free)',
   paidUnlock:
-    `Explorer: up to 3 reports in the first 30 days, the First 72 Hours guide, the Doctor Prep Sheet in the app, and free denial letter decoding. Caregiver Pro ($39/mo or $390/yr) adds unlimited reports, PDF export, Second Opinion Mode, full trial matching, Insurance Denial Defense, and Access Agent tracker and travel costs, with a 14-day trial. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${CONCIERGE_CAREGIVER_GRANT_DAYS} days of Caregiver Pro.`,
+    `${explorerName()}: up to 3 reports in the first 30 days, the First 72 Hours guide, the Doctor Prep Sheet in the app, and free denial letter decoding. ${caregiverProName()} (${PLANS.caregiver.monthlyLabel}/mo or ${PLANS.caregiver.yearlyLabel}/yr) adds unlimited reports, PDF export, Second Opinion Mode, full trial matching, Insurance Denial Defense, and Access Agent tracker and travel costs, with a 14-day trial. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case and includes ${includedProDays()} days of ${caregiverProName()}.`,
 };
 
 export const PRICING_PAGE = {
   title: 'Simple, transparent pricing for the hardest journey.',
   description:
-    `Tools: Explorer at $0, Caregiver Pro at $39/month or $390/year. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. No credit card required to start Tools.`,
+    `Tools: ${explorerName()} at $0, ${caregiverProName()} at ${PLANS.caregiver.monthlyLabel}/month or ${PLANS.caregiver.yearlyLabel}/year. Concierge is ${CONCIERGE_LIST_PRICE_LABEL} per case. No credit card required to start Tools.`,
 };
 
 export function yearlyAmountCents(monthlyCents: number): number {
@@ -636,7 +669,15 @@ export function hasAdvocateAccess(tier: SubscriptionTier): boolean {
 }
 
 export function publicCatalogFeatures() {
-  const hidden = new Set(['hipaa_baa', 'prior_auth', 'financial_aid']);
+  const hidden = new Set([
+    'hipaa_baa',
+    'prior_auth',
+    'financial_aid',
+    'community',
+    'goals_of_care',
+    'genetic_counseling',
+    'care_plan_sheets',
+  ]);
   const features = CATALOG_FEATURES.filter((feature) => !hidden.has(feature.id));
   return features.map((feature) => {
     if (feature.id !== 'financial_aid' && feature.id !== 'care_plan_sheets') return feature;

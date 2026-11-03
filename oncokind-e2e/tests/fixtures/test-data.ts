@@ -155,7 +155,7 @@ export const pricingTiers = {
   },
   concierge: {
     name: 'Concierge',
-    price: '$299',
+    price: '$499',
     cta: 'Start Case',
     href: '/concierge',
   },

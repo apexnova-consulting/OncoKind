@@ -52,11 +52,11 @@ test('No unscoped raw-data retention claim remains in app or components', () => 
   }
 });
 
-test('Public Concierge price is $299 unless a lock or price test is set', () => {
+test('Public Concierge price is the active Case Ready variant unless a lock is set', () => {
   assert.equal(weeklyCohortPriceCents(new Date('2026-10-25T12:00:00Z')), CONCIERGE_DEFAULT_PRICE_CENTS);
-  assert.equal(CONCIERGE_LIST_PRICE_LABEL, '$299');
+  assert.equal(CONCIERGE_LIST_PRICE_LABEL, '$499');
   const concierge = CATALOG_FEATURES.find((feature) => feature.id === 'concierge');
-  assert.ok(concierge?.cells.free.includes('$299'));
+  assert.ok(concierge?.cells.free.includes('$499'));
 });
 
 test('Denial Defense is included from Caregiver Pro on every catalog cell', () => {

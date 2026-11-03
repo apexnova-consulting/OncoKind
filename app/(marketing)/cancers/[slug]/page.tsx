@@ -10,6 +10,12 @@ import { pageMetadata } from '@/lib/seo';
 import { EMPATHY_FILTER_POLICY } from '@/lib/legal/empathy';
 import { Button } from '@/components/ui/button';
 import { CONCIERGE_LIST_PRICE_LABEL } from '@/lib/pricing-config';
+import { DIAGNOSIS_SOURCES_LINE } from '@/lib/ok01';
+import { trialKeyForSlug } from '@/lib/trials/trial-terms';
+import { fetchPublicTrials } from '@/lib/trials/public-lists';
+import { PublicTrialList } from '@/components/cancers/PublicTrialList';
+
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return CANCER_LANDINGS.map((landing) => ({ slug: landing.slug }));
@@ -25,12 +31,30 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   });
 }
 
-export default function CancerLandingPage({ params }: { params: { slug: string } }) {
+export default async function CancerLandingPage({ params }: { params: { slug: string } }) {
   const landing = cancerLandingBySlug(params.slug);
   if (!landing) notFound();
+  const trialKey = trialKeyForSlug(params.slug);
+  const trialData = trialKey ? await fetchPublicTrials(trialKey) : null;
+  const itemList =
+    trialData && trialData.trials.length
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          itemListElement: trialData.trials.map((trial, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            url: trial.url,
+            name: trial.title,
+          })),
+        }
+      : null;
 
   return (
     <main className="bg-[var(--color-bg-page)] px-4 py-16 sm:py-24">
+      {itemList ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
+      ) : null}
       <div className="mx-auto max-w-3xl space-y-8">
         <p className="text-sm font-semibold uppercase tracking-widest text-[#0F6E56]">Fictional sample</p>
         <h1 className="font-display text-4xl font-semibold text-[var(--color-primary-900)]">{landing.name}</h1>
@@ -61,21 +85,23 @@ export default function CancerLandingPage({ params }: { params: { slug: string }
           </ul>
           <p className="mt-3 text-sm text-slate-600">{TYPICAL_RECORDS_NOTE}</p>
         </section>
+        {trialKey && trialData ? (
+          <PublicTrialList
+            landingKey={trialKey}
+            trials={trialData.trials}
+            refreshedOn={trialData.refreshedOn}
+            ok={trialData.ok}
+          />
+        ) : null}
         <div className="flex flex-wrap gap-3">
           <Button asChild>
-            <Link href="/signup">Start free with Explorer</Link>
+            <Link href="/signup">Start with Explorer</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href="/concierge">Have Concierge do it, {CONCIERGE_LIST_PRICE_LABEL}</Link>
           </Button>
         </div>
-        <p className="text-xs text-slate-500">
-          Plain-language source:{' '}
-          <a className="font-semibold text-[#0F6E56] underline-offset-2 hover:underline" href={landing.nciUrl} target="_blank" rel="noreferrer">
-            {landing.nciLabel}
-          </a>
-          . Accessed {landing.accessedOn}.
-        </p>
+        <p className="text-xs text-slate-500">{DIAGNOSIS_SOURCES_LINE(landing.accessedOn)}</p>
       </div>
     </main>
   );

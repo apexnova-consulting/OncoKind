@@ -31,6 +31,7 @@ export const FROZEN_TOOL_ROUTES = [
   '/features/first-72-hours',
   '/features/insurance-denial-defense',
   '/features/oncokind-family',
+  '/features/prep-sheets',
 ] as const;
 
 export const PUBLIC_RESULTS_MIN_N = 30;

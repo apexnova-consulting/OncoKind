@@ -39,7 +39,7 @@ const stages: Array<{ name: string; items: NavItem[] }> = [
     items: [
       { href: '/journey/timeline', label: 'Care Timeline', icon: Calendar },
       { href: '/journey/documents', label: 'Documents', icon: FileText },
-      { href: '/journey/second-opinion', label: 'Second Opinion Mode', icon: FolderPlus },
+      { href: '/features/prep-sheets', label: 'Prep Sheet library', icon: FileText },
     ],
   },
   {
@@ -51,8 +51,9 @@ const stages: Array<{ name: string; items: NavItem[] }> = [
     ],
   },
   {
-    name: 'Plan ahead',
+    name: 'Plan Ahead',
     items: [
+      { href: '/journey/second-opinion', label: 'Second Opinion Mode', icon: FolderPlus },
       { href: '/journey/trials', label: 'Clinical Trial Matching', icon: FlaskConical },
       { href: '/journey/concierge', label: 'Concierge case', icon: Heart },
     ],

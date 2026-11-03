@@ -1,30 +1,31 @@
 import { HOMEPAGE_PITCH } from '@/lib/board-run2';
+import { STAGE_DESCRIPTIONS, STAGE_LABELS } from '@/lib/ok01';
 
 export const JOURNEY_POSITIONING = HOMEPAGE_PITCH;
 
 export const JOURNEY_STAGES = [
   {
-    id: 'understand',
-    name: 'Understand',
-    summary: 'See what the report says, what it does not say, and the first 72 hours.',
+    id: 'understand' as const,
+    name: STAGE_LABELS.understand,
+    summary: STAGE_DESCRIPTIONS.understand,
     href: '/features',
   },
   {
-    id: 'prepare',
-    name: 'Prepare',
-    summary: 'Questions before the visit, a check-in after, and a living timeline.',
+    id: 'prepare' as const,
+    name: STAGE_LABELS.prepare,
+    summary: STAGE_DESCRIPTIONS.prepare,
     href: '/features/doctor-prep-sheet',
   },
   {
-    id: 'fight',
-    name: 'Fight',
-    summary: 'Decode a denial, estimate travel, and find assistance programs.',
+    id: 'fight' as const,
+    name: STAGE_LABELS.fight,
+    summary: STAGE_DESCRIPTIONS.fight,
     href: '/features/insurance-denial-defense',
   },
   {
-    id: 'plan',
-    name: 'Plan Ahead',
-    summary: 'Trials, family history, second opinions, or Concierge when you want it handled.',
+    id: 'plan' as const,
+    name: STAGE_LABELS.plan,
+    summary: STAGE_DESCRIPTIONS.plan,
     href: '/concierge',
   },
 ] as const;

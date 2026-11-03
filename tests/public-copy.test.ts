@@ -47,10 +47,10 @@ test('Free card copy matches the 3-report window', () => {
   assert.ok(FREE_FEATURES.includes('Denial letter decode free'));
 });
 
-test('Public catalog uses Explorer, Care Plan Question Sheets, and no KindAuth row', () => {
+test('Public catalog uses Explorer, Prep Sheet library, and no KindAuth row', () => {
   assert.equal(PLANS.free.name, 'Explorer');
   assert.equal(FAMILY_GUIDELINE_SHEET_NAME, 'Care Plan Question Sheets');
-  assert.ok(publicCatalogFeatures().some((feature) => feature.name === FAMILY_GUIDELINE_SHEET_NAME));
+  assert.ok(publicCatalogFeatures().some((feature) => feature.name === 'Prep Sheet library'));
   assert.equal(publicCatalogFeatures().some((feature) => feature.name === 'KindAuth'), false);
 });
 

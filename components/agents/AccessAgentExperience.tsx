@@ -7,6 +7,7 @@ import type { ProgramMatch } from '@/lib/agents/access/match';
 import { APPLICATION_STATUSES, type ApplicationStatus } from '@/lib/agents/access/match';
 import { EDUCATIONAL_DISCLAIMER } from '@/lib/agents/safety';
 import { HandleThisPrompt } from '@/components/concierge/HandleThisPrompt';
+import { ACCESS_AGENT_UNVERIFIED_LABEL } from '@/lib/ok01';
 
 export function AccessAgentExperience() {
   const [homeZip, setHomeZip] = useState('');
@@ -128,7 +129,11 @@ export function AccessAgentExperience() {
             <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs">{match.band.replaceAll('_', ' ')}</span>
           </div>
           <p className="mt-1 text-sm text-slate-500">{match.program.organization}</p>
-          <p className="mt-2 text-xs text-slate-500">Last verified {match.program.last_verified_on}. Status: {match.program.status}.</p>
+          <p className="mt-2 text-xs text-slate-500">
+            {match.program.status === 'unverified' || !match.program.last_verified_on
+              ? ACCESS_AGENT_UNVERIFIED_LABEL
+              : `Last verified ${match.program.last_verified_on}. Status: ${match.program.status}.`}
+          </p>
           <ul className="mt-3 list-disc pl-5 text-sm text-slate-700">
             {match.reasons.map((reason) => (
               <li key={reason}>{reason}</li>

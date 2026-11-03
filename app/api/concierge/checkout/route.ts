@@ -3,6 +3,7 @@ import { getProfile } from '@/lib/auth';
 import { isFeatureEnabled } from '@/lib/feature-flags';
 import { createOneTimeCheckoutSession } from '@/lib/stripe';
 import { weeklyCohortPriceCents } from '@/lib/concierge/config';
+import { activeCaseReadyVariant, caseReadyStripePriceId } from '@/lib/ok01';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { conciergeWaitlistMessage, isConciergeAtWeeklyCap, weekStartUtc } from '@/lib/concierge/capacity';
 import { canCoverConciergeFee, normalizeSponsorCode, type SponsoredCode } from '@/lib/concierge/sponsored';
@@ -53,17 +54,22 @@ export async function POST(request: NextRequest) {
       });
     }
   }
-  const priceId = process.env.STRIPE_PRICE_ID_CONCIERGE ?? '';
+  const priceId = caseReadyStripePriceId();
   if (!priceId) return NextResponse.json({ error: 'Concierge price is not configured.' }, { status: 503 });
   const base = process.env.NEXT_PUBLIC_APP_URL ?? request.nextUrl.origin;
   const shown = String(weeklyCohortPriceCents());
+  const variant = activeCaseReadyVariant();
   const session = await createOneTimeCheckoutSession({
     customerEmail: user.email ?? undefined,
     successUrl: `${base}/journey/concierge?checkout=success`,
     cancelUrl: `${base}/concierge`,
     priceId,
     userId: user.id,
-    metadata: { price_shown_cents: shown, sponsor_code: sponsorCode },
+    metadata: {
+      price_shown_cents: shown,
+      price_variant: variant,
+      source: 'concierge_page',
+    },
   });
   if (session.url) return NextResponse.json({ url: session.url, priceShown: shown });
   return NextResponse.json({ error: 'Unable to start checkout.' }, { status: 500 });

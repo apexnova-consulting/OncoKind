@@ -6,6 +6,7 @@ import { Cloud, MoonStar, FileText, ExternalLink } from 'lucide-react';
 import { createClient } from '@/lib/supabase-client';
 import { Button } from '@/components/ui/button';
 import { LanguageSelector } from '@/components/layout/LanguageSelector';
+import { isFeatureEnabled } from '@/lib/feature-flags';
 
 export function DashboardNav({
   brand,
@@ -57,9 +58,11 @@ export function DashboardNav({
           <Link href="/dashboard/billing" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Billing
           </Link>
-          <Link href="/community" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
-            Community
-          </Link>
+          {isFeatureEnabled('community_enabled') ? (
+            <Link href="/community" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
+              Community
+            </Link>
+          ) : null}
           <Link href="/quiet-room" className="hidden items-center gap-1 text-sm text-slate-600 hover:text-slate-900 sm:inline-flex">
             <MoonStar className="h-4 w-4" />
             Quiet Room
@@ -85,9 +88,14 @@ export function DashboardNav({
             </Link>
           )}
           {isAdmin ? (
-            <Link href="/admin/organizations" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
-              Admin
-            </Link>
+            <>
+              <Link href="/admin/concierge-time" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
+                Time log
+              </Link>
+              <Link href="/admin/organizations" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
+                Admin
+              </Link>
+            </>
           ) : null}
           <Link href="/dashboard/security" className="hidden text-sm text-slate-600 hover:text-slate-900 sm:inline-block">
             Security

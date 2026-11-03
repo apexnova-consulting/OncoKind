@@ -23,10 +23,10 @@ test('Complete the Picture reduced mode defaults on', () => {
   assert.equal(isCtpReducedMode(), true);
 });
 
-test('Public Concierge price defaults to $299', () => {
+test('Public Concierge price defaults to Case Ready A', () => {
   const price = weeklyCohortPriceCents(new Date('2026-10-25T12:00:00Z'));
   assert.equal(price, CONCIERGE_DEFAULT_PRICE_CENTS);
-  assert.equal(formatUsdFromCents(CONCIERGE_DEFAULT_PRICE_CENTS), '$299');
+  assert.equal(formatUsdFromCents(CONCIERGE_DEFAULT_PRICE_CENTS), '$499');
 });
 
 test('Case state machine blocks illegal jumps to Case Ready', () => {

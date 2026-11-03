@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { caregiverProName, includedProDays } from '@/lib/ok01';
 
 export function HardshipForm() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export function HardshipForm() {
     <main className="mx-auto max-w-xl px-4 py-16">
       <h1 className="font-display text-4xl font-semibold">Can&apos;t afford this?</h1>
       <p className="mt-4 text-slate-600">
-        Request a reduced price or sponsored Concierge case, or a 60-day Caregiver Pro code. A person
+        Request a reduced price or sponsored Concierge case, or a Caregiver Pro code. A person
         reviews every request. Do not include diagnosis or other medical details.
       </p>
       {done ? (
@@ -48,7 +49,7 @@ export function HardshipForm() {
                 checked={requestType === 'caregiver_pro'}
                 onChange={() => setRequestType('caregiver_pro')}
               />
-              Caregiver Pro code
+              {includedProDays()}-day {caregiverProName()} code
             </label>
           </fieldset>
           <label className="block text-sm font-medium">

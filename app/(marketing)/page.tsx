@@ -89,7 +89,7 @@ const jsonLdFAQ = {
       name: "What does 'free' actually include?",
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Up to 3 reports in the first 30 days and a Cancer Profile. Trial matching on Free is a preview of the top 3 matches. Doctor Prep Sheet PDFs, full matching, and Insurance Denial Defense are on Caregiver Pro. Travel and lodging tracking is on Caregiver Plus.',
+        text: 'Up to 3 reports in the first 30 days and a Cancer Profile. Trial lists on diagnosis pages are free for everyone. Matching to your case is a top 3 preview on Explorer. Doctor Prep Sheet PDFs, full matching, and Insurance Denial Defense are on Caregiver Pro.',
       },
     },
   ],
