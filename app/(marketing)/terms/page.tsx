@@ -2,7 +2,7 @@ const sections = [
   {
     title: '1. Acceptance of These Terms',
     body: [
-      'These Terms of Service govern your access to and use of OncoKind, including our website, applications, community features, reports, doctor prep tools, clinical trial matching features, and related services (collectively, the "Services"). By accessing or using the Services, you agree to be bound by these Terms and our Privacy Policy.',
+      'These Terms of Service are a contract between you and OncoKind, LLC ("OncoKind," "we," "us," or "our"). They govern your access to and use of OncoKind, including our website, applications, community features, reports, doctor prep tools, clinical trial matching features, and related services (collectively, the "Services"). By accessing or using the Services, you agree to be bound by these Terms and our Privacy Policy.',
       'If you are using the Services on behalf of another person, such as a family member or someone in your care, you represent that you have authority to do so and that you will use the Services in a way that is lawful and appropriate for that situation. If you do not agree to these Terms, do not use the Services.',
     ],
   },
@@ -102,7 +102,7 @@ const sections = [
   {
     title: '15. Indemnification',
     body: [
-      'You agree to defend, indemnify, and hold harmless OncoKind and its affiliates, officers, employees, contractors, and licensors from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys’ fees, arising out of or related to your content, your misuse of the Services, your breach of these Terms, or your violation of any law or third-party right.',
+      'You agree to defend, indemnify, and hold harmless OncoKind, LLC and its affiliates, officers, employees, contractors, and licensors from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys’ fees, arising out of or related to your content, your misuse of the Services, your breach of these Terms, or your violation of any law or third-party right.',
     ],
   },
   {
@@ -120,7 +120,7 @@ const sections = [
   {
     title: '18. Contact Us',
     body: [
-      'If you have questions about these Terms, please contact us at support@oncokind.com.',
+      'If you have questions about these Terms, please contact OncoKind, LLC at support@oncokind.com.',
     ],
   },
 ] as const;
@@ -128,7 +128,7 @@ const sections = [
 export const metadata = {
   title: 'Terms of Service | OncoKind',
   description:
-    'OncoKind Terms of Service governing use of our educational cancer-care platform, community, subscriptions, and related services.',
+    'Terms of Service for OncoKind, LLC governing use of our educational cancer-care platform, community, subscriptions, and related services.',
 };
 
 export default function TermsPage() {
@@ -139,12 +139,13 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-text-secondary)]">
-          These Terms of Service explain the rules that apply when you use OncoKind. Please read
-          them carefully, especially the sections on medical disclaimers, subscription billing,
-          community content, limitations of liability, and dispute resolution.
+          These Terms of Service are between you and OncoKind, LLC. They explain the rules that
+          apply when you use OncoKind. Please read them carefully, especially the sections on
+          medical disclaimers, subscription billing, community content, limitations of liability,
+          and dispute resolution.
         </p>
         <p className="mt-4 text-sm font-medium tracking-[var(--tracking-wide)] text-[var(--color-text-muted)]">
-          Last updated: May 11, 2026
+          Last updated: November 18, 2026
         </p>
 
         <div className="mt-12 space-y-10">

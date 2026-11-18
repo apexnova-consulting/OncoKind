@@ -124,7 +124,7 @@ export async function TrustFooter() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-[var(--color-surface-400)] sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
-          <p>© {year} {brandTheme.displayName}. All rights reserved.</p>
+          <p>© {year} {brandTheme.displayName === 'OncoKind' ? 'OncoKind, LLC' : brandTheme.displayName}. All rights reserved.</p>
           <p className="max-w-lg text-xs leading-relaxed">
             {globalDisclaimer}
           </p>

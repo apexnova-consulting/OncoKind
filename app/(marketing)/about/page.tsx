@@ -8,11 +8,11 @@ import { ClinicalAdvisorSection } from '@/components/clinical/ClinicalAdvisorSec
 export const metadata = {
   title: 'About OncoKind: Built by a Caregiver, for Caregivers',
   description:
-    'Mike Nielson built OncoKind while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
+    'The founder of OncoKind built the platform while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
   openGraph: {
     title: 'About OncoKind: Built by a Caregiver, for Caregivers',
     description:
-      'Mike Nielson built OncoKind while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
+      'The founder of OncoKind built the platform while his mother was fighting Stage 4 cancer. She passed away on July 4, 2026. Read the story behind the platform designed to give every family the clarity they deserve.',
   },
 };
 
@@ -63,7 +63,7 @@ const timeline = [
   {
     age: 'Now',
     event: 'His mother: rare Stage 4 metastatic cancer',
-    note: 'While serving as his mother\'s primary caregiver, Mike realized what was missing: not just in the medical system, but in every tool ever built for it.',
+    note: 'While serving as his mother\'s primary caregiver, he realized what was missing: not just in the medical system, but in every tool ever built for it.',
   },
 ];
 
@@ -166,7 +166,7 @@ export default function AboutPage() {
       >
         <div className="mx-auto max-w-[var(--max-width-wide)]">
           <h2 className="font-display text-3xl font-semibold text-white">Meet the Founder</h2>
-          <p className="mt-2 text-sm text-white/50">Mike Nielson, Founder, OncoKind</p>
+          <p className="mt-2 text-sm text-white/50">Mike N., Founder</p>
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
             {/* Founder photo — swap /images/founder-photo.jpg when photo is ready */}
@@ -216,7 +216,7 @@ export default function AboutPage() {
                   This disease has taken so much from my family. It won&apos;t take clarity from
                   yours.
                 </p>
-                <p className="font-semibold text-[var(--brand-gold)]">Mike Nielson, Founder</p>
+                <p className="font-semibold text-[var(--brand-gold)]">Mike N., Founder</p>
               </div>
             </div>
           </div>

@@ -71,7 +71,7 @@ async function sendConfirmationEmail(email: string, name?: string) {
               </p>
 
               <p style="font-size:14px; color:#1A2332; font-style:italic; margin:0;">
-                Mike Nielson, Founder<br />
+                Mike N., Founder<br />
                 <span style="font-size:13px; color:#8896A4; font-style:normal;">OncoKind &middot; <a href="https://www.oncokind.com" style="color:#2E6B5E;">oncokind.com</a></span>
               </p>
             </td>

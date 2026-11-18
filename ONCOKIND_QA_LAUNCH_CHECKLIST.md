@@ -1,6 +1,6 @@
 # OncoKind — Pre-Launch QA Checklist
 **Version:** 1.0 — June 2026  
-**Tester:** Mike Nielson  
+**Tester:** Founder of OncoKind  
 **Environment:** Production (oncokind.com) + Supabase Studio
 
 ---

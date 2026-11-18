@@ -2,7 +2,7 @@ const sections = [
   {
     title: '1. Scope of This Policy',
     body: [
-      'This Privacy Policy explains how OncoKind collects, uses, stores, shares, and protects personal information when you use our website, applications, community features, patient-support tools, and related services (collectively, the "Services").',
+      'This Privacy Policy explains how OncoKind, LLC ("OncoKind," "we," "us," or "our") collects, uses, stores, shares, and protects personal information when you use our website, applications, community features, patient-support tools, and related services (collectively, the "Services").',
       'By using the Services, you acknowledge the practices described in this Privacy Policy. If you do not agree with this Policy, please do not use the Services.',
     ],
   },
@@ -113,7 +113,7 @@ const sections = [
   {
     title: '17. Contact Us',
     body: [
-      'If you have questions about this Privacy Policy or would like to submit a privacy request, please contact us at support@oncokind.com.',
+      'If you have questions about this Privacy Policy or would like to submit a privacy request, please contact OncoKind, LLC at support@oncokind.com.',
     ],
   },
 ] as const;
@@ -121,7 +121,7 @@ const sections = [
 export const metadata = {
   title: 'Privacy Policy | OncoKind',
   description:
-    'OncoKind Privacy Policy describing how we collect, use, protect, and disclose personal information and health-related data.',
+    'Privacy Policy for OncoKind, LLC describing how we collect, use, protect, and disclose personal information and health-related data.',
 };
 
 export default function PrivacyPage() {
@@ -132,13 +132,13 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-text-secondary)]">
-          This Privacy Policy explains what information OncoKind collects, how we use it, how we
-          protect it, and the choices available to you. It is intended to reflect how the platform
-          operates today, including document processing, account management, community features, and
-          paid subscriptions.
+          This Privacy Policy explains what information OncoKind, LLC collects, how we use it, how
+          we protect it, and the choices available to you. It is intended to reflect how the
+          platform operates today, including document processing, account management, community
+          features, and paid subscriptions.
         </p>
         <p className="mt-4 text-sm font-medium tracking-[var(--tracking-wide)] text-[var(--color-text-muted)]">
-          Last updated: May 11, 2026
+          Last updated: November 18, 2026
         </p>
 
         <div className="mt-12 space-y-10">

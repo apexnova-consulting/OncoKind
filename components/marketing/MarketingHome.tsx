@@ -659,7 +659,7 @@ export function MarketingHome({ signedIn }: { signedIn: boolean }) {
                   This is the tool I wish I had.&rdquo;
                 </blockquote>
                 <p className="mt-6 text-sm font-bold uppercase tracking-widest text-[#9FE1CB]">
-                  Mike Nielson, Founder &amp; CEO, OncoKind
+                  Mike N., Founder
                 </p>
               </div>
               <div className="mt-6">

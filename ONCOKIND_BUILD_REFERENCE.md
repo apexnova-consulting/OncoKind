@@ -1,6 +1,6 @@
 # OncoKind — Complete Build Reference
 **Last updated:** June 8, 2026
-**Author:** Mike Nielson, Founder
+**Author:** Founder of OncoKind
 **Document purpose:** Full technical reference for the OncoKind platform — features, structure,
 database schema, services, and environment configuration.
 
@@ -43,7 +43,7 @@ diagnosis for the first time. Overwhelmed but trying.
 The Empathy Filter — a proprietary system that removes survival statistics and fear-based language
 from every AI-generated output — is unique in the market. No direct competitor has built this.
 
-**Founder:** Mike Nielson. Active caregiver for his mother (Stage 4 metastatic cancer). Personal
+**Founder:** Founder of OncoKind. Active caregiver for his mother (Stage 4 metastatic cancer). Personal
 history with the disease spanning grandmother (age 9), grandfather (age 15), father (age 16),
 and cousin (age 28).
 
@@ -766,7 +766,7 @@ Banner and form disappear immediately across the entire site.
   "@type": "SoftwareApplication",
   "name": "OncoKind",
   "applicationCategory": "HealthApplication",
-  "author": { "@type": "Person", "name": "Mike Nielson" },
+  "author": { "@type": "Organization", "name": "OncoKind, LLC" },
   "offers": [Free/$0, Caregiver Pro/$19, Advocate/$49]
 }
 ```

@@ -99,7 +99,7 @@ const jsonLd = {
     },
   ],
   operatingSystem: 'Web, iOS (PWA), Android (PWA)',
-  author: { '@type': 'Person', name: 'Mike Nielson' },
+  author: { '@type': 'Organization', name: 'OncoKind, LLC' },
 };
 
 export default async function RootLayout({
